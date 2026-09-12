@@ -43,5 +43,6 @@ npm run lint && npm test && npm run verify && npm run build
   full production deployment (~95 MB build copy each) and are for hotfixes only.
 - Before committing any new/edited image under `public/`, run
   `python3 scripts/optimize_images.py` (needs Pillow). Never commit multi-MB PNG/JPG.
-- Commit as `111325113+Solatjamil@users.noreply.github.com` — Vercel blocks
-  deployments whose commit email can't be matched to a GitHub account.
+- Commit as `saulspodship <saulspodship@gmail.com>` — the Vercel-linked account.
+  On the Hobby plan with a private repo, Vercel blocks deployments authored by
+  any other GitHub account.

@@ -67,6 +67,10 @@ three weeks is what caused the 11 GB Deployment Storage spike in Sep 2026.
 - To reclaim storage: Actions -> "Clean old Vercel deployments" (needs the
   `VERCEL_TOKEN` repo secret); dry-run first. Deletions are restorable 30 days.
 - **Git identity:** always commit with
-  `user.email = 111325113+Solatjamil@users.noreply.github.com` (GitHub noreply of the
-  repo owner). Vercel BLOCKS deployments whose commit email cannot be matched to a
-  GitHub account (e.g. `agent@arena.ai` was blocked on 2026-09-13).
+  `user.name = saulspodship` / `user.email = saulspodship@gmail.com` — the GitHub
+  account linked to the project's Vercel. The repo is PRIVATE and Vercel is on the
+  Hobby plan, so ONLY commits authored by an account with project access deploy;
+  anything else is blocked ("Git author ... must have access to the project on
+  Vercel"). `111325113+Solatjamil@users.noreply.github.com` resolves to a DIFFERENT
+  GitHub account (`Solatjamil`) and its commits were blocked on 2026-09-13 — do not
+  use it, even though earlier revisions of this file recommended it.
