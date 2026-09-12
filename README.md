@@ -1,20 +1,47 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Saul's Podship Scriptorium
 
-# Run and deploy your AI Studio app
+Comparative apologetics and Bible-encyclopedia SPA for [saulspodship.com](https://www.saulspodship.com) —
+50+ illustrated volumes, biblical maps atlas, a 400-question comparative codex
+(Islam / Judaism / Hinduism / Sikhism), a Pakistani Christian music archive, and
+prophecy tools.
 
-This contains everything you need to run your app locally.
+**Stack:** React 19 + Vite 6 + TypeScript · Tailwind CSS 4 · Express (served via a
+single Vercel function) · Firestore REST API · React Router (`createHashRouter`).
 
-View your app in AI Studio: https://ai.studio/apps/c0ebd8e4-5a5c-4407-aecf-e7b162604083
+## Getting started
 
-## Run Locally
+```bash
+npm install
+npm run dev        # dev server on :3000 (tsz server.ts behind gen-volume-index)
+```
 
-**Prerequisites:**  Node.js
+## Scripts
 
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Volume index generation + `tsx server.ts` dev server |
+| `npm run build` | Link check → `vite build` → postbuild prerender → music prerender → bundles `server.ts` to `dist/server.cjs` |
+| `npm start` | Run the built server (`dist/server.cjs`) |
+| `npm run lint` | Type-check (`tsc --noEmit`) |
+| `npm test` | Hero-variant integrity test (unique MD5s per variant) |
+| `npm run verify` | Codex integrity gate (`scripts/verify-codex.mjs`, 400/400 cards) |
+| `npm run gen:volumes` | Regenerate `src/data/volumes/volumeIndex.json` |
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Verify before finishing (required)
+
+```bash
+npm run lint && npm test && npm run verify && npm run build
+```
+
+## Repo conventions (read before contributing)
+
+- **`AGENTS.md`** — agent guardrails, incl. the frozen codex artifact rules.
+- **`.github/workflows/`** — `promote-dev` promotes `dev` → `main` daily (17:15 PKT);
+  `videos-sync` refreshes `public/videos/assets/videos-data.*`. **Never hand-edit
+  those generated data files** and don't fight the automation.
+- Day-to-day work lands on the **`dev`** branch; direct pushes to `main` trigger a
+  full production deployment (~95 MB build copy each) and are for hotfixes only.
+- Before committing any new/edited image under `public/`, run
+  `python3 scripts/optimize_images.py` (needs Pillow). Never commit multi-MB PNG/JPG.
+- Commit as `111325113+Solatjamil@users.noreply.github.com` — Vercel blocks
+  deployments whose commit email can't be matched to a GitHub account.

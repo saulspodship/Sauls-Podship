@@ -5,10 +5,10 @@ description: Guardrails for the Comparative Apologetics Codex add-on (fifth pill
 
 # Comparative Apologetics Codex — rules
 
-- `public/comparative-apologetics/index.html` is a **frozen, verified artifact**. Never rewrite,
+- `public/comparative-apologetics/codex.html` is a **frozen, verified artifact**. Never rewrite,
   reformat, minify, or split it. If a content edit is genuinely required, edit it in place with a
   minimal diff and run `node scripts/verify-codex.mjs` (must report 400/400, 100 per religion).
-- The codex is embedded via `<iframe src="/comparative-apologetics/index.html">`. Do not inline it,
+- The codex is embedded via `<iframe src="/comparative-apologetics/codex.html">`. Do not inline it,
   do not convert it to JSX, do not fetch-and-`dangerouslySetInnerHTML` it.
 - Route slug is `comparative-apologetics` (hash router → `/#/comparative-apologetics`). Do not rename.
 - The fifth pillar card must reuse the **exact** classes of the existing four pillar cards:
@@ -19,4 +19,4 @@ description: Guardrails for the Comparative Apologetics Codex add-on (fifth pill
 - Do not touch the other four pillars' copy, icons, or hrefs.
 - Icons come from `lucide-react` (already a dependency) or inline SVG — do not add icon packages.
 - Do not add dependencies for this feature. It needs none.
-- When done, always run `npm run build` and confirm `dist/comparative-apologetics/index.html` exists.
+- When done, always run `npm run build` and confirm `dist/comparative-apologetics/codex.html` exists.

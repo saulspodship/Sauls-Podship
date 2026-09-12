@@ -22,11 +22,11 @@ new route `/comparative-apologetics` that hosts the complete interactive codex
    `lg:grid-cols-4` → `lg:grid-cols-5` (or `xl:grid-cols-5 lg:grid-cols-3`).
 5. Update the section intro text to read "Five Pillars of Saul's Podship Scriptorium".
 6. Add `/comparative-apologetics` to the Sitemap page and `sitemap.xml` (if present).
-7. Run `npm run build` and confirm `dist/comparative-apologetics/index.html` exists.
+7. Run `npm run build` and confirm `dist/comparative-apologetics/codex.html` exists.
 
 ## Hard rules
 
-- **Do not** edit, minify, re-format, or "clean up" `public/comparative-apologetics/index.html`.
+- **Do not** edit, minify, re-format, or "clean up" `public/comparative-apologetics/codex.html`.
   It is a verified, self-contained document: 400 `article.qcard` elements with stable IDs
   (`q-islam-1` … `q-sikhism-100`), its own CSS/JS toolbar, and tested behaviour.
   Any change there must go through `scripts/verify-codex.mjs` and pass 400/400.
@@ -44,7 +44,7 @@ new route `/comparative-apologetics` that hosts the complete interactive codex
 ```bash
 node scripts/verify-codex.mjs      # 400 cards, 4×100, unique IDs, toolbar present
 npm run build
-ls dist/comparative-apologetics/index.html
+ls dist/comparative-apologetics/codex.html
 ```
 Then open `/#/comparative-apologetics`, click a religion chip (it filters **and**
 scrolls to that section), click a question title (it expands), and change the sort to

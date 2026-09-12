@@ -22,7 +22,6 @@ export default defineConfig({
           if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
           if (id.includes('lucide-react')) return 'vendor-icons';
           if (id.includes('framer-motion')) return 'vendor-motion';
-          if (id.includes('/three/')) return 'vendor-three';
           if (/[\\/](react-markdown|remark|rehype|micromark|mdast|hast|unified|unist|vfile|bail|trough|zwitch|property-information|space-separated-tokens|comma-separated-tokens|decode-named-character-reference|character-entities|devlop|estree|is-plain-obj|style-to-object|inline-style-parser|html-url-attributes|trim-lines|ccount|escape-string-regexp|markdown-table|longest-streak)/.test(id)) return 'vendor-markdown';
           if (id.includes('firebase')) return 'vendor-firebase';
           if (id.includes('@google/genai')) return 'vendor-genai';

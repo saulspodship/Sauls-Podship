@@ -3,13 +3,14 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 const here = dirname(fileURLToPath(import.meta.url));
+const ARTIFACT = "public/comparative-apologetics/codex.html";
 const candidates = [
-  resolve(here, "../public/comparative-apologetics/index.html"),
-  resolve(process.cwd(), "public/comparative-apologetics/index.html"),
+  resolve(here, "../" + ARTIFACT),
+  resolve(process.cwd(), ARTIFACT),
 ];
 let html = null, used = null;
 for (const p of candidates) { try { html = readFileSync(p, "utf8"); used = p; break; } catch {} }
-if (!html) { console.error("FAIL: codex index.html not found"); process.exit(1); }
+if (!html) { console.error("FAIL: codex artifact not found (expected " + ARTIFACT + ")"); process.exit(1); }
 const ids = [...html.matchAll(/<article class="qcard" id="(q-([a-z]+)-(\d+))"/g)];
 const byRel = {};
 for (const m of ids) byRel[m[2]] = (byRel[m[2]] || 0) + 1;
@@ -23,4 +24,4 @@ if (!html.includes('id="qsort"')) problems.push("sort control missing");
 if (!/id="sec-(islam|judaism|hinduism|sikhism)"/.test(html)) problems.push("section anchors missing");
 if (!html.includes("ENHANCED-UX v1")) problems.push("UX enhancement marker missing");
 if (problems.length) { console.error("FAIL:", problems.join("; ")); process.exit(1); }
-console.log(`OK: 400 cards (islam ${byRel.islam}, judaism ${byRel.judaism}, hinduism ${byRel.hinduism}, sikhism ${byRel.sikhism}), toolbar present\n  ${used}`);
+console.log(`OK: 400/400 cards (islam ${byRel.islam}, judaism ${byRel.judaism}, hinduism ${byRel.hinduism}, sikhism ${byRel.sikhism}), toolbar present\n  ${used}`);
