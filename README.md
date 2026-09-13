@@ -36,11 +36,13 @@ npm run lint && npm test && npm run verify && npm run build
 ## Repo conventions (read before contributing)
 
 - **`AGENTS.md`** — agent guardrails, incl. the frozen codex artifact rules.
-- **`.github/workflows/`** — `promote-dev` promotes `dev` → `main` daily (17:15 PKT);
-  `videos-sync` refreshes `public/videos/assets/videos-data.*`. **Never hand-edit
-  those generated data files** and don't fight the automation.
-- Day-to-day work lands on the **`dev`** branch; direct pushes to `main` trigger a
-  full production deployment (~95 MB build copy each) and are for hotfixes only.
+- **`.github/workflows/`** — `videos-sync` refreshes `public/videos/assets/videos-data.*`
+  daily (18:15 PKT); `vercel-cleanup` prunes old Vercel deployments on demand.
+  **Never hand-edit those generated data files** and don't fight the automation.
+- **`main` is the only long-lived branch** (`dev` and the `promote-dev` workflow were
+  retired 2026-09-13). Every push to `main` triggers a full production deployment
+  (~95 MB build copy each), so batch related changes into one push and merge
+  short-lived branches only once they're ready.
 - Before committing any new/edited image under `public/`, run
   `python3 scripts/optimize_images.py` (needs Pillow). Never commit multi-MB PNG/JPG.
 - Commit as `saulspodship <saulspodship@gmail.com>` — the Vercel-linked account.

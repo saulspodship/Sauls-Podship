@@ -56,10 +56,11 @@ Every push to `main` creates a production deployment, and Vercel keeps a FULL co
 of the build output (`dist/`, ~95 MB) for every retained deployment. ~120 pushes in
 three weeks is what caused the 11 GB Deployment Storage spike in Sep 2026.
 
-- **Push day-to-day work to the `dev` branch, not `main`.** A workflow promotes
-  `dev` → `main` once daily (17:15 PKT) after a build check. Direct pushes to
-  `main` are reserved for emergency hotfixes only — each one is a production
-  deployment that stores a full ~95 MB build copy in Vercel Deployment Storage.
+- **`main` is the only long-lived branch.** The `dev` branch and the daily
+  `promote-dev` workflow were retired on 2026-09-13 — everything lives in `main`.
+  Since every push to `main` is now a production deployment, **batch related
+  changes into a single push** rather than pushing after each commit, and do the
+  work in short-lived branches that get merged once they are ready.
 - Before committing any new or edited image under `public/`, run:
   `python3 scripts/optimize_images.py` (needs Pillow). It compresses in place and
   generates missing `hero-1920.webp` variants. Never commit multi-MB PNG/JPG.
