@@ -42,7 +42,7 @@ const MODULES: {
     label: 'The Interlinked Bible — 344,799 Threads',
     short: 'Interlinked Bible',
     blurb: 'Every cross-reference in Scripture — 344,799 verse links forming 190,758 chapter threads across all 66 books — woven into one interactive horseshoe, with a world faith map beneath.',
-    src: '/cross-references/',
+    src: '/cross-references/viz.html',
     full: '/cross-references',
     icon: Network,
   },
