@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy } from 'react';
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { createHashRouter, RouteObject } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -155,4 +155,4 @@ export const routeConfig: RouteObject[] = [
   }
 ];
 
-export const router = createBrowserRouter(routeConfig);
+export const router = createHashRouter(routeConfig);
