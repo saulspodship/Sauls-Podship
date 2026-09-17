@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== "production") {
   // In development, load Vite dynamically
   import("vite").then(({ createServer: createViteServer }) => {
     createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, allowedHosts: true },
       appType: "spa",
     }).then((vite) => {
       app.use(vite.middlewares);
