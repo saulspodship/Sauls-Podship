@@ -70,8 +70,10 @@ if (!Number.isInteger(from) || !Number.isInteger(to)) {
 }
 const pad = n => String(n).padStart(2, '0');
 const mirrorPath = path.join(VOL_DIR, 'volumesData.json');
+let processed = 0;
 
 for (const m of manifest.filter(e => e.n >= from && e.n <= to)) {
+  processed++;
   const master = path.join(MASTERS, `${m.slug}.png`);
   if (!fs.existsSync(master)) throw new Error(`missing master for volume ${m.n}: ${master}`);
   const dir = path.join(IMG_DIR, m.slug);
@@ -111,5 +113,17 @@ for (const m of manifest.filter(e => e.n >= from && e.n <= to)) {
   fs.writeFileSync(mirrorPath, mirror);
 
   console.log(`[HERO] vol ${pad(m.n)} ${m.slug}: variants + data updated`);
+}
+
+// vercel.json caches /images/** for 30 days, so every batch that overwrites
+// hero variants in place must bump ART_VERSION in src/lib/artUrl.ts — that
+// changes the ?v= cache-buster on every rendered art URL.
+if (processed > 0) {
+  const artUrlPath = path.join(ROOT, 'src/lib/artUrl.ts');
+  const lib = fs.readFileSync(artUrlPath, 'utf8');
+  const next = Number(/export const ART_VERSION = (\d+);/.exec(lib)?.[1]);
+  if (!Number.isInteger(next)) throw new Error('ART_VERSION not found in src/lib/artUrl.ts');
+  fs.writeFileSync(artUrlPath, lib.replace(/export const ART_VERSION = \d+;/, `export const ART_VERSION = ${next + 1};`));
+  console.log(`[HERO] ART_VERSION bumped ${next} → ${next + 1} (cache-bust for ${processed} volume(s))`);
 }
 console.log('[HERO] batch done');

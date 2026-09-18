@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { BookOpen, ExternalLink, Play, ArrowDown } from 'lucide-react';
 import { Volume } from '../types';
 import { SITE } from '../config/site';
+import { artUrl } from '../lib/artUrl';
 
 interface HeroProps {
   variant: 'home' | 'volume';
@@ -32,11 +33,11 @@ export const Hero: React.FC<HeroProps> = ({ variant, volume, onStartReading }) =
           className="relative w-full aspect-video sm:absolute sm:inset-0 sm:aspect-auto"
           style={{ background: 'linear-gradient(180deg, #16060F 0%, #1A0812 62%, #24101C 100%)' }}
         >
-          <source media="(max-width: 639px)" srcSet={`${base}/hero-1280.webp`} type="image/webp" />
-          <source media="(max-width: 1279px)" srcSet={`${base}/hero-1280.webp`} type="image/webp" />
-          <source srcSet={`${base}/hero-1920.webp`} type="image/webp" />
+          <source media="(max-width: 639px)" srcSet={artUrl(`${base}/hero-1280.webp`)} type="image/webp" />
+          <source media="(max-width: 1279px)" srcSet={artUrl(`${base}/hero-1280.webp`)} type="image/webp" />
+          <source srcSet={artUrl(`${base}/hero-1920.webp`)} type="image/webp" />
           <img
-            src={`${base}/hero-1920.jpg`}
+            src={artUrl(`${base}/hero-1920.jpg`)}
             alt={volume.heroImage?.alt || volume.title}
             width="1920"
             height="1082"
@@ -45,8 +46,9 @@ export const Hero: React.FC<HeroProps> = ({ variant, volume, onStartReading }) =
             className="h-full w-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              if (volume.heroImage?.src && target.src !== volume.heroImage.src) {
-                target.src = volume.heroImage.src;
+              const fallback = volume.heroImage?.src ? artUrl(volume.heroImage.src) : '';
+              if (fallback && !target.src.endsWith(fallback)) {
+                target.src = fallback;
               }
             }}
           />

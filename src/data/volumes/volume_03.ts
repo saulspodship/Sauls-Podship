@@ -20,8 +20,8 @@ export const volume_03: Volume = {
     "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1478147427282-58a87a120781?auto=format&fit=crop&w=800&q=80",
-    "alt": "All Big Denominations & Their Differences"
+    "src": "/images/volumes/all-big-denominations-their-differences/hero-1280.webp",
+    "alt": "The great traditions of the one Church standing together under a single dawn — gothic cathedral, orthodox domes, a plain meeting-house, a modern worship hall and an ancient stone chapel"
   },
   "metaDescription": "Compare Christian denominations: Catholic, Orthodox, Protestant, Baptist, Pentecostal. Understand theological differences, church government, and shared historic creeds.",
   "keywords": [
