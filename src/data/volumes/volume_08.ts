@@ -16,12 +16,12 @@ export const volume_08: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/baptism-sacraments-circumcision/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Baptism, Sacraments & Circumcision”",
-    "credit": "Public domain — St1hart · Wikimedia Commons"
+    "alt": "A baptism in the Jordan River at golden hour, the new believer lowered into sunlit water among the reeds",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-    "alt": "Baptism, Sacraments & Circumcision"
+    "src": "/images/volumes/baptism-sacraments-circumcision/hero-1280.webp",
+    "alt": "A baptism in the Jordan River at golden hour, the new believer lowered into sunlit water among the reeds"
   },
   "metaDescription": "Understand Christian baptism, Old Testament circumcision, and sacraments. Explore sacramental theology, covenant signs, immersion vs pouring, and grace.",
   "keywords": [

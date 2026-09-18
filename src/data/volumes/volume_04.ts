@@ -16,12 +16,12 @@ export const volume_04: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/angels-demons-beasts-monsters-in-the-bible/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Angels, Demons, Beasts & Monsters in the Bible”",
-    "credit": "Public domain — Gustave Doré and Henry Holiday, license cc-by-sa-3.0 for com · Wikimedia Commons"
+    "alt": "A six-winged seraph of burnished gold hovering above the temple altar, framed by a fallen angel and an apocalyptic beast in storm-shadow",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&fit=crop&w=800&q=80",
-    "alt": "Angels, Demons, Beasts & Monsters in the Bible"
+    "src": "/images/volumes/angels-demons-beasts-monsters-in-the-bible/hero-1280.webp",
+    "alt": "A six-winged seraph of burnished gold hovering above the temple altar, framed by a fallen angel and an apocalyptic beast in storm-shadow"
   },
   "metaDescription": "Explore angels, demons, cherubim, seraphim, and apocalyptic beasts in the Bible. Understand the biblical supernatural hierarchy, origins of evil, and spiritual warfare.",
   "keywords": [

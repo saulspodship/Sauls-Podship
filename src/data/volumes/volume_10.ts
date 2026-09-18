@@ -16,12 +16,12 @@ export const volume_10: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/biblical-creation-vs-scientific-creation/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Biblical Creation vs Scientific Creation”",
-    "credit": "Public domain — Frank Vincentz · Wikimedia Commons"
+    "alt": "The Genesis scroll under lamplight beneath a blazing nebula — the written word and the universe it describes",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=800&q=80",
-    "alt": "Biblical Creation vs Scientific Creation"
+    "src": "/images/volumes/biblical-creation-vs-scientific-creation/hero-1280.webp",
+    "alt": "The Genesis scroll under lamplight beneath a blazing nebula — the written word and the universe it describes"
   },
   "metaDescription": "Examine Genesis creation accounts alongside modern science: Big Bang cosmology, young-earth, old-earth, and evolutionary creation frameworks explained objectively.",
   "keywords": [

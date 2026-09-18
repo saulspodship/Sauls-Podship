@@ -16,12 +16,12 @@ export const volume_05: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/apologetics-40-critical-questions/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Apologetics: 40 Critical Questions”",
-    "credit": "Public domain — Raphael · Wikimedia Commons"
+    "alt": "A scholar weighing the hardest objections to the faith at a lamplit desk before an open Bible as dawn breaks through the study window",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80",
-    "alt": "Apologetics: 40 Critical Questions"
+    "src": "/images/volumes/apologetics-40-critical-questions/hero-1280.webp",
+    "alt": "A scholar weighing the hardest objections to the faith at a lamplit desk before an open Bible as dawn breaks through the study window"
   },
   "metaDescription": "Answers to 40 critical apologetics questions: the problem of evil, science and faith, biblical reliability, moral relativism, and the historical resurrection of Jesus.",
   "keywords": [

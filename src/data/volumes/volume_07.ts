@@ -16,12 +16,12 @@ export const volume_07: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/ark-of-covenant-and-other-biblical-relics/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Ark of Covenant and other Biblical Relics”",
-    "credit": "Public domain — Doré, Gustave (1832-1883) · Wikimedia Commons"
+    "alt": "The golden Ark of the Covenant with winged cherubim beneath the shekinah light of the Holy of Holies",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=800&q=80",
-    "alt": "Ark of Covenant and other Biblical Relics"
+    "src": "/images/volumes/ark-of-covenant-and-other-biblical-relics/hero-1280.webp",
+    "alt": "The golden Ark of the Covenant with winged cherubim beneath the shekinah light of the Holy of Holies"
   },
   "metaDescription": "The history and theology of the Ark of the Covenant, Mercy Seat, Aaron's rod, jar of manna, and temple relics. Explore biblical records, claims, and spiritual meaning.",
   "keywords": [

@@ -16,12 +16,12 @@ export const volume_12: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/book-of-revelation/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Book of Revelation”",
-    "credit": "Public domain — AnonymousUnknown author · Wikimedia Commons"
+    "alt": "The aged apostle John on Patmos beholding the glorified Christ among seven golden lampstands",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80",
-    "alt": "Book of Revelation"
+    "src": "/images/volumes/book-of-revelation/hero-1280.webp",
+    "alt": "The aged apostle John on Patmos beholding the glorified Christ among seven golden lampstands"
   },
   "metaDescription": "Unpack the Book of Revelation: apocalyptic symbolism, Preterist vs Futurist views, seven seals, trumpets, bowls, and the triumphant return of Jesus Christ.",
   "keywords": [

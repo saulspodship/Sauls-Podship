@@ -16,12 +16,12 @@ export const volume_13: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/christianity-in-south-asia-india-pakistan/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Christianity in South Asia (India & Pakistan)”",
-    "credit": "Public domain — Vis M · Wikimedia Commons"
+    "alt": "Pakistani Christian worshippers in shalwar kameez singing devotion in a historic stone church",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?auto=format&fit=crop&w=800&q=80",
-    "alt": "Christianity in South Asia (India & Pakistan)"
+    "src": "/images/volumes/christianity-in-south-asia-india-pakistan/hero-1280.webp",
+    "alt": "Pakistani Christian worshippers in shalwar kameez singing devotion in a historic stone church"
   },
   "metaDescription": "Discover the 2,000-year history of Christianity in India and Pakistan: Apostle Thomas' mission in 52 AD, William Carey, the 1908 Sialkot revivals, and Punjabi Zaboor.",
   "keywords": [
