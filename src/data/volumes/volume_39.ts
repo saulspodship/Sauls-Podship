@@ -16,12 +16,12 @@ export const volume_39: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/revelation-judgments-timeline/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Revelation Judgments Timeline”",
-    "credit": "Public domain — Gebhard Fugel · Wikimedia Commons"
+    "alt": "A seven-sealed scroll resting on a stone altar beneath a thunderous parting sky, seven lamps of fire burning as golden throne-room light breaks through the storm — the judgments of Revelation in order",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=800&q=80",
-    "alt": "Revelation Judgments Timeline"
+    "src": "/images/volumes/revelation-judgments-timeline/hero-1280.webp",
+    "alt": "A seven-sealed scroll resting on a stone altar beneath a thunderous parting sky, seven lamps of fire burning as golden throne-room light breaks through the storm — the judgments of Revelation in order"
   },
   "metaDescription": "Visual timeline and chart of the Book of Revelation judgments: Seven Seals, Seven Trumpets, and Seven Bowls. Discover chronological vs recapitulationist models.",
   "keywords": [

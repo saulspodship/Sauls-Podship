@@ -16,12 +16,12 @@ export const volume_43: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/ten-commandments-ot-laws/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Ten Commandments & OT Laws”",
-    "credit": "Public domain — Gustave Doré · Wikimedia Commons"
+    "alt": "The summit of Mount Sinai wrapped in thundercloud and holy fire, two blank stone tablets standing in the radiance, lightning splitting a dark sky above the tent city of Israel in the valley below",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1447069387593-a5de0862481e?auto=format&fit=crop&w=800&q=80",
-    "alt": "Ten Commandments & OT Laws"
+    "src": "/images/volumes/ten-commandments-ot-laws/hero-1280.webp",
+    "alt": "The summit of Mount Sinai wrapped in thundercloud and holy fire, two blank stone tablets standing in the radiance, lightning splitting a dark sky above the tent city of Israel in the valley below"
   },
   "metaDescription": "In-depth study of the Ten Commandments and Old Testament Law: Decalogue structure, the threefold division of the Law, Christ fulfilling the Law, and modern Christian ethics.",
   "keywords": [

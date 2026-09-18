@@ -16,12 +16,12 @@ export const volume_37: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/primeval-world-timeline-ancient-civilizations/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Primeval World Timeline & Ancient Civilizations”",
-    "credit": "Public domain — J. M. W. Turner · Wikimedia Commons"
+    "alt": "Dawn of civilisation on the plain of Shinar — a mud-brick ziggurat rising above tents and palm groves between two great rivers, morning mist and amber sunrise light",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=800&q=80",
-    "alt": "Primeval World Timeline & Ancient Civilizations"
+    "src": "/images/volumes/primeval-world-timeline-ancient-civilizations/hero-1280.webp",
+    "alt": "Dawn of civilisation on the plain of Shinar — a mud-brick ziggurat rising above tents and palm groves between two great rivers, morning mist and amber sunrise light"
   },
   "metaDescription": "Synchronize early Genesis with ancient history: Eden, the Deluge, Sumerian King List, Epic of Gilgamesh, Eridu, and the Tower of Babel archaeological connections.",
   "keywords": [

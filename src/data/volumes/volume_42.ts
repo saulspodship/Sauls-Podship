@@ -16,12 +16,12 @@ export const volume_42: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/systematic-theology-subjects/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Systematic Theology Subjects”",
-    "credit": "Public domain — Marie-Lan Nguyen · Wikimedia Commons"
+    "alt": "A cathedral library of doctrine — towering shelves of leather-bound volumes and a great open tome on a lectern beneath a rose window, shafts of coloured light mapping the architecture of the Christian faith",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
-    "alt": "Systematic Theology Subjects"
+    "src": "/images/volumes/systematic-theology-subjects/hero-1280.webp",
+    "alt": "A cathedral library of doctrine — towering shelves of leather-bound volumes and a great open tome on a lectern beneath a rose window, shafts of coloured light mapping the architecture of the Christian faith"
   },
   "metaDescription": "Systematic theology subjects explained: Revelation, Divine Attributes, Trinity, Providence, Fall of Man, Substitutionary Atonement theories, and Eschatology.",
   "keywords": [
