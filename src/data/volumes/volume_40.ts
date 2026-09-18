@@ -16,12 +16,12 @@ export const volume_40: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/sermon-on-the-mount/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Sermon on the Mount”",
-    "credit": "Public domain — This Photo was taken by Wolfgang Moroder.  \n\nFeel free to us · Wikimedia Commons"
+    "alt": "Jesus seated on a grassy hillside above the Sea of Galilee teaching a multitude gathered on the slopes, soft morning light and drifting mist over the water below",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80",
-    "alt": "Sermon on the Mount"
+    "src": "/images/volumes/sermon-on-the-mount/hero-1280.webp",
+    "alt": "Jesus seated on a grassy hillside above the Sea of Galilee teaching a multitude gathered on the slopes, soft morning light and drifting mist over the water below"
   },
   "metaDescription": "Exposition of Jesus' Sermon on the Mount (Matthew 5-7): Beatitudes, salt and light, lust and anger of the heart, loving enemies, and building on the solid rock.",
   "keywords": [

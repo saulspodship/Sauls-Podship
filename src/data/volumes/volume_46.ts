@@ -16,12 +16,12 @@ export const volume_46: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/true-worship-vs-false-worship/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “True Worship vs False Worship”",
-    "credit": "Public domain — Frans Francken the Younger · Wikimedia Commons"
+    "alt": "Two altars divided by light — incense rising from a pure stone altar toward an open heaven of golden radiance, while at a pagan high place a strange green flame gutters out before a mute stone idol in the shadows",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=800&q=80",
-    "alt": "True Worship vs False Worship"
+    "src": "/images/volumes/true-worship-vs-false-worship/hero-1280.webp",
+    "alt": "Two altars divided by light — incense rising from a pure stone altar toward an open heaven of golden radiance, while at a pagan high place a strange green flame gutters out before a mute stone idol in the shadows"
   },
   "metaDescription": "Explore True Worship vs False Worship in the Bible: John 4:24 Spirit and Truth, Nadab and Abihu's strange fire, Golden Calf syncretism, and modern church worship ethics.",
   "keywords": [

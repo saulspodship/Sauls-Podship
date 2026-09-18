@@ -20,8 +20,8 @@ export const volume_01: Volume = {
     "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=800&q=80",
-    "alt": "All Bible Stories"
+    "src": "/images/volumes/all-bible-stories/hero-1280.webp",
+    "alt": "The story of the Bible in one vision — creation light, the ark, the parting of the sea, David and Goliath, the nativity, the cross and the empty tomb"
   },
   "metaDescription": "Explore all Bible stories in one unified chronological metanarrative. Trace biblical eras, covenants, and redemption from Genesis to Revelation with charts.",
   "keywords": [

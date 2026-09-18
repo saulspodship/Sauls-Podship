@@ -20,8 +20,8 @@ export const volume_02: Volume = {
     "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80",
-    "alt": "All Biblical Numerology"
+    "src": "/images/volumes/all-biblical-numerology/hero-1280.webp",
+    "alt": "Sacred numbers in the Scriptures — the seven-branched menorah, an illuminated scroll with the Hebrew numerals seven and forty, the twelve-stone breastplate and the forty days of rain"
   },
   "metaDescription": "Discover the symbolic meaning of biblical numbers including 3, 7, 12, 40, and 70. Explore scriptural counts, gematria context, and sacred mathematical symmetry.",
   "keywords": [

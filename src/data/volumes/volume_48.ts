@@ -16,12 +16,12 @@ export const volume_48: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/vatican-and-its-history/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Vatican and its History”",
-    "credit": "Public domain — Giovanni Paolo Panini · Wikimedia Commons"
+    "alt": "St Peter's Square at golden hour — Bernini's great colonnade embracing the piazza, the Egyptian obelisk and twin fountains, the dome of St Peter's rising against a warm Roman sky",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
-    "alt": "Vatican and its History"
+    "src": "/images/volumes/vatican-and-its-history/hero-1280.webp",
+    "alt": "St Peter's Square at golden hour — Bernini's great colonnade embracing the piazza, the Egyptian obelisk and twin fountains, the dome of St Peter's rising against a warm Roman sky"
   },
   "metaDescription": "Explore the history of the Vatican: St. Peter's tomb, Constantine's basilica, the Avignon papacy, Renaissance popes, the Counter-Reformation, and the Lateran Treaty.",
   "keywords": [

@@ -16,12 +16,12 @@ export const volume_41: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/seven-last-words-of-jesus/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Seven Last Words of Jesus”",
-    "credit": "Public domain — Anthony van Dyck · Wikimedia Commons"
+    "alt": "Golgotha at the ninth hour — three weathered empty wooden crosses silhouetted against a darkened noon sky, mourning women in dark cloaks and a young disciple kneeling at the foot of the hill, a Roman centurion removing his helmet in awe, an amber shaft of light breaking through storm clouds over an olive grove and the distant walls of Jerusalem",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=800&q=80",
-    "alt": "Seven Last Words of Jesus"
+    "src": "/images/volumes/seven-last-words-of-jesus/hero-1280.webp",
+    "alt": "Golgotha at the ninth hour — three weathered empty wooden crosses silhouetted against a darkened noon sky, mourning women in dark cloaks and a young disciple kneeling at the foot of the hill, a Roman centurion removing his helmet in awe, an amber shaft of light breaking through storm clouds over an olive grove and the distant walls of Jerusalem"
   },
   "metaDescription": "Meditation on the Seven Last Words of Jesus from the Cross: 'Father forgive them', 'Today in paradise', 'It is finished', 'Into Your hands I commit my spirit'.",
   "keywords": [

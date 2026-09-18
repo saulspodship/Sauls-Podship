@@ -16,12 +16,12 @@ export const volume_36: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/parables-of-jesus-all-40-explained/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Parables of Jesus: All 40+ Explained”",
-    "credit": "Public domain — Alexandre Bida · Wikimedia Commons"
+    "alt": "Jesus teaching from a wooden fishing boat just off the Galilean shore while crowds cover the hillside, a sower casting seed in the foreground, golden evening light on the water",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=800&q=80",
-    "alt": "Parables of Jesus: All 40+ Explained"
+    "src": "/images/volumes/parables-of-jesus-all-40-explained/hero-1280.webp",
+    "alt": "Jesus teaching from a wooden fishing boat just off the Galilean shore while crowds cover the hillside, a sower casting seed in the foreground, golden evening light on the water"
   },
   "metaDescription": "Explore all 40+ parables of Jesus Christ: The Prodigal Son, Good Samaritan, Sower, Mustard Seed, and Talents. Unpack their historical context and radical Kingdom truth.",
   "keywords": [

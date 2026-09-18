@@ -16,12 +16,12 @@ export const volume_38: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/psalm-authors/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Psalm Authors”",
-    "credit": "Public domain — Peter Paul Rubens · Wikimedia Commons"
+    "alt": "David the shepherd-king playing a lyre beneath a canopy of stars on a Jerusalem rooftop, oil lamp and unrolled scroll beside him, the ancient city sleeping in deep blue night",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
-    "alt": "Psalm Authors"
+    "src": "/images/volumes/psalm-authors/hero-1280.webp",
+    "alt": "David the shepherd-king playing a lyre beneath a canopy of stars on a Jerusalem rooftop, oil lamp and unrolled scroll beside him, the ancient city sleeping in deep blue night"
   },
   "metaDescription": "Who wrote the Psalms? Discover David, Asaph, the Sons of Korah, Moses (Psalm 90), Heman, Ethan, and Solomon. Learn psalm genres, laments, and liturgical theology.",
   "keywords": [

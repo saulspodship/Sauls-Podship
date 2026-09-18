@@ -16,12 +16,12 @@ export const volume_47: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/types-of-bad-spirits-in-the-bible/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Types of Bad Spirits in the Bible”",
-    "credit": "Public domain — Follower of Paul Bril · Wikimedia Commons"
+    "alt": "Christ freeing a kneeling chained man among the Gerasene tombs as mist-like shadow-forms scatter and flee before the breaking dawn light over the Sea of Galilee",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
-    "alt": "Types of Bad Spirits in the Bible"
+    "src": "/images/volumes/types-of-bad-spirits-in-the-bible/hero-1280.webp",
+    "alt": "Christ freeing a kneeling chained man among the Gerasene tombs as mist-like shadow-forms scatter and flee before the breaking dawn light over the Sea of Galilee"
   },
   "metaDescription": "A complete biblical study of the 20 named bad spirits: spirit of jealousy, lying spirit, spirit of divination (python), familiar spirits, and the believer's authority in Christ.",
   "keywords": [

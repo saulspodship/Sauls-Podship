@@ -16,12 +16,12 @@ export const volume_44: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/the-five-offerings-of-leviticus/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “The Five Offerings of Leviticus”",
-    "credit": "Public domain — Internet Archive Book Images · Wikimedia Commons"
+    "alt": "The bronze altar of the tabernacle courtyard at sunset — a Levite priest in white linen presenting an offering as a single column of smoke rises straight into the amber sky, the tent of meeting glowing behind",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
-    "alt": "The Five Offerings of Leviticus"
+    "src": "/images/volumes/the-five-offerings-of-leviticus/hero-1280.webp",
+    "alt": "The bronze altar of the tabernacle courtyard at sunset — a Levite priest in white linen presenting an offering as a single column of smoke rises straight into the amber sky, the tent of meeting glowing behind"
   },
   "metaDescription": "Explore the five offerings of Leviticus: Burnt, Grain, Peace, Sin, and Guilt. Discover ritual procedures, blood symbolism, and complete fulfillment in the cross of Christ.",
   "keywords": [
