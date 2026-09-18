@@ -16,12 +16,12 @@ export const volume_11: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/biblical-maps/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Biblical Maps”",
-    "credit": "Public domain — Abraham Ortelius · Wikimedia Commons"
+    "alt": "Antique maps of the Holy Land on a cartographer's table with brass compass, magnifier and candlelight",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80",
-    "alt": "Biblical Maps"
+    "src": "/images/volumes/biblical-maps/hero-1280.webp",
+    "alt": "Antique maps of the Holy Land on a cartographer's table with brass compass, magnifier and candlelight"
   },
   "metaDescription": "Explore biblical maps and geography: Abraham's journey, Exodus routes, the Promised Land tribal allocations, and Apostle Paul's missionary travels in the Roman Empire.",
   "keywords": [

@@ -126,10 +126,10 @@ export const EncyclopediaIndexPage: React.FC = () => {
           <p className="text-center text-xs text-white/60 mb-6 max-w-xl mx-auto">
             Interactive charts woven from the same scholarship as the 51 volumes — open them alongside any volume.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-stretch justify-center gap-5">
             <a
               href="/prophecy-map"
-              className="group flex items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all"
+              className="group flex w-full items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all md:w-[calc(50%-10px)]"
             >
               <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#4A152C] border border-[#D4AF37]/40 flex items-center justify-center">
                 <Globe2 className="w-5 h-5 text-[#E8C96A]" />
@@ -146,7 +146,7 @@ export const EncyclopediaIndexPage: React.FC = () => {
             </a>
             <a
               href="/cross-references"
-              className="group flex items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all"
+              className="group flex w-full items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all md:w-[calc(50%-10px)]"
             >
               <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#4A152C] border border-[#D4AF37]/40 flex items-center justify-center">
                 <Network className="w-5 h-5 text-[#E8C96A]" />

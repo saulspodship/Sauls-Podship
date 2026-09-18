@@ -16,12 +16,12 @@ export const volume_09: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/bible-book-writers/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Bible Book Writers”",
-    "credit": "Public domain — Walters Art Museum Illuminated Manuscripts · Wikimedia Commons"
+    "alt": "Biblical scribes writing the Scriptures by lamplight with reed pen, leather scroll, ink pots and papyrus",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80",
-    "alt": "Bible Book Writers"
+    "src": "/images/volumes/bible-book-writers/hero-1280.webp",
+    "alt": "Biblical scribes writing the Scriptures by lamplight with reed pen, leather scroll, ink pots and papyrus"
   },
   "metaDescription": "Who wrote the Bible? Comprehensive guide to the human authors of all 66 books, their historical eras, vocations, original languages, and inspiration.",
   "keywords": [

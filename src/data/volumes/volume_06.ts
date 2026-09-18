@@ -16,12 +16,12 @@ export const volume_06: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/apostles-creed/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Apostle's Creed”",
-    "credit": "Public domain — James Tissot · Wikimedia Commons"
+    "alt": "Early believers confessing the creed by oil-lamp light in a Roman catacomb beneath the fish symbol carved in living stone",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80",
-    "alt": "Apostle's Creed"
+    "src": "/images/volumes/apostles-creed/hero-1280.webp",
+    "alt": "Early believers confessing the creed by oil-lamp light in a Roman catacomb beneath the fish symbol carved in living stone"
   },
   "metaDescription": "Line-by-line exposition of the Apostle's Creed. Learn its patristic roots, baptismal interrogation history, theological meaning, and defense of orthodox faith.",
   "keywords": [
