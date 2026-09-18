@@ -16,12 +16,12 @@ export const volume_30: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/miracles-of-jesus-and-the-apostles-complete-catalogue/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Miracles of Jesus & the Apostles: Complete Catalogue”",
-    "credit": "Public domain — Washington Allston · Wikimedia Commons"
+    "alt": "Christ at the prow of a wooden boat commanding the storm as waves freeze mid-crest and a shaft of light pierces the clouds",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
-    "alt": "Miracles of Jesus & the Apostles: Complete Catalogue"
+    "src": "/images/volumes/miracles-of-jesus-and-the-apostles-complete-catalogue/hero-1280.webp",
+    "alt": "Christ at the prow of a wooden boat commanding the storm as waves freeze mid-crest and a shaft of light pierces the clouds"
   },
   "metaDescription": "Catalogue of all 37 miracles of Jesus and apostolic miracles in Acts. Categorized into nature, healing, deliverance, and resurrection miracles with Gospel parallels.",
   "keywords": [

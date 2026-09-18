@@ -16,12 +16,12 @@ export const volume_29: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/messianic-prophecies/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Messianic Prophecies”",
-    "credit": "Public domain — unknown artist · Wikimedia Commons"
+    "alt": "An ancient scroll of prophecy unrolled on stone, threads of light from its letters converging on a manger and a distant cross",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=800&q=80",
-    "alt": "Messianic Prophecies"
+    "src": "/images/volumes/messianic-prophecies/hero-1280.webp",
+    "alt": "An ancient scroll of prophecy unrolled on stone, threads of light from its letters converging on a manger and a distant cross"
   },
   "metaDescription": "Explore major Messianic prophecies fulfilled by Jesus: Genesis 3:15, Isaiah 53, Psalm 22, Micah 5:2, Daniel 9, and the mathematical probability of fulfillment.",
   "keywords": [

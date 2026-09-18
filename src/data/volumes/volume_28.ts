@@ -16,12 +16,12 @@ export const volume_28: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/lords-prayer/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Lord's Prayer”",
-    "credit": "Public domain — Lucas Gassel · Wikimedia Commons"
+    "alt": "Christ on a hillside teaching the disciples to pray, hands lifted toward heaven, the listening crowd seated on the grass",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=800&q=80",
-    "alt": "Lord's Prayer"
+    "src": "/images/volumes/lords-prayer/hero-1280.webp",
+    "alt": "Christ on a hillside teaching the disciples to pray, hands lifted toward heaven, the listening crowd seated on the grass"
   },
   "metaDescription": "Clause-by-clause commentary on the Lord's Prayer: Our Father in heaven, hallowed be Your name, daily bread, forgiveness, temptation, and the doxology explained.",
   "keywords": [

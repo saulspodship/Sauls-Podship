@@ -16,12 +16,12 @@ export const volume_24: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/history-of-all-12-disciples/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “History of All 12 Disciples”",
-    "credit": "Public domain — Rembrandt · Wikimedia Commons"
+    "alt": "The Twelve gathered around Christ in a lamplit upper room as He breaks bread, each disciple distinct in pose and expression",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-    "alt": "History of All 12 Disciples"
+    "src": "/images/volumes/history-of-all-12-disciples/hero-1280.webp",
+    "alt": "The Twelve gathered around Christ in a lamplit upper room as He breaks bread, each disciple distinct in pose and expression"
   },
   "metaDescription": "Biographies and historical martyrdoms of all 12 apostles: Peter, John, James, Andrew, Thomas, Bartholomew, and others. Trace their missionary paths from Jerusalem to Rome and India.",
   "keywords": [

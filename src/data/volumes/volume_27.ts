@@ -16,12 +16,12 @@ export const volume_27: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/jesus-is-god-full-references-ot-nt/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Jesus Is God (Full References OT + NT)”",
-    "credit": "Public domain — Raphael · Wikimedia Commons"
+    "alt": "Christ in radiant glory standing between unfurled scrolls of the Law and the Prophets lit by a descending beam of light",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800&q=80",
-    "alt": "Jesus Is God (Full References OT + NT)"
+    "src": "/images/volumes/jesus-is-god-full-references-ot-nt/hero-1280.webp",
+    "alt": "Christ in radiant glory standing between unfurled scrolls of the Law and the Prophets lit by a descending beam of light"
   },
   "metaDescription": "Exhaustive biblical evidence that Jesus is God: Old Testament Yahweh titles, New Testament explicit claims (John 1:1, Titus 2:13), divine attributes, and worship.",
   "keywords": [
