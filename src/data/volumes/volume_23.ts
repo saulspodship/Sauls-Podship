@@ -16,12 +16,12 @@ export const volume_23: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/heaven-hell/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Heaven & Hell”",
-    "credit": "Public domain — Gustave Doré · Wikimedia Commons"
+    "alt": "A realm divided by one seam of light: the radiant New Jerusalem descending in clouds on one side, an ember-lit outer darkness on the other",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&w=800&q=80",
-    "alt": "Heaven & Hell"
+    "src": "/images/volumes/heaven-hell/hero-1280.webp",
+    "alt": "A realm divided by one seam of light: the radiant New Jerusalem descending in clouds on one side, an ember-lit outer darkness on the other"
   },
   "metaDescription": "What does the Bible teach about Heaven and Hell? Explore Sheol, Hades, Gehenna, intermediate state, eternal conscious torment, annihilationism, and the New Earth.",
   "keywords": [

@@ -16,12 +16,12 @@ export const volume_19: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/easter-resurrection/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Easter & Resurrection”",
-    "credit": "Public domain — Matthias Grünewald · Wikimedia Commons"
+    "alt": "The empty tomb at dawn with the stone rolled away and a radiant angel in white seated at the entrance",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80",
-    "alt": "Easter & Resurrection"
+    "src": "/images/volumes/easter-resurrection/hero-1280.webp",
+    "alt": "The empty tomb at dawn with the stone rolled away and a radiant angel in white seated at the entrance"
   },
   "metaDescription": "Explore the historical and theological proof of Jesus Christ's bodily resurrection. Understand the empty tomb, eyewitness testimonies, and new creation victory.",
   "keywords": [

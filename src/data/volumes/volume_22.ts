@@ -16,12 +16,12 @@ export const volume_22: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/guide-to-christian-living/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Guide to Christian Living”",
-    "credit": "Public domain — Lucas Cranach the Elder · Wikimedia Commons"
+    "alt": "First-century disciples walking a sunlit path of daily faith through olive groves toward a Judean village",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-    "alt": "Guide to Christian Living"
+    "src": "/images/volumes/guide-to-christian-living/hero-1280.webp",
+    "alt": "First-century disciples walking a sunlit path of daily faith through olive groves toward a Judean village"
   },
   "metaDescription": "A complete guide to Christian discipleship: daily prayer, fasting, biblical finances, overcoming temptation, mental health, marriage, and living holy in modern culture.",
   "keywords": [

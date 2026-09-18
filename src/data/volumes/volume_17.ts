@@ -16,12 +16,12 @@ export const volume_17: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/crusades-historical-theological-analysis/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Crusades — Historical + Theological Analysis”",
-    "credit": "Public domain — Henri Frédéric Schopin · Wikimedia Commons"
+    "alt": "A weary crusader knight kneeling in prayer before a tattered cross-banner at dusk outside a besieged Levantine city",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=800&q=80",
-    "alt": "Crusades — Historical + Theological Analysis"
+    "src": "/images/volumes/crusades-historical-theological-analysis/hero-1280.webp",
+    "alt": "A weary crusader knight kneeling in prayer before a tattered cross-banner at dusk outside a besieged Levantine city"
   },
   "metaDescription": "Objective historical and theological analysis of the Crusades: Pope Urban II, First to Fourth Crusades, Saladin, fall of Acre, and Christian theological critique.",
   "keywords": [

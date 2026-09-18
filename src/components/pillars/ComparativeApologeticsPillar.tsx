@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 
 /**
- * Fifth pillar card — "400 Comparative Questions".
+ * Fifth pillar card — "400 Comparative Religion Apologetics Questions".
  * Styled 1:1 with the existing four pillar cards on the home page
  * (p-8 rounded-3xl white card, wine #4A152C, gold #E8C96A hover).
  */
@@ -43,7 +43,7 @@ export default function ComparativeApologeticsPillar({
           </svg>
         </div>
         <h3 className="font-serif font-bold text-xl text-[#4A152C] mb-2">
-          {count} Comparative Questions
+          {count} Comparative Religion Apologetics Questions
         </h3>
         <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-sans">
           The hardest objections raised in Christian dialogue with Islam,

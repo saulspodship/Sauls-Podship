@@ -16,12 +16,12 @@ export const volume_15: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/comparative-religion/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Comparative Religion”",
-    "credit": "Public domain — Thomas Rowlandson · Wikimedia Commons"
+    "alt": "Sacred scriptures of the world's faiths laid side by side on a candlelit scholar's desk",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=800&q=80",
-    "alt": "Comparative Religion"
+    "src": "/images/volumes/comparative-religion/hero-1280.webp",
+    "alt": "Sacred scriptures of the world's faiths laid side by side on a candlelit scholar's desk"
   },
   "metaDescription": "Comparative study of world religions: Christianity, Islam, Judaism, Hinduism, and Buddhism. Compare concepts of God, human sin, atonement, and the person of Christ.",
   "keywords": [

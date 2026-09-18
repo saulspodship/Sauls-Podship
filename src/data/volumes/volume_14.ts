@@ -16,12 +16,12 @@ export const volume_14: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/christmas-history/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Christmas History”",
-    "credit": "Public domain — Sailko · Wikimedia Commons"
+    "alt": "The Nativity in a rock-hewn Bethlehem cave-stable beneath a radiant star, Mary kneeling by the manger while shepherds approach on the hillside",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
-    "alt": "Christmas History"
+    "src": "/images/volumes/christmas-history/hero-1280.webp",
+    "alt": "The Nativity in a rock-hewn Bethlehem cave-stable beneath a radiant star, Mary kneeling by the manger while shepherds approach on the hillside"
   },
   "metaDescription": "Explore the real history of Christmas: biblical nativity prophecies, the December 25 dating controversy, St. Nicholas of Myra, and the theology of the Incarnation.",
   "keywords": [
