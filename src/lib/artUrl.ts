@@ -15,7 +15,7 @@
  * hero masters are converted — do not edit it by hand unless you need to
  * force a cache bust.
  */
-export const ART_VERSION = 4;
+export const ART_VERSION = 6;
 
 /**
  * Append the ?v=ART_VERSION cache-buster to local site paths (/images/…).
