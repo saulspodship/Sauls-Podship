@@ -16,12 +16,12 @@ export const volume_34: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/not-biblical-quotes-sayings/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Not Biblical Quotes or Sayings”",
-    "credit": "Public domain — Unknown authorUnknown author · Wikimedia Commons"
+    "alt": "A scholar's desk by candlelight — an open Bible glowing under a single shaft of light, quill and inkwell beside crumpled parchments consigned to shadow: discerning true Scripture from popular invented sayings",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-    "alt": "Not Biblical Quotes or Sayings"
+    "src": "/images/volumes/not-biblical-quotes-sayings/hero-1280.webp",
+    "alt": "A scholar's desk by candlelight — an open Bible glowing under a single shaft of light, quill and inkwell beside crumpled parchments consigned to shadow: discerning true Scripture from popular invented sayings"
   },
   "metaDescription": "Famous quotes people think are in the Bible but aren't: 'God helps those who help themselves,' 'Money is the root of all evil,' 'God won't give you more than you can handle.'",
   "keywords": [

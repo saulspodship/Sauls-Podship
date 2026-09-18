@@ -16,12 +16,12 @@ export const volume_49: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/worlds-all-big-churches/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “World's All Big Churches”",
-    "credit": "Public domain — William Miller · Wikimedia Commons"
+    "alt": "A dawn-mist panorama of the world's great churches — Hagia Sophia's dome, Gothic spires, colourful onion domes, round stone Ethiopian hill chapels and a modern meeting hall gathered under one morning sky",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80",
-    "alt": "World's All Big Churches"
+    "src": "/images/volumes/worlds-all-big-churches/hero-1280.webp",
+    "alt": "A dawn-mist panorama of the world's great churches — Hagia Sophia's dome, Gothic spires, colourful onion domes, round stone Ethiopian hill chapels and a modern meeting hall gathered under one morning sky"
   },
   "metaDescription": "Tour the world's greatest cathedrals and churches: St. Peter's Basilica, Hagia Sophia, Sagrada Família, Notre-Dame, Westminster Abbey, and modern mega-sanctuaries.",
   "keywords": [

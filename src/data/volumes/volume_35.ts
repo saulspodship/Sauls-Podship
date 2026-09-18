@@ -16,12 +16,12 @@ export const volume_35: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/original-scripture-languages/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Original Scripture Languages”",
-    "credit": "Public domain — Anonymous (Ethiopia)Unknown author · Wikimedia Commons"
+    "alt": "Hebrew, Aramaic and Greek manuscripts spread across a candlelit scriptorium desk — Torah scroll, Targum and Greek codex under warm flickering light, a scribe's quill resting mid-copy",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=800&q=80",
-    "alt": "Original Scripture Languages"
+    "src": "/images/volumes/original-scripture-languages/hero-1280.webp",
+    "alt": "Hebrew, Aramaic and Greek manuscripts spread across a candlelit scriptorium desk — Torah scroll, Targum and Greek codex under warm flickering light, a scribe's quill resting mid-copy"
   },
   "metaDescription": "Learn the original languages of the Bible: Biblical Hebrew, Biblical Aramaic, and Koine Greek. Understand grammar, idioms, semantics, and Bible translation principles.",
   "keywords": [

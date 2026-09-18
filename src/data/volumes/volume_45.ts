@@ -16,12 +16,12 @@ export const volume_45: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/the-magi/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “The Magi”",
-    "credit": "Public domain — Edward Burne-Jones · Wikimedia Commons"
+    "alt": "Persian magi in rich robes crossing a moonlit desert on camels toward a huge low star above the Judean hills, chests of gold, frankincense and myrrh bound to the saddles",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-    "alt": "The Magi"
+    "src": "/images/volumes/the-magi/hero-1280.webp",
+    "alt": "Persian magi in rich robes crossing a moonlit desert on camels toward a huge low star above the Judean hills, chests of gold, frankincense and myrrh bound to the saddles"
   },
   "metaDescription": "Who were the biblical Magi (Wise Men)? Trace their Persian origins, Daniel's influence in Babylon, the astronomical Star of Bethlehem, and royal prophetic gifts.",
   "keywords": [

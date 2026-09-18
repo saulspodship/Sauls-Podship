@@ -16,12 +16,12 @@ export const volume_50: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/1-year-sermon-guide-52-gen-z-topics/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “1-Year Sermon Guide (52 Gen-Z Topics)”",
-    "credit": "Public domain — British Cartoon Prints Collection · Wikimedia Commons"
+    "alt": "Young adults of many nations in a circle of honest late-evening conversation about faith and hope in a warm hall, an open Bible resting on a wooden crate at the centre",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
-    "alt": "1-Year Sermon Guide (52 Gen-Z Topics)"
+    "src": "/images/volumes/1-year-sermon-guide-52-gen-z-topics/hero-1280.webp",
+    "alt": "Young adults of many nations in a circle of honest late-evening conversation about faith and hope in a warm hall, an open Bible resting on a wooden crate at the centre"
   },
   "metaDescription": "A complete 52-week sermon and curriculum guide for Gen-Z: biblical perspectives on mental health, anxiety, digital addiction, sexuality, purpose, and deconstruction.",
   "keywords": [
