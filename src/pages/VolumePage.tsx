@@ -195,81 +195,6 @@ export const VolumePage: React.FC = () => {
       {/* 1. Shared Full-Bleed Volume Hero */}
       <Hero variant="volume" volume={volume} />
 
-      {/* 2. Sticky Quick Navigation & Resource Action Bar */}
-      <nav aria-label="Volume Section Navigation" className="sticky top-14 sm:top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 py-2.5 px-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto text-xs font-semibold text-gray-700 scrollbar-none">
-          <div className="flex items-center gap-4">
-            <a href="#summary" className="hover:text-[#4A152C] whitespace-nowrap">Overview</a>
-            <a href="#key-facts" className="hover:text-[#4A152C] whitespace-nowrap">Key Facts</a>
-            <a href="#exegesis" className="hover:text-[#4A152C] whitespace-nowrap">Manuscript Exegesis</a>
-            {volume.content?.tables && volume.content.tables.length > 0 && (
-              <a href="#tables" className="hover:text-[#4A152C] whitespace-nowrap">Tables ({volume.content.tables.length})</a>
-            )}
-            {volume.content?.storyPanels && volume.content.storyPanels.length > 0 && (
-              <a href="#story-panels" className="hover:text-[#4A152C] whitespace-nowrap">Panels ({volume.content.storyPanels.length})</a>
-            )}
-            {volume.faq && volume.faq.length > 0 && (
-              <a href="#faq" className="hover:text-[#4A152C] whitespace-nowrap">FAQ ({volume.faq.length})</a>
-            )}
-            <a href="#resources" className="hover:text-[#4A152C] whitespace-nowrap">Resources</a>
-            <a href="#related" className="hover:text-[#4A152C] whitespace-nowrap">Related Volumes</a>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={handleCopyCitation}
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-md border border-gray-300 transition-colors"
-              title="Copy Chicago/APA Academic Citation"
-            >
-              {copiedCitation ? (
-                <>
-                  <Check className="w-3 h-3 text-emerald-600" />
-                  <span className="text-emerald-700">Citation Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3 h-3 text-gray-500" />
-                  <span>Cite Volume</span>
-                </>
-              )}
-            </button>
-
-            {volume.articleLink && (
-              <a
-                href={volume.articleLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 hover:bg-emerald-100"
-              >
-                <span>Article</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-            {volume.youtubeLink ? (
-              <a
-                href={volume.youtubeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-50 px-2.5 py-1 rounded-md border border-red-200 hover:bg-red-100"
-              >
-                <span>Video</span>
-                <Play className="w-3 h-3 fill-current" />
-              </a>
-            ) : (
-              <a
-                href={SITE.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-50 px-2.5 py-1 rounded-md border border-red-200 hover:bg-red-100"
-              >
-                <span>YouTube</span>
-                <Play className="w-3 h-3 fill-current" />
-              </a>
-            )}
-          </div>
-        </div>
-      </nav>
-
       {/* 3. Main Volume Body */}
       <div id="volume-content" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
         
@@ -386,6 +311,14 @@ export const VolumePage: React.FC = () => {
                 <Table className="w-6 h-6 text-[#D4AF37]" />
                 Comparative &amp; Linguistic Reference Tables
               </h2>
+              <div className="flex items-center justify-center gap-2 mt-2" aria-hidden="true">
+                <span className="h-px w-16 bg-gradient-to-r from-transparent to-[#D4AF37]/70" />
+                <span className="text-[#D4AF37] text-xs">&#10022;</span>
+                <span className="h-px w-16 bg-gradient-to-l from-transparent to-[#D4AF37]/70" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-3xl mx-auto">
+                The complete comparative apparatus of this volume in one continuous study layer: canonical taxonomy, synoptic parallels &amp; audiences, Greek&ndash;Hebrew linguistic keys, corrected misreadings, first-century cultural background, and single-sentence exegesis of every parable.
+              </p>
             </div>
 
             {volume.content.tables.map((table, tIdx) => {
