@@ -16,12 +16,12 @@ export const volume_32: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/names-of-jesus/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Names of Jesus”",
-    "credit": "Public domain — Charles de Foucauld · Wikimedia Commons"
+    "alt": "A mosaic of Christ's titles — the shepherd's lamb, the king's crown, the lamp of light and the open book of the Word",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=800&q=80",
-    "alt": "Names of Jesus"
+    "src": "/images/volumes/names-of-jesus/hero-1280.webp",
+    "alt": "A mosaic of Christ's titles — the shepherd's lamb, the king's crown, the lamp of light and the open book of the Word"
   },
   "metaDescription": "Discover over 100 biblical names and titles of Jesus Christ: Emmanuel, Son of Man, Lamb of God, Prince of Peace, Alpha and Omega, and their profound theological meaning.",
   "keywords": [

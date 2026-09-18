@@ -16,12 +16,12 @@ export const volume_31: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/names-of-god/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Names of God”",
-    "credit": "Public domain — Dead Sea Scrolls · Wikimedia Commons"
+    "alt": "The Hebrew Name of God glowing in fire above the temple mount at night as incense smoke rises from the altar",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80",
-    "alt": "Names of God"
+    "src": "/images/volumes/names-of-god/hero-1280.webp",
+    "alt": "The Hebrew Name of God glowing in fire above the temple mount at night as incense smoke rises from the altar"
   },
   "metaDescription": "Explore the Hebrew names of God: Yahweh, Elohim, Adonai, El Shaddai, Yahweh Jireh, Yahweh Rapha. Discover their biblical meanings, pronunciation, and significance.",
   "keywords": [

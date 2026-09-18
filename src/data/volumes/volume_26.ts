@@ -16,12 +16,12 @@ export const volume_26: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/how-the-world-populated-after-abels-death/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “How The World Populated After Abel's Death”",
-    "credit": "Public domain — Gustave Doré · Wikimedia Commons"
+    "alt": "The first mudbrick city rising in a river valley at dusk as the descendants of Adam settle the earth after Abel's death",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
-    "alt": "How The World Populated After Abel's Death"
+    "src": "/images/volumes/how-the-world-populated-after-abels-death/hero-1280.webp",
+    "alt": "The first mudbrick city rising in a river valley at dusk as the descendants of Adam settle the earth after Abel's death"
   },
   "metaDescription": "Where did Cain get his wife? How did the world populate after Abel's death? Explore biblical demographic models, primeval lifespans, and Genesis genealogies.",
   "keywords": [

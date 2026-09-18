@@ -16,12 +16,12 @@ export const volume_20: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/family-tree-adam-jesus/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Family Tree: Adam → Jesus”",
-    "credit": "Public domain — Unknown authorUnknown author · Wikimedia Commons"
+    "alt": "A colossal luminous tree of generations rising from Adam and Eve in Eden to a young maiden of Nazareth beneath the Star of Bethlehem",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
-    "alt": "Family Tree: Adam → Jesus"
+    "src": "/images/volumes/family-tree-adam-jesus/hero-1280.webp",
+    "alt": "A colossal luminous tree of generations rising from Adam and Eve in Eden to a young maiden of Nazareth beneath the Star of Bethlehem"
   },
   "metaDescription": "Trace the biblical genealogy from Adam to Jesus Christ. Understand the differences between Matthew's royal lineage and Luke's biological lineage, and messianic lines.",
   "keywords": [

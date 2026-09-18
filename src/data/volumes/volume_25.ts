@@ -16,12 +16,12 @@ export const volume_25: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/holy-communion/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Holy Communion”",
-    "credit": "Public domain — Jacopo Tintoretto · Wikimedia Commons"
+    "alt": "A broken loaf and a chalice of wine on a rough wooden table in a candlelit upper room wrapped in faint incense smoke",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1515621061946-eff1c2a352bd?auto=format&fit=crop&w=800&q=80",
-    "alt": "Holy Communion"
+    "src": "/images/volumes/holy-communion/hero-1280.webp",
+    "alt": "A broken loaf and a chalice of wine on a rough wooden table in a candlelit upper room wrapped in faint incense smoke"
   },
   "metaDescription": "Explore Holy Communion and the Lord's Supper: Biblical Passover roots, 1 Corinthians 11, Transubstantiation, Consubstantiation, Spiritual Presence, and Memorialism.",
   "keywords": [

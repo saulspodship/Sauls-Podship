@@ -16,12 +16,12 @@ export const volume_16: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/complete-christian-theology-map/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Complete Christian Theology Map”",
-    "credit": "Public domain — Abraham van der Eyk · Wikimedia Commons"
+    "alt": "A grand illuminated map of Christian theology unfurled on a study desk, its lit routes running from Eden through the Cross to the New Jerusalem",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=800&q=80",
-    "alt": "Complete Christian Theology Map"
+    "src": "/images/volumes/complete-christian-theology-map/hero-1280.webp",
+    "alt": "A grand illuminated map of Christian theology unfurled on a study desk, its lit routes running from Eden through the Cross to the New Jerusalem"
   },
   "metaDescription": "Explore the complete Christian theology map: ten core doctrines including Theology Proper, Christology, Soteriology, and Eschatology mapped into a coherent system.",
   "keywords": [

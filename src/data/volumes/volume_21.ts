@@ -16,12 +16,12 @@ export const volume_21: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/forbidden-knowledge-the-watchers/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Forbidden Knowledge & the Watchers”",
-    "credit": "Public domain — Gustave Doré · Wikimedia Commons"
+    "alt": "Colossal fallen Watchers of storm and starfire descending the black slopes of Mount Hermon at twilight above an oblivious settlement",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1519074002996-a69e7ac46a42?auto=format&fit=crop&w=800&q=80",
-    "alt": "Forbidden Knowledge & the Watchers"
+    "src": "/images/volumes/forbidden-knowledge-the-watchers/hero-1280.webp",
+    "alt": "Colossal fallen Watchers of storm and starfire descending the black slopes of Mount Hermon at twilight above an oblivious settlement"
   },
   "metaDescription": "Examine Genesis 6, the Watchers, and 1 Enoch. Understand the sons of God controversy, the Nephilim giants, second-temple Jewish thought, and Jude's references.",
   "keywords": [

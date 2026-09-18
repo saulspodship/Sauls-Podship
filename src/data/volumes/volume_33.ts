@@ -16,12 +16,12 @@ export const volume_33: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/non-canonical-books-canon-differences/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Non-Canonical Books & Canon Differences”",
-    "credit": "Public domain — unknown, facsimile editior Tischendorf · Wikimedia Commons"
+    "alt": "Ancient codices and scrolls weighed on bronze scales in a conciliar library while a bishop's hand sorts the canonical books",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800&q=80",
-    "alt": "Non-Canonical Books & Canon Differences"
+    "src": "/images/volumes/non-canonical-books-canon-differences/hero-1280.webp",
+    "alt": "Ancient codices and scrolls weighed on bronze scales in a conciliar library while a bishop's hand sorts the canonical books"
   },
   "metaDescription": "Why were certain books excluded from the Bible? Compare the Protestant, Catholic, and Orthodox canons. Examine the Apocrypha, Pseudepigrapha, and Gnostic gospels.",
   "keywords": [

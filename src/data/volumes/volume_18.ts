@@ -16,12 +16,12 @@ export const volume_18: Volume = {
   "lastUpdated": "2026-09-06",
   "heroImage": {
     "src": "/images/volumes/early-church-fathers-councils/hero-1920.jpg",
-    "alt": "Public-domain artwork illustrating “Early Church Fathers & Councils”",
-    "credit": "Public domain — Симон Ушаков (?) · Wikimedia Commons"
+    "alt": "Bishop fathers of the early church in solemn debate at the Council of Nicaea inside a sunlit Roman basilica",
+    "credit": "Original artwork commissioned by Saul's Podship Studio"
   },
   "cardImage": {
-    "src": "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
-    "alt": "Early Church Fathers & Councils"
+    "src": "/images/volumes/early-church-fathers-councils/hero-1280.webp",
+    "alt": "Bishop fathers of the early church in solemn debate at the Council of Nicaea inside a sunlit Roman basilica"
   },
   "metaDescription": "Explore Early Church Fathers and Councils: Apostolic fathers, Tertullian, Athanasius, Augustine, Council of Nicaea (325), and Chalcedon (451) defending orthodoxy.",
   "keywords": [
