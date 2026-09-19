@@ -167,7 +167,7 @@ export const VolumePage: React.FC = () => {
           "name": "Saul's Podship",
           "url": "https://www.saulspodship.com"
         },
-        "image": volume.heroImage?.src?.startsWith("/") ? `${SITE.url}${volume.heroImage.src}` : (volume.heroImage?.src || "https://www.saulspodship.com/images/hero/last-supper-1920.webp")
+        "image": volume.heroImage?.src?.startsWith("/") ? `${SITE.url}${volume.heroImage.src}` : (volume.heroImage?.src || "https://www.saulspodship.com/images/hero/last-supper-v2-1920.webp")
       },
       {
         "@type": "FAQPage",
@@ -251,7 +251,7 @@ export const VolumePage: React.FC = () => {
         )}
 
         {/* Companion Modules — every volume page links the interactive companions */}
-        <section id="companion-modules" className="rounded-3xl bg-[#1A0812] border-2 border-[#D4AF37]/40 shadow-xl p-6 sm:p-8 scroll-mt-24">
+        <section id="companion-modules" className="rounded-3xl bg-[#1A0812] border-2 border-[#D4AF37]/40 shadow-xl p-6 sm:p-8 scroll-mt-24 text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
             <Layers className="w-4 h-4 text-[#E8C96A]" />
             <span className="text-xs font-black uppercase tracking-widest text-[#E8C96A]">Companion Modules</span>
@@ -259,15 +259,12 @@ export const VolumePage: React.FC = () => {
           <p className="text-center text-[11px] sm:text-xs text-white/60 mb-5 max-w-xl mx-auto">
             Interactive charts woven from the same scholarship as the 51 volumes — open them alongside this dossier.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a href="/prophecy-map" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
+          <div className="mx-auto flex w-full flex-wrap items-center justify-center gap-3">
+            <a href="/prophecy-map" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
               <Globe2 className="w-3.5 h-3.5" /> Biblical Prophecy Map
             </a>
-            <a href="/cross-references" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
+            <a href="/cross-references" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
               <Network className="w-3.5 h-3.5" /> The Interlinked Bible
-            </a>
-            <a href="/comparative-apologetics" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
-              <ShieldCheck className="w-3.5 h-3.5" /> Comparative Apologetics
             </a>
           </div>
         </section>

@@ -47,8 +47,8 @@ def process_volume(vol):
                 out_f.write(resp.read())
         except Exception as e:
             print(f"[WARN] Failed to download hero for {slug}: {e}")
-            # Fallback to last-supper-source.jpg if download fails
-            fallback = os.path.join(ROOT_DIR, 'public', 'images', 'hero', 'last-supper-source.jpg')
+            # Fallback to last-supper-v2-source.jpg if download fails
+            fallback = os.path.join(ROOT_DIR, 'public', 'images', 'hero', 'last-supper-v2-source.jpg')
             if os.path.exists(fallback):
                 import shutil
                 shutil.copy(fallback, source_file)

@@ -52,7 +52,7 @@ export const HomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+          <div className="flex flex-wrap justify-center gap-8 w-full *:w-full md:*:w-[calc(50%-1rem)] lg:*:w-[calc(33.333%-1.334rem)] xl:*:w-[calc(25%-1.5rem)]">
             <div className="p-8 rounded-3xl bg-white border border-[#4A152C]/10 shadow-sm flex flex-col items-center justify-between text-center group hover:border-[#D4AF37] transition-all">
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 rounded-2xl bg-[#4A152C]/10 text-[#4A152C] flex items-center justify-center mb-4 group-hover:bg-[#4A152C] group-hover:text-[#E8C96A] transition-colors">
