@@ -57,4 +57,4 @@ Every volume ships: `hero-2560.webp`, `hero-1920.webp`, `hero-1280.webp`, `hero-
 | 49 | World's All Big Churches | Unsplash — Hagia Sophia / Sagrada Família (credit photographer) | photo |
 | 50 | 1-Year Sermon Guide (52 Gen-Z Topics) | Unsplash — young adults studying an open Bible (credit photographer) | photo |
 
-**Homepage hero:** Leonardo da Vinci, *The Last Supper* (c. 1495–98) — Wikimedia `File:Última_Cena_-_Da_Vinci_5.jpg`. Portrait file shows the complete painting on mobile (Phase 10.2).
+**Homepage hero:** *The Last Supper* (2026) — an original ultra-realistic commission owned by Saul's Podship, the Lord's face drawn from the Shroud of Turin. Files are `last-supper-v2-*` (`-source.jpg`, `-1920.webp`, `-1920.jpg`, `-1280.webp`, `-portrait.webp`); the portrait file shows the complete painting on mobile (Phase 10.2). Note: the `-v2` suffix must be bumped whenever the art changes — `vercel.json` caches `/images/*` for 30 days and `public/sw.js` is stale-while-revalidate, so reusing a filename leaves returning visitors on the old artwork.

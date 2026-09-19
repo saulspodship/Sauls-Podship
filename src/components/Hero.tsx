@@ -142,11 +142,11 @@ export const Hero: React.FC<HeroProps> = ({ variant, volume, onStartReading }) =
   return (
     <section id="home-hero" className="relative w-full overflow-hidden min-h-[240px] sm:min-h-[100svh] flex flex-col text-white">
       <picture className="absolute inset-0">
-        <source media="(max-width: 639px)"  srcSet="/images/hero/last-supper-1280.webp"     type="image/webp" />
-        <source media="(max-width: 1279px)" srcSet="/images/hero/last-supper-1280.webp"     type="image/webp" />
-        <source srcSet="/images/hero/last-supper-1920.webp" type="image/webp" />
+        <source media="(max-width: 639px)"  srcSet="/images/hero/last-supper-v2-1280.webp"     type="image/webp" />
+        <source media="(max-width: 1279px)" srcSet="/images/hero/last-supper-v2-1280.webp"     type="image/webp" />
+        <source srcSet="/images/hero/last-supper-v2-1920.webp" type="image/webp" />
         <img
-          src="/images/hero/last-supper-1920.jpg"
+          src="/images/hero/last-supper-v2-1920.jpg"
           alt="The Last Supper — ultra-realistic commission with the Lord's face drawn from the Shroud of Turin"
           width="1920"
           height="1082"

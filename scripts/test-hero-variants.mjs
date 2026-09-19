@@ -23,9 +23,9 @@ console.log('[TEST HERO VARIANTS] Checking hero image variants and MD5 uniquenes
 // 1. Check Homepage Hero (Last Supper)
 const heroDir = path.resolve('public/images/hero');
 const mainVariants = [
-  'last-supper-1920.webp',
-  'last-supper-1280.webp',
-  'last-supper-portrait.webp'
+  'last-supper-v2-1920.webp',
+  'last-supper-v2-1280.webp',
+  'last-supper-v2-portrait.webp'
 ];
 
 const mainHashes = new Map();
