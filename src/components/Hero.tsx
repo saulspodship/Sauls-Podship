@@ -147,7 +147,7 @@ export const Hero: React.FC<HeroProps> = ({ variant, volume, onStartReading }) =
         <source srcSet="/images/hero/last-supper-1920.webp" type="image/webp" />
         <img
           src="/images/hero/last-supper-1920.jpg"
-          alt="The Last Supper by Leonardo da Vinci"
+          alt="The Last Supper — ultra-realistic commission with the Lord's face drawn from the Shroud of Turin"
           width="1920"
           height="1082"
           fetchPriority="high"
@@ -191,7 +191,7 @@ export const Hero: React.FC<HeroProps> = ({ variant, volume, onStartReading }) =
         </div>
 
         <p className="credit mt-3 text-[10px] opacity-60 px-4">
-          Leonardo da Vinci, <i>The Last Supper</i> (c. 1495–98), Santa Maria delle Grazie, Milan — public domain.
+          Saul's Podship archive — <i>The Last Supper</i>, ultra-realistic original commission (2026); the Lord's face drawn from the Shroud of Turin.
         </p>
       </div>
     </section>
