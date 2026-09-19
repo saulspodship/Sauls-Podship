@@ -16,6 +16,7 @@ const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'))
 import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
+import AscensionSplash from '../components/AscensionSplash';
 
 
 // Chrome/Edge fire beforeinstallprompt when the PWA criteria (manifest +
@@ -210,6 +211,10 @@ export const RootLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1D2D50] font-sans antialiased selection:bg-[#4A152C] selection:text-[#E8C96A] pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
+      {/* Site-wide splash: plays on every open of the site/app (any link),
+          then unmounts. GSAP ascension — Jesus rises, declares, ascends. */}
+      <AscensionSplash />
+
       {/* key by path: full page loads all share key "default", which made a new page inherit the previous page's offset */}
       <ScrollRestoration getKey={(loc) => loc.pathname} />
 
