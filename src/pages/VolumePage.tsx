@@ -24,6 +24,7 @@ import { sceneImageFor, storyArt } from '../components/story/storyScenes';
 import { bibleComUrl } from '../lib/bibleRef';
 import { SITE } from '../config/site';
 import AutoFrame from '../components/modules/AutoFrame';
+import WorldReligionsDeepDive from '../components/volumes/WorldReligionsDeepDive';
 
 
 
@@ -404,6 +405,9 @@ export const VolumePage: React.FC = () => {
             })}
           </section>
         )}
+
+        {/* Extended World Religions study layer — Vol. 15 only, directly beneath the tables */}
+        {slug === 'comparative-religion' && <WorldReligionsDeepDive />}
 
         {/* Interactive Story Panels & Historical Narratives (Visual Era Explorer) */}
         {volume.content?.storyPanels && volume.content.storyPanels.length > 0 && (
