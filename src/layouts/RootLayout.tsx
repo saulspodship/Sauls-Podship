@@ -7,8 +7,9 @@ import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
 import { 
   BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, 
-  Menu, X, Search, ChevronRight, ExternalLink, Globe, Award,
-  Sparkles, Mail, Play, Video, MapPin
+  Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award,
+  Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle,
+  Map, Globe2, Music2
 } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
@@ -17,6 +18,171 @@ import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
 import AscensionSplash from '../components/AscensionSplash';
+
+
+/* ── Header navigation ─────────────────────────────────────────────────
+   Every destination on the site is reachable from the header: a top-level
+   item is either a direct link or a dropdown group. The study modules
+   (Prophecy Map, Interlinked Bible, Kings of the Bible, Comparative
+   Apologetics, Theological Archive, Biblical Maps Atlas) used to exist only
+   in the mobile "More" sheet — they now have a desktop dropdown too.      */
+type IconType = React.ComponentType<{ className?: string; strokeWidth?: number }>;
+type NavLeaf = { name: string; href: string; icon: IconType; isExternal?: boolean; isStatic?: boolean };
+type NavGroup = { name: string; icon: IconType; group: NavLeaf[] };
+type NavItem = NavLeaf | NavGroup;
+const isNavGroup = (item: NavItem): item is NavGroup => Array.isArray((item as NavGroup).group);
+
+/** A leaf is "on" when the current path is it, or sits underneath it. */
+const leafActive = (leaf: NavLeaf, pathname: string) =>
+  pathname === leaf.href ||
+  (!leaf.isExternal && !leaf.isStatic && leaf.href !== '/' && pathname.startsWith(leaf.href));
+
+const NAV_ITEMS: NavItem[] = [
+  { name: 'Encyclopedia', href: '/encyclopedia', icon: BookOpen },
+  {
+    name: 'Study Tools',
+    icon: Compass,
+    group: [
+      { name: 'Prophecy Map', href: '/prophecy-map', icon: Globe2 },
+      { name: 'Interlinked Bible', href: '/cross-references', icon: Network },
+      { name: 'Kings of the Bible', href: '/kings-of-the-bible', icon: Crown },
+      { name: 'Comparative Apologetics', href: '/comparative-apologetics', icon: Scale },
+      { name: 'Theological Archive', href: '/theological-archive', icon: HelpCircle },
+      { name: 'Biblical Maps Atlas', href: '/encyclopedia/biblical-maps-atlas.html', icon: Map, isStatic: true },
+    ],
+  },
+  {
+    name: 'Watch & Listen',
+    icon: Play,
+    group: [
+      { name: 'Podcast', href: '/podcast', icon: Mic },
+      { name: 'Videos', href: '/videos/', icon: Video, isStatic: true },
+      { name: 'Sacred Music', href: '/music', icon: Music },
+      { name: 'Punjabi Zaboor', href: '/music/punjabi-zaboor', icon: Music2 },
+      { name: 'Singers Archive', href: '/music/pakistani-singers-archive', icon: Mic },
+    ],
+  },
+  { name: 'Scriptorium Studio', href: '/studio', icon: Sparkles },
+  {
+    name: 'Ministry',
+    icon: Info,
+    group: [
+      { name: 'About', href: '/about', icon: Info },
+      { name: 'Standards', href: '/scholarly-standards', icon: ShieldCheck },
+      { name: 'Support & Mission', href: '/support', icon: Heart },
+      { name: 'FAQ', href: '/faq', icon: HelpCircle },
+      { name: 'Contact', href: '/contact', icon: Mail },
+    ],
+  },
+  { name: 'Support', href: SITE.patreon, icon: Heart, isExternal: true },
+];
+
+
+/**
+ * Desktop dropdown. Opens on hover (with a grace period so the pointer can
+ * travel into the panel) and on click/keyboard; closes on Escape, on an
+ * outside click and on every route change.
+ *
+ * The panel stays in the DOM while closed (visibility:hidden, so its links
+ * leave the tab order) — that keeps ChromeControls' language dictionary able
+ * to translate the labels, and gives a fade instead of a hard pop.
+ */
+const NavDropdown: React.FC<{ item: NavGroup; pathname: string }> = ({ item, pathname }) => {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const hoverTimer = useRef<number | null>(null);
+
+  const clearHover = () => {
+    if (hoverTimer.current !== null) { window.clearTimeout(hoverTimer.current); hoverTimer.current = null; }
+  };
+  const openMenu = () => { clearHover(); setOpen(true); };
+  const closeMenu = (delay = 0) => { clearHover(); hoverTimer.current = window.setTimeout(() => setOpen(false), delay); };
+
+  useEffect(() => { setOpen(false); clearHover(); }, [pathname]);
+  useEffect(() => () => clearHover(), []);
+  useEffect(() => {
+    if (!open) return;
+    const onDocDown = (e: MouseEvent) => {
+      const el = wrapRef.current;
+      if (el && !el.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDocDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  const Icon = item.icon;
+  const active = item.group.some((c) => leafActive(c, pathname));
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative shrink-0"
+      onMouseEnter={openMenu}
+      onMouseLeave={() => closeMenu(140)}
+    >
+      <button
+        type="button"
+        onClick={() => (open ? setOpen(false) : openMenu())}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={`inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-1.5 xl:px-2.5 2xl:px-3 text-[13px] xl:text-sm font-semibold leading-none transition-all ${
+          active || open
+            ? 'bg-[#4A152C] text-[#E8C96A] border-[#D4AF37]/40 shadow-inner'
+            : 'text-white/80 hover:text-white hover:bg-white/10 border-transparent'
+        }`}
+      >
+        <Icon className="hidden 2xl:block w-4 h-4 opacity-80" />
+        <span>{item.name}</span>
+        <ChevronDown className={`w-3.5 h-3.5 shrink-0 opacity-70 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      <div
+        className={`absolute right-0 top-full z-[60] w-[min(80vw,290px)] pt-2.5 transition-all duration-150 ${
+          open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-1 pointer-events-none'
+        }`}
+      >
+        <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#1A0812]/97 p-2 text-left shadow-2xl backdrop-blur-xl">
+          {item.group.map((c) => {
+            const CIcon = c.icon;
+            const on = leafActive(c, pathname);
+            const cls = `flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors ${
+              on ? 'bg-[#4A152C] text-[#E8C96A]' : 'text-white/85 hover:bg-white/10 hover:text-white'
+            }`;
+            if (c.isExternal) {
+              return (
+                <a key={c.name} href={c.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                  <CIcon className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span className="min-w-0 flex-1">{c.name}</span>
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-60" />
+                </a>
+              );
+            }
+            if (c.isStatic) {
+              return (
+                <a key={c.name} href={c.href} className={cls}>
+                  <CIcon className="w-4 h-4 shrink-0 text-[#D4AF37]" />
+                  <span className="min-w-0 flex-1">{c.name}</span>
+                </a>
+              );
+            }
+            return (
+              <Link key={c.name} to={c.href} className={cls}>
+                <CIcon className="w-4 h-4 shrink-0 text-[#D4AF37]" />
+                <span className="min-w-0 flex-1">{c.name}</span>
+                <ChevronRight className="w-3.5 h-3.5 shrink-0 opacity-50" />
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 
 // Chrome/Edge fire beforeinstallprompt when the PWA criteria (manifest +
@@ -198,16 +364,43 @@ export const RootLayout: React.FC = () => {
     return () => { ids.forEach(clearTimeout); clearTimeout(done); root.style.scrollBehavior = prev; window.removeEventListener('wheel', onUser); window.removeEventListener('touchstart', onUser); window.removeEventListener('keydown', onUser); };
   }, [location.pathname, location.search, navType]);
 
-  const navLinks: { name: string; href: string; icon: React.ComponentType<{ className?: string }>; isExternal?: boolean; isStatic?: boolean }[] = [
-    { name: 'Encyclopedia', href: '/encyclopedia', icon: BookOpen },
-    { name: 'Podcast', href: '/podcast', icon: Mic },
-    { name: 'Videos', href: '/videos/', icon: Video, isStatic: true },
-    { name: 'Sacred Music', href: '/music', icon: Music },
-    { name: 'Scriptorium Studio', href: '/studio', icon: Sparkles },
-    { name: 'Standards', href: '/scholarly-standards', icon: ShieldCheck },
-    { name: 'About', href: '/about', icon: Info },
-    { name: 'Support', href: SITE.patreon, icon: Heart, isExternal: true },
-  ];
+
+  const drawerLeaf = (leaf: NavLeaf) => {
+    const Icon = leaf.icon;
+    const on = leafActive(leaf, location.pathname);
+    const cls = `flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold ${
+      on ? 'bg-[#4A152C] text-[#E8C96A] border border-[#D4AF37]/30' : 'text-white/90 hover:bg-white/10'
+    }`;
+    const body = (
+      <>
+        <div className="flex items-center gap-3">
+          <Icon className={`w-4 h-4 ${leaf.isExternal ? 'text-rose-400' : 'text-[#D4AF37]'}`} />
+          <span>{leaf.name}{leaf.isExternal ? ' (Patreon)' : ''}</span>
+        </div>
+        {leaf.isExternal ? <ExternalLink className="w-4 h-4 opacity-50" /> : <ChevronRight className="w-4 h-4 opacity-50" />}
+      </>
+    );
+    const key = leaf.href;
+    if (leaf.isExternal) {
+      return (
+        <a key={key} href={leaf.href} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)} className={cls}>
+          {body}
+        </a>
+      );
+    }
+    if (leaf.isStatic) {
+      return (
+        <a key={key} href={leaf.href} onClick={() => setMobileMenuOpen(false)} className={cls}>
+          {body}
+        </a>
+      );
+    }
+    return (
+      <Link key={key} to={leaf.href} onClick={() => setMobileMenuOpen(false)} className={cls}>
+        {body}
+      </Link>
+    );
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1D2D50] font-sans antialiased selection:bg-[#4A152C] selection:text-[#E8C96A] pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
@@ -236,7 +429,8 @@ export const RootLayout: React.FC = () => {
 
           {/* Desktop Nav Items */}
           <nav className="hidden lg:flex flex-1 min-w-0 flex-nowrap items-center justify-end gap-0.5 xl:gap-1 ml-auto sp-desktop-nav">
-            {navLinks.map((item) => {
+            {NAV_ITEMS.map((item) => {
+              if (isNavGroup(item)) return <NavDropdown key={item.name} item={item} pathname={location.pathname} />;
               const Icon = item.icon;
               if (item.isExternal) {
                 return (
@@ -255,19 +449,19 @@ export const RootLayout: React.FC = () => {
                 );
               }
               if (item.isStatic) {
+                // a real file under public/ — must NOT go through the hash router
                 return (
                   <a
                     key={item.name}
                     href={item.href}
                     className="inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-1.5 xl:px-2.5 2xl:px-3 text-[13px] xl:text-sm font-semibold leading-none text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                    title="Bible video series"
                   >
                     <Icon className="hidden 2xl:block w-4 h-4 opacity-80" />
-                    {item.name}
+                    <span>{item.name}</span>
                   </a>
                 );
               }
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+              const isActive = leafActive(item, location.pathname);
               return (
                 <Link
                   key={item.name}
@@ -279,7 +473,7 @@ export const RootLayout: React.FC = () => {
                   }`}
                 >
                   <Icon className="hidden 2xl:block w-4 h-4 opacity-80" />
-                  {item.name}
+                  <span>{item.name}</span>
                 </Link>
               );
             })}
@@ -303,65 +497,21 @@ export const RootLayout: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Navigation Drawer — every destination, grouped */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#1A0812] border-b border-[#D4AF37]/20 px-4 pt-3 pb-6 space-y-2 text-left">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              if (item.isExternal) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-4 h-4 text-rose-400" />
-                      <span>{item.name} (Patreon)</span>
-                    </div>
-                    <ExternalLink className="w-4 h-4 opacity-50" />
-                  </a>
-                );
-              }
-              if (item.isStatic) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-4 h-4 text-[#D4AF37]" />
-                      <span>{item.name}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 opacity-50" />
-                  </a>
-                );
-              }
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold ${
-                    isActive
-                      ? 'bg-[#4A152C] text-[#E8C96A] border border-[#D4AF37]/30'
-                      : 'text-white/90 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[#D4AF37]" />
-                    <span>{item.name}</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 opacity-50" />
-                </Link>
-              );
-            })}
+          <div className="lg:hidden bg-[#1A0812] border-b border-[#D4AF37]/20 px-4 pt-2 pb-6 text-left max-h-[72vh] overflow-y-auto overscroll-contain">
+            {NAV_ITEMS.map((item) =>
+              isNavGroup(item) ? (
+                <div key={item.name} className="pt-1">
+                  <p className="px-4 pb-1 pt-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#D4AF37]/70">
+                    {item.name}
+                  </p>
+                  {item.group.map(drawerLeaf)}
+                </div>
+              ) : (
+                <div key={item.name} className="pt-1">{drawerLeaf(item)}</div>
+              )
+            )}
           </div>
         )}
       </header>
