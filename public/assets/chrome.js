@@ -30,6 +30,10 @@
   }
   function trimHeader(){
     document.querySelectorAll('header a,header button,nav a,nav button').forEach(function(el){
+      /* 2026-09-19: the header is now five categorised dropdowns (src/config/nav.ts).
+         Their panels are legitimately allowed to carry a "YouTube" row, so only the
+         top-level header row / the injected shell bar are trimmed — never a menu. */
+      if(el.closest('.sp-mega,[id^="nav-panel-"],.sp-hdr .panel,.sp-hdr nav')) return;
       var t=(el.textContent||'').trim().toLowerCase();
       if(/youtube/.test(t)) hide(el);
       else if(el.closest('header,nav') && /(browse|explore)\s+(all\s+)?50\s+volumes/.test(t)) hide(el);

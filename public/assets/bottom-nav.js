@@ -22,6 +22,7 @@
   var MORE = [
     ['Study modules', [['/prophecy-map', 'Prophecy Map · Globe & Timeline'], ['/cross-references', 'Bible Links · Cross-References'], ['/kings-of-the-bible', 'Kings of the Bible · Volume 51'], ['/encyclopedia/biblical-maps-atlas.html', 'Biblical Maps Atlas']]],
     ['Listen & watch', [['/podcast', 'Podcast'], ['/music', 'Sacred Music & Zaboor'], ['/studio', 'Scriptorium Studio']]],
+    ['Academy — our campuses', [['https://saulssundayschool.saulspodship.com', 'Sunday School'], ['https://biblicallanguages.saulspodship.com', 'Biblical Languages']]],
     ['Ministry', [['/scholarly-standards', 'Scholarly Standards'], ['/about', 'About Saul’s Podship'], ['https://www.patreon.com/saulspodship', 'Support on Patreon']]]
   ];
   function active(to) { return to === '/' ? path === '/' : path.indexOf(to.replace(/\/$/, '')) === 0; }

@@ -15,6 +15,10 @@ export const SITE = {
   patreonGift: "https://www.patreon.com/solatnadeem/gift",
   blog: "https://goshsays.blogspot.com/",
   punjabiZaboor: "https://punjabizaboor.org/",
+  // Ministry campuses: subdomains of saulspodship.com, surfaced in the
+  // header's Academy dropdown (each opens in its own tab).
+  sundaySchool: "https://saulssundayschool.saulspodship.com/",
+  biblicalLanguages: "https://biblicallanguages.saulspodship.com/",
   author: {
     name: "Solat Nadeem",
     role: "Founder & Lead Exegete",

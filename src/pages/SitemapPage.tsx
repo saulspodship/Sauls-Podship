@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Compass, ExternalLink } from 'lucide-react';
 import { VOLUME_INDEX as VOLUMES } from '../data/volumes/index-lite';
+import { NAV_GROUPS, isOffSite } from '../config/nav';
 
 export const SitemapPage: React.FC = () => {
   return (
@@ -25,34 +26,70 @@ export const SitemapPage: React.FC = () => {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 text-gray-800">
-        {/* Core Pages */}
-        <section className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+        {/* Site families — the same five groups the header dropdowns use,
+            so this page and the navigation can never drift apart. */}
+        <section className="space-y-6">
           <h2 className="font-serif text-xl font-bold text-[#4A152C] border-b border-gray-100 pb-2">
             Primary Navigation
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-            <Link to="/" className="text-[#4A152C] hover:underline font-semibold">Home &amp; Hero</Link>
-            <Link to="/encyclopedia" className="text-[#4A152C] hover:underline font-semibold">51-Volume Encyclopedia Catalog</Link>
-            <Link to="/podcast" className="text-[#4A152C] hover:underline font-semibold">Theological Podcast</Link>
-            <a href="/videos/" className="text-[#4A152C] hover:underline font-semibold">Bible Video Library</a>
-            <Link to="/music" className="text-[#4A152C] hover:underline font-semibold">Sacred Music &amp; Hymnody</Link>
-            <Link to="/music/punjabi-zaboor" className="text-[#4A152C] hover:underline font-semibold">Punjabi Zaboor (150 Psalms)</Link>
-            <Link to="/music/pakistani-singers-archive" className="text-[#4A152C] hover:underline font-semibold">Pakistani Singers Archive</Link>
-            <Link to="/studio" className="text-[#4A152C] hover:underline font-semibold">Scriptorium AI Studio</Link>
-            <Link to="/scholarly-standards" className="text-[#4A152C] hover:underline font-semibold">Scholarly Standards</Link>
-            <Link to="/theological-archive" className="text-[#4A152C] hover:underline font-semibold">Theological Archive (1000 Answers)</Link>
-            <Link to="/comparative-apologetics" className="text-[#4A152C] hover:underline font-semibold">Comparative Apologetics Codex</Link>
-            <Link to="/prophecy-map" className="text-[#4A152C] hover:underline font-semibold">Biblical Prophecy Map</Link>
-            <Link to="/kings-of-the-bible" className="text-[#4A152C] hover:underline font-semibold">Kings of the Bible</Link>
-            <Link to="/cross-references" className="text-[#4A152C] hover:underline font-semibold">Bible Cross-References</Link>
-            <Link to="/sitemap" className="text-[#4A152C] hover:underline font-semibold">HTML Site Directory</Link>
-            <Link to="/about" className="text-[#4A152C] hover:underline font-semibold">About the Scriptorium</Link>
-            <Link to="/support" className="text-[#4A152C] hover:underline font-semibold">Support &amp; Partner</Link>
-            <Link to="/faq" className="text-[#4A152C] hover:underline font-semibold">Frequently Asked Questions</Link>
-            <Link to="/contact" className="text-[#4A152C] hover:underline font-semibold">Contact Desk</Link>
-            <Link to="/privacy" className="text-[#4A152C] hover:underline font-semibold">Privacy Policy</Link>
-            <Link to="/terms" className="text-[#4A152C] hover:underline font-semibold">Terms of Service</Link>
-            <Link to="/disclaimer" className="text-[#4A152C] hover:underline font-semibold">Theological Disclaimer</Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Link to="/" className="bg-[#4A152C] text-white p-5 rounded-2xl flex items-center justify-between hover:bg-[#8B1C2E] transition-colors">
+              <span className="text-sm font-bold">Home &amp; Hero</span>
+              <span className="text-[10px] uppercase tracking-widest text-[#E8C96A]">Start</span>
+            </Link>
+            <Link to="/encyclopedia" className="bg-white p-5 rounded-2xl border border-gray-200 flex items-center justify-between hover:border-[#D4AF37] transition-colors">
+              <span className="text-sm font-bold text-[#4A152C]">51-Volume Encyclopedia Catalog</span>
+              <BookOpen className="w-4 h-4 text-[#8B1C2E]" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {NAV_GROUPS.map((group) => {
+              const Icon = group.icon;
+              return (
+                <div key={group.id} className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
+                  <h3 className="flex items-center gap-2 font-serif text-lg font-bold text-[#4A152C] border-b border-gray-100 pb-2">
+                    <Icon className="w-4 h-4 text-[#8B1C2E]" />
+                    {group.label}
+                  </h3>
+                  <p className="mt-1 text-[11px] uppercase tracking-widest text-gray-500 font-semibold">{group.kicker}</p>
+                  <div className="mt-4 space-y-4">
+                    {group.sections.map((section) => (
+                      <div key={section.heading}>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gray-400 mb-1.5">{section.heading}</p>
+                        <ul className="space-y-1.5 text-sm">
+                          {section.items.map((item) => (
+                            <li key={item.href + item.label}>
+                              {item.kind === 'external' || isOffSite(item.href) ? (
+                                <a
+                                  href={item.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-start gap-1.5 text-[#4A152C] hover:underline font-semibold"
+                                >
+                                  <span>{item.label}</span>
+                                  <ExternalLink className="w-3 h-3 mt-1 opacity-60" />
+                                </a>
+                              ) : item.kind === 'static' ? (
+                                // real files under /public — full page load, not a router navigation
+                                <a href={item.href} className="text-[#4A152C] hover:underline font-semibold">
+                                  {item.label}
+                                </a>
+                              ) : (
+                                <Link to={item.href} className="text-[#4A152C] hover:underline font-semibold">
+                                  {item.label}
+                                </Link>
+                              )}
+                              {item.tag && <span className="ml-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">{item.tag}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 

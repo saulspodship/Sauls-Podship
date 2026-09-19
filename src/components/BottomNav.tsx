@@ -12,6 +12,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   Home, Globe2, Network, Crown, Video, LayoutGrid, X,
   BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map,
+  School, Languages,
 } from 'lucide-react';
 import { SITE } from '../config/site';
 
@@ -41,6 +42,13 @@ const MORE: { heading: string; items: Item[] }[] = [
       { to: '/podcast',               label: 'Podcast',                 icon: Mic },
       { to: '/music',                 label: 'Sacred Music & Zaboor',   icon: Music },
       { to: '/studio',                label: 'Scriptorium Studio',      icon: Sparkles },
+    ],
+  },
+  {
+    heading: 'Academy · our campuses',
+    items: [
+      { to: SITE.sundaySchool,      label: 'Sunday School · Subdomain',      icon: School, external: true },
+      { to: SITE.biblicalLanguages, label: 'Biblical Languages · Subdomain', icon: Languages, external: true },
     ],
   },
   {

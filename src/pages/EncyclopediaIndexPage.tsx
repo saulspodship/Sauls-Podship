@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   BookOpen, Search, Filter, ArrowUpDown, ChevronRight, 
   ExternalLink, Play, Calendar, ShieldCheck, Layers, Globe2
@@ -14,8 +14,13 @@ import { artUrl } from '../lib/artUrl';
 
 export const EncyclopediaIndexPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'number' | 'title'>('number');
+
+  // The header's Encyclopedia dropdown deep-links straight into a discipline
+  // (e.g. /encyclopedia?category=history), so the filter lives in the URL and
+  // stays shareable/bookmarkable; the chips below rewrite it.
+  const [params, setParams] = useSearchParams();
+  const paramCategory = (params.get('category') || 'all').toLowerCase();
 
   const categories = [
     { id: 'all', label: 'All 51 Volumes', count: VOLUMES.length },
@@ -24,6 +29,13 @@ export const EncyclopediaIndexPage: React.FC = () => {
     { id: 'devotional', label: 'Devotional & Spiritual', count: VOLUMES.filter(v => v.category === 'devotional').length },
     { id: 'reference', label: 'Reference & Canonical', count: VOLUMES.filter(v => v.category === 'reference').length },
   ];
+
+  const selectedCategory = categories.some((c) => c.id === paramCategory) ? paramCategory : 'all';
+  const setSelectedCategory = (id: string) => {
+    const next = new URLSearchParams(params);
+    if (id === 'all') next.delete('category'); else next.set('category', id);
+    setParams(next, { replace: true });
+  };
 
   const filteredVolumes = useMemo(() => {
     return VOLUMES.filter((v) => {

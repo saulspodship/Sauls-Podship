@@ -5,10 +5,10 @@
 
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
-import { 
-  BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, 
-  Menu, X, Search, ChevronRight, ExternalLink, Globe, Award,
-  Sparkles, Mail, Play, Video, MapPin
+import {
+  ShieldCheck, Heart,
+  Menu, X, Award,
+  Play, MapPin
 } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
@@ -16,6 +16,7 @@ const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'))
 import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
+import { SiteNavDesktop, SiteNavMobile } from '../components/SiteNav';
 
 
 // Chrome/Edge fire beforeinstallprompt when the PWA criteria (manifest +
@@ -197,27 +198,18 @@ export const RootLayout: React.FC = () => {
     return () => { ids.forEach(clearTimeout); clearTimeout(done); root.style.scrollBehavior = prev; window.removeEventListener('wheel', onUser); window.removeEventListener('touchstart', onUser); window.removeEventListener('keydown', onUser); };
   }, [location.pathname, location.search, navType]);
 
-  const navLinks: { name: string; href: string; icon: React.ComponentType<{ className?: string }>; isExternal?: boolean; isStatic?: boolean }[] = [
-    { name: 'Encyclopedia', href: '/encyclopedia', icon: BookOpen },
-    { name: 'Podcast', href: '/podcast', icon: Mic },
-    { name: 'Videos', href: '/videos/', icon: Video, isStatic: true },
-    { name: 'Sacred Music', href: '/music', icon: Music },
-    { name: 'Scriptorium Studio', href: '/studio', icon: Sparkles },
-    { name: 'Standards', href: '/scholarly-standards', icon: ShieldCheck },
-    { name: 'About', href: '/about', icon: Info },
-    { name: 'Support', href: SITE.patreon, icon: Heart, isExternal: true },
-  ];
-
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1D2D50] font-sans antialiased selection:bg-[#4A152C] selection:text-[#E8C96A] pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
       {/* key by path: full page loads all share key "default", which made a new page inherit the previous page's offset */}
       <ScrollRestoration getKey={(loc) => loc.pathname} />
 
-      {/* Global Navigation Header */}
-      <header className="sticky top-0 z-50 w-full bg-[#16060f]/70 backdrop-blur-md border-b border-[#D4AF37]/20 text-white transition-all shadow-md">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-5 lg:px-6 h-14 sm:h-16 md:h-20 flex items-center justify-between gap-3 lg:gap-4">
+      {/* Global Navigation Header — five categorised dropdowns (the taxonomy lives in src/config/nav.ts) */}
+      <header className="sticky top-0 z-50 w-full bg-[#16060f]/80 backdrop-blur-md border-b border-[#D4AF37]/20 text-white transition-all shadow-md">
+        {/* `relative` here is what the mega panels anchor to — they span the whole
+            header row instead of the small wrapper of the button that opened them. */}
+        <div className="relative max-w-[1600px] mx-auto px-4 sm:px-5 lg:px-6 h-14 sm:h-16 md:h-20 flex items-center justify-between gap-3 lg:gap-4">
           {/* Brand Logo with Correct SVG */}
-          <Link to="/" className="flex items-center gap-2 sm:gap-2.5 group min-w-0 shrink lg:shrink-0 lg:gap-2">
+          <Link to="/" className="flex items-center gap-2 sm:gap-2.5 group min-w-0 shrink lg:shrink-0 lg:gap-2" aria-label="Saul's Podship — home">
             <img src="/icons/emblem.png" alt="Saul's Podship Logo" className="h-10 w-10 sm:h-14 sm:w-14 lg:h-11 lg:w-11 xl:h-14 xl:w-14 object-contain shrink-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] group-hover:scale-105 transition-transform" />
             <div className="flex flex-col text-left min-w-0">
               <span className="font-serif font-bold text-[15px] sm:text-xl lg:text-lg xl:text-xl tracking-tight text-white group-hover:text-[#E8C96A] transition-colors whitespace-nowrap truncate">
@@ -229,136 +221,37 @@ export const RootLayout: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex flex-1 min-w-0 flex-nowrap items-center justify-end gap-0.5 xl:gap-1 ml-auto sp-desktop-nav">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              if (item.isExternal) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-1.5 xl:px-2.5 2xl:px-3 text-[13px] xl:text-sm font-semibold leading-none text-white/80 hover:text-[#E8C96A] hover:bg-white/10 transition-all group"
-                    title="Partner on Patreon"
-                  >
-                    <Icon className="hidden 2xl:block w-4 h-4 text-rose-400 group-hover:scale-110 transition-transform" />
-                    <span>{item.name}</span>
-                    <ExternalLink className="hidden 2xl:block w-3 h-3 opacity-60" />
-                  </a>
-                );
-              }
-              if (item.isStatic) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-1.5 xl:px-2.5 2xl:px-3 text-[13px] xl:text-sm font-semibold leading-none text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                    title="Bible video series"
-                  >
-                    <Icon className="hidden 2xl:block w-4 h-4 opacity-80" />
-                    {item.name}
-                  </a>
-                );
-              }
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-1.5 xl:px-2.5 2xl:px-3 text-[13px] xl:text-sm font-semibold leading-none transition-all ${
-                    isActive
-                      ? 'bg-[#4A152C] text-[#E8C96A] border border-[#D4AF37]/40 shadow-inner'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <Icon className="hidden 2xl:block w-4 h-4 opacity-80" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* Desktop navigation — one dropdown per family of the site */}
+          <SiteNavDesktop />
 
           {/* Right Header Controls */}
           <div className="flex h-10 shrink-0 items-center gap-1.5 sm:gap-3">
             <ChromeControls />
 
-
-
+            {/* Support CTA — everything else lives inside the dropdowns */}
+            <Link
+              to="/support"
+              title="Partner with the mission"
+              className="hidden xl:inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#D4AF37] px-3.5 text-[12px] font-extrabold uppercase tracking-wider text-[#1A0812] shadow-md transition-colors hover:bg-[#E8C96A]"
+            >
+              <Heart className="w-3.5 h-3.5" />
+              Support
+            </Link>
 
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden h-10 w-10 inline-flex items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition-colors focus:outline-none shrink-0"
               aria-label="Toggle Navigation Menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#1A0812] border-b border-[#D4AF37]/20 px-4 pt-3 pb-6 space-y-2 text-left">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              if (item.isExternal) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-4 h-4 text-rose-400" />
-                      <span>{item.name} (Patreon)</span>
-                    </div>
-                    <ExternalLink className="w-4 h-4 opacity-50" />
-                  </a>
-                );
-              }
-              if (item.isStatic) {
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-4 h-4 text-[#D4AF37]" />
-                      <span>{item.name}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 opacity-50" />
-                  </a>
-                );
-              }
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold ${
-                    isActive
-                      ? 'bg-[#4A152C] text-[#E8C96A] border border-[#D4AF37]/30'
-                      : 'text-white/90 hover:bg-white/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[#D4AF37]" />
-                    <span>{item.name}</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 opacity-50" />
-                </Link>
-              );
-            })}
-          </div>
-        )}
+        {/* Mobile / tablet drawer — the same five groups, opened as accordions */}
+        <SiteNavMobile open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       </header>
 
       {/* Main Routed Content */}

@@ -235,3 +235,18 @@ th, td {
 @media (max-width: 1023px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: 16px !important; }
 }
+
+/* ===== header dropdowns (src/components/SiteNav.tsx) ===== */
+/* The site centre-aligns every header by default; menus are lists, so they read
+   left-aligned instead. */
+header .sp-mega,
+header .sp-mega * { text-align: left; }
+.sp-mega { transform-origin: top center; animation: spMegaIn .18s ease-out both; }
+@keyframes spMegaIn {
+  from { opacity: 0; transform: translateY(-6px) scale(.995); }
+  to   { opacity: 1; transform: none; }
+}
+.sp-nav-drawer { animation: spMegaIn .16s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .sp-mega, .sp-nav-drawer { animation: none !important; }
+}
