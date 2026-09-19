@@ -36,7 +36,7 @@ export const TermsPage: React.FC = () => {
 
           <h2 className="font-serif text-xl font-bold text-[#4A152C]">3. Intellectual Property &amp; Artwork</h2>
           <p className="text-sm text-gray-700 leading-relaxed">
-            Historical art assets (such as Leonardo da Vinci's <em>The Last Supper</em>) are in the public domain. Original exegesis and compilation copyright belong to Saul's Podship Scriptorium.
+            Historical art assets are in the public domain where so marked. The homepage artwork <em>The Last Supper</em> (2026) is an original ultra-realistic commission — the Lord's face drawn from the Shroud of Turin — created for and owned by Saul's Podship. Original exegesis and compilation copyright belong to Saul's Podship Scriptorium.
           </p>
         </div>
       </div>
