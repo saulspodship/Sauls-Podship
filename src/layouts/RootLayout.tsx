@@ -49,6 +49,8 @@ const NAV_ITEMS: NavItem[] = [
       { name: 'Comparative Apologetics', href: '/comparative-apologetics', icon: Scale },
       { name: 'Theological Archive', href: '/theological-archive', icon: HelpCircle },
       { name: 'Biblical Maps Atlas', href: '/encyclopedia/biblical-maps-atlas.html', icon: Map, isStatic: true },
+      { name: "Saul's Sunday School", href: 'http://saulssundayschool.saulspodship.com', icon: GraduationCap, isExternal: true },
+      { name: 'Biblical Languages', href: 'http://biblicallanguages.saulspodship.com', icon: Languages, isExternal: true },
     ],
   },
   {
