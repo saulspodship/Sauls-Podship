@@ -66,12 +66,48 @@
   '.sp-seo .para{font-family:"EB Garamond",Georgia,serif;font-style:italic;color:var(--m);max-width:860px;margin:0 auto 20px;line-height:1.7;font-size:1rem}'+
   '.sp-seo details{background:var(--p);border:1px solid var(--l);border-radius:6px;padding:12px 18px;margin:8px auto;max-width:860px;text-align:left}'+
   '.sp-seo summary{font-weight:700;font-size:13px;color:var(--w);cursor:pointer;text-align:center}'+
-  '.sp-seo details p{margin:10px 0 4px;font-size:13px;color:#4a4038;line-height:1.7}';
+  '.sp-seo details p{margin:10px 0 4px;font-size:13px;color:#4a4038;line-height:1.7}'+
+  '.sp-seo .fallback-notice{color:#d32f2f;font-weight:bold;margin-bottom:15px;}'+
+  '.sp-seo .fallback-links{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;}'+
+  '.sp-seo .fallback-links a{color:var(--w);text-decoration:underline;}';
   document.head.appendChild(st);
-  var sec=document.createElement('section'); sec.className='sp-seo';
-  sec.innerHTML='<span class="kick">Theological Inquiries</span><h2>Frequently Asked Questions</h2><p class="para">'+d.para+'</p>'+
-    d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join('');
-  var main=document.querySelector('main')||document.getElementById('root')||document.body;
-  var footer=document.querySelector('footer');
-  if(footer && footer.parentNode===main) main.insertBefore(sec,footer); else main.appendChild(sec);
+
+  function injectFAQ(isFallback) {
+    if (document.querySelector('.sp-seo')) return; // Idempotency guard
+    var sec = document.createElement('section'); 
+    sec.className = 'sp-seo';
+    
+    if (isFallback) {
+      sec.innerHTML = '<div class="fallback-notice">Site is taking longer than usual to load.</div>' +
+        '<div class="fallback-links">' +
+        '<a href="/encyclopedia">Encyclopedia</a>' +
+        '<a href="/videos/">Videos</a>' +
+        '<a href="/kings-of-the-bible.html">Kings of the Bible</a>' +
+        '</div>';
+    } else {
+      sec.innerHTML = '<span class="kick">Theological Inquiries</span><h2>Frequently Asked Questions</h2><p class="para">' + d.para + '</p>' +
+        d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join('');
+    }
+
+    var main = document.querySelector('main');
+    var root = document.getElementById('root');
+    var target = main || root || document.body;
+    var footer = document.querySelector('footer');
+    if (footer && footer.parentNode === target) target.insertBefore(sec, footer); else target.appendChild(sec);
+  }
+
+  var elapsed = 0;
+  var interval = setInterval(function() {
+    elapsed += 150;
+    var root = document.getElementById('root');
+    var hasAppRendered = (root && root.children.length > 0) || document.querySelector('main') || document.querySelector('footer');
+    
+    if (hasAppRendered) {
+      clearInterval(interval);
+      injectFAQ(false);
+    } else if (elapsed >= 5000) {
+      clearInterval(interval);
+      injectFAQ(true);
+    }
+  }, 150);
 })();

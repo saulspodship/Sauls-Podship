@@ -32,7 +32,7 @@
   "scripts": {
     "dev": "node scripts/gen-volume-index.mjs && tsx server.ts",
     "prebuild": "(python3 -c 'from PIL import Image' 2>/dev/null && python3 scripts/make_hero_variants.py public/images/hero/last-supper-v2-source.jpg public/images/hero last-supper-v2) || echo '[INFO] Skipping image generation (Python PIL not installed)'; node scripts/test-hero-variants.mjs",
-    "build": "node scripts/gen-volume-index.mjs && node scripts/check-links.mjs && vite build && node scripts/postbuild.mjs && node scripts/prerender-music.mjs && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
+    "build": "node scripts/gen-volume-index.mjs && node scripts/check-links.mjs && tsc --noEmit && vite build && node scripts/postbuild.mjs && node scripts/prerender-music.mjs && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "test": "node scripts/test-hero-variants.mjs",
     "verify": "node scripts/verify-codex.mjs",
