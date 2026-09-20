@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy } from 'react';
-import { createHashRouter, RouteObject } from 'react-router-dom';
+import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import RootLayout from './layouts/RootLayout';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -24,6 +24,8 @@ const PunjabiZaboorPage = lazy(() => import('./pages/PunjabiZaboorPage'));
 const SingersArchivePage = lazy(() => import('./pages/SingersArchivePage'));
 const StudioPage = lazy(() => import('./pages/StudioPage'));
 const TheologicalArchivePage = lazy(() => import('./pages/TheologicalArchivePage'));
+const TheologicalQuestionPage = lazy(() => import('./pages/TheologicalQuestionPage'));
+const TheologicalCategoryPage = lazy(() => import('./pages/TheologicalCategoryPage'));
 const ComparativeApologeticsPage = lazy(() => import('./pages/ComparativeApologeticsPage'));
 const ProphecyMapPage = lazy(() => import('./pages/ModulePages').then(m => ({ default: m.ProphecyMapPage })));
 const KingsOfTheBiblePage = lazy(() => import('./pages/ModulePages').then(m => ({ default: m.KingsOfTheBiblePage })));
@@ -104,6 +106,15 @@ export const routeConfig: RouteObject[] = [
         element: L(<TheologicalArchivePage />)
       },
       {
+        // Permalinks submitted in sitemap-theological-archive.xml (were soft-404s).
+        path: 'theological-archive/question/:slug',
+        element: L(<TheologicalQuestionPage />)
+      },
+      {
+        path: 'theological-archive/category/:slug',
+        element: L(<TheologicalCategoryPage />)
+      },
+      {
         path: 'comparative-apologetics',
         element: L(<ComparativeApologeticsPage />)
       },
@@ -155,4 +166,9 @@ export const routeConfig: RouteObject[] = [
   }
 ];
 
-export const router = createHashRouter(routeConfig);
+// BrowserRouter (migrated 2026-09 from createHashRouter): clean crawlable URLs.
+// Deep links work on every host — Vercel's SPA-fallback rewrite, the
+// prerendered dist/<route>/index.html shells, and server.ts's *all fallback
+// all serve the app shell for unknown paths. Legacy /#/… links are upgraded
+// to clean URLs by a shim in index.html, so old backlinks keep working.
+export const router = createBrowserRouter(routeConfig);

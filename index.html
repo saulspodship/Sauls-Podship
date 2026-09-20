@@ -4,6 +4,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Legacy hash-URL upgrade (2026-09 router migration): the app used to live
+      // at /#/encyclopedia/… — old backlinks, bookmarks and shares still point
+      // there. Rewrite to the clean URL before the app boots (no history entry,
+      // query string preserved), so nothing ever renders under a /#/ address.
+      (function () {
+        try {
+          var h = location.hash || '';
+          if (h.charAt(0) === '#' && h.charAt(1) === '/') {
+            var path = h.slice(1) || '/';
+            var q = path.indexOf('?') >= 0 ? '' : location.search || '';
+            location.replace(path + q);
+          }
+        } catch (e) { /* stay on the hash URL; the app still boots */ }
+      })();
+    </script>
     <meta name="theme-color" content="#F8F4E3" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -22,19 +38,23 @@
     <meta name="author" content="Solat Nadeem / Saul's Podship" />
     <link rel="canonical" href="https://www.saulspodship.com/" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook (absolute URLs: scrapers ignore relative paths) -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Saul's Podship" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://www.saulspodship.com/" />
     <meta property="og:title" content="Saul's Podship | Interactive Theological Encyclopedia" />
     <meta property="og:description" content="Explore 51 volumes of visual Bible study, Christian history, gospel music archives, and deep biblical narratives to worship in Spirit and Truth." />
-    <meta property="og:image" content="/icons/brand-logo.png" />
+    <meta property="og:image" content="https://www.saulspodship.com/icons/brand-logo.png" />
+    <meta property="og:image:alt" content="Saul's Podship — Interactive Theological Encyclopedia" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:site" content="@TheSaulsPodship" />
     <meta property="twitter:url" content="https://www.saulspodship.com/" />
     <meta property="twitter:title" content="Saul's Podship | Interactive Theological Encyclopedia" />
     <meta property="twitter:description" content="Explore 51 volumes of visual Bible study, Christian history, gospel music archives, and deep biblical narratives to worship in Spirit and Truth." />
-    <meta property="twitter:image" content="/icons/brand-logo.png" />
+    <meta property="twitter:image" content="https://www.saulspodship.com/icons/brand-logo.png" />
 
     <!-- GEO / Global Optimization -->
     <meta name="geo.region" content="Global" />
@@ -72,7 +92,14 @@
       "name": "Saul's Podship",
       "url": "https://www.saulspodship.com/",
       "logo": "https://www.saulspodship.com/icons/brand-logo.png",
-      "description": "A digital ministry dedicated to deep biblical study, narrative storytelling, and spiritual growth."
+      "description": "A digital ministry dedicated to deep biblical study, narrative storytelling, and spiritual growth.",
+      "sameAs": [
+        "https://www.youtube.com/@TheSaulsPodship",
+        "https://www.tiktok.com/@saulspodship",
+        "https://www.facebook.com/saulspodship",
+        "https://www.instagram.com/saulspodship/",
+        "https://www.patreon.com/solatnadeem"
+      ]
     }
     </script>
 
@@ -94,16 +121,17 @@
       });
     </script>
 
-    <!-- Ascension splash art (plays on every open of the site/app): fetch
-         immediately. hero-1920.webp keeps artUrl()'s ?v= cache buster. -->
-    <link rel="preload" as="image" href="/images/stories/scenes/cross.webp" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/volumes/kings-of-the-bible-v2/hero-1920.webp?v=6" fetchpriority="high">
+    <!-- Splash art preloads are injected at runtime ONLY when the splash will
+         actually play (first load of the session, never for bots) — see
+         RootLayout.preloadSplashArt. Preloading them here made two heavy
+         images compete with the LCP hero on every single page view. -->
 
     <!-- LCP hero image: fetch immediately, right size per viewport -->
     <link rel="preload" as="image" href="/images/hero/last-supper-v2-1280.webp" media="(max-width: 1279px)" fetchpriority="high">
     <link rel="preload" as="image" href="/images/hero/last-supper-v2-1920.webp" media="(min-width: 1280px)" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://i.ytimg.com">
     <!-- Fonts load without blocking first paint (display=swap + async media swap) -->
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet"></noscript>

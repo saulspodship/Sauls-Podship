@@ -44,7 +44,9 @@ const pioneerRegex =
 let pMatch;
 while ((pMatch = pioneerRegex.exec(content)) !== null) {
   const rawName = pMatch[1].replace(/<[^>]+>/g, ' ').trim();
-  const nameOnly = pMatch[1].split('<')[0].trim();
+  // Name cell may START with markup (Shahbaz's portrait <img>): split on <br>
+  // first (name is always the first line), THEN strip tags.
+  const nameOnly = pMatch[1].split(/<br\s*\/?>/i)[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   const bio = pMatch[2].replace(/<[^>]+>/g, '').trim();
   const slug = slugify(nameOnly);
   if (slug && !seenSlugs.has(slug)) {
@@ -127,9 +129,21 @@ const archiveHtml = content.replace(cardLinkRegex, (match, name, middle, bio) =>
   return match;
 });
 
+// Pioneer rows previously had NO link to their bio pages (orphaned URLs —
+// only reachable via sitemap). Inject the same biography link for them.
+const pioneerLinkRegex =
+  /<div class="pioneer-name">([\s\S]*?)<\/div>([\s\S]*?)<div class="pioneer-bio">([\s\S]*?)<\/div>/g;
+const archiveHtmlLinked = archiveHtml.replace(pioneerLinkRegex, (match, nameCell, middle, bio) => {
+  if (/<a\s[^>]*href="\/music-archive\//i.test(match)) return match; // idempotent
+  const nameOnly = nameCell.split(/<br\s*\/?>/i)[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const slug = slugify(nameOnly);
+  if (!slug) return match;
+  return `<div class="pioneer-name">${nameCell}</div>${middle}<div class="pioneer-bio">${bio} <a href="/music-archive/${slug}" style="color:var(--gold-light); font-weight:bold; text-decoration:underline; display:inline-block; margin-left:0.35rem;">Read Biography &amp; Legacy &rarr;</a></div>`;
+});
+
 const archDir = path.join(distDir, 'Pakistanisingersarchive');
 fs.mkdirSync(archDir, { recursive: true });
-fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtml, 'utf8');
+fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtmlLinked, 'utf8');
 
 // ---- 2. Artist bio pages (mirror the /music-archive/:slug route) ----
 function renderBio(artist) {

@@ -91,8 +91,12 @@ if (fs.existsSync(path.join(rootDir, 'public/sitemap.xml'))) {
 }
 
 // 2. Generate robots.txt
+// NOTE: /*.md$ is disallowed — the per-volume .md mirrors in dist/encyclopedia/
+// are research conveniences, not canonical pages; crawling them would create
+// near-duplicate content in Search Console.
 const robotsTxt = `User-agent: *
 Allow: /
+Disallow: /*.md$
 
 Sitemap: ${BASE_URL}/sitemap.xml
 Sitemap: ${BASE_URL}/sitemap-theological-archive.xml
@@ -140,6 +144,40 @@ if (fs.existsSync(indexHtmlTemplatePath)) {
   baseTemplate = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
 }
 
+// Per-route SEO copy shared with the SPA (src/config/pageMeta.json) — injected
+// into every prerendered shell so raw HTML (no-JS crawlers, social scrapers)
+// carries the same unique title/description/canonical the app applies at runtime.
+const PAGE_META = JSON.parse(fs.readFileSync(path.join(rootDir, 'src/config/pageMeta.json'), 'utf8'));
+
+const attrEsc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+/** Inject a full head meta set (title/desc/canonical/OG/Twitter) into a shell. */
+function injectShellMeta(html, { title, description, keywords, canonical, image, ogType }) {
+  const img = image || `${BASE_URL}/icons/brand-logo.png`;
+  let out = html
+    .replace(/<title>.*?<\/title>/i, `<title>${attrEsc(title)}</title>`)
+    .replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/i, `<meta name="description" content="${attrEsc(description)}" />`)
+    .replace(/<link\s+rel="canonical"\s+href=".*?"\s*\/?>/i, `<link rel="canonical" href="${attrEsc(canonical)}" />`)
+    .replace(/<meta\s+property="og:type"\s+content=".*?"\s*\/?>/i, `<meta property="og:type" content="${ogType || 'website'}" />`)
+    .replace(/<meta\s+property="og:url"\s+content=".*?"\s*\/?>/i, `<meta property="og:url" content="${attrEsc(canonical)}" />`)
+    .replace(/<meta\s+property="og:title"\s+content=".*?"\s*\/?>/i, `<meta property="og:title" content="${attrEsc(title)}" />`)
+    .replace(/<meta\s+property="og:description"\s+content=".*?"\s*\/?>/i, `<meta property="og:description" content="${attrEsc(description)}" />`)
+    .replace(/<meta\s+property="og:image"\s+content=".*?"\s*\/?>/i, `<meta property="og:image" content="${attrEsc(img)}" />`)
+    .replace(/<meta\s+(?:name|property)="twitter:title"\s+content=".*?"\s*\/?>/i, `<meta name="twitter:title" content="${attrEsc(title)}" />`)
+    .replace(/<meta\s+(?:name|property)="twitter:description"\s+content=".*?"\s*\/?>/i, `<meta name="twitter:description" content="${attrEsc(description)}" />`)
+    .replace(/<meta\s+(?:name|property)="twitter:image"\s+content=".*?"\s*\/?>/i, `<meta name="twitter:image" content="${attrEsc(img)}" />`);
+  // keywords: replace when the template has one, else insert after description
+  if (keywords && keywords.length) {
+    const kw = `<meta name="keywords" content="${attrEsc(keywords.join(', '))}" />`;
+    if (/<meta\s+name="keywords"/i.test(out)) {
+      out = out.replace(/<meta\s+name="keywords"\s+content=".*?"\s*\/?>/i, kw);
+    } else {
+      out = out.replace(/(<meta\s+name="description"[^>]*>\s*)/i, `$1${kw}\n    `);
+    }
+  }
+  return out;
+}
+
 for (const v of volumes) {
   // Markdown output
   const mdPath = path.join(encDistDir, `${v.slug}.md`);
@@ -167,11 +205,17 @@ for (const v of volumes) {
   const volDesc = v.metaDescription || v.summary || v.overview;
   const volCanonical = `${BASE_URL}/encyclopedia/${v.slug}`;
 
-  // Replace title, description, canonical
-  let volHtml = baseTemplate
-    .replace(/<title>.*?<\/title>/i, `<title>${volTitle}</title>`)
-    .replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/i, `<meta name="description" content="${volDesc.replace(/"/g, '&quot;')}" />`)
-    .replace(/<link\s+rel="canonical"\s+href=".*?"\s*\/?>/i, `<link rel="canonical" href="${volCanonical}" />`);
+  // Replace title, description, canonical + full OG/Twitter set (same values
+  // the SPA's VolumeMeta applies at runtime, so raw HTML matches rendered DOM).
+  const volHero = v.heroImage?.src?.startsWith('/') ? `${BASE_URL}${v.heroImage.src}` : (v.heroImage?.src || undefined);
+  const volHtml = injectShellMeta(baseTemplate, {
+    title: volTitle,
+    description: volDesc,
+    keywords: v.keywords,
+    canonical: volCanonical,
+    image: volHero,
+    ogType: 'article',
+  });
 
   fs.writeFileSync(path.join(volDir, 'index.html'), volHtml, 'utf8');
 
@@ -202,18 +246,30 @@ for (const v of volumes) {
   }
 }
 
+
 // Pre-render static HTML for all static pages
 for (const p of staticPages) {
-  if (p === '' || p === '/comparative-apologetics' || p === '/cross-references' || p === '/videos' || p.endsWith('.html')) continue; // dist/prophecy-map.html & friends are real files vite already copied; mkdir over them is ENOTDIR // dist/index.html already exists, codex AND the Interlinked Bible shell have their own static index.html, /videos is a standalone static module
+  if (p === '' || p === '/videos' || p.endsWith('.html')) continue; // dist/prophecy-map.html & friends are real files vite already copied; mkdir over them is ENOTDIR // dist/index.html already exists, codex AND the Interlinked Bible shell have their own static index.html, /videos is a standalone static module — NEVER overwrite its real index.html with the SPA shell
   const targetDir = path.join(distDir, p.replace(/^\//, ''));
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
-  const pageCanonical = `${BASE_URL}${p}`;
-  const pageHtml = baseTemplate.replace(
-    /<link\s+rel="canonical"\s+href=".*?"\s*\/?>/i,
-    `<link rel="canonical" href="${pageCanonical}" />`
-  );
+  const key = p === '' ? '/' : p.replace(/\/$/, '');
+  const pm = PAGE_META[key];
+  if (!pm) {
+    console.warn(`[POSTBUILD] No pageMeta.json entry for "${p}" — shell keeps template meta.`);
+    fs.writeFileSync(path.join(targetDir, 'index.html'), baseTemplate, 'utf8');
+    continue;
+  }
+  const pageCanonical = `${BASE_URL}${key === '/' ? '/' : key}`;
+  const pageHtml = injectShellMeta(baseTemplate, {
+    title: pm.title,
+    description: pm.description,
+    keywords: pm.keywords,
+    canonical: pageCanonical,
+    image: pm.image ? `${BASE_URL}${pm.image}` : undefined,
+    ogType: 'website',
+  });
   fs.writeFileSync(path.join(targetDir, 'index.html'), pageHtml, 'utf8');
 }
 

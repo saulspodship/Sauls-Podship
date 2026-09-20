@@ -34,7 +34,7 @@ export const SitemapPage: React.FC = () => {
             <Link to="/" className="text-[#4A152C] hover:underline font-semibold">Home &amp; Hero</Link>
             <Link to="/encyclopedia" className="text-[#4A152C] hover:underline font-semibold">51-Volume Encyclopedia Catalog</Link>
             <Link to="/podcast" className="text-[#4A152C] hover:underline font-semibold">Theological Podcast</Link>
-            <a href="/videos/" className="text-[#4A152C] hover:underline font-semibold">Bible Video Library</a>
+            <a href="/videos" className="text-[#4A152C] hover:underline font-semibold">Bible Video Library</a>
             <Link to="/music" className="text-[#4A152C] hover:underline font-semibold">Sacred Music &amp; Hymnody</Link>
             <Link to="/music/punjabi-zaboor" className="text-[#4A152C] hover:underline font-semibold">Punjabi Zaboor (150 Psalms)</Link>
             <Link to="/music/pakistani-singers-archive" className="text-[#4A152C] hover:underline font-semibold">Pakistani Singers Archive</Link>

@@ -35,7 +35,9 @@ const pioneerRegex =
 let pMatch;
 while ((pMatch = pioneerRegex.exec(content)) !== null) {
   const rawName = pMatch[1].replace(/<[^>]+>/g, ' ').trim();
-  const nameOnly = pMatch[1].split('<')[0].trim();
+  // Name cell may START with markup (Shahbaz's portrait <img>): split on <br>
+  // first (name is always the first line), THEN strip tags.
+  const nameOnly = pMatch[1].split(/<br\s*\/?>/i)[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   const bio = pMatch[2].replace(/<[^>]+>/g, '').trim();
   const slug = slugify(nameOnly);
   if (slug && !seenSlugs.has(slug)) {

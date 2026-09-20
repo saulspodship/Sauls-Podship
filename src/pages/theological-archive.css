@@ -507,3 +507,26 @@
   .ta-q-body, .ta-item-body, .ta-direct { display: block !important; }
   .ta-q, .ta-cat { break-inside: avoid; }
 }
+
+/* ---------------- permalink pages (question / category) ---------------- */
+.ta-crumb { max-width: 1200px; margin: 0 auto; padding: 18px 24px 0; font-size: 0.78rem; color: var(--mut); text-align: center; }
+.ta-crumb a { color: var(--wine); font-weight: 700; text-decoration: none; }
+.ta-crumb a:hover { text-decoration: underline; }
+.ta-ref { margin: 10px auto 0; font-size: 0.92rem; color: var(--mut); max-width: 760px; }
+.ta-ref strong { color: var(--wine); }
+.ta-single { max-width: 1200px; margin-left: auto; margin-right: auto; }
+.ta-item-head { display: flex; align-items: baseline; gap: 12px; margin: 0; font-size: 1rem; }
+.ta-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1200px; margin: 34px auto 0; padding: 0 24px; flex-wrap: wrap; }
+.ta-pager a { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: var(--wine); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px; background: #fff; max-width: 100%; }
+.ta-pager a:hover { border-color: var(--gold); }
+.ta-pager-all { margin-left: auto; margin-right: auto; }
+.ta-pager-prev { text-align: left; }
+.ta-pager-next { text-align: right; margin-left: auto; }
+.ta-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-width: 1200px; margin: 30px auto 10px; padding: 0 24px 30px; }
+.ta-cat-link { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--wine); text-decoration: none; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; }
+.ta-cat-link small { margin-left: auto; font-weight: 400; color: var(--mut); }
+.ta-cat-link:hover { border-color: var(--gold); }
+@media (max-width: 900px) {
+  .ta-crumb, .ta-pager, .ta-cats { padding-left: 16px; padding-right: 16px; }
+  .ta-pager-prev, .ta-pager-next { max-width: 100%; }
+}

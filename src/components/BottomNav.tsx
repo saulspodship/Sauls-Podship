@@ -22,7 +22,7 @@ const TABS: Item[] = [
   { to: '/theological-archive',     label: 'Questions',   icon: HelpCircle },
   { to: '/encyclopedia',            label: 'Volumes',     icon: BookOpen },
   { to: '/comparative-apologetics', label: 'Apologetics', icon: Scale },
-  { to: '/videos/',            label: 'Videos',      icon: Video, static: true },
+  { to: '/videos',             label: 'Videos',      icon: Video, static: true },
 ];
 
 const MORE: { heading: string; items: Item[] }[] = [

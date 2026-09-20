@@ -6,12 +6,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Compass, ArrowLeft } from 'lucide-react';
+import { usePageMeta } from '../lib/pageMeta';
 
 interface NotFoundPageProps {
   status?: number;
 }
 
 export const NotFoundPage: React.FC<NotFoundPageProps> = () => {
+  // The static host always answers 200 for SPA fallback URLs, so client-side
+  // noindex is what keeps mistyped / removed URLs OUT of Google's index
+  // (fixes "Soft 404" / "Crawled — currently not indexed" on dead ends).
+  usePageMeta({
+    title: "Page Not Found | Saul's Podship",
+    description: "The page you requested could not be found. Browse the 51-volume theological encyclopedia, study modules and archives instead.",
+    path: '/404',
+    noindex: true,
+  });
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-[#FDFBF7] px-4 py-20">
       <div className="max-w-md w-full text-center space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-gray-200 shadow-sm">

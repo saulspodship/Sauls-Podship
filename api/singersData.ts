@@ -5,7 +5,7 @@
 
 /** GENERATED FILE — do not edit by hand.
  *  Regenerate with: node scripts/generate-singers-data.mjs
- *  Source: public/singers.html (105 artist records).
+ *  Source: public/singers.html (106 artist records).
  *  This list is bundled into the Vercel API function so singer pages never
  *  depend on runtime filesystem paths. */
 
@@ -21,6 +21,16 @@ export interface EmbeddedArtist {
 }
 
 export const EMBEDDED_ARTISTS: EmbeddedArtist[] = [
+  {
+    "id": "imam-ud-din-shahbaz",
+    "name": "Imam-ud-Din Shahbaz",
+    "badge": "Historic Pioneer",
+    "also": "",
+    "role": "Historic Pioneer / Patriarch of Gospel",
+    "dates": "1845 – 1921",
+    "bio": "The undisputed pioneer of Pakistani gospel music heritage. A Punjabi evangelist and poet from Zafarwal, he produced the first metrical translation of the entire Book of Psalms into Punjabi, known as Punjabi Zabur, completing all 150 psalms set to local ragas between 1888 and 1908. Earned a Doctor of Divinity from Tarkio College, Missouri. His translations are still sung in Pakistani churches today, making him arguably the single most enduring influence in Pakistani Christian worship music. Died 1921 in Bhalwal, Pakistan.",
+    "links": {}
+  },
   {
     "id": "saleem-raza-noel-dias",
     "name": "Saleem Raza (Noel Dias)",

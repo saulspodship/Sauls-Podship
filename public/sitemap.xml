@@ -541,6 +541,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.saulspodship.com/music-archive/pastor-jamil-ud-din</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.saulspodship.com/music-archive/pastor-arshad-sadiq</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -1075,7 +1081,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.saulspodship.com/encyclopedia/biblical-maps-atlas</loc>
+    <loc>https://www.saulspodship.com/encyclopedia/biblical-maps-atlas.html</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -1,7 +1,7 @@
 # Comparative Apologetics Codex — install package for saulspodship.com
 
 This folder is a **drop-in add-on** for the Saul's Podship Vite + React + Tailwind
-site (React Router `createHashRouter`, lucide-react icons, wine `#4A152C` /
+site (React Router `createBrowserRouter`, lucide-react icons, wine `#4A152C` /
 gold `#E8C96A` / cream `#F8F4E3` palette).
 
 It adds a **fifth pillar** — "400 Comparative Questions" — to the
@@ -37,7 +37,9 @@ new route `/comparative-apologetics` that hosts the complete interactive codex
 - Match the existing pillar card markup exactly (same Tailwind classes) so the fifth card
   is visually identical to the other four. Do not introduce new colours.
 - Keep the existing four pillars, their links, and their copy unchanged.
-- Preserve `createHashRouter`; do not switch to `createBrowserRouter`.
+- The app uses `createBrowserRouter` (migrated 2026-09 from `createHashRouter` to fix
+  Search Console duplicate-content/soft-404 issues — do NOT switch back to hash routing).
+  Legacy `/#/...` links are upgraded to clean URLs by the shim in `index.html`.
 
 ## Verify before finishing
 
@@ -46,7 +48,7 @@ node scripts/verify-codex.mjs      # 400 cards, 4×100, unique IDs, toolbar pres
 npm run build
 ls dist/comparative-apologetics/codex.html
 ```
-Then open `/#/comparative-apologetics`, click a religion chip (it filters **and**
+Then open `/comparative-apologetics`, click a religion chip (it filters **and**
 scrolls to that section), click a question title (it expands), and change the sort to
 "Most asked in Pakistan & India".
 

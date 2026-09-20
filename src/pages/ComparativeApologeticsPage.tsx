@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import index from "../data/comparativeApologeticsIndex.json";
+import { usePageMeta } from "../lib/pageMeta";
 import "./theological-archive.css";
 
 /**
@@ -50,17 +51,14 @@ const META: MetaData = {
 };
 
 function useDocumentMeta(meta: MetaData) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = meta.title;
-    let desc = document.querySelector('meta[name="description"]');
-    const prevDesc = desc ? desc.getAttribute("content") : null;
-    if (desc) desc.setAttribute("content", meta.description);
-    return () => {
-      document.title = prev;
-      if (desc && prevDesc !== null) desc.setAttribute("content", prevDesc);
-    };
-  }, [meta]);
+  // Shared helper applies title + description + canonical + OG/Twitter.
+  usePageMeta({
+    title: meta.title,
+    description: meta.description,
+    keywords: ['comparative apologetics', 'christian apologetics Islam', 'interfaith dialogue', 'apologetics Pakistan India'],
+    path: '/comparative-apologetics',
+    ogType: 'website',
+  });
 }
 
 function faqJsonLd() {

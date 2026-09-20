@@ -97,7 +97,7 @@ export const HomePage: React.FC = () => {
                   streamed from the Podship video library.
                 </p>
               </div>
-              <a href="/videos/" className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
+              <a href="/videos" className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
                 <span>Watch the Video Library</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </a>

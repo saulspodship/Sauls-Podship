@@ -868,7 +868,10 @@ function getSingersList(): ArtistRecord[] {
   let pMatch;
   while ((pMatch = pioneerRegex.exec(content)) !== null) {
     const rawName = pMatch[1].replace(/<[^>]+>/g, " ").trim();
-    const nameOnly = pMatch[1].split("<")[0].trim();
+    // The name cell may START with markup (Shahbaz's portrait <img>). Split
+    // on <br> first (name is always the first line), THEN strip tags — the
+    // old split('<')[0] produced '' and dropped the pioneer entirely (404).
+    const nameOnly = pMatch[1].split(/<br\s*\/?>/i)[0].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const bio = pMatch[2].replace(/<[^>]+>/g, "").trim();
     const slug = nameOnly.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
     if (slug && !seenSlugs.has(slug)) {
@@ -1084,6 +1087,16 @@ app.get("/Pakistanisingersarchive", (req, res) => {
       return match;
     });
 
+    // Same for pioneer rows (name cell may start with a portrait <img>).
+    const pioneerLinkRegex = /<div class="pioneer-name">([\s\S]*?)<\/div>([\s\S]*?)<div class="pioneer-bio">([\s\S]*?)<\/div>/g;
+    content = content.replace(pioneerLinkRegex, (match, nameCell, middle, bio) => {
+      if (/<a\s[^>]*href="\/music-archive\//i.test(match)) return match;
+      const nameOnly = String(nameCell).split(/<br\s*\/?>/i)[0].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      const slug = nameOnly.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+      if (!slug) return match;
+      return `<div class="pioneer-name">${nameCell}</div>${middle}<div class="pioneer-bio">${bio} <a href="/music-archive/${slug}" style="color:var(--gold-light); font-weight:bold; text-decoration:underline; display:inline-block; margin-left:0.35rem;">Read Biography &amp; Legacy &rarr;</a></div>`;
+    });
+
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.send(content);
   } catch (err) {
@@ -1295,7 +1308,7 @@ app.get("/encyclopedia/:slug", async (req, res) => {
     <!-- BREADCRUMBS -->
     <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2.5rem; color: rgba(29,45,80,0.6);">
       <a href="/" style="color: #4A152C; text-decoration: none; font-weight: bold;">Home</a> &nbsp;/&nbsp; 
-      <a href="/#encyclopedia" style="color: #4A152C; text-decoration: none; font-weight: bold;">Encyclopedia</a> &nbsp;/&nbsp; 
+      <a href="/encyclopedia" style="color: #4A152C; text-decoration: none; font-weight: bold;">Encyclopedia</a> &nbsp;/&nbsp; 
       <span style="color: #1D2D50;">${volume.title}</span>
     </div>
 

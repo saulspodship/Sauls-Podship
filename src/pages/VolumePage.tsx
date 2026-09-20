@@ -16,7 +16,7 @@ import Hero from '../components/Hero';
 import ManuscriptAnalysis from '../components/ManuscriptAnalysis';
 import NotFoundPage from './NotFoundPage';
 import VolumeNumberRedirect from './VolumeNumberRedirect';
-import { StoryPanel } from '../types';
+import { StoryPanel, Volume } from '../types';
 import { ScriptureRef } from '../components/ScriptureRef';
 import { InlineMd } from '../components/InlineMd';
 import { StorySceneIcon, sceneForStory } from '../components/story/StorySceneIcon';
@@ -24,6 +24,22 @@ import { sceneImageFor, storyArt } from '../components/story/storyScenes';
 import { bibleComUrl } from '../lib/bibleRef';
 import { SITE } from '../config/site';
 import AutoFrame from '../components/modules/AutoFrame';
+import { usePageMeta, SITE_URL } from '../lib/pageMeta';
+
+/** Applies this volume's title / description / canonical / OG tags. */
+const VolumeMeta: React.FC<{ volume: Volume }> = ({ volume }) => {
+  const numPadded = volume.number < 10 ? `0${volume.number}` : `${volume.number}`;
+  const hero = volume.heroImage?.src;
+  usePageMeta({
+    title: (volume as { metaTitle?: string }).metaTitle || `${volume.title} | Volume ${numPadded} Theological Encyclopedia | Saul's Podship`,
+    description: volume.metaDescription || volume.summary || volume.overview || `Scholarly exegesis and theological analysis of ${volume.title}.`,
+    keywords: volume.keywords,
+    path: `/encyclopedia/${volume.slug}`,
+    image: hero?.startsWith('/') ? `${SITE_URL}${hero}` : (hero || undefined),
+    ogType: 'article',
+  });
+  return null;
+};
 
 
 
@@ -186,6 +202,7 @@ export const VolumePage: React.FC = () => {
 
   return (
     <div className="w-full bg-[#FDFBF7]">
+      <VolumeMeta volume={volume} />
       {/* Schema Injection */}
       <script
         type="application/ld+json"

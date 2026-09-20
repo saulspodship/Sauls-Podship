@@ -10,7 +10,7 @@ description: Guardrails for the Comparative Apologetics Codex add-on (fifth pill
   minimal diff and run `node scripts/verify-codex.mjs` (must report 400/400, 100 per religion).
 - The codex is embedded via `<iframe src="/comparative-apologetics/codex.html">`. Do not inline it,
   do not convert it to JSX, do not fetch-and-`dangerouslySetInnerHTML` it.
-- Route slug is `comparative-apologetics` (hash router → `/#/comparative-apologetics`). Do not rename.
+- Route slug is `comparative-apologetics` (clean URL → `/comparative-apologetics`). Do not rename.
 - The fifth pillar card must reuse the **exact** classes of the existing four pillar cards:
   `p-8 rounded-3xl bg-white border border-[#4A152C]/10 shadow-sm flex flex-col items-center
   justify-between text-center group hover:border-[#D4AF37] transition-all`.

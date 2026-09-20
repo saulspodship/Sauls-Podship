@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ToughQuestion } from '../data/theology/types';
+import { ToughQuestion, ArchiveCategory } from '../data/theology/types';
 
 export const ARCHIVE_BASE = '/theological-archive';
 
@@ -67,6 +67,49 @@ export function scholarlyLd(meta: PageMeta) {
     "author": { "@type": "Person", "name": SITE.author },
     "publisher": { "@type": "Organization", "name": SITE.name },
     "isAccessibleForFree": "true",
+  };
+}
+
+/** Permalink meta for one tough question: /theological-archive/question/<slug> */
+export function questionMeta(q: ToughQuestion): PageMeta {
+  const short = q.common.en.length > 150 ? `${q.common.en.slice(0, 147)}…` : q.common.en;
+  return {
+    title: `${q.q} | Tough Bible Questions | Saul's Podship`,
+    description: `${q.q} — ${short} Answered from Catholic, Orthodox, Protestant, Anglican and Pentecostal traditions, in English, Urdu, Hindi and Arabic.`,
+    canonical: `${SITE.url}${ARCHIVE_BASE}/question/${q.slug}`,
+    keywords: [q.q.toLowerCase(), 'tough bible questions', 'christian theology', 'apologetics', q.ref],
+  };
+}
+
+/** Permalink meta for one book-by-book codex: /theological-archive/category/<slug> */
+export function categoryMeta(c: ArchiveCategory): PageMeta {
+  return {
+    title: `${c.name} — Bible Study Questions & Answers | Saul's Podship`,
+    description: `${c.items.length} book-by-book Bible study questions on ${c.name} with concise answers and scripture references, from the Saul's Podship theological archive.`,
+    canonical: `${SITE.url}${ARCHIVE_BASE}/category/${c.slug}`,
+    keywords: [c.name.toLowerCase(), 'bible study questions', 'bible answers', 'scripture study'],
+  };
+}
+
+/** Full-question FAQ JSON-LD: the five tradition summaries as parallel answers. */
+export function questionFaqLd(q: ToughQuestion) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: q.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: q.common.en,
+        },
+        suggestedAnswer: q.views.map((v) => ({
+          '@type': 'Answer',
+          text: `${v.summary}${v.detail ? ` ${v.detail}` : ''}`,
+        })),
+      },
+    ],
   };
 }
 

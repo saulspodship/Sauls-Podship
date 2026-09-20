@@ -6,8 +6,20 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Mic, Play, Calendar, Clock, ChevronLeft, ExternalLink, BookOpen, ShieldCheck } from 'lucide-react';
-import { EPISODES } from '../data/episodes';
+import { EPISODES, Episode } from '../data/episodes';
 import NotFoundPage from './NotFoundPage';
+import { usePageMeta } from '../lib/pageMeta';
+
+const EpisodeMeta: React.FC<{ episode: Episode }> = ({ episode }) => {
+  usePageMeta({
+    title: `${episode.title} | Podcast Ep. ${episode.number} | Saul's Podship`,
+    description: episode.description.length > 160 ? `${episode.description.slice(0, 157)}…` : episode.description,
+    keywords: [...episode.topics, ...episode.scriptureReferences, 'theology podcast'],
+    path: `/podcast/${episode.slug}`,
+    ogType: 'article',
+  });
+  return null;
+};
 
 export const PodcastEpisodePage: React.FC = () => {
   const { episode: episodeSlug } = useParams<{ episode: string }>();
@@ -22,6 +34,7 @@ export const PodcastEpisodePage: React.FC = () => {
 
   return (
     <div className="w-full bg-[#FDFBF7]">
+      <EpisodeMeta episode={episode} />
       <section className="bg-[#1A0812] text-white py-20 px-4 sm:px-6 lg:px-8 border-b border-[#D4AF37]/30">
         <div className="max-w-4xl mx-auto space-y-4">
           <Link

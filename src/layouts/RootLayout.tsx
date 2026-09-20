@@ -14,10 +14,53 @@ import {
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
 const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'));
+// The ascension splash (GSAP + two large artworks) is likewise NOT in the
+// critical bundle: it lazy-loads only when it will actually play — once per
+// browser session, never for crawlers (they must see page content + a single H1).
+const AscensionSplash = lazy(() => import('../components/AscensionSplash'));
 import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
-import AscensionSplash from '../components/AscensionSplash';
+import { staticMetaFor, applyPageMeta } from '../lib/pageMeta';
+
+/**
+ * Should the splash play on this load? Once per tab session, and never for
+ * bots / headless renderers (Googlebot, social scrapers, Audits) — they get
+ * straight to the content, which also keeps exactly one H1 per page.
+ */
+function shouldPlaySplash(): boolean {
+  try {
+    if (sessionStorage.getItem('sp-splash-seen')) return false;
+  } catch (_) {
+    return false;
+  }
+  try {
+    const ua = navigator.userAgent || '';
+    if (/bot|crawl|spider|slurp|mediapartners|adsbot|google|bing|yandex|baidu|duckduck|lighthouse|pagespeed|facebookexternal|twitterbot|linkedinbot|embedly|quora|ia_archiver|headless|phantomjs/i.test(ua)) return false;
+    if ((navigator as any).webdriver) return false;
+  } catch (_) { /* fall through to playing */ }
+  try {
+    sessionStorage.setItem('sp-splash-seen', '1');
+  } catch (_) {}
+  return true;
+}
+
+/** Preload the two splash artworks only when the splash will actually play. */
+function preloadSplashArt() {
+  const hrefs = [
+    '/images/stories/scenes/cross.webp',
+    '/images/volumes/kings-of-the-bible-v2/hero-1920.webp?v=6',
+  ];
+  for (const href of hrefs) {
+    if (document.head.querySelector(`link[rel="preload"][href="${href}"]`)) continue;
+    const l = document.createElement('link');
+    l.rel = 'preload';
+    l.as = 'image';
+    l.href = href;
+    (l as any).fetchPriority = 'high';
+    document.head.appendChild(l);
+  }
+}
 
 
 /* ── Header navigation ─────────────────────────────────────────────────
@@ -56,7 +99,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: Play,
     group: [
       { name: 'Podcast', href: '/podcast', icon: Mic },
-      { name: 'Videos', href: '/videos/', icon: Video, isStatic: true },
+      { name: 'Videos', href: '/videos', icon: Video, isStatic: true },
       { name: 'Sacred Music', href: '/music', icon: Music },
       { name: 'Punjabi Zaboor', href: '/music/punjabi-zaboor', icon: Music2 },
       { name: 'Singers Archive', href: '/music/pakistani-singers-archive', icon: Mic },
@@ -345,6 +388,22 @@ export const RootLayout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navType = useNavigationType();
+  // Decided once per mount: the splash plays on the first load of the
+  // session only (subsequent client-side navigations never replay it).
+  const [playSplash] = useState<boolean>(() => {
+    const play = shouldPlaySplash();
+    if (play) preloadSplashArt();
+    return play;
+  });
+
+  // Unique title / description / canonical for every static route, so no two
+  // clean URLs share a title or meta description. Exact-path matches only —
+  // dynamic pages (volumes, episodes, archive questions) apply their own meta
+  // and must never be overwritten here.
+  useEffect(() => {
+    const meta = staticMetaFor(location.pathname);
+    if (meta) applyPageMeta(meta);
+  }, [location.pathname]);
 
   // Every route change starts at the top of the new page, instantly.
   // (ScrollRestoration alone raced with lazy pages + smooth scrolling, so the
@@ -404,9 +463,13 @@ export const RootLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1D2D50] font-sans antialiased selection:bg-[#4A152C] selection:text-[#E8C96A] pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
-      {/* Site-wide splash: plays on every open of the site/app (any link),
+      {/* Site-wide splash: first load of each session only (never for bots),
           then unmounts. GSAP ascension — Jesus rises, declares, ascends. */}
-      <AscensionSplash />
+      {playSplash && (
+        <Suspense fallback={null}>
+          <AscensionSplash />
+        </Suspense>
+      )}
 
       {/* key by path: full page loads all share key "default", which made a new page inherit the previous page's offset */}
       <ScrollRestoration getKey={(loc) => loc.pathname} />
@@ -578,7 +641,7 @@ export const RootLayout: React.FC = () => {
                 <li><Link to="/music/punjabi-zaboor" className="hover:text-[#E8C96A] transition-colors">Punjabi Zaboor (150 Psalms)</Link></li>
                 <li><Link to="/music/pakistani-singers-archive" className="hover:text-[#E8C96A] transition-colors">Pakistani Singers Archive</Link></li>
                 <li><Link to="/podcast" className="hover:text-[#E8C96A] transition-colors">Theological Podcast</Link></li>
-                <li><a href="/videos/" className="hover:text-[#E8C96A] transition-colors">Bible Video Library</a></li>
+                <li><a href="/videos" className="hover:text-[#E8C96A] transition-colors">Bible Video Library</a></li>
                 <li><Link to="/studio" className="hover:text-[#E8C96A] transition-colors">Scriptorium AI Studio</Link></li>
                 <li>
                   <a

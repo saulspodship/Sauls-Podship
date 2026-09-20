@@ -1,0 +1,111 @@
+{
+  "_comment": "Single source of truth for per-route SEO meta. Used by the SPA (src/lib/pageMeta.ts) AND by build scripts (postbuild.mjs injects these into the prerendered static shells). Keep titles <= 60 chars and descriptions 140-160 chars where possible.",
+  "/": {
+    "title": "Saul's Podship | Interactive Theological Encyclopedia",
+    "description": "Saul's Podship is an interactive theological encyclopedia and digital ministry. Explore 51 volumes of visual Bible study, Christian history, gospel music archives, and deep biblical narratives.",
+    "keywords": ["interactive theological encyclopedia", "visual Bible study", "Christian history", "gospel music archive", "biblical narratives"]
+  },
+  "/encyclopedia": {
+    "title": "51-Volume Theological Encyclopedia | Saul's Podship",
+    "description": "Browse all 51 peer-reviewed volumes of the Saul's Podship encyclopedia — biblical exegesis, church history, doctrine, hymnology and apologetics, free for scholars and believers.",
+    "keywords": ["bible encyclopedia", "theological volumes", "biblical exegesis", "church history", "systematic theology"]
+  },
+  "/about": {
+    "title": "About the Scriptorium | Saul's Podship",
+    "description": "Saul's Podship is an open-access digital scriptorium restoring depth, historic grounding and rigorous linguistic exegesis to the study of Holy Scripture.",
+    "keywords": ["about Saul's Podship", "digital scriptorium", "biblical exegesis ministry", "Solat Nadeem"]
+  },
+  "/scholarly-standards": {
+    "title": "Scholarly Standards & Method | Saul's Podship",
+    "description": "Our grammatical-historical hermeneutic: how every volume is researched, sourced from Hebrew, Greek and Aramaic manuscripts, and peer-reviewed.",
+    "keywords": ["scholarly standards", "grammatical-historical hermeneutics", "biblical research method"]
+  },
+  "/podcast": {
+    "title": "Theological Podcast & Audio Masterclasses | Saul's Podship",
+    "description": "Listen to Saul's Podship audio masterclasses — covenants, canon, ancient Near Eastern context and difficult exegetical questions, episode by episode.",
+    "keywords": ["theology podcast", "bible audio studies", "christian masterclasses"]
+  },
+  "/music": {
+    "title": "Sacred Music & Hymnody | Saul's Podship",
+    "description": "Sacred music hub: the 150 Punjabi Zaboor psalms, Masihi Geet heritage and the Pakistani gospel singers archive — hymnody preserved for the global church.",
+    "keywords": ["sacred music", "christian hymnody", "Punjabi Zaboor", "Masihi Geet"]
+  },
+  "/music/punjabi-zaboor": {
+    "title": "Punjabi Zaboor — All 150 Psalms in Punjabi Verse | Saul's Podship",
+    "description": "The complete 150 Punjabi Zaboor psalms versified by Imam-ud-Din Shahbaz (1908) — history, meters, sheet music and audio renditions of a living hymn tradition.",
+    "keywords": ["Punjabi Zaboor", "150 psalms Punjabi", "Imam-ud-Din Shahbaz", "Punjabi psalms"]
+  },
+  "/music/pakistani-singers-archive": {
+    "title": "Pakistani Gospel Singers Directory | Saul's Podship",
+    "description": "Searchable directory of Pakistani Christian gospel singers, composers and pioneers — biographies, eras, ragas and contributions to Masihi Geet and Zaboor.",
+    "keywords": ["Pakistani gospel singers", "Masihi Geet singers", "Pakistani christian musicians"]
+  },
+  "/studio": {
+    "title": "Scriptorium Studio — AI Research & Hymn Composer | Saul's Podship",
+    "description": "Interactive theological studio: research the scriptorium archive with the AI scholar, or compose sacred hymns with the raga-based gospel composer.",
+    "keywords": ["bible research tool", "AI theology assistant", "hymn composer", "gospel music composer"]
+  },
+  "/theological-archive": {
+    "title": "100 Tough Bible Questions & 1000 Answers | Saul's Podship",
+    "description": "Complete text index of 100 tough theology questions and 1000 book-by-book Bible study answers, in English, Urdu, Hindi and Arabic across five Christian traditions.",
+    "keywords": ["tough bible questions", "christian theology", "apologetics", "bible answers"]
+  },
+  "/comparative-apologetics": {
+    "title": "400 Comparative Apologetics Questions — Islam, Judaism, Hinduism & Sikhism | Saul's Podship",
+    "description": "A Christian's guide to comparative apologetics: 100 critical questions each on Islam, Judaism, Hinduism and Sikhism, with primary sources and a Christian response.",
+    "keywords": ["comparative apologetics", "christian apologetics Islam", "interfaith dialogue", "apologetics Pakistan India"]
+  },
+  "/prophecy-map": {
+    "title": "Biblical Prophecy Map — 247 Prophecies Charted | Saul's Podship",
+    "description": "247 biblical prophecies — fulfilled, partly fulfilled and still future — woven by 1,063 cross-references on a rotatable 3D globe. Every thread opens on bible.com.",
+    "image": "/images/hero-prophecy.jpg",
+    "keywords": ["bible prophecy map", "fulfilled prophecy", "messianic prophecies", "prophecy timeline"]
+  },
+  "/kings-of-the-bible": {
+    "title": "Kings of the Bible — Every Throne in Order | Saul's Podship",
+    "description": "Every throne in the Bible in canonical order — from Jesus the King of Kings through Saul, David, the Herods to the last king — with reigns and prophets.",
+    "image": "/images/hero-jesus-alpha-omega.jpg",
+    "keywords": ["kings of the bible", "kings of Israel and Judah", "biblical chronology"]
+  },
+  "/cross-references": {
+    "title": "Interlinked Bible — 344,799 Cross-References | Saul's Podship",
+    "description": "Every cross-reference in Scripture woven into one interactive chart: 66 books, 1,189 chapters, 190,758 chapter threads, with KJV drill-down.",
+    "image": "/images/hero-interlinked.jpg",
+    "keywords": ["bible cross references", "scripture concordance", "interlinked bible"]
+  },
+  "/support": {
+    "title": "Support & Partner With the Ministry | Saul's Podship",
+    "description": "Partner with Saul's Podship: your support keeps 51 volumes, atlases, archives and podcasts free for believers and scholars worldwide.",
+    "keywords": ["support ministry", "partner", "donate", "patreon"]
+  },
+  "/faq": {
+    "title": "Frequently Asked Questions | Saul's Podship",
+    "description": "Answers about using the encyclopedia, citing volumes, the Punjabi Zaboor archive, podcasts and supporting the Saul's Podship ministry.",
+    "keywords": ["faq", "how to cite", "bible study help"]
+  },
+  "/contact": {
+    "title": "Contact & Submissions | Saul's Podship",
+    "description": "Contact the Saul's Podship scriptorium — corrections, submissions, partnership and research questions from scholars and believers worldwide.",
+    "keywords": ["contact", "submissions", "corrections"]
+  },
+  "/privacy": {
+    "title": "Privacy Policy | Saul's Podship",
+    "description": "How Saul's Podship collects, uses and protects your data across the website and the installed Podship app.",
+    "keywords": ["privacy policy"]
+  },
+  "/terms": {
+    "title": "Terms of Service | Saul's Podship",
+    "description": "Terms of service for using the Saul's Podship website, app, encyclopedia volumes and study modules.",
+    "keywords": ["terms of service"]
+  },
+  "/disclaimer": {
+    "title": "Theological Disclaimer | Saul's Podship",
+    "description": "Our theological posture: scholarly perspectives offered for study and discussion within the historic Christian faith.",
+    "keywords": ["theological disclaimer"]
+  },
+  "/sitemap": {
+    "title": "Site Directory & Sitemap | Saul's Podship",
+    "description": "Complete directory of Saul's Podship: all 51 encyclopedia volumes, study modules, music archives, podcasts and ministry pages.",
+    "keywords": ["sitemap", "site directory", "all volumes index"]
+  }
+}

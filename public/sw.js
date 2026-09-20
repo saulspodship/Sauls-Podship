@@ -4,7 +4,7 @@
    visits, and offer a cached shell offline. Deliberately light:
    never precache the 51 hero artworks; cache lazily instead.
    ============================================================ */
-const VERSION = 'sp-pwa-v6';
+const VERSION = 'sp-pwa-v7';
 const SHELL = [
   '/',
   '/index.html',

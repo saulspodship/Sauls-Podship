@@ -76,7 +76,7 @@
     var rail = document.getElementById('sp-rail');
     if (!rail) return;
     var latest = publishedVideos().slice(0, 8);
-    var AVATAR = CH.avatarUrl || 'assets/channel-avatar-64.png';
+    var AVATAR = CH.avatarUrl || '/videos/assets/channel-avatar-64.png';
     rail.innerHTML = latest.map(function (v) {
       return (
         '<button class="v-card" data-id="' + v.id + '" aria-label="Play ' + esc(cleanTitle(v.title)) + '">' +

@@ -104,12 +104,13 @@ export const VideosRail: React.FC = () => {
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-            <Link
-              to="/videos/"
+            {/* Plain anchor: /videos is a standalone static page, not an SPA route. */}
+            <a
+              href="/videos"
               className="ml-2 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#4A152C] text-[#F8F4E3] text-xs font-bold hover:bg-[#681E3E] transition-colors shadow"
             >
               All videos <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -131,6 +132,9 @@ export const VideosRail: React.FC = () => {
                   src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
                   alt=""
                   loading="lazy"
+                  decoding="async"
+                  width={320}
+                  height={180}
                   className="w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#16060F]/70 via-transparent to-transparent" />

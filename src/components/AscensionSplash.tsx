@@ -205,8 +205,8 @@ export const AscensionSplash: React.FC = () => {
     <div
       ref={rootRef}
       className="asc-root"
-      role="img"
-      aria-label="Splash: against the hill of the crucifixion, Jesus rises in glory, declares Himself God, and ascends out of the top of the screen. Jesus is God — Son of God, Perfect Son of Man."
+      role="region"
+      aria-label="Intro: Jesus rises in glory and ascends. Jesus is God — Son of God, Perfect Son of Man."
       onClick={() => skipRef.current()}
       style={{ cursor: 'pointer' }}
     >
@@ -261,7 +261,7 @@ export const AscensionSplash: React.FC = () => {
 
       {/* the words */}
       <div className="asc-text">
-        <h1 className="asc-title" lang="en">JESUS IS GOD</h1>
+        <p className="asc-title" lang="en" aria-hidden="false">JESUS IS GOD</p>
         <p className="asc-line2">Son of GOD &mdash; Perfect Son of Man</p>
         <p className="asc-line3">
           Accept this truth in your life, and receive His grace through keeping faith.
