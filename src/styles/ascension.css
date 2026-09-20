@@ -15,9 +15,16 @@
      .asc-flash    final light flash
      .asc-skip     skip control
 
-   All animated nodes start at opacity:0 — GSAP owns transforms
-   (xPercent/yPercent centering is applied via gsap.set in the
-   component, so NO CSS transform is set here).
+   Every animated node starts at opacity:0 IN CSS — never only in JS.
+   The component applies GSAP's initial state in useLayoutEffect (before
+   the first paint), but the stylesheet has to agree with it: without
+   `opacity: 0` here, a layer is painted once at its raw CSS position
+   before GSAP touches it. That is what made Jesus flash on the RIGHT
+   half of the screen on load (.asc-fig is positioned with left:50%).
+
+   GSAP still owns the transforms (xPercent/yPercent centering is applied
+   via gsap.set), so NO CSS transform is set on any animated node — a CSS
+   translate would be parsed into x/y by GSAP and double-shift the layer.
    ============================================================ */
 
 .asc-root {
@@ -123,6 +130,9 @@
   top: 36%;
   width: min(64vmin, 340px);
   aspect-ratio: 3 / 4;
+  /* hidden until GSAP animates it in — otherwise the very first paint shows
+     the figure un-centred (left edge at 50%) on the right side of the screen */
+  opacity: 0;
   pointer-events: none;
   will-change: transform, opacity;
 }
@@ -226,6 +236,7 @@
   width: 74px;
   height: 1px;
   background: linear-gradient(90deg, transparent, #E8C96A, transparent);
+  opacity: 0;
 }
 
 .asc-verse {

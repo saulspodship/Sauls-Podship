@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { artUrl } from '../lib/artUrl';
 import '../styles/ascension.css';
@@ -44,7 +44,12 @@ export const AscensionSplash: React.FC = () => {
   const skipRef = useRef<() => void>(() => {});
   const [done, setDone] = useState(false);
 
-  useEffect(() => {
+  // useLayoutEffect, NOT useEffect. GSAP writes the initial state of every
+  // layer here, and layout effects run before the browser paints. With
+  // useEffect the first frame was painted straight from the stylesheet, and
+  // Jesus — centred only by gsap.set(xPercent/yPercent -50) — showed up on the
+  // RIGHT half of the screen for a moment before the curtain lifted.
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const $ = (sel: string) => root.querySelector<HTMLElement>(sel);
@@ -60,31 +65,48 @@ export const AscensionSplash: React.FC = () => {
     const line3 = $('.asc-line3');
     const verse = $('.asc-verse');
     const acts = $('.asc-acts');
+    const rule = $('.asc-rule');
     const skip = $('.asc-skip');
-    if (!bg || !wash || !rays || !glow || !fig || !beam || !flash || !title || !line2 || !line3 || !verse || !acts || !skip) return;
     const parts = Array.from(root.querySelectorAll<HTMLElement>('.asc-p'));
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Lock page scroll while the splash is on screen.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    // GSAP owns the transform of every animated node — CSS must not set one.
-    gsap.set(fig, { xPercent: -50, yPercent: -50, y: '110vh', scale: 0.94, autoAlpha: 0 });
-    gsap.set(rays, { xPercent: -50, yPercent: -50, rotation: 0, autoAlpha: 0 });
-    gsap.set(glow, { xPercent: -50, yPercent: -50, scale: 0.82, autoAlpha: 0 });
-    gsap.set(beam, { xPercent: -50, scaleY: 0.35, transformOrigin: '50% 0%', autoAlpha: 0 });
-    gsap.set(acts, { xPercent: -50, autoAlpha: 0 });
-    gsap.set(parts, { autoAlpha: 0 });
-    gsap.set([bg, wash], { autoAlpha: 0 });
-    gsap.set([title, line2, line3, verse], { autoAlpha: 0, y: 24 });
-    gsap.set(skip, { autoAlpha: 0 });
-
     const finish = () => {
       document.body.style.overflow = prevOverflow;
+      // stop intercepting clicks the instant the curtain drops — React unmounts
+      // a frame later, and the header/nav must be usable immediately.
+      root.style.pointerEvents = 'none';
       setDone(true);
     };
+
+    // This splash is a fixed, full-screen overlay at z-index 9999 — it sits on
+    // top of the site header, the nav and every dropdown. If anything goes
+    // wrong it has to get out of the way, never hold the chrome hostage.
+    if (!bg || !wash || !rays || !glow || !fig || !beam || !flash || !title || !line2 || !line3 || !verse || !acts || !rule || !skip) {
+      finish();
+      return;
+    }
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    try {
+      // GSAP owns the transform of every animated node — CSS must not set one.
+      gsap.set(fig, { xPercent: -50, yPercent: -50, y: '110vh', scale: 0.94, autoAlpha: 0 });
+      gsap.set(rays, { xPercent: -50, yPercent: -50, rotation: 0, autoAlpha: 0 });
+      gsap.set(glow, { xPercent: -50, yPercent: -50, scale: 0.82, autoAlpha: 0 });
+      gsap.set(beam, { xPercent: -50, scaleY: 0.35, transformOrigin: '50% 0%', autoAlpha: 0 });
+      gsap.set(acts, { xPercent: -50, autoAlpha: 0 });
+      gsap.set(parts, { autoAlpha: 0 });
+      gsap.set([bg, wash], { autoAlpha: 0 });
+      gsap.set([title, line2, line3, rule, verse], { autoAlpha: 0, y: 24 });
+      gsap.set(skip, { autoAlpha: 0 });
+    } catch (err) {
+      console.warn('[AscensionSplash] GSAP unavailable — skipping the intro:', err);
+      finish();
+      return;
+    }
 
     let tl: gsap.core.Timeline;
 
@@ -94,7 +116,7 @@ export const AscensionSplash: React.FC = () => {
       tl.to(bg, { autoAlpha: 1, duration: 0.6, ease: 'power1.out' }, 0)
         .to(wash, { autoAlpha: 0.3, duration: 0.6 }, 0)
         .to(fig, { autoAlpha: 1, y: '0vh', scale: 1, duration: 0.8, ease: 'power1.out' }, 0.1)
-        .to([title, line2, line3, verse], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out' }, 0.5)
+        .to([title, line2, line3, rule, verse], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out' }, 0.5)
         .to(skip, { autoAlpha: 1, duration: 0.4 }, 0.4)
         .to(fig, { y: '-8vh', autoAlpha: 0, duration: 0.9, ease: 'power1.in' }, 3.6)
         .to(root, { autoAlpha: 0, duration: 0.8, ease: 'power1.inOut' }, 4.3);
@@ -122,6 +144,7 @@ export const AscensionSplash: React.FC = () => {
         .fromTo(title, { y: 30, letterSpacing: '0.55em' }, { y: 0, letterSpacing: '0.16em', autoAlpha: 1, duration: 1.4, ease: 'power2.out' }, 2.3)
         .fromTo(line2, { y: 20 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 2.9)
         .fromTo(line3, { y: 20 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 3.3)
+        .fromTo(rule, { y: 18 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 3.6)
         .fromTo(verse, { y: 16 }, { y: 0, autoAlpha: 1, duration: 1.0, ease: 'power2.out' }, 3.8)
         .to(skip, { autoAlpha: 1, duration: 0.5 }, 1.1)
 
@@ -147,6 +170,10 @@ export const AscensionSplash: React.FC = () => {
     // small beat so the art starts decoding before the curtain lifts
     const startTimer = window.setTimeout(() => tl.play(), 250);
 
+    // Failsafe: a stalled timeline (background tab, throttled rAF, paused
+    // media) must not leave the overlay parked over the header for ever.
+    const failsafe = window.setTimeout(finish, tl.duration() * 1000 + 2500);
+
     // Skip = fast-forward the remaining animation (never a hard cut).
     const skipNow = () => {
       window.clearTimeout(startTimer);
@@ -163,6 +190,7 @@ export const AscensionSplash: React.FC = () => {
 
     return () => {
       window.clearTimeout(startTimer);
+      window.clearTimeout(failsafe);
       window.removeEventListener('keydown', onKey);
       skip.removeEventListener('click', onSkipClick);
       tl.kill();
