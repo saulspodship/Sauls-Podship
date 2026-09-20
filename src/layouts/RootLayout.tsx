@@ -5,12 +5,7 @@
 
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
-import { 
-  BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, 
-  Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award,
-  Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle,
-  Map, Globe2, Music2
-} from 'lucide-react';
+import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
 const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'));
@@ -377,7 +372,7 @@ export const RootLayout: React.FC = () => {
       <>
         <div className="flex items-center gap-3">
           <Icon className={`w-4 h-4 ${leaf.isExternal ? 'text-rose-400' : 'text-[#D4AF37]'}`} />
-          <span>{leaf.name}{leaf.isExternal ? ' (Patreon)' : ''}</span>
+          <span>{leaf.name}{/patreon/i.test(leaf.href) ? ' (Patreon)' : ''}</span>
         </div>
         {leaf.isExternal ? <ExternalLink className="w-4 h-4 opacity-50" /> : <ChevronRight className="w-4 h-4 opacity-50" />}
       </>

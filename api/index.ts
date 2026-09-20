@@ -1470,5 +1470,28 @@ app.get("/music-archive/:slug", async (req, res) => {
 app.use("/src/assets/images", express.static(path.join(process.cwd(), "src/assets/images")));
 app.use("/images", express.static(path.join(process.cwd(), "public/images")));
 
+app.get(/.*/, (req, res, next) => {
+  const distPath = path.join(process.cwd(), "dist");
+  let isContainer = false;
+  try {
+    isContainer = fs.existsSync(distPath) && fs.statSync(distPath).isDirectory();
+  } catch (e) {
+    // ignore
+  }
+  
+  if (isContainer) {
+    return next();
+  }
+  
+  const hasExtension = /\.[a-z0-9]+$/i.test(req.path);
+  const isHtml = req.path.endsWith('.html');
+  
+  if (!hasExtension || isHtml) {
+    return res.redirect(302, "/#" + req.path);
+  } else {
+    return res.status(404).json({ error: "Not found", path: req.path });
+  }
+});
+
 // Export Express app for serverless function/local listener usage
 export default app;

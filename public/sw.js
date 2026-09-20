@@ -4,7 +4,7 @@
    visits, and offer a cached shell offline. Deliberately light:
    never precache the 51 hero artworks; cache lazily instead.
    ============================================================ */
-const VERSION = 'sp-pwa-v6';
+const VERSION = 'sp-pwa-v7';
 const SHELL = [
   '/',
   '/index.html',
@@ -54,8 +54,10 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => { c.put(req, copy); trimCache(c); });
+          if (res.status === 200) {
+            const copy = res.clone();
+            caches.open(VERSION).then((c) => { c.put(req, copy); trimCache(c); });
+          }
           return res;
         })
         .catch(async () => (await caches.match(req)) || (await caches.match('/index.html')) || (await caches.match('/')))

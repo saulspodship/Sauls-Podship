@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home, Globe2, Network, Crown, Video, LayoutGrid, X,
-  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map,
+  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map, GraduationCap, Languages
 } from 'lucide-react';
 import { SITE } from '../config/site';
 
