@@ -33,6 +33,8 @@ const MORE: { heading: string; items: Item[] }[] = [
       { to: '/cross-references',        label: 'Bible Links · Interlinked Cross-References', icon: Network },
       { to: '/kings-of-the-bible',      label: 'Kings of the Bible · Volume 51',         icon: Crown },
       { to: '/encyclopedia/biblical-maps-atlas.html', label: 'Biblical Maps Atlas',       icon: Map, static: true },
+      { to: 'http://saulssundayschool.saulspodship.com', label: "Saul's Sunday School",   icon: GraduationCap, external: true },
+      { to: 'http://biblicallanguages.saulspodship.com', label: 'Biblical Languages',     icon: Languages, external: true },
     ],
   },
   {
