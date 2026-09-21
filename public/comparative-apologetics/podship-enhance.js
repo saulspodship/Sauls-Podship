@@ -26,7 +26,21 @@
     "Sikhism": { ur: "سکھ مت", hi: "सिख धर्म", ar: "السيखية" },
     "Table of Contents": { ur: "فہرست", hi: "विषय-सूची", ar: "جدول المحتويات" },
     "Search": { ur: "تلاش", hi: "खोज", ar: "بحث" },
-    "Back to top": { ur: "اوپر جائیں", hi: "ऊपर लौटें", ar: "إلى الأعلى" }
+    "Back to top": { ur: "اوپر جائیں", hi: "ऊपर लौटें", ar: "إلى الأعلى" },
+    "Saul's Podship · A Biblical Ministry Project": { ur: "ساؤلز پوڈشپ · ایک انجیلی خدمت کا منصوبہ", hi: "सॉल्स पॉडशिप · एक बाइबली सेवा-परियोजना", ar: "ساولس بودشيب · مشروع خدمة إنجيلية" },
+    "Timeless Truth, Modern Lens — Questions, Answers, and Honest Dialogue Across World Religions": { ur: "دائمی سچ ، جدید نظریہ — سوالات، جوابات اور امن مکالمہ دنیا کے ادیان کے درمیان", hi: "कालातीत सत्य, आधुनिक उपकरण — प्रश्न, उत्तर और ईमानदार संवाद विश्व धर्मों के बीच", ar: "الحق الأزلي ونطرة عصرية — أسئلة وأجوبة وحوار صادق عبر أديان العالم" },
+    "— Points of Critical Inquiry": { ur: "— نقدی مطالعے کے نکات", hi: "— गहन परीक्षा के बिंदु", ar: "— نقاط البحث النقدي" },
+    "Coming Next": { ur: "اگلا کیا ہے", hi: "आगे आने वाला", ar: "قادم قريباً" },
+    "Sort: Book order": { ur: "ترتیب: کتاب کی ترتیب", hi: "क्रम: पुस्तक क्रम", ar: "الترتيب: حسب ترتيب الكتاب" },
+    "Sort: Most asked in Pakistan & India": { ur: "ترتیب: پاکستان و بھارت میں زیادہ پوچھے گئے", hi: "क्रम: पाकिस्तान / भारत में सर्वाधिक पूछे गए", ar: "الترتيب: الأكثر طرحاً في باكستان والهند" },
+    "Sort: A–Z by question": { ur: "ترتیب: سوالات ا تا ز", hi: "क्रम: अ – ज़ प्रश्न के अनुसार", ar: "الترتيب: أ – ي حسب السؤال" },
+    "Expand all": { ur: "سب کھولیں", hi: "सभी खोलें", ar: "وسّع الكل" },
+    "Collapse all": { ur: "سب بند کریں", hi: "सभी बंद करें", ar: "اطوِ الكل" },
+    "All": { ur: "سب", hi: "सभी", ar: "الكل" },
+    "100 questions": { ur: "۱۰۰ سوالات", hi: "१०० प्रश्न", ar: "١٠٠ سؤال" },
+    "400 questions total": { ur: "مجموعی طور پر ۴۰۰ سوالات", hi: "कुल ४०० प्रश्न", ar: "٤٠٠ سؤال إجمالاً" },
+    "Search 400 questions — try crucifixion, caste dowry, or \"who is the Mahdi\"": { ur: "۴۰۰ سوالات میں تلاش کریں — مثلاً صلیب، جہیز، یا \"مہدی کون ہے\"", hi: "४०० प्रश्नों में खोजें — जैसे क्रूसीकरण, दहेज, या \"महदी कौन है\"", ar: "ابحث في ٤٠٠ سؤال — جرّب الصلب أو المهر أو \"من هو المهدي\"" },
+    "No questions match. Try fewer words, different spellings (Qur'an/Quran), or clear the religion filter.": { ur: "کوئی سوال مطابق نہیں۔ کم الفاظ، مختلف ہجے (قرآن/قُران) آزمائیں یا مذہبی فلٹر ہٹا دیں۔", hi: "कोई प्रश्न मेल नहीं खाता। कम शब्द, भिन्न वर्तनी (क़ुरआन/कुरान) आज़माएँ या धर्म फ़िल्टर हटाएँ।", ar: "لا يوجد سؤال مطابق. جرّب كلمات أقل أو تهجئة مختلفة (قرآن) أو أزل مرشِّح الدين." }
   };
 
   var lang = "en", theme = "light";
@@ -34,31 +48,91 @@
     lang = localStorage.getItem("sp-lang") || "en";
     theme = "light"; /* canonical Podship wine/cream look */
   } catch (e) {}
+  /* The host SPA embeds this codex with ?lang=xx — that wins at boot so the
+     frame always matches the site-wide language selected in the header. */
+  var urlLang = (location.search.match(/[?&]lang=(en|ur|hi|ar)/) || [])[1];
+  if (urlLang) {
+    lang = urlLang;
+    try { localStorage.setItem("sp-lang", lang); } catch (e) {}
+  }
+
+  /* Lookups receive whitespace-normalised text, so the keys are normalised
+     the same way — an irregular double space must not break a translation. */
+  var NDICT = {};
+  Object.keys(DICT).forEach(function (k) {
+    var nk = k.replace(/\s+/g, " ").trim();
+    if (nk && !NDICT[nk]) NDICT[nk] = DICT[k];
+  });
+
+  /* Translation state: [textNode, originalData] pairs so any language can be
+     swapped in and out without reloading the 1.6 MB document. */
+  var translated = [];
+  function restoreLang() {
+    translated.forEach(function (pair) { try { pair[0].data = pair[1]; } catch (e) {} });
+    translated = [];
+  }
+
+  /* Whole-string hit first; then retry with leading/trailing symbols
+     (☪ Islam → Islam) so icon-prefixed chips still translate. */
+  function lookup(text, l) {
+    var hit = NDICT[text] || DICT[text];
+    if (hit && hit[l]) return hit[l];
+    try {
+      var m = text.match(/^([^\p{L}\p{N}]+)?([\s\S]*?)([^\p{L}\p{N}]+)?$/u);
+      if (m && m[2]) {
+        var k = NDICT[m[2]] || DICT[m[2]];
+        if (k && k[l]) return (m[1] || "") + k[l] + (m[3] || "");
+      }
+    } catch (e) { /* older engine without \p classes */ }
+    return null;
+  }
 
   function applyLang(l) {
     document.documentElement.lang = l;
     document.documentElement.dir = RTL[l] ? "rtl" : "ltr";
     document.documentElement.setAttribute("data-lang", l);
-    // restore previous
-    Array.prototype.forEach.call(document.querySelectorAll("[data-sp-i18n]"), function (el) {
-      el.textContent = el.getAttribute("data-sp-orig") || el.textContent;
-      el.removeAttribute("data-sp-i18n");
-    });
+    restoreLang();
     if (l === "en") return;
-    Array.prototype.forEach.call(
-      document.querySelectorAll("h1, h2, h3, .toc a, nav a, button.doc-title, .hero-eyebrow, .section-eyebrow, .section-sub"),
-      function (el) {
-        if (el.children.length && el.tagName !== "A") return;
-        var t = (el.textContent || "").replace(/\s+/g, " ").trim();
-        var hit = DICT[t];
-        if (hit && hit[l]) {
-          el.setAttribute("data-sp-orig", t);
-          el.setAttribute("data-sp-i18n", l);
-          el.textContent = hit[l];
-        }
+    /* Walk TEXT NODES (not elements): headings split by <span>eyebrows</span>,
+       toolbar chips with counts, select options… all translate cleanly while
+       the question bodies themselves stay untouched. */
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!n.data || !n.data.replace(/\s+/g, "")) return NodeFilter.FILTER_REJECT;
+        var p = n.parentElement;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        if (p.closest("script, style, noscript, textarea, code, pre, .qcard, .qblock")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
       }
-    );
+    });
+    var nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(function (node) {
+      var out = lookup(node.data.replace(/\s+/g, " ").trim(), l);
+      if (out) {
+        var m = node.data.match(/^(\s*)([\s\S]*?)(\s*)$/);
+        translated.push([node, node.data]);
+        node.data = m[1] + out + m[3];
+      }
+    });
+    /* search placeholder */
+    var q = document.getElementById("qsearch");
+    if (q && !q.getAttribute("data-orig-ph")) q.setAttribute("data-orig-ph", q.placeholder || "");
+    if (q) {
+      var phHit = lookup((q.getAttribute("data-orig-ph") || "").replace(/\s+/g, " ").trim(), l);
+      q.placeholder = phHit || q.getAttribute("data-orig-ph") || q.placeholder;
+    }
   }
+
+  /* Live language updates from the host SPA (no reload needed). */
+  window.addEventListener("message", function (e) {
+    var d = e && e.data;
+    if (d && d.sp === "lang" && /^(en|ur|hi|ar)$/.test(d.lang || "")) {
+      lang = d.lang;
+      try { localStorage.setItem("sp-lang", lang); } catch (err) {}
+      applyLang(lang);
+    }
+  });
 
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);

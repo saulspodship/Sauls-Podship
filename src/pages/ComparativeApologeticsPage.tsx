@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import index from "../data/comparativeApologeticsIndex.json";
+import { useSiteLang } from "../i18n/LanguageProvider";
 import "./theological-archive.css";
 
 /**
@@ -80,6 +81,7 @@ function faqJsonLd() {
 
 export default function ComparativeApologeticsPage() {
   useDocumentMeta(META);
+  const { t, lang } = useSiteLang();
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const [frameH, setFrameH] = useState<number | string>("calc(100vh - 120px)");
   const [ready, setReady] = useState(false);
@@ -115,6 +117,14 @@ export default function ComparativeApologeticsPage() {
     return () => { window.clearInterval(t); f?.removeEventListener("load", measure); };
   }, []);
 
+  // Live language: tell the embedded codex (same-origin) to retranslate its
+  // chrome without reloading its 1.6 MB document.
+  useEffect(() => {
+    try {
+      frameRef.current?.contentWindow?.postMessage({ sp: "lang", lang }, "*");
+    } catch { /* frame not ready yet */ }
+  }, [lang]);
+
   // Read ?q= / ?rel= from either the hash-router search or the real search.
   const initialHash = useMemo(() => {
     const raw =
@@ -127,7 +137,8 @@ export default function ComparativeApologeticsPage() {
     return "";
   }, []);
 
-  const src = CODEX_SRC + initialHash;
+  // ?lang= seeds the codex's own translator at load; postMessage keeps it live.
+  const src = `${CODEX_SRC}?lang=${lang}${initialHash}`;
 
   const jumpTo = (hash: string) => {
     const f = frameRef.current;
@@ -150,15 +161,12 @@ export default function ComparativeApologeticsPage() {
       />
 
       <header className="ta-masthead">
-        <span className="ta-kicker">Theological Heritage &amp; Foundations</span>
+        <span className="ta-kicker">{t("Theological Heritage & Foundations")}</span>
         <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">
-          The Comparative Apologetics <em className="text-[#E8C96A] not-italic">Codex</em>
+          {t("The Comparative Apologetics")} <em className="text-[#E8C96A] not-italic">{t("Codex")}</em>
         </h1>
-        <p className="ta-lede">
-          Four hundred of the hardest questions raised in Christian dialogue with
-          Islam, Judaism, Hinduism and Sikhism — one hundred per tradition. Every entry
-          states the other faith&rsquo;s position fairly from its own primary sources
-          before offering a Christian response. Persuasion through honesty, never mockery.
+        <p className="ta-lede" dir={lang === "ur" || lang === "ar" ? "rtl" : "ltr"}>
+          {t("Four hundred of the hardest questions raised in Christian dialogue with Islam, Judaism, Hinduism and Sikhism — one hundred per tradition. Every entry states the other faith's position fairly from its own primary sources before offering a Christian response. Persuasion through honesty, never mockery.")}
         </p>
         <div className="ta-stats">
           {RELIGIONS.map((r) => (
@@ -169,12 +177,12 @@ export default function ComparativeApologeticsPage() {
               className="text-left hover:text-[#E8C96A] transition-colors"
             >
               <span className="block text-[10px] tracking-[0.3em] uppercase text-[#D4AF37]">
-                {r.vol}
+                {t(r.vol)}
               </span>
               <span className="block text-lg font-semibold">
-                {r.glyph}&nbsp;{r.label}
+                {r.glyph}&nbsp;{t(r.label)}
               </span>
-              <span className="block text-xs opacity-70">100 questions</span>
+              <span className="block text-xs opacity-70">{t("100 questions")}</span>
             </button>
           ))}
         </div>
@@ -183,14 +191,12 @@ export default function ComparativeApologeticsPage() {
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-6">
         <div className="ta-bar rounded-xl">
           <span className="text-[11px] tracking-[0.18em] uppercase text-[#7a6a5f]">
-            Inside the codex
+            {t("Inside the codex")}
           </span>
-          <span className="text-xs text-[#2a231d]">
-            Search all 400 (keywords, sentences or &ldquo;exact phrases&rdquo;) &middot;
-            filter by tradition &middot; sort by <strong>Most asked in Pakistan &amp; India</strong>
-            &middot; tap any question to open it
+          <span className="text-xs text-[#2a231d]" dir={lang === "ur" || lang === "ar" ? "rtl" : "ltr"}>
+            {t("Search all 400 (keywords, sentences or \"exact phrases\") · filter by tradition · sort by Most asked in Pakistan & India · tap any question to open it")}
           </span>
-          <span className="ta-hits">{ready ? `${typedIndex.length} questions loaded` : "Loading\u2026"}</span>
+          <span className="ta-hits">{ready ? `${typedIndex.length} ${t("questions loaded")}` : t("Loading…")}</span>
         </div>
 
         <div>
@@ -206,30 +212,30 @@ export default function ComparativeApologeticsPage() {
         </div>
 
         <p className="text-center text-xs text-[#7a6a5f] font-sans mt-4">
-          Prefer a full window?{" "}
+          {t("Prefer a full window?")}{" "}
           <a
             href={CODEX_SRC}
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-[#4A152C]"
           >
-            Open the codex in a new tab
+            {t("Open the codex in a new tab")}
           </a>{" "}
-          &middot; printable (questions auto-expand when printing).
+          &middot; {t("printable (questions auto-expand when printing).")}
         </p>
       </section>
 
       {/* Crawlable text index of all 400 question titles (SEO + accessibility). */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-12 mb-16">
         <h2 className="font-serif text-2xl text-[#4A152C] mb-6 text-center font-bold">
-          Complete Question Index
+          {t("Complete Question Index")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {RELIGIONS.map((r) => (
             <div key={r.key}>
               <h3 className="font-serif font-bold text-lg text-[#4A152C] mb-3">
-                {r.glyph}&nbsp;{r.label}{" "}
-                <span className="text-xs font-sans font-normal text-[#7a6a5f]">{r.vol}</span>
+                {r.glyph}&nbsp;{t(r.label)}{" "}
+                <span className="text-xs font-sans font-normal text-[#7a6a5f]">{t(r.vol)}</span>
               </h3>
               <ol className="space-y-1 text-sm font-sans text-[#2a231d]">
                 {typedIndex

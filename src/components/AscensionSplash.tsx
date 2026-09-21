@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { artUrl } from '../lib/artUrl';
 import '../styles/ascension.css';
 
 /**
- * AscensionSplash — the site-wide "splash screen" that plays the moment the
- * app opens (website or installed PWA, any route/link).
+ * AscensionSplash — the site-wide "splash screen" that plays the FIRST time
+ * the app is opened in a browser session (website or installed PWA, any
+ * route/link). A sessionStorage flag guarantees it is never seen repeatedly:
+ * refreshes, internal navigation and deep links skip straight to the content.
  *
  * Inspired by the Volume 51 hero banner ("Christ enthroned as King of Kings,
  * the Alpha and the Omega"):
@@ -42,7 +44,20 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
 export const AscensionSplash: React.FC = () => {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const skipRef = useRef<() => void>(() => {});
-  const [done, setDone] = useState(false);
+  // Play ONLY the first time the website is opened in a browser session.
+  // Every later load — an internal navigation, a refresh, a deep link —
+  // must go straight to the content; nobody wants the intro on repeat.
+  const [done, setDone] = useState(() => {
+    try {
+      return sessionStorage.getItem('sp-splash-played') === '1';
+    } catch {
+      return false;
+    }
+  });
+
+  const markPlayed = useCallback(() => {
+    try { sessionStorage.setItem('sp-splash-played', '1'); } catch { /* private mode */ }
+  }, []);
 
   // useLayoutEffect, NOT useEffect. GSAP writes the initial state of every
   // layer here, and layout effects run before the browser paints. With
@@ -74,6 +89,10 @@ export const AscensionSplash: React.FC = () => {
     document.body.style.overflow = 'hidden';
 
     const finish = () => {
+      // Mark the session FIRST so the splash can never replay inside this
+      // browser session — no matter which path led here (natural completion,
+      // skip, failsafe timer, or the missing-art bail-out below).
+      markPlayed();
       document.body.style.overflow = prevOverflow;
       // stop intercepting clicks the instant the curtain drops — React unmounts
       // a frame later, and the header/nav must be usable immediately.

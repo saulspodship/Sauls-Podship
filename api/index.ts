@@ -1482,7 +1482,16 @@ app.get(/.*/, (req, res, next) => {
   if (isContainer) {
     return next();
   }
-  
+
+  // Local dev (`npm run dev`): server.ts sets this flag BEFORE mounting the
+  // Vite middleware, so any request the API routes don't own falls through to
+  // Vite — which serves public/ (codex, prophecy map, icons, /assets), the
+  // /src modules and the SPA index.html. Without this, every asset 404'd and
+  // "/" redirect-looped before Vite ever saw a request.
+  if ((globalThis as any).__SP_VITE_DEV === true) {
+    return next();
+  }
+
   const hasExtension = /\.[a-z0-9]+$/i.test(req.path);
   const isHtml = req.path.endsWith('.html');
   

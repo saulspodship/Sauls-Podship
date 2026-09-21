@@ -1,10 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 /**
- * Fifth pillar card — "400 Comparative Religion Apologetics Questions".
- * Styled 1:1 with the existing four pillar cards on the home page
+ * Pillar card — "400 Comparative Religion Apologetics Questions".
+ * Styled 1:1 with the other pillar cards on the home page
  * (p-8 rounded-3xl white card, wine #4A152C, gold #E8C96A hover).
+ *
+ * IMPORTANT: react-router <Link>, never a raw <a href> — the site runs on
+ * a hash router, so a plain href would reload the document, replay the
+ * GSAP splash and dump the visitor back on the home route.
  */
 export const COMPARATIVE_APOLOGETICS_PATH = "/comparative-apologetics";
 
@@ -53,13 +58,13 @@ export default function ComparativeApologeticsPillar({
           by what is most asked in Pakistan &amp; India.
         </p>
       </div>
-      <a
-        href={href}
+      <Link
+        to={href}
         className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group"
       >
         <span>Open the Codex</span>
         <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-      </a>
+      </Link>
     </article>
   );
 }

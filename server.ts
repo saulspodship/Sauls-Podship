@@ -11,6 +11,10 @@ if (process.env.NODE_ENV !== "production") {
       server: { middlewareMode: true, allowedHosts: true },
       appType: "spa",
     }).then((vite) => {
+      // Tell the API's catch-all route that Vite is live behind it: anything
+      // the API doesn't own must fall through to Vite (public/ files, /src
+      // modules, the SPA shell) instead of being 404'd or redirected.
+      (globalThis as any).__SP_VITE_DEV = true;
       app.use(vite.middlewares);
       app.listen(PORT, "0.0.0.0", () => {
         console.log(`Development server running on http://localhost:${PORT}`);

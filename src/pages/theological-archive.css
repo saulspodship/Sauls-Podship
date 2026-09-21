@@ -507,3 +507,20 @@
   .ta-q-body, .ta-item-body, .ta-direct { display: block !important; }
   .ta-q, .ta-cat { break-inside: avoid; }
 }
+
+/* ---------------- multilingual question titles ---------------- */
+/* When a content language is selected, the translated title is primary and
+   the English original rides along underneath in a muted small line. */
+.ta-q-orig {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.62;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+.ta-q-text[lang="ur"], .ta-direct[lang="ur"], .ta-direct p[lang="ur"],
+.ta-lang[lang="ur"] { font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", serif; line-height: 2.1; }
+.ta-q-text[lang="ar"], .ta-direct p[lang="ar"] { font-family: "Noto Naskh Arabic", "Amiri", "Traditional Arabic", serif; line-height: 1.9; }
+.ta-q-text[lang="hi"] { font-family: "Noto Sans Devanagari", "Mangal", sans-serif; }

@@ -260,12 +260,12 @@ export const VolumePage: React.FC = () => {
             Interactive charts woven from the same scholarship as the 51 volumes — open them alongside this dossier.
           </p>
           <div className="mx-auto flex w-full flex-wrap items-center justify-center gap-3">
-            <a href="/prophecy-map" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
+            <Link to="/prophecy-map" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
               <Globe2 className="w-3.5 h-3.5" /> Biblical Prophecy Map
-            </a>
-            <a href="/cross-references" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
+            </Link>
+            <Link to="/cross-references" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-[#E8C96A] font-bold text-xs border border-[#D4AF37]/30 transition-all">
               <Network className="w-3.5 h-3.5" /> The Interlinked Bible
-            </a>
+            </Link>
           </div>
         </section>
 

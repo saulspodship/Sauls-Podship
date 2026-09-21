@@ -128,8 +128,8 @@ export const EncyclopediaIndexPage: React.FC = () => {
             Interactive charts woven from the same scholarship as the 51 volumes — open them alongside any volume.
           </p>
           <div className="mx-auto flex max-w-4xl flex-wrap items-stretch justify-center gap-5">
-            <a
-              href="/prophecy-map"
+            <Link
+              to="/prophecy-map"
               className="group flex w-full items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all md:w-[calc(50%-10px)]"
             >
               <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#4A152C] border border-[#D4AF37]/40 flex items-center justify-center">
@@ -144,9 +144,9 @@ export const EncyclopediaIndexPage: React.FC = () => {
                 </span>
               </span>
               <ExternalLink className="w-4 h-4 text-white/40 group-hover:text-[#E8C96A] flex-shrink-0" />
-            </a>
-            <a
-              href="/cross-references"
+            </Link>
+            <Link
+              to="/cross-references"
               className="group flex w-full items-center gap-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 p-5 transition-all md:w-[calc(50%-10px)]"
             >
               <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#4A152C] border border-[#D4AF37]/40 flex items-center justify-center">
@@ -161,7 +161,7 @@ export const EncyclopediaIndexPage: React.FC = () => {
                 </span>
               </span>
               <ExternalLink className="w-4 h-4 text-white/40 group-hover:text-[#E8C96A] flex-shrink-0" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Seo from '../components/theology/Seo';
 import { TOUGH_QUESTIONS } from '../data/theology/tough';
 import { ARCHIVE_CATEGORIES } from '../data/theology/archive';
@@ -14,6 +14,7 @@ import {
   CATEGORY_ICON,
   type ToughQuestion,
   type ArchiveCategory,
+  type LangKey,
 } from '../data/theology/types';
 import {
   indexMeta,
@@ -25,6 +26,8 @@ import {
   STATS,
   ARCHIVE_BASE,
 } from '../lib/theologySeo';
+import { useSiteLang } from '../i18n/LanguageProvider';
+import { toughTitle, TOUGH_TITLES } from '../data/theology/toughI18n';
 import './theological-archive.css';
 
 /* ---------- search: "quoted phrase" = exact, bare words = AND ---------- */
@@ -46,13 +49,59 @@ function makeMatcher(raw: string): ((text: string) => boolean) | null {
 
 const toughHaystack = (q: ToughQuestion) =>
   [q.q, q.ref, q.rv, q.common.en, q.common.ur, q.common.hi, q.common.ar,
+   TOUGH_TITLES[q.id] ? Object.values(TOUGH_TITLES[q.id]).join(' ') : '',
    ...q.views.flatMap((v) => [v.summary, v.detail ?? '', v.quote?.text ?? '', v.quote?.cite ?? ''])].join(' ');
 
 type SortMode = 'freq' | 'region' | 'num' | 'az';
 type Track = 'tough' | 'archive';
+type PageLang = 'all' | LangKey;
+
+const RTL_KEYS: LangKey[] = ['ur', 'ar'];
+
+/** Per-language masthead ledes (they embed live counts, so no dict lookup). */
+const LEDES: Record<PageLang, string> = {
+  all: `Answers to ${STATS.toughCount} of the hardest questions in Christian theology — each set out in English, Urdu,
+          Hindi and Arabic, then answered from five traditions: Catholic, Orthodox, Protestant, Anglican and
+          Pentecostal. Alongside them sits a book-by-book archive of ${STATS.archiveCount.toLocaleString()} study
+          questions across ${STATS.categoryCount} codices. All scripture is quoted from the Revised Version of
+          1885&nbsp;/&nbsp;1895.`,
+  en: `Answers to ${STATS.toughCount} of the hardest questions in Christian theology — each set out in English, Urdu,
+          Hindi and Arabic, then answered from five traditions: Catholic, Orthodox, Protestant, Anglican and
+          Pentecostal. Alongside them sits a book-by-book archive of ${STATS.archiveCount.toLocaleString()} study
+          questions across ${STATS.categoryCount} codices. All scripture is quoted from the Revised Version of
+          1885&nbsp;/&nbsp;1895.`,
+  ur: `مسیحی الہیات کے ${STATS.toughCount} مشکل ترین سوالوں کے جوابات — ہر سوال انگریزی، اردو، ہندی اور عربی میں، پھر پانچ روایات — کیتھولک، آرتھوڈوکس، پروٹسٹنٹ، انگلیکن اور پنتیکاسٹل — کے مطابق۔ ساتھ ہی کتاب بہ کتاب ${STATS.archiveCount.toLocaleString()} مطالعاتی سوالوں کا آرکائیو ${STATS.categoryCount} کوڈیکس میں۔ تمام آیات ۱۸۸۵/۱۸۹۵ء کی نظرِ ثانی شدہ نسخہ سے لی گئی ہیں۔`,
+  hi: `ईसाई धर्मशास्त्र के ${STATS.toughCount} कठिनतम प्रश्नों के उत्तर — प्रत्येक प्रश्न अंग्रेज़ी, उर्दू, हिन्दी और अरबी में, फिर पाँच परंपराओं — कैथोलिक, ऑर्थोडॉक्स, प्रोटेस्टैंट, एंग्लिकन और पेंटेकोस्टल — के अनुसार। साथ में पुस्तक-वार ${STATS.archiveCount.toLocaleString()} अध्ययन प्रश्नों का अभिलेखागार ${STATS.categoryCount} कोडेक्स में। सभी वचन १८८५/१८९५ के संशोधित संस्करण से उद्धृत हैं।`,
+  ar: `أجوبة عن ${STATS.toughCount} من أصعب أسئلة اللاهوت المسيحي — كل سؤال بالإنجليزية والأردية والهندية والعربية، ثم بإجابات من خمس تقليدات: الكاثوليك والأرثوذكس والبروتستانت والأنغليكان والخمسينيين. وإلى جانبها أرشيف فيه ${STATS.archiveCount.toLocaleString()} سؤالاً دراسياً سفراً بسفر في ${STATS.categoryCount} مخطوطة. جميع الآيات مقتبسة من النسخة المنقحة ١٨٨٥/١٨٩٥.`,
+};
+
+/** "{n} questions" in the page languages. */
+const countLabel = (n: number, lang: PageLang): string => {
+  if (lang === 'ur') return `${n.toLocaleString('ur-PK')} سوالات`;
+  if (lang === 'hi') return `${n.toLocaleString('en-IN')} प्रश्न`;
+  if (lang === 'ar') return `${n.toLocaleString('ar-EG')} سؤالاً`;
+  return `${n.toLocaleString('en-US')} question${n === 1 ? '' : 's'}`;
+};
+
+const entryLabel = (n: number, lang: PageLang): string => {
+  if (lang === 'ur') return `${n.toLocaleString('ur-PK')} اندراجات`;
+  if (lang === 'hi') return `${n.toLocaleString('en-IN')} प्रविष्टियाँ`;
+  if (lang === 'ar') return `${n.toLocaleString('ar-EG')} مدخلاً`;
+  return `${n.toLocaleString('en-US')} entr${n === 1 ? 'y' : 'ies'}`;
+};
 
 export default function TheologicalArchivePage() {
   const [track, setTrack] = useState<Track>('tough');
+  const { t, lang: siteLang, setLang: setSiteLang } = useSiteLang();
+
+  // The page's content-language filter follows the site-wide language (and
+  // writes back to it — one choice, whole website).
+  const [lang, setLang] = useState<PageLang>(() => (siteLang === 'en' ? 'all' : siteLang));
+  useEffect(() => { setLang(siteLang === 'en' ? 'all' : siteLang); }, [siteLang]);
+  const changeLang = useCallback((l: PageLang) => {
+    setLang(l);
+    setSiteLang(l === 'all' ? 'en' : l);
+  }, [setSiteLang]);
 
   const jsonLd = useMemo(
     () => [
@@ -71,44 +120,45 @@ export default function TheologicalArchivePage() {
       <Seo meta={indexMeta} jsonLd={jsonLd} />
 
       <header className="ta-masthead">
-        <span className="ta-kicker">Theological Heritage &amp; Foundations</span>
+        <span className="ta-kicker">{t('Theological Heritage & Foundations')}</span>
         <h1>
-          The Tough Questions <em>Archive</em>
+          {t('The Tough Questions')} <em>{t('Archive')}</em>
         </h1>
         {/* GEO: a single lede paragraph an answer engine can lift verbatim */}
-        <p className="ta-lede">
-          Answers to {STATS.toughCount} of the hardest questions in Christian theology — each set out in English, Urdu,
-          Hindi and Arabic, then answered from five traditions: Catholic, Orthodox, Protestant, Anglican and
-          Pentecostal. Alongside them sits a book-by-book archive of {STATS.archiveCount.toLocaleString()} study
-          questions across {STATS.categoryCount} codices. All scripture is quoted from the Revised Version of
-          1885&nbsp;/&nbsp;1895.
-        </p>
+        <p className="ta-lede">{LEDES[lang]}</p>
         <dl className="ta-stats">
-          <div><dt>{STATS.toughCount}</dt><dd>Tough Questions</dd></div>
-          <div><dt>{STATS.archiveCount.toLocaleString()}</dt><dd>Archive Entries</dd></div>
-          <div><dt>{STATS.denominationCount}</dt><dd>Traditions</dd></div>
-          <div><dt>{STATS.languageCount}</dt><dd>Languages</dd></div>
-          <div><dt>{STATS.regionalCount}</dt><dd>Pakistan / India Focus</dd></div>
+          <div><dt>{STATS.toughCount}</dt><dd>{t('Tough Questions')}</dd></div>
+          <div><dt>{STATS.archiveCount.toLocaleString()}</dt><dd>{t('Archive Entries')}</dd></div>
+          <div><dt>{STATS.denominationCount}</dt><dd>{t('Traditions')}</dd></div>
+          <div><dt>{STATS.languageCount}</dt><dd>{t('Languages')}</dd></div>
+          <div><dt>{STATS.regionalCount}</dt><dd>{t('Pakistan / India Focus')}</dd></div>
         </dl>
       </header>
 
       <nav className="ta-tracks" aria-label="Archive sections">
         <button className={track === 'tough' ? 'on' : ''} onClick={() => setTrack('tough')} aria-pressed={track === 'tough'}>
-          <span className="vol">Volume I</span>
-          <b>The Hundred Tough Questions</b>
-          <small>Four languages · five traditions · sourced quotation</small>
+          <span className="vol">{t('Volume I')}</span>
+          <b>{t('The Hundred Tough Questions')}</b>
+          <small>{t('Four languages · five traditions · sourced quotation')}</small>
         </button>
         <button className={track === 'archive' ? 'on' : ''} onClick={() => setTrack('archive')} aria-pressed={track === 'archive'}>
-          <span className="vol">Volume II</span>
-          <b>Book-by-Book Scriptorium</b>
-          <small>{STATS.archiveCount.toLocaleString()} entries · {STATS.categoryCount} codices</small>
+          <span className="vol">{t('Volume II')}</span>
+          <b>{t('Book-by-Book Scriptorium')}</b>
+          <small>
+            {lang === 'ur' && `${STATS.archiveCount.toLocaleString('ur-PK')} اندراجات · ${STATS.categoryCount} کوڈیکس`}
+            {lang === 'hi' && `${STATS.archiveCount.toLocaleString('en-IN')} प्रविष्टियाँ · ${STATS.categoryCount} कोडेक्स`}
+            {lang === 'ar' && `${STATS.archiveCount.toLocaleString('ar-EG')} مدخلاً · ${STATS.categoryCount} مخطوطة`}
+            {(lang === 'all' || lang === 'en') && `${STATS.archiveCount.toLocaleString()} entries · ${STATS.categoryCount} codices`}
+          </small>
         </button>
       </nav>
 
-      {track === 'tough' ? <ToughTrack /> : <ArchiveTrack />}
+      {track === 'tough'
+        ? <ToughTrack lang={lang} setLang={changeLang} />
+        : <ArchiveTrack lang={lang} />}
 
       <footer className="ta-provenance">
-        <h2>Sources &amp; Method</h2>
+        <h2>{t('Sources & Method')}</h2>
         <p>{PROVENANCE}</p>
       </footer>
     </div>
@@ -117,12 +167,13 @@ export default function TheologicalArchivePage() {
 
 /* ============================= VOLUME I ============================= */
 
-function ToughTrack() {
+function ToughTrack({ lang, setLang }: { lang: PageLang; setLang: (l: PageLang) => void }) {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortMode>('freq');
   const [scope, setScope] = useState<'' | 't1' | 'pk'>('');
-  const [lang, setLang] = useState<'all' | 'en' | 'ur' | 'hi' | 'ar'>('all');
   const [openIds, setOpenIds] = useState<Set<number>>(new Set());
+  const titleLang: LangKey = lang === 'all' ? 'en' : lang;
+  const titleRtl = RTL_KEYS.includes(titleLang);
 
   const toggle = useCallback((id: number) => {
     setOpenIds((prev) => {
@@ -169,7 +220,7 @@ function ToughTrack() {
           <option value="t1">Most asked only</option>
           <option value="pk">Pakistan / India focus</option>
         </select>
-        <select value={lang} onChange={(e) => setLang(e.target.value as typeof lang)} aria-label="Language">
+        <select value={lang} onChange={(e) => setLang(e.target.value as PageLang)} aria-label="Language">
           <option value="all">All languages</option>
           {LANGUAGES.map((l) => (
             <option key={l.key} value={l.key}>{l.label}</option>
@@ -177,7 +228,7 @@ function ToughTrack() {
         </select>
         <button onClick={() => setOpenIds(new Set(visible.map((q) => q.id)))}>Expand all</button>
         <button onClick={() => setOpenIds(new Set())}>Collapse all</button>
-        <span className="ta-hits">{visible.length} question{visible.length === 1 ? '' : 's'}</span>
+        <span className="ta-hits">{countLabel(visible.length, lang)}</span>
       </div>
 
       {visible.length === 0 && <p className="ta-none">No question matches your search.</p>}
@@ -194,7 +245,12 @@ function ToughTrack() {
               <h3 className="ta-q-head">
                 <button onClick={() => toggle(q.id)} aria-expanded={openIds.has(q.id)} aria-controls={`body-${q.id}`}>
                   <span className="ta-q-num">{String(i + 1).padStart(3, '0')}</span>
-                  <span className="ta-q-text" itemProp="name">{q.q}</span>
+                  <span className="ta-q-text" itemProp="name">
+                    <span dir={titleRtl ? 'rtl' : 'ltr'} lang={titleLang === 'en' ? undefined : titleLang}>
+                      {toughTitle(q.id, q.q, titleLang)}
+                    </span>
+                    {lang !== 'all' && lang !== 'en' && <small className="ta-q-orig">{q.q}</small>}
+                  </span>
                   <span className="ta-q-pills">
                     {q.region && <span className="pill pill-r">{q.region}</span>}
                     <span className={`pill pill-t${q.tier}`}>{TIER_LABEL[q.tier]}</span>
@@ -213,7 +269,13 @@ function ToughTrack() {
                 hidden={!openIds.has(q.id)}
               >
                 <span className="ta-direct-label">Short answer</span>
-                <p itemProp="text">{directAnswer(q)}</p>
+                <p
+                  itemProp="text"
+                  dir={RTL_KEYS.includes(lang === 'all' ? 'en' : lang) ? 'rtl' : 'ltr'}
+                  lang={lang === 'all' || lang === 'en' ? undefined : lang}
+                >
+                  {lang === 'all' ? directAnswer(q) : q.common[lang]}
+                </p>
               </div>
 
               <div id={`body-${q.id}`} className="ta-q-body" hidden={!openIds.has(q.id)}>
@@ -261,7 +323,7 @@ function ToughTrack() {
 
 /* ============================= VOLUME II ============================= */
 
-function ArchiveTrack() {
+function ArchiveTrack({ lang }: { lang: PageLang }) {
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('');
   const [field, setField] = useState<'all' | 'q' | 'a' | 'r' | 'n'>('all');
@@ -311,7 +373,7 @@ function ArchiveTrack() {
         </select>
         <button onClick={() => setOpenCats(new Set(ARCHIVE_CATEGORIES.map((c) => c.slug)))}>Expand codices</button>
         <button onClick={() => { setOpenCats(new Set()); setOpenItems(new Set()); }}>Collapse all</button>
-        <span className="ta-hits">{total.toLocaleString()} entr{total === 1 ? 'y' : 'ies'}</span>
+        <span className="ta-hits">{entryLabel(total, lang)}</span>
       </div>
 
       {total === 0 && <p className="ta-none">No entry matches your search.</p>}

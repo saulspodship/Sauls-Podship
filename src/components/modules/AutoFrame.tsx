@@ -4,7 +4,8 @@
  * no inner scrollbar. The frame grows to its content's height and the
  * page scrolls as one.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useSiteLang } from '../../i18n/LanguageProvider';
 
 interface Props {
   src: string;
@@ -16,6 +17,25 @@ interface Props {
 
 const AutoFrame: React.FC<Props> = ({ src, title, initial = '76vh', min = 560, className = '' }) => {
   const ref = useRef<HTMLIFrameElement | null>(null);
+  const { lang } = useSiteLang();
+
+  // Tell the embedded module which site language is active. The static
+  // modules (prophecy map, interlinked Bible, kings) read ?lang= at boot and
+  // also listen for the postMessage below, so switching languages is live.
+  useEffect(() => {
+    try {
+      ref.current?.contentWindow?.postMessage({ sp: 'lang', lang }, '*');
+    } catch { /* frame not ready yet */ }
+  }, [lang]);
+
+  // ?lang=xx rides along on the frame URL (before any #hash).
+  const srcWithLang = useMemo(() => {
+    if (lang === 'en') return src;
+    const hash = src.indexOf('#');
+    const base = hash === -1 ? src : src.slice(0, hash);
+    const tail = hash === -1 ? '' : src.slice(hash);
+    return `${base}${base.includes('?') ? '&' : '?'}lang=${lang}${tail}`;
+  }, [src, lang]);
 
   useEffect(() => {
     const f = ref.current;
@@ -64,12 +84,12 @@ const AutoFrame: React.FC<Props> = ({ src, title, initial = '76vh', min = 560, c
       window.clearInterval(iv);
       ro?.disconnect();
     };
-  }, [src]);
+  }, [srcWithLang]);
 
   return (
     <iframe
       ref={ref}
-      src={src}
+      src={srcWithLang}
       title={title}
       loading="lazy"
       className={`w-full border-0 block bg-transparent ${className}`}

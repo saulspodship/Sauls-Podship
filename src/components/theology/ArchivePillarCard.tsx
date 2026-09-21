@@ -3,11 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Link } from 'react-router-dom';
 import { STATS, ARCHIVE_BASE } from '../../lib/theologySeo';
 
 /**
- * Fourth pillar card for the "Four Pillars of Saul's Podship Scriptorium"
+ * Pillar card for the "Seven Pillars of Saul's Podship Scriptorium"
  * section on the home page. Styled to match the existing cards.
+ *
+ * IMPORTANT: this must be a react-router <Link>, never a raw <a href>.
+ * The app runs on a hash router — a plain href forces a full document
+ * reload, replays the GSAP splash and strands the visitor on the home
+ * route instead of the archive.
  */
 export default function ArchivePillarCard({ href = ARCHIVE_BASE }: { href?: string }) {
   return (
@@ -32,9 +38,9 @@ export default function ArchivePillarCard({ href = ARCHIVE_BASE }: { href?: stri
         </p>
       </div>
 
-      <a href={href} className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
+      <Link to={href} className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
         <span>Enter the Archive</span> <span aria-hidden="true">→</span>
-      </a>
+      </Link>
     </article>
   );
 }
