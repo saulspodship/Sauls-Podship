@@ -6,8 +6,7 @@
    - a visible "Theological Inquiries" FAQ block + paragraphic summary prose,
      styled with the site's own tokens (wine/gold/cream, EB Garamond/Inter). */
 (function(){
-  var path=(location.pathname||'/').replace(/\/+$/,'')||'/';
-  var DATA={
+var DATA={
     '/':{
       para:"Saul’s Podship is a biblical ministry project presenting an interactive theological encyclopedia for believers and scholars worldwide: 50 peer-reviewed volumes from Eden to the New Jerusalem; a Biblical Prophecy Map tagging all 247 prophecies by historical, metaphorical and futurist fulfilment; the Kings of the Bible throne line from Jesus the King of Kings to the final Beast; 400 comparative apologetics questions across Islam, Judaism, Hinduism and Sikhism; and the living archive of Punjabi Zaboor hymnody — 150 Psalms in classical Punjabi meters — fulfilling the vision of worship in Spirit and Truth from Karachi to the nations.",
       faq:[
@@ -44,19 +43,113 @@
       ]
     }
   };
-  var d=DATA[path]; if(!d) return;
+
+  /* The SPA is a HASH router: location.pathname is always "/", and the real
+     route lives in location.hash (#/encyclopedia/volume-1). Standalone and
+     pre-rendered pages keep using the pathname. Without this the home FAQ
+     block was injected on EVERY route (volumes, modules, pages). */
+  function routeKey(){
+    var h=(location.hash||'').replace(/^#\/\/?/,'');
+    var p=h?('/'+h):(location.pathname||'/');
+    return p.replace(/\/+$/,'')||'/';
+  }
 
   /* GEO */
   function meta(name,content){ var m=document.createElement('meta'); m.name=name; m.content=content; document.head.appendChild(m); }
   meta('geo.region','PK'); meta('geo.placename','Karachi, Pakistan — serving believers worldwide');
   meta('geo.position','24.8607;67.0011'); meta('ICBM','24.8607, 67.0011');
 
-  /* AEO JSON-LD */
-  var ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":d.faq.map(function(f){
-    return {"@type":"Question","name":f[0],"acceptedAnswer":{"@type":"Answer","text":f[1]}};
-  })};
-  var sc=document.createElement('script'); sc.type='application/ld+json'; sc.textContent=JSON.stringify(ld);
-  document.head.appendChild(sc);
+  var ldEl=null, sec=null, moAttached=false;
+
+  /* React Router navigates via pushState (no hashchange/popstate events) —
+     but it always swaps <main>'s children, so one permanent observer on
+     <main> is the navigation signal. Attached once, never disconnected:
+     routes without FAQ data must not blind future navigations. */
+  function attachObserver(){
+    if(moAttached) return;
+    var main=document.querySelector('main');
+    if(!main) return;
+    moAttached=true;
+    new MutationObserver(function(){ update(); }).observe(main,{childList:true});
+  }
+
+  /* AEO JSON-LD — one per matching route, swapped on navigation */
+  function jsonLdFor(d){
+    if(ldEl){ ldEl.parentNode.removeChild(ldEl); ldEl=null; }
+    if(!d) return;
+    var ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":d.faq.map(function(f){
+      return {"@type":"Question","name":f[0],"acceptedAnswer":{"@type":"Answer","text":f[1]}};
+    })};
+    var sc=document.createElement('script'); sc.type='application/ld+json';
+    sc.className='sp-seo-ld'; sc.textContent=JSON.stringify(ld);
+    document.head.appendChild(sc); ldEl=sc;
+  }
+
+  function removeBlock(){
+    if(sec && sec.parentNode) sec.parentNode.removeChild(sec);
+    sec=null;
+  }
+
+  /* React owns <main> and re-orders its children on every route change;
+     the FAQ block must always stay at the very BOTTOM of the content —
+     never above it. A footer inside the target always stays below. */
+  function keepLast(){
+    if(!sec) return;
+    var main=document.querySelector('main')||document.getElementById('root')||document.body;
+    if(!main||sec.parentNode!==main) return;
+    var anchor=null, kids=main.children;
+    for(var i=0;i<kids.length;i++){ if(kids[i].tagName==='FOOTER'){ anchor=kids[i]; break; } }
+    if(anchor){ if(sec.nextElementSibling!==anchor) main.insertBefore(sec,anchor); }
+    else if(main.lastElementChild!==sec){ main.appendChild(sec); }
+  }
+
+  function makeSection(inner){
+    var s=document.createElement('section');
+    s.className='sp-seo';
+    s.innerHTML=inner;
+    return s;
+  }
+
+  function injectBlock(d){
+    if(sec){ keepLast(); return; } /* idempotency guard */
+    sec=makeSection('<span class="kick">Theological Inquiries</span><h2>Frequently Asked Questions</h2><p class="para">'+d.para+'</p>'+
+      d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join(''));
+    place(sec);
+  }
+
+  function injectFallback(){
+    if(sec) return;
+    sec=makeSection('<div class="fallback-notice">Site is taking longer than usual to load.</div>'+
+      '<div class="fallback-links">'+
+      '<a href="/encyclopedia">Encyclopedia</a>'+
+      '<a href="/videos/">Videos</a>'+
+      '<a href="/kings-of-the-bible.html">Kings of the Bible</a>'+
+      '</div>');
+    place(sec);
+  }
+
+  function place(el){
+    var main=document.querySelector('main');
+    var root=document.getElementById('root');
+    var target=main||root||document.body;
+    var footer=document.querySelector('footer');
+    if(footer&&footer.parentNode===target&&footer!==el) target.insertBefore(el,footer);
+    else target.appendChild(el);
+  }
+
+  /* Per-route update: right content, right schema, always at the bottom.
+     Cheap + idempotent — safe to call from every DOM mutation. */
+  var lastKey=null;
+  function update(force){
+    var k=routeKey();
+    if(!force&&k===lastKey){ if(sec) keepLast(); return; }
+    lastKey=k;
+    var d=DATA[k];
+    jsonLdFor(d);
+    removeBlock(); /* content is per-route — rebuild, never just reposition */
+    if(d) injectBlock(d);
+    attachObserver();
+  }
 
   /* visible FAQ + prose, site tokens */
   var st=document.createElement('style');
@@ -72,42 +165,22 @@
   '.sp-seo .fallback-links a{color:var(--w);text-decoration:underline;}';
   document.head.appendChild(st);
 
-  function injectFAQ(isFallback) {
-    if (document.querySelector('.sp-seo')) return; // Idempotency guard
-    var sec = document.createElement('section'); 
-    sec.className = 'sp-seo';
-    
-    if (isFallback) {
-      sec.innerHTML = '<div class="fallback-notice">Site is taking longer than usual to load.</div>' +
-        '<div class="fallback-links">' +
-        '<a href="/encyclopedia">Encyclopedia</a>' +
-        '<a href="/videos/">Videos</a>' +
-        '<a href="/kings-of-the-bible.html">Kings of the Bible</a>' +
-        '</div>';
-    } else {
-      sec.innerHTML = '<span class="kick">Theological Inquiries</span><h2>Frequently Asked Questions</h2><p class="para">' + d.para + '</p>' +
-        d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join('');
-    }
+  var elapsed=0;
+  var interval=setInterval(function() {
+    elapsed+=150;
+    var root=document.getElementById('root');
+    var hasAppRendered=(root&&root.children.length>0)||document.querySelector('main')||document.querySelector('footer');
+    if(hasAppRendered){ clearInterval(interval); attachObserver(); update(); }
+    else if(elapsed>=5000){ clearInterval(interval); injectFallback(); }
+  },150);
 
-    var main = document.querySelector('main');
-    var root = document.getElementById('root');
-    var target = main || root || document.body;
-    var footer = document.querySelector('footer');
-    if (footer && footer.parentNode === target) target.insertBefore(sec, footer); else target.appendChild(sec);
+  /* SPA navigations: re-evaluate the route; React commits the new content
+     asynchronously, so update again after the dust settles (keepLast also
+     guards every DOM change inside <main>). */
+  function onNav(){
+    update(true);
+    setTimeout(function(){ update(true); },120);
   }
-
-  var elapsed = 0;
-  var interval = setInterval(function() {
-    elapsed += 150;
-    var root = document.getElementById('root');
-    var hasAppRendered = (root && root.children.length > 0) || document.querySelector('main') || document.querySelector('footer');
-    
-    if (hasAppRendered) {
-      clearInterval(interval);
-      injectFAQ(false);
-    } else if (elapsed >= 5000) {
-      clearInterval(interval);
-      injectFAQ(true);
-    }
-  }, 150);
+  window.addEventListener('hashchange',onNav);
+  window.addEventListener('popstate',onNav);
 })();
