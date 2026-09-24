@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 /**
@@ -53,13 +54,16 @@ export default function ComparativeApologeticsPillar({
           by what is most asked in Pakistan &amp; India.
         </p>
       </div>
-      <a
-        href={href}
+      {/* Must be a router <Link>: the app uses createHashRouter, so a plain
+          <a href="/comparative-apologetics"> triggers a full reload of a path
+          the static host answers with index.html (no #hash) — the home page. */}
+      <Link
+        to={href}
         className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group"
       >
         <span>Open the Codex</span>
         <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-      </a>
+      </Link>
     </article>
   );
 }
