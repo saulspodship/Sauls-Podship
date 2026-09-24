@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Link } from 'react-router-dom';
 import { STATS, ARCHIVE_BASE } from '../../lib/theologySeo';
 
 /**
@@ -32,9 +33,12 @@ export default function ArchivePillarCard({ href = ARCHIVE_BASE }: { href?: stri
         </p>
       </div>
 
-      <a href={href} className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
+      {/* Must be a router <Link>: the app uses createHashRouter, so a plain
+          <a href="/theological-archive"> triggers a full reload of a path the
+          static host answers with index.html (no #hash) — i.e. the home page. */}
+      <Link to={href} className="mt-6 inline-flex items-center text-xs font-bold text-[#4A152C] hover:text-[#8B1C2E] gap-1 group">
         <span>Enter the Archive</span> <span aria-hidden="true">→</span>
-      </a>
+      </Link>
     </article>
   );
 }

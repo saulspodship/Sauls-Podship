@@ -11,6 +11,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Saul's Podship" />
     <title>Saul's Podship | Interactive Theological Encyclopedia</title>
+    <script>
+      // The app is routed with createHashRouter (/#/route). Static hosting
+      // answers any unknown path (e.g. /theological-archive from the sitemap,
+      // volume-page companion buttons or an old plain <a href>) with this
+      // file and an EMPTY hash, which silently lands on the home page.
+      // Rewrite such deep links to their hash form before the app boots.
+      (function () {
+        var p = location.pathname;
+        if (p && p !== '/' && p !== '/index.html' && !location.hash) {
+          location.replace('/#' + p.replace(/\/+$/, '') + location.search);
+        }
+      })();
+    </script>
     <link rel="icon" type="image/png" sizes="64x64" href="/icons/favicon.png" />
     <link rel="shortcut icon" type="image/png" href="/icons/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
