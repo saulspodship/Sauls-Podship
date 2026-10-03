@@ -44,7 +44,7 @@ const pioneerRegex =
 let pMatch;
 while ((pMatch = pioneerRegex.exec(content)) !== null) {
   const rawName = pMatch[1].replace(/<[^>]+>/g, ' ').trim();
-  const nameOnly = pMatch[1].split('<')[0].trim();
+  const nameOnly = pMatch[1].replace(/<img\b[^>]*>/gi, '').split('<')[0].trim();
   const bio = pMatch[2].replace(/<[^>]+>/g, '').trim();
   const slug = slugify(nameOnly);
   if (slug && !seenSlugs.has(slug)) {

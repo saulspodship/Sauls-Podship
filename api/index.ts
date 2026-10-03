@@ -868,7 +868,7 @@ function getSingersList(): ArtistRecord[] {
   let pMatch;
   while ((pMatch = pioneerRegex.exec(content)) !== null) {
     const rawName = pMatch[1].replace(/<[^>]+>/g, " ").trim();
-    const nameOnly = pMatch[1].split("<")[0].trim();
+    const nameOnly = pMatch[1].replace(/<img\b[^>]*>/gi, "").split("<")[0].trim();
     const bio = pMatch[2].replace(/<[^>]+>/g, "").trim();
     const slug = nameOnly.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-");
     if (slug && !seenSlugs.has(slug)) {
