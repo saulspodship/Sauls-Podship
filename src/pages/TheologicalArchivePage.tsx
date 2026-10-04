@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import Seo from '../components/theology/Seo';
 import { TOUGH_QUESTIONS } from '../data/theology/tough';
 import { ARCHIVE_CATEGORIES } from '../data/theology/archive';
@@ -52,7 +53,40 @@ type SortMode = 'freq' | 'region' | 'num' | 'az';
 type Track = 'tough' | 'archive';
 
 export default function TheologicalArchivePage() {
-  const [track, setTrack] = useState<Track>('tough');
+  // Deep links from the sitemap: /theological-archive/question/:slug and
+  // /theological-archive/category/:slug open the matching entry on the hub.
+  const { slug: focusSlug } = useParams<{ slug: string }>();
+  const { pathname } = useLocation();
+  const focusKind: 'question' | 'category' | null = focusSlug
+    ? pathname.includes('/category/') ? 'category' : pathname.includes('/question/') ? 'question' : null
+    : null;
+  const [track, setTrack] = useState<Track>(focusKind === 'category' ? 'archive' : 'tough');
+
+  const pageMeta = useMemo(() => {
+    if (focusKind === 'question') {
+      const q = TOUGH_QUESTIONS.find((x) => x.slug === focusSlug);
+      if (q) {
+        return {
+          ...indexMeta,
+          title: `${q.q} | Saul's Podship`,
+          description: directAnswer(q).slice(0, 300),
+          canonical: `${indexMeta.canonical}/question/${q.slug}`,
+        };
+      }
+    }
+    if (focusKind === 'category') {
+      const c = ARCHIVE_CATEGORIES.find((x) => x.slug === focusSlug);
+      if (c) {
+        return {
+          ...indexMeta,
+          title: `${c.name} — Book-by-Book Bible Study Archive | Saul's Podship`,
+          description: `${c.items.length} study questions and answers for ${c.name}, quoted from the Revised Version (1885/1895).`,
+          canonical: `${indexMeta.canonical}/category/${c.slug}`,
+        };
+      }
+    }
+    return indexMeta;
+  }, [focusKind, focusSlug]);
 
   const jsonLd = useMemo(
     () => [
@@ -68,7 +102,7 @@ export default function TheologicalArchivePage() {
 
   return (
     <div className="ta-root">
-      <Seo meta={indexMeta} jsonLd={jsonLd} />
+      <Seo meta={pageMeta} jsonLd={jsonLd} />
 
       <header className="ta-masthead">
         <span className="ta-kicker">Theological Heritage &amp; Foundations</span>
@@ -105,7 +139,9 @@ export default function TheologicalArchivePage() {
         </button>
       </nav>
 
-      {track === 'tough' ? <ToughTrack /> : <ArchiveTrack />}
+      {track === 'tough'
+        ? <ToughTrack focusSlug={focusKind === 'question' ? focusSlug : undefined} />
+        : <ArchiveTrack focusSlug={focusKind === 'category' ? focusSlug : undefined} />}
 
       <footer className="ta-provenance">
         <h2>Sources &amp; Method</h2>
@@ -117,12 +153,23 @@ export default function TheologicalArchivePage() {
 
 /* ============================= VOLUME I ============================= */
 
-function ToughTrack() {
+function ToughTrack({ focusSlug }: { focusSlug?: string }) {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortMode>('freq');
   const [scope, setScope] = useState<'' | 't1' | 'pk'>('');
   const [lang, setLang] = useState<'all' | 'en' | 'ur' | 'hi' | 'ar'>('all');
   const [openIds, setOpenIds] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (!focusSlug) return;
+    const target = TOUGH_QUESTIONS.find((q) => q.slug === focusSlug);
+    if (!target) return;
+    setOpenIds(new Set([target.id]));
+    const t = window.setTimeout(() => {
+      document.getElementById(`q-${focusSlug}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => window.clearTimeout(t);
+  }, [focusSlug]);
 
   const toggle = useCallback((id: number) => {
     setOpenIds((prev) => {
@@ -261,12 +308,21 @@ function ToughTrack() {
 
 /* ============================= VOLUME II ============================= */
 
-function ArchiveTrack() {
+function ArchiveTrack({ focusSlug }: { focusSlug?: string }) {
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('');
   const [field, setField] = useState<'all' | 'q' | 'a' | 'r' | 'n'>('all');
   const [openCats, setOpenCats] = useState<Set<string>>(new Set());
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!focusSlug || !ARCHIVE_CATEGORIES.some((c) => c.slug === focusSlug)) return;
+    setOpenCats(new Set([focusSlug]));
+    const t = window.setTimeout(() => {
+      document.getElementById(`cat-${focusSlug}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => window.clearTimeout(t);
+  }, [focusSlug]);
 
   const results = useMemo(() => {
     const m = makeMatcher(query);
