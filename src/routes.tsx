@@ -104,6 +104,14 @@ export const routeConfig: RouteObject[] = [
         element: L(<TheologicalArchivePage />)
       },
       {
+        path: 'theological-archive/question/:slug',
+        element: L(<TheologicalArchivePage />)
+      },
+      {
+        path: 'theological-archive/category/:slug',
+        element: L(<TheologicalArchivePage />)
+      },
+      {
         path: 'comparative-apologetics',
         element: L(<ComparativeApologeticsPage />)
       },
