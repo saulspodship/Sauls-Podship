@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18",
+ "generatedAt": "2026-10-19",
  "channel": {
   "name": "Saul's Podship",
   "handle": "@thesaulspodship",
@@ -853,7 +853,7 @@
   {
    "id": "NBPnwuhs68Y",
    "n": 77,
-   "title": "#77 PSALM 151 — DEAD SEA SCROLLS میں ملی DAVID کی گمشدہ زبور | اپوکریفا مطالعہ",
+   "title": "#77 PSALM 151 की पूरी कहानी — DEAD SEA SCROLLS में मिली DAVID की खोई हुई ज़बूर | Apocrypha Study",
    "length": "6:57",
    "channelOrder": 3,
    "collections": [
@@ -864,7 +864,7 @@
   {
    "id": "AhURIGtCkpo",
    "n": 78,
-   "title": "#78 Additions to Daniel Explained: 3 Stories Missing from Protestant Bibles | Apocrypha Study",
+   "title": "#78 DANIEL کے اضافے — 3 کہانیاں جو PROTESTANT بائبل سے غائب ہیں | اپوکریفا مطالعہ",
    "length": "9:41",
    "channelOrder": 2,
    "collections": [
@@ -875,7 +875,7 @@
   {
    "id": "9QUE4UFfiGo",
    "n": 79,
-   "title": "#79 ADDITIONS TO ESTHER की पूरी कहानी — 6 अतिरिक्त अध्याय जो PROTESTANT Bible से गायब हैं | Apocryph",
+   "title": "#79 Additions to Esther Explained: 6 Extra Chapters Missing from Protestant Bible | Apocrypha Stu",
    "length": "8:09",
    "channelOrder": 1,
    "collections": [
@@ -886,7 +886,7 @@
   {
    "id": "SBvO2DoXZwQ",
    "n": 80,
-   "title": "#80 LETTER OF JEREMIAH की पूरी कहानी — IDOLATRY के खिलाफ प्राचीन चेतावनी | Apocrypha Study",
+   "title": "#80 JEREMIAH کا خط — بت پرستی کے خلاف قدیم تنبیہ | اپوکریفا مطالعہ",
    "length": "3:05",
    "channelOrder": 0,
    "collections": [
@@ -917,9 +917,7 @@
    "key": "noncanon",
    "label": "14 Non-Canonical Books",
    "blurb": "Apocrypha & Pseudepigrapha — the hidden prophetic voices.",
-   "playlist": "https://www.youtube.com/playlist?list=PL8xJ8m8_tH6mDaGEpcdD2i9c3SjoFuqUj",
-   "totalOnYouTube": 16,
-   "comingSoon": 2
+   "playlist": "https://www.youtube.com/playlist?list=PL8xJ8m8_tH6mDaGEpcdD2i9c3SjoFuqUj"
   }
  ]
 }
