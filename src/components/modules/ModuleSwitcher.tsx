@@ -4,7 +4,7 @@
    "window"): a borderless auto-height frame flows with content,
    and the switch buttons sit below, centered, as on the atlas.
    ============================================================ */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Compass, ExternalLink, Network } from 'lucide-react';
 import AutoFrame from './AutoFrame';
@@ -19,6 +19,26 @@ function useIsMobile() {
     return () => mq.removeEventListener('change', on);
   }, []);
   return m;
+}
+
+/** Mount the (heavy) embedded module only once it is close to the viewport.
+ *  The home page sits below the atlas, so the iframe + its 300 kB document
+ *  used to start downloading while the visitor was still reading the hero. */
+function useNearViewport<T extends HTMLElement>(rootMargin = '500px') {
+  const ref = useRef<T | null>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || near) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const io = new IntersectionObserver(
+      (entries) => { if (entries.some(e => e.isIntersecting)) { setNear(true); io.disconnect(); } },
+      { rootMargin }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near, rootMargin]);
+  return { ref, near };
 }
 
 export type ModuleId = 'map' | 'crossrefs';
@@ -54,6 +74,7 @@ const ModuleSwitcher: React.FC<Props> = ({ compact = false }) => {
   const [active, setActive] = useState<ModuleId>('map');
   const mod = MODULES.find(m => m.id === active)!;
   const isMobile = useIsMobile();
+  const { ref: hostRef, near } = useNearViewport<HTMLDivElement>();
 
   // Phones / app view: no embedded module (the iframes are heavy and the
   // toolbars swallow the small screen). Show routing cards that open each
@@ -85,14 +106,28 @@ const ModuleSwitcher: React.FC<Props> = ({ compact = false }) => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full">
-        <AutoFrame
-          src={mod.src}
-          title={`${mod.label} — interactive module`}
-          initial={compact ? '62vh' : '76vh'}
-          min={compact ? 440 : 560}
-        />
+    <div ref={hostRef} className="w-full flex flex-col items-center">
+      <div className="w-full" style={{ minHeight: compact ? 440 : 560 }}>
+        {near ? (
+          <AutoFrame
+            src={mod.src}
+            title={`${mod.label} — interactive module`}
+            initial={compact ? '62vh' : '76vh'}
+            min={compact ? 440 : 560}
+          />
+        ) : (
+          // Placeholder with the same height — no layout shift when it swaps in.
+          <div
+            className="w-full flex flex-col items-center justify-center gap-3 rounded-2xl border border-[#D4AF37]/20 bg-white/[0.03]"
+            style={{ height: compact ? '62vh' : '76vh', minHeight: compact ? 440 : 560 }}
+            aria-hidden="true"
+          >
+            <span className="inline-block h-8 w-8 rounded-full border-2 border-[#D4AF37]/25 border-t-[#E8C96A] animate-spin" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#E8C96A]/70">
+              {mod.short}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* module switch buttons — below the preview, centered */}

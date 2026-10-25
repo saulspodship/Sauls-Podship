@@ -807,6 +807,12 @@ function markdownToHtml(md: string): string {
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*\*/g, "");
   html = html.replace(/__(.*?)__/g, "<strong>$1</strong>");
+  // Single-asterisk emphasis (*Sira*, *Antiquities* …) — after bold, so the
+  // double markers are already consumed.
+  html = html.replace(/(^|[\s(])\*([^*\n]{1,200})\*/g, '$1<em>$2</em>');
+  html = html.replace(/(^|[\s(])_([^_\n]{1,200})_/g, '$1<em>$2</em>');
+  // Blockquotes ("> line")
+  html = html.replace(/^>\s?(.*)$/gm, '<blockquote style="margin:1.75rem 0; padding:1rem 1.25rem; border-left:4px solid #D4AF37; background:rgba(212,175,55,.08); border-radius:6px; font-style:italic; color:#4A152C;">$1</blockquote>');
   // Bullet points: •, -, * markdown/unicode bullets all normalized
   html = html.replace(/^[ \t]*[•⁃▪][ \t]+(.*?)\n/gm, '<li style="margin-bottom:0.5rem; margin-left:1.5rem; list-style-type:disc;">$1</li>');
   html = html.replace(/^[ \t]*[-*][ \t]+(.*?)\n/gm, '<li style="margin-bottom:0.5rem; margin-left:1.5rem; list-style-type:disc;">$1</li>');
@@ -1135,10 +1141,16 @@ app.get("/encyclopedia/:slug", async (req, res) => {
     // 1. Try local data first (fast, reliable, 100% available)
     const localVolume = findVolume(reqSlug);
     
-    // 2. Optionally check Firestore for runtime edits (with safe fallback)
+    // 2. Optionally check Firestore for runtime edits (with safe fallback).
+    //    Time-boxed: the local corpus is already in memory, so an editor's
+    //    Firestore copy may take at most 600 ms before we render local data.
+    //    Previously every volume URL waited on this round-trip unconditionally.
     let firestoreVolume: any = null;
     try {
-      firestoreVolume = await getFirestoreDoc("volumes", reqSlug);
+      firestoreVolume = await Promise.race([
+        getFirestoreDoc("volumes", reqSlug),
+        new Promise((resolve) => setTimeout(() => resolve(null), 600)),
+      ]);
     } catch (_) {
       // Ignore Firestore permission/network errors and proceed with local data
     }
@@ -1171,6 +1183,9 @@ app.get("/encyclopedia/:slug", async (req, res) => {
     }
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
+    // Let the edge serve the article without re-running the function on every
+    // hit (the corpus only changes on deploy or an explicit Firestore edit).
+    res.setHeader("Cache-Control", "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
     const title = volume.metaTitle || `${volume.title} | Volume ${volume.id || ''} Theological Encyclopedia | Saul's Podship`;
     const description = volume.metaDescription || volume.overview || `Scholarly exegesis, historical context, and comprehensive theological analysis of ${volume.title}.`;
     const volumeNumber = volume.volumeNumber || volume.id || "01";

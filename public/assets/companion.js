@@ -4,8 +4,25 @@
    ROUTING BUTTONS at the BOTTOM of the content, styled with the site's own tokens
    (wine #4A152C / gold #D4AF37 / Inter). Does not touch any other UI. */
 (function(){
+  /* Fast path: the React volume page renders <section id="companion-modules">
+     with its own "Companion Modules" eyebrow. The old implementation scanned
+     EVERY h2/h3/h4/div/span/p and read .textContent off each one — on a long
+     volume that is hundreds of thousands of characters re-serialised four
+     times (300 ms / 1.2 s / 3 s / SPA repaints) and was a visible main-thread
+     stall. Headings only, and never more than once. */
+  var DONE='data-companion-routes-done';
   function findCompanion(){
-    var nodes=document.querySelectorAll('h2,h3,h4,div,span,p');
+    var host=document.getElementById('companion-modules');
+    if(host){
+      /* The React panel labels itself with an eyebrow <span>/<h2>. Look only
+         inside that one small section — never the whole document. */
+      var kids=host.querySelectorAll('span,h2,h3,h4');
+      for(var k=0;k<kids.length;k++){
+        if(/companion modules/i.test((kids[k].textContent||'').trim())) return kids[k];
+      }
+      return host;
+    }
+    var nodes=document.querySelectorAll('h2,h3,h4');
     for(var i=0;i<nodes.length;i++){
       var t=(nodes[i].textContent||'').trim();
       if(/^Companion Modules$/i.test(t)) return nodes[i];
@@ -19,6 +36,7 @@
     return a;
   }
   function run(){
+    if(document.documentElement.hasAttribute(DONE)) return; /* once per page */
     var head=findCompanion(); if(!head) return;
     if(document.querySelector('[data-companion-routes]')) return; /* idempotent */
     /* Only replace the SMALL companion panel: climb until we find the first
@@ -42,9 +60,14 @@
       {href:'/comparative-apologetics',label:'Comparative Apologetics'} ]
       .forEach(function(t){ bar.appendChild(btn(t)); });
     sec.parentElement.insertBefore(bar, sec); /* same place, as plain routing buttons */
-    try{ sec.remove(); }catch(e){}
+    /* Hide, do not remove: this node belongs to React's tree, and deleting it
+       makes a later re-render of the same page throw NotFoundError. */
+    document.documentElement.setAttribute(DONE,'1');
+    if(sec.id==='companion-modules'){ sec.style.display='none'; }
+    else { try{ sec.style.display='none'; }catch(e){} }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(run,300)});
   else setTimeout(run,300);
-  setTimeout(run,1200); setTimeout(run,3000); /* SPA repaints */
+  /* SPA repaints: watch for the app flag instead of re-scanning on a timer. */
+  window.addEventListener('sp-app-ready', function(){ setTimeout(run, 60); }, { once: true });
 })();

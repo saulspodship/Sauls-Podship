@@ -4,7 +4,9 @@
    visits, and offer a cached shell offline. Deliberately light:
    never precache the 51 hero artworks; cache lazily instead.
    ============================================================ */
-const VERSION = 'sp-pwa-v7';
+// v8 (2026-10-25): purges the pre-fix copies of the non-hashed retrofit
+// scripts (seo-aeo.js / companion.js) and the old page shell.
+const VERSION = 'sp-pwa-v8';
 const SHELL = [
   '/',
   '/index.html',

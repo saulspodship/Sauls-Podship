@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import { getVolumeByNumber, getVolumeById } from '../data/volumes';
+import { VOLUME_INDEX } from '../data/volumes/index-lite';
 
 interface VolumeNumberRedirectProps {
   num?: number;
@@ -19,7 +19,9 @@ export const VolumeNumberRedirect: React.FC<VolumeNumberRedirectProps> = ({ num:
     : (paramNum ? parseInt(paramNum, 10) : undefined);
 
   if (targetNum && !isNaN(targetNum)) {
-    const volume = getVolumeByNumber(targetNum) || getVolumeById(String(targetNum));
+    // The 82 kB catalogue index is enough to resolve a number → slug, so this
+    // redirect no longer pulls the (previously) 628 kB of volume bodies.
+    const volume = VOLUME_INDEX.find(v => v.number === targetNum || v.id === String(targetNum));
     if (volume && volume.slug) {
       return <Navigate replace to={`/encyclopedia/${volume.slug}`} />;
     }

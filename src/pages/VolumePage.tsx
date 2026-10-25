@@ -11,7 +11,9 @@ import {
   Layers, MapPin, HelpCircle, CheckCircle2, Table, Info,
   Search, Download, Copy, Check, Filter, ArrowUpRight, X, FileText, Printer, Globe2
 , Network} from 'lucide-react';
-import { getVolumeBySlug, VOLUMES } from '../data/volumes';
+import { VOLUME_INDEX, VolumeSummary } from '../data/volumes/index-lite';
+import { loadVolume, peekVolume } from '../data/volumes/registry';
+import { Volume } from '../types';
 import Hero from '../components/Hero';
 import ManuscriptAnalysis from '../components/ManuscriptAnalysis';
 import NotFoundPage from './NotFoundPage';
@@ -27,10 +29,53 @@ import AutoFrame from '../components/modules/AutoFrame';
 
 
 
+/** Shown for the ~50 ms between the hero paint and the dossier chunk arriving.
+ *  It renders the REAL hero banner (the catalogue index already has the title,
+ *  art and category), so there is no layout shift when the body appears. */
+const VolumeDossierLoading: React.FC<{ entry: VolumeSummary }> = ({ entry }) => {
+  const shell = useMemo(() => ({ ...entry } as unknown as Volume), [entry]);
+  return (
+    <div className="w-full bg-[#FDFBF7]">
+      <Hero variant="volume" volume={shell} />
+      <div
+        className="max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col items-center gap-4"
+        role="status"
+        aria-live="polite"
+      >
+        <span className="inline-block h-9 w-9 rounded-full border-2 border-[#D4AF37]/30 border-t-[#D4AF37] animate-spin" />
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#8B1C2E]">
+          Opening the dossier&hellip;
+        </p>
+        <span className="sr-only">Loading volume text</span>
+      </div>
+    </div>
+  );
+};
+
 export const VolumePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const numericSlug = !!slug && /^\d{1,2}$/.test(slug);
+
+  /**
+   * The lightweight catalogue row (title, subtitle, hero art, category) is
+   * already in memory from volumeIndex.json, so the hero banner paints on the
+   * first frame. The full dossier (analysis, tables, story panels, FAQ) is its
+   * own ~20 kB chunk, fetched below — 628 kB → ~20 kB on a cold volume visit.
+   */
+  const entry = useMemo(
+    () =>
+      !slug || numericSlug
+        ? undefined
+        : VOLUME_INDEX.find((v) => v.slug.toLowerCase() === slug.toLowerCase()),
+    [slug, numericSlug]
+  );
+
+  const [volume, setVolume] = useState<Volume | undefined>(() =>
+    entry ? peekVolume(entry.number) : undefined
+  );
+
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  
+
   // Interactive Story Panels State
   const [selectedEra, setSelectedEra] = useState<string>('All');
   const [storyPage, setStoryPage] = useState<number>(0);
@@ -43,45 +88,44 @@ export const VolumePage: React.FC = () => {
   const [copiedTableIdx, setCopiedTableIdx] = useState<number | null>(null);
   const [copiedCitation, setCopiedCitation] = useState<boolean>(false);
 
-  // If slug is purely digits (e.g. /encyclopedia/47 or /encyclopedia/02)
-  if (slug && /^\d{1,2}$/.test(slug)) {
-    return <VolumeNumberRedirect num={parseInt(slug, 10)} />;
-  }
+  // Fetch the dossier for the current slug (cached after the first visit).
+  const entryNumber = entry?.number;
+  useEffect(() => {
+    if (!entryNumber) {
+      setVolume(undefined);
+      return;
+    }
+    const cached = peekVolume(entryNumber);
+    if (cached) {
+      setVolume(cached);
+      return;
+    }
+    let alive = true;
+    setVolume(undefined);
+    loadVolume(entryNumber).then((v) => {
+      if (alive) setVolume(v);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [entryNumber]);
 
-  if (!slug) {
-    return <NotFoundPage status={404} />;
-  }
-
-  const volume = getVolumeBySlug(slug);
-
-  if (!volume) {
-    return <NotFoundPage status={404} />;
-  }
-
-  // Calculate adjacent volumes for bottom navigation
-  const currentIndex = VOLUMES.findIndex(v => v.slug.toLowerCase() === volume.slug.toLowerCase());
-  const prevVolume = currentIndex > 0 ? VOLUMES[currentIndex - 1] : null;
-  const nextVolume = currentIndex < VOLUMES.length - 1 ? VOLUMES[currentIndex + 1] : null;
-
-  // Compute related volume objects
-  const relatedVolumeObjects = (volume.relatedVolumes || [])
-    .map(relSlug => getVolumeBySlug(relSlug))
-    .filter((v): v is typeof volume => !!v);
+  const storyPanels = volume?.content?.storyPanels;
 
   // Extract unique eras for story panels if present
   const allEras = useMemo(() => {
-    if (!volume.content?.storyPanels) return [];
+    if (!storyPanels) return [];
     const set = new Set<string>();
-    volume.content.storyPanels.forEach(p => {
+    storyPanels.forEach(p => {
       if (p.era) set.add(p.era);
     });
     return ['All', ...Array.from(set)];
-  }, [volume.content?.storyPanels]);
+  }, [storyPanels]);
 
   // Filtered Story Panels
   const filteredPanels = useMemo(() => {
-    if (!volume.content?.storyPanels) return [];
-    return volume.content.storyPanels.filter(p => {
+    if (!storyPanels) return [];
+    return storyPanels.filter(p => {
       const matchEra = selectedEra === 'All' || p.era === selectedEra;
       const q = panelSearchQuery.toLowerCase();
       const matchQuery = !q || 
@@ -92,7 +136,7 @@ export const VolumePage: React.FC = () => {
         (p.characters && p.characters.toLowerCase().includes(q));
       return matchEra && matchQuery;
     });
-  }, [volume.content?.storyPanels, selectedEra, panelSearchQuery]);
+  }, [storyPanels, selectedEra, panelSearchQuery]);
 
   const pagePanels = useMemo(
     () => filteredPanels.slice(storyPage * STORY_PAGE_SIZE, (storyPage + 1) * STORY_PAGE_SIZE),
@@ -100,6 +144,29 @@ export const VolumePage: React.FC = () => {
   );
   const storyPages = Math.max(1, Math.ceil(filteredPanels.length / STORY_PAGE_SIZE));
   useEffect(() => { setStoryPage(0); }, [selectedEra, panelSearchQuery]);
+
+  // Route guards (after every hook, so the hook order never changes).
+  if (numericSlug) {
+    return <VolumeNumberRedirect num={parseInt(slug as string, 10)} />;
+  }
+
+  if (!slug || (!entry && !volume)) {
+    return <NotFoundPage status={404} />;
+  }
+
+  if (!volume) {
+    return <VolumeDossierLoading entry={entry as VolumeSummary} />;
+  }
+
+  // Calculate adjacent volumes for bottom navigation
+  const currentIndex = VOLUME_INDEX.findIndex(v => v.slug.toLowerCase() === volume.slug.toLowerCase());
+  const prevVolume = currentIndex > 0 ? VOLUME_INDEX[currentIndex - 1] : null;
+  const nextVolume = currentIndex < VOLUME_INDEX.length - 1 ? VOLUME_INDEX[currentIndex + 1] : null;
+
+  // Compute related volume objects from the lightweight index
+  const relatedVolumeObjects = (volume.relatedVolumes || [])
+    .map(relSlug => VOLUME_INDEX.find(v => v.slug.toLowerCase() === relSlug.toLowerCase()))
+    .filter((v): v is VolumeSummary => !!v);
 
   // Copy Citation Helper
   const handleCopyCitation = () => {

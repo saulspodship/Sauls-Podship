@@ -96,18 +96,60 @@
     if (footer && footer.parentNode === target) target.insertBefore(sec, footer); else target.appendChild(sec);
   }
 
-  var elapsed = 0;
-  var interval = setInterval(function() {
-    elapsed += 150;
-    var root = document.getElementById('root');
-    var hasAppRendered = (root && root.children.length > 0) || document.querySelector('main') || document.querySelector('footer');
-    
-    if (hasAppRendered) {
-      clearInterval(interval);
-      injectFAQ(false);
-    } else if (elapsed >= 5000) {
-      clearInterval(interval);
-      injectFAQ(true);
-    }
-  }, 150);
+  function removeFAQ() {
+    var el = document.querySelector('.sp-seo');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  /* ── When does the block appear? ──────────────────────────────────────
+     NEVER over the pre-render shell. The old code polled `#root` every
+     150 ms and injected as soon as the container had ANY child — but every
+     client-rendered route ships a crawler-facing pre-render block inside
+     `#root` (see scripts/prerender-seo.mjs), so a block headed "Frequently
+     Asked Questions" was painted on top of the page while the JS bundle was
+     still downloading, and then replaced by the hero. That was the reported
+     "page loads showing the FAQs on top, then the hero banner".
+
+     Now: static/standalone pages (no #root) get the block immediately; the
+     SPA waits for React to paint (the `data-sp-app` flag set by RootLayout /
+     the 'sp-app-ready' event from the splash) and only shows it on the home
+     route, removing it again when the visitor navigates away. */
+  var isSpa = !!document.getElementById('root');
+
+  if (!isSpa) {
+    injectFAQ(false);
+    return;
+  }
+
+  var injectedRoute = null;
+  function homeRoute() {
+    var h = (location.hash || '').replace(/^#/, '');
+    return h === '' || h === '/' || h.indexOf('/?') === 0 || h === '/index.html';
+  }
+  function ready() {
+    if (!homeRoute()) { removeFAQ(); return; }
+    if (injectedRoute === location.hash) return;
+    injectedRoute = location.hash;
+    injectFAQ(false);
+  }
+  function appIsUp() { return document.documentElement.hasAttribute('data-sp-app'); }
+
+  if (appIsUp()) {
+    ready();
+  } else {
+    window.addEventListener('sp-app-ready', ready, { once: true });
+    // Cheap attribute poll (no DOM scans, no injection) in case the event
+    // fired before this deferred script ran.
+    var tries = 0;
+    var iv = setInterval(function () {
+      if (appIsUp()) { clearInterval(iv); ready(); }
+      else if (++tries > 60) { clearInterval(iv); }
+    }, 100);
+  }
+
+  window.addEventListener('hashchange', function () {
+    injectedRoute = null;
+    if (!homeRoute()) { removeFAQ(); return; }
+    if (appIsUp()) ready();
+  });
 })();

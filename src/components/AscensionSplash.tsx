@@ -25,8 +25,13 @@ import '../styles/ascension.css';
  *      page behind it.
  *
  * Skippable (Skip button / tap / Esc) and fully respectful of
- * prefers-reduced-motion. ~10 s, then unmounts (zero runtime cost after).
+ * prefers-reduced-motion. Runs for exactly 2 seconds end-to-end, then
+ * unmounts (zero runtime cost after).
  */
+
+/** Hard cap on the whole splash, in seconds. The timeline is authored against
+ *  this number: every act is placed on a 0 → 2 s beat. */
+const SPLASH_SECONDS = 2;
 
 const JESUS_SRC = artUrl('/images/volumes/kings-of-the-bible-v2/hero-1920.webp');
 const CROSS_SRC = '/images/stories/scenes/cross.webp';
@@ -50,6 +55,12 @@ export const AscensionSplash: React.FC = () => {
   // Jesus — centred only by gsap.set(xPercent/yPercent -50) — showed up on the
   // RIGHT half of the screen for a moment before the curtain lifted.
   useLayoutEffect(() => {
+    // Tell the static boot curtain in index.html that the app is painted. It
+    // covers the crawler-facing pre-render shell during boot; removing it here
+    // means the hand-over happens on the splash's first frame (no gap, and no
+    // flash of the pre-render link list before the hero banner).
+    try { window.dispatchEvent(new CustomEvent('sp-app-ready')); } catch { /* no-op */ }
+
     const root = rootRef.current;
     if (!root) return;
     const $ = (sel: string) => root.querySelector<HTMLElement>(sel);
@@ -113,66 +124,70 @@ export const AscensionSplash: React.FC = () => {
     if (reduced) {
       // Reduced motion: calm cross-fade, no travel, no flash.
       tl = gsap.timeline({ paused: true, onComplete: finish });
-      tl.to(bg, { autoAlpha: 1, duration: 0.6, ease: 'power1.out' }, 0)
-        .to(wash, { autoAlpha: 0.3, duration: 0.6 }, 0)
-        .to(fig, { autoAlpha: 1, y: '0vh', scale: 1, duration: 0.8, ease: 'power1.out' }, 0.1)
-        .to([title, line2, line3, rule, verse], { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power1.out' }, 0.5)
-        .to(skip, { autoAlpha: 1, duration: 0.4 }, 0.4)
-        .to(fig, { y: '-8vh', autoAlpha: 0, duration: 0.9, ease: 'power1.in' }, 3.6)
-        .to(root, { autoAlpha: 0, duration: 0.8, ease: 'power1.inOut' }, 4.3);
+      tl.to(bg, { autoAlpha: 1, duration: 0.3, ease: 'power1.out' }, 0)
+        .to(wash, { autoAlpha: 0.3, duration: 0.3 }, 0)
+        .to(fig, { autoAlpha: 1, y: '0vh', scale: 1, duration: 0.4, ease: 'power1.out' }, 0.05)
+        .to([title, line2, line3, rule, verse], { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power1.out' }, 0.25)
+        .to(skip, { autoAlpha: 1, duration: 0.3 }, 0.2)
+        .to(fig, { autoAlpha: 0, duration: 0.35, ease: 'power1.in' }, 1.35)
+        .to(root, { autoAlpha: 0, duration: 0.3, ease: 'power1.inOut' }, 1.6);
     } else {
+      // ── 2-SECOND CUT ────────────────────────────────────────────────
+      // Every act keeps its place, but the whole five-act sequence is
+      // compressed onto a 0 → 2 s beat: the page behind the curtain is
+      // interactive after two seconds instead of ten.
       tl = gsap.timeline({ paused: true, onComplete: finish });
 
       /* ── ACT 1 · THE PLACE WHERE HE WAS CRUCIFIED ───────────────────── */
-      // Calvary fades in while breathing (slow Ken Burns, whole run).
-      tl.fromTo(bg, { scale: 1.24 }, { scale: 1.0, duration: 10.6, ease: 'none' }, 0)
-        .to(bg, { autoAlpha: 1, duration: 1.4, ease: 'power1.out' }, 0)
-        .to(wash, { autoAlpha: 0.34, duration: 1.2, ease: 'power1.out' }, 0)
+      // Calvary fades in while breathing (Ken Burns, whole run).
+      tl.fromTo(bg, { scale: 1.18 }, { scale: 1.0, duration: SPLASH_SECONDS, ease: 'none' }, 0)
+        .to(bg, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' }, 0)
+        .to(wash, { autoAlpha: 0.34, duration: 0.3, ease: 'power1.out' }, 0)
 
         /* ── ACT 2 · THE LIGHT RISES ──────────────────────────────────── */
-        .fromTo(rays, { rotation: -12, autoAlpha: 0 }, { rotation: 0, autoAlpha: 0.95, duration: 2.2, ease: 'power2.out' }, 0.5)
-        .to(rays, { rotation: 16, duration: 10.2, ease: 'none' }, 0)
-        .fromTo(glow, { scale: 0.82, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.9, ease: 'power2.out' }, 0.8)
-        .to(parts, { autoAlpha: 0.9, y: '-14vh', x: (i: number) => PARTICLES[i].drift, duration: 2.6, ease: 'sine.inOut', stagger: { each: 0.14, from: 'random' } }, 1.1)
+        .fromTo(rays, { rotation: -12, autoAlpha: 0 }, { rotation: 0, autoAlpha: 0.95, duration: 0.5, ease: 'power2.out' }, 0.1)
+        .to(rays, { rotation: 16, duration: SPLASH_SECONDS, ease: 'none' }, 0)
+        .fromTo(glow, { scale: 0.82, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.45, ease: 'power2.out' }, 0.12)
+        .to(parts, { autoAlpha: 0.9, y: '-14vh', x: (i: number) => PARTICLES[i].drift, duration: 0.6, ease: 'sine.inOut', stagger: { each: 0.015, from: 'random' } }, 0.15)
 
         /* ── ACT 3 · JESUS COMES ONTO THE SCREEN ──────────────────────── */
-        .to(fig, { autoAlpha: 1, y: '0vh', scale: 1, duration: 2.3, ease: 'power2.out' }, 0.9)
-        // gentle "living" float while the words come
-        .to(fig, { y: '-5vh', duration: 1.15, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 3.3)
+        .to(fig, { autoAlpha: 1, y: '0vh', scale: 1, duration: 0.55, ease: 'power2.out' }, 0.05)
+        // gentle "living" float while the words come (ends before the ascension)
+        .to(fig, { y: '-4vh', duration: 0.24, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 0.62)
 
         /* ── ACT 4 · THE DECLARATION ──────────────────────────────────── */
-        .fromTo(title, { y: 30, letterSpacing: '0.55em' }, { y: 0, letterSpacing: '0.16em', autoAlpha: 1, duration: 1.4, ease: 'power2.out' }, 2.3)
-        .fromTo(line2, { y: 20 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 2.9)
-        .fromTo(line3, { y: 20 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 3.3)
-        .fromTo(rule, { y: 18 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 3.6)
-        .fromTo(verse, { y: 16 }, { y: 0, autoAlpha: 1, duration: 1.0, ease: 'power2.out' }, 3.8)
-        .to(skip, { autoAlpha: 1, duration: 0.5 }, 1.1)
+        .fromTo(title, { y: 22, letterSpacing: '0.42em' }, { y: 0, letterSpacing: '0.16em', autoAlpha: 1, duration: 0.55, ease: 'power2.out' }, 0.28)
+        .fromTo(line2, { y: 14 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: 'power2.out' }, 0.42)
+        .fromTo(line3, { y: 14 }, { y: 0, autoAlpha: 1, duration: 0.35, ease: 'power2.out' }, 0.52)
+        .fromTo(rule, { y: 12 }, { y: 0, autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, 0.6)
+        .fromTo(verse, { y: 12 }, { y: 0, autoAlpha: 1, duration: 0.4, ease: 'power2.out' }, 0.66)
+        .to(skip, { autoAlpha: 1, duration: 0.3 }, 0.2)
 
         /* ── ACT 5 · THE ASCENSION — He passes out of the top ─────────── */
-        .to(fig, { y: '-140vh', scale: 1.14, duration: 3.5, ease: 'power2.in' }, 5.7)
-        .to(fig, { autoAlpha: 0, duration: 1.1, ease: 'power1.in' }, 7.6)
-        .to(glow, { autoAlpha: 0, scale: 1.4, duration: 3.1, ease: 'power2.in' }, 5.9)
-        .to(rays, { autoAlpha: 0, duration: 3.1, ease: 'power2.in' }, 5.9)
-        .to(parts, { y: '-130vh', autoAlpha: 0, duration: 2.5, ease: 'power2.in', stagger: 0.06 }, 5.8)
-        .to(wash, { autoAlpha: 0.05, duration: 2.6, ease: 'power2.in' }, 5.9)
+        .to(fig, { y: '-140vh', scale: 1.12, duration: 0.85, ease: 'power2.in' }, 1.15)
+        .to(fig, { autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 1.6)
+        .to(glow, { autoAlpha: 0, scale: 1.35, duration: 0.85, ease: 'power2.in' }, 1.15)
+        .to(rays, { autoAlpha: 0, duration: 0.85, ease: 'power2.in' }, 1.15)
+        .to(parts, { y: '-130vh', autoAlpha: 0, duration: 0.8, ease: 'power2.in', stagger: 0.015 }, 1.12)
+        .to(wash, { autoAlpha: 0.05, duration: 0.75, ease: 'power2.in' }, 1.15)
         // pillar of light at the top edge as He passes through
-        .fromTo(beam, { autoAlpha: 0, scaleY: 0.35 }, { autoAlpha: 1, scaleY: 1.15, duration: 1.6, ease: 'power2.out' }, 6.0)
-        .to(beam, { autoAlpha: 0, duration: 1.3, ease: 'power1.in' }, 7.6)
+        .fromTo(beam, { autoAlpha: 0, scaleY: 0.35 }, { autoAlpha: 1, scaleY: 1.15, duration: 0.4, ease: 'power2.out' }, 1.18)
+        .to(beam, { autoAlpha: 0, duration: 0.35, ease: 'power1.in' }, 1.6)
         // "He is ascended into glory"
-        .fromTo(acts, { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 6.6)
-        .to(acts, { autoAlpha: 0, duration: 0.8, ease: 'power1.in' }, 7.8)
+        .fromTo(acts, { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, 1.32)
+        .to(acts, { autoAlpha: 0, duration: 0.22, ease: 'power1.in' }, 1.66)
         // flash of heaven, then dissolve into the page
-        .fromTo(flash, { autoAlpha: 0 }, { autoAlpha: 0.95, duration: 0.55, ease: 'power2.in' }, 8.1)
-        .to(flash, { autoAlpha: 0, duration: 1.2, ease: 'power2.out' }, 8.7)
-        .to(root, { autoAlpha: 0, duration: 0.9, ease: 'power1.inOut' }, 8.9);
+        .fromTo(flash, { autoAlpha: 0 }, { autoAlpha: 0.95, duration: 0.16, ease: 'power2.in' }, 1.6)
+        .to(flash, { autoAlpha: 0, duration: 0.26, ease: 'power2.out' }, 1.76)
+        .to(root, { autoAlpha: 0, duration: SPLASH_SECONDS - 1.74, ease: 'power1.inOut' }, 1.74);
     }
 
-    // small beat so the art starts decoding before the curtain lifts
-    const startTimer = window.setTimeout(() => tl.play(), 250);
+    // The art is preloaded, so the curtain lifts immediately: no dead beat.
+    const startTimer = window.setTimeout(() => tl.play(), 40);
 
     // Failsafe: a stalled timeline (background tab, throttled rAF, paused
     // media) must not leave the overlay parked over the header for ever.
-    const failsafe = window.setTimeout(finish, tl.duration() * 1000 + 2500);
+    const failsafe = window.setTimeout(finish, SPLASH_SECONDS * 1000 + 1500);
 
     // Skip = fast-forward the remaining animation (never a hard cut).
     const skipNow = () => {
