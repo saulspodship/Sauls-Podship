@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
 import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
@@ -342,6 +342,14 @@ export const RootLayout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navType = useNavigationType();
+
+  // Marks the document as "React has painted". The static retrofit scripts
+  // (public/assets/seo-aeo.js, companion.js) and the boot curtain in index.html
+  // wait for this instead of guessing from `#root.children.length` — which is
+  // non-zero the instant the crawler-facing pre-render shell is parsed.
+  useLayoutEffect(() => {
+    document.documentElement.setAttribute('data-sp-app', 'ready');
+  }, []);
 
   // Every route change starts at the top of the new page, instantly.
   // (ScrollRestoration alone raced with lazy pages + smooth scrolling, so the

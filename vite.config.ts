@@ -17,7 +17,10 @@ export default defineConfig({
         // Stable vendor chunks: React/router change rarely, so returning visitors
         // keep them cached even when page code changes.
         manualChunks(id) {
-          if (/[\\/]src[\\/]data[\\/]volumes[\\/]volume_\d+\.ts$/.test(id)) return 'volumes-data';
+          // NOTE: volume bodies are intentionally NOT grouped into one chunk.
+          // src/data/volumes/registry.ts imports them with import.meta.glob, so
+          // Rollup emits one ~4–60 kB chunk per volume and a volume page only
+          // downloads the dossier being read (was a single 628 kB block).
           if (!id.includes('node_modules')) return;
           if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
           if (id.includes('lucide-react')) return 'vendor-icons';

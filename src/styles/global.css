@@ -235,3 +235,17 @@ th, td {
 @media (max-width: 1023px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: 16px !important; }
 }
+
+/* ===== 2026-10-25: scroll smoothness on phones =====
+   The sticky site header carried a full-width `backdrop-blur`. A backdrop
+   filter on a position:sticky element is re-composited every single frame
+   while scrolling, which is the loudest source of scroll jank on mid-range
+   Android. On small screens the same look is achieved with a near-opaque
+   tint — visually identical (the header is dark either way), far cheaper. */
+@media (max-width: 767px) {
+  header.sticky {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-color: rgba(22, 6, 15, 0.97) !important;
+  }
+}

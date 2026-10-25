@@ -24,6 +24,59 @@
         }
       })();
     </script>
+    <!-- ── Boot curtain (critical, inline) ─────────────────────────────────
+         The app is client-rendered, so every route's HTML ships a small
+         crawler-facing pre-render block (see scripts/prerender-seo.mjs). On a
+         cold load the browser paints that block — a serif list of site links
+         (…FAQ…) — for a beat before React replaces it with the hero banner and
+         the volume body. That flash is what made pages "load with the FAQs on
+         top, then the hero image".
+
+         This curtain is painted by the HTML parser itself (no JS, no network)
+         in the splash screen's own colours, sits under the React splash
+         (z-index 9998 vs 9999), and is removed the moment the app paints
+         ('sp-app-ready', dispatched by AscensionSplash). Result: the first
+         frame is the brand, never the pre-render shell. It also gives an
+         instant first paint on slow connections instead of a white screen. -->
+    <style>
+      #sp-boot {
+        position: fixed; inset: 0; z-index: 9998;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 14px; padding: 24px; text-align: center;
+        background: radial-gradient(120% 90% at 50% 28%, #24101C 0%, #16060F 55%, #0A0308 100%);
+        color: #F8F4E3;
+        font-family: Merriweather, Georgia, "Times New Roman", serif;
+        -webkit-tap-highlight-color: transparent;
+        pointer-events: none;
+        transition: opacity .22s ease;
+      }
+      #sp-boot .sp-boot-mark {
+        font-size: clamp(1.25rem, 1.1rem + 1.6vw, 2rem);
+        font-weight: 900; letter-spacing: .16em; text-transform: uppercase; color: #E8C96A;
+      }
+      #sp-boot .sp-boot-line {
+        width: min(210px, 54vw); height: 1px;
+        background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+      }
+      #sp-boot .sp-boot-sub {
+        font-family: Inter, "Segoe UI", system-ui, sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: .28em;
+        text-transform: uppercase; color: rgba(248, 244, 227, .68);
+      }
+      #sp-boot .sp-boot-dot {
+        width: 30px; height: 30px; border-radius: 999px; margin-top: 4px;
+        border: 2px solid rgba(212, 175, 55, .28); border-top-color: #E8C96A;
+        animation: spBootSpin .9s linear infinite;
+      }
+      @keyframes spBootSpin { to { transform: rotate(360deg); } }
+      #sp-boot.sp-boot-hide { opacity: 0; }
+      html.sp-booted #sp-boot { display: none !important; }
+      @media (prefers-reduced-motion: reduce) {
+        #sp-boot .sp-boot-dot { animation: none; }
+      }
+    </style>
+    <noscript><style>#sp-boot { display: none !important; }</style></noscript>
+
     <link rel="icon" type="image/png" sizes="64x64" href="/icons/favicon.png" />
     <link rel="shortcut icon" type="image/png" href="/icons/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
@@ -122,7 +175,34 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet"></noscript>
 </head>
   <body style="background-color: #F8F4E3; color: #1D2D50; margin: 0; padding: 0;">
+    <div id="sp-boot" role="status" aria-live="polite" aria-label="Opening Saul's Podship">
+      <div class="sp-boot-mark">Saul&rsquo;s Podship</div>
+      <div class="sp-boot-line"></div>
+      <div class="sp-boot-sub">Theological Scriptorium</div>
+      <div class="sp-boot-dot" aria-hidden="true"></div>
+    </div>
     <div id="root"></div>
+    <script>
+      // Remove the boot curtain as soon as the React splash is on screen.
+      // Fallbacks (slow bundle, blocked script) keep it from ever sticking.
+      (function () {
+        var boot = document.getElementById('sp-boot');
+        if (!boot) return;
+        var removed = false;
+        function clear() {
+          if (removed) return;
+          removed = true;
+          boot.className = 'sp-boot-hide';
+          setTimeout(function () {
+            document.documentElement.classList.add('sp-booted');
+            if (boot.parentNode) boot.parentNode.removeChild(boot);
+          }, 240);
+        }
+        window.addEventListener('sp-app-ready', clear);
+        window.addEventListener('load', function () { setTimeout(clear, 2500); });
+        setTimeout(clear, 6000);
+      })();
+    </script>
     <script type="module" src="/index.tsx"></script>
     <script>
       // Chrome fires beforeinstallprompt very early — often before the React
