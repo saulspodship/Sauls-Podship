@@ -1,165 +1,22 @@
-/* Saul's Podship — SEO / AEO / GEO injector (drop-in on every page)
-   Usage: <script src="/assets/seo-aeo.js" defer></script>
-   Adds, per route, without touching the existing UI:
-   - JSON-LD structured data (FAQPage / Article / LearningResource / WebSite) for AEO,
-   - GEO meta (geo.region PK, geo.placename, ICBM Karachi + worldwide copy),
-   - a visible "Theological Inquiries" FAQ block + paragraphic summary prose,
-     styled with the site's own tokens (wine/gold/cream, EB Garamond/Inter). */
-(function(){
-  var path=(location.pathname||'/').replace(/\/+$/,'')||'/';
-  var DATA={
-    '/':{
-      para:"Saul’s Podship is a biblical ministry project presenting an interactive theological encyclopedia for believers and scholars worldwide: 50 peer-reviewed volumes from Eden to the New Jerusalem; a Biblical Prophecy Map tagging all 247 prophecies by historical, metaphorical and futurist fulfilment; the Kings of the Bible throne line from Jesus the King of Kings to the final Beast; 400 comparative apologetics questions across Islam, Judaism, Hinduism and Sikhism; and the living archive of Punjabi Zaboor hymnody — 150 Psalms in classical Punjabi meters — fulfilling the vision of worship in Spirit and Truth from Karachi to the nations.",
-      faq:[
-        ["What is Saul's Podship?","An interactive theological encyclopedia and digital ministry: 50 peer-reviewed volumes, the Biblical Prophecy Map, the Kings of the Bible throne line, 400 comparative apologetics questions, and the Punjabi Zaboor archive — freely accessible worldwide."],
-        ["What do the fulfilment tags on the Prophecy Map mean?","Every one of the 247 prophecies carries three interpretive lenses — Historical (preterist/historicist reading), Metaphorical (idealist/spiritual reading) and Futurist (literal awaiting reading) — so you can see which school of theology counts each prophecy complete."],
-        ["Who is the first King in the Kings of the Bible module?","Jesus the Messiah — King of Kings and Lord of Lords, the Alpha and the Omega — before Saul, David and Solomon; the line closes with the final counterfeit king, the Beast."],
-        ["Is the Punjabi Zaboor archive complete?","Yes — the complete historical record of 150 biblical Psalms versified into Punjabi classical meters by Imam-ud-Din Shahbaz (1908), with the living archive of Pakistani gospel musicians."],
-        ["Are the new biblical maps interactive?","Yes — eight journey maps with animated footsteps tracing Abraham, the Exodus, Paul, the Seven Churches and more, stop by stop."],
-        ["Is Saul's Podship free?","Yes. Every volume, atlas, archive and podcast is freely accessible; the ministry is sustained by voluntary support and prayer."]
-      ]
-    },
-    '/encyclopedia':{
-      para:"The complete Scriptorium catalog: fifty peer-reviewed volumes across scholarly exegesis, historical theology, devotional, reference and hymnology categories — each with data tables, FAQs, timelines, original-language transliteration and complete scriptural references, with the companion modules routed at the bottom of every volume.",
-      faq:[
-        ["How many volumes are in the encyclopedia?","Fifty — 26 scholarly exegesis, 11 historical theology, 8 devotional & spiritual, 5 reference & canonical."],
-        ["What are the companion modules?","The Biblical Prophecy Map, Kings of the Bible, the Interlinked Bible and Comparative Apologetics — interactive charts woven from the same scholarship, linked by routing buttons at the bottom of every volume."],
-        ["Are the volumes free to read?","Yes — every volume, table and FAQ is freely readable online."]
-      ]
-    },
-    '/comparative-apologetics':{
-      para:"A Christian’s guide to comparative apologetics: 400 of the hardest objections raised in dialogue with Islam, Judaism, Hinduism and Sikhism — 100 per tradition — each answered with context, primary sources, a fair statement of the other side, and a Christian response; searchable, sortable, and ranked by what is most asked in Pakistan & India.",
-      faq:[
-        ["How is the codex organized?","100 questions per tradition, each with Context, Mainstream Position & Primary Sources, Christian Apologetic Response, and Points for Respectful Discussion."],
-        ["What is the method?","Represent other traditions accurately and charitably before answering — persuasion through honesty, not mockery; weak or fabricated hadith are never used as authoritative."],
-        ["Can I search and sort the questions?","Yes — by book order, by most-asked in Pakistan & India, or A–Z."]
-      ]
-    },
-    '/encyclopedia/biblical-maps':{
-      para:"Biblical Maps, Volume 11: a visual atlas of sacred topography — the land bridge of Canaan, the Exodus spine, Paul’s 10,000 miles, the Jordan Rift — now with an interactive journey atlas whose footsteps walk each route, and the world map at the foot of the volume.",
-      faq:[
-        ["Why is geographical context vital for reading the Bible?","Revelation happened in real places: elevation, water and borderlands shape the meaning of campaigns, covenants and parables."],
-        ["Where did the Exodus route travel?","Rameses → Succoth → the sea crossing → Sinai → Kadesh-barnea → Moab; the interactive map walks this spine."],
-        ["How many missionary journeys did Paul make?","Three recorded journeys plus the voyage to Rome — over 10,000 miles."]
-      ]
+/* Saul's Podship — GEO metadata helper.
+   Route FAQ content and FAQPage JSON-LD are rendered by React from src/data/faq.ts,
+   so this asset intentionally never writes visible DOM or structured data. */
+(function () {
+  var geo = [
+    ['geo.region', 'PK'],
+    ['geo.placename', 'Karachi, Pakistan — serving believers worldwide'],
+    ['geo.position', '24.8607;67.0011'],
+    ['ICBM', '24.8607, 67.0011']
+  ];
+
+  geo.forEach(function (entry) {
+    var selector = 'meta[name="' + entry[0] + '"]';
+    var meta = document.head.querySelector(selector);
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = entry[0];
+      document.head.appendChild(meta);
     }
-  };
-  var d=DATA[path]; if(!d) return;
-
-  /* GEO */
-  function meta(name,content){ var m=document.createElement('meta'); m.name=name; m.content=content; document.head.appendChild(m); }
-  meta('geo.region','PK'); meta('geo.placename','Karachi, Pakistan — serving believers worldwide');
-  meta('geo.position','24.8607;67.0011'); meta('ICBM','24.8607, 67.0011');
-
-  /* AEO JSON-LD */
-  var ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":d.faq.map(function(f){
-    return {"@type":"Question","name":f[0],"acceptedAnswer":{"@type":"Answer","text":f[1]}};
-  })};
-  var sc=document.createElement('script'); sc.type='application/ld+json'; sc.textContent=JSON.stringify(ld);
-  document.head.appendChild(sc);
-
-  /* visible FAQ + prose, site tokens */
-  var st=document.createElement('style');
-  st.textContent='.sp-seo{--w:#4A152C;--g:#D4AF37;--gd:#B5952F;--c:#F8F4E3;--p:#FFFDF6;--l:#E3D8BD;--m:#7a6a5f;max-width:1100px;margin:40px auto 60px;padding:0 20px;text-align:center;font-family:Inter,"Segoe UI",sans-serif}'+
-  '.sp-seo .kick{display:inline-block;border:1px solid var(--g);padding:4px 16px;font-size:9px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gd)}'+
-  '.sp-seo h2{font-family:"Merriweather",Georgia,serif;color:var(--w);font-size:1.5rem;margin:12px 0 10px}'+
-  '.sp-seo .para{font-family:"EB Garamond",Georgia,serif;font-style:italic;color:var(--m);max-width:860px;margin:0 auto 20px;line-height:1.7;font-size:1rem}'+
-  '.sp-seo details{background:var(--p);border:1px solid var(--l);border-radius:6px;padding:12px 18px;margin:8px auto;max-width:860px;text-align:left}'+
-  '.sp-seo summary{font-weight:700;font-size:13px;color:var(--w);cursor:pointer;text-align:center}'+
-  '.sp-seo details p{margin:10px 0 4px;font-size:13px;color:#4a4038;line-height:1.7}'+
-  '.sp-seo .fallback-notice{color:#d32f2f;font-weight:bold;margin-bottom:15px;}'+
-  '.sp-seo .fallback-links{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;}'+
-  '.sp-seo .fallback-links a{color:var(--w);text-decoration:underline;}';
-  document.head.appendChild(st);
-
-  function injectFAQ(isFallback) {
-    if (document.querySelector('.sp-seo')) return; // Idempotency guard
-    var sec = document.createElement('section'); 
-    sec.className = 'sp-seo';
-    
-    if (isFallback) {
-      sec.innerHTML = '<div class="fallback-notice">Site is taking longer than usual to load.</div>' +
-        '<div class="fallback-links">' +
-        '<a href="/encyclopedia">Encyclopedia</a>' +
-        '<a href="/videos/">Videos</a>' +
-        '<a href="/kings-of-the-bible.html">Kings of the Bible</a>' +
-        '</div>';
-    } else {
-      sec.innerHTML = '<span class="kick">Theological Inquiries</span><h2>Frequently Asked Questions</h2><p class="para">' + d.para + '</p>' +
-        d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join('');
-    }
-
-    /* Always the LAST thing on the page. Appending into `main` / `#root` meant
-       the block could land above page content when the React tree was still
-       settling (reported as "the FAQs come on top of the volume page"), so it
-       now mounts straight onto <body>, after the footer. */
-    document.body.appendChild(sec);
-  }
-
-  function removeFAQ() {
-    var el = document.querySelector('.sp-seo');
-    if (el && el.parentNode) el.parentNode.removeChild(el);
-  }
-
-  /* ── When does the block appear? ──────────────────────────────────────
-     NEVER over the pre-render shell. The old code polled `#root` every
-     150 ms and injected as soon as the container had ANY child — but every
-     client-rendered route ships a crawler-facing pre-render block inside
-     `#root` (see scripts/prerender-seo.mjs), so a block headed "Frequently
-     Asked Questions" was painted on top of the page while the JS bundle was
-     still downloading, and then replaced by the hero. That was the reported
-     "page loads showing the FAQs on top, then the hero banner".
-
-     Now: static/standalone pages (no #root) get the block immediately; the
-     SPA waits for React to paint (the `data-sp-app` flag set by RootLayout /
-     the 'sp-app-ready' event from the splash) and only shows it on the home
-     route, removing it again when the visitor navigates away. */
-  var isSpa = !!document.getElementById('root');
-
-  if (!isSpa) {
-    injectFAQ(false);
-    return;
-  }
-
-  var injectedRoute = null;
-  /* "Home" means the real front page — on BOTH url styles:
-     • hash routes  -> /#/  (location.pathname is "/" for every deep route)
-     • path routes  -> /encyclopedia/all-bible-stories  (hash is empty there)
-     Ignoring pathname is what used to paint the home FAQ block on top of the
-     51 volume pages, which are all served as path URLs. */
-  function homeRoute() {
-    var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
-    var h = (location.hash || '').replace(/^#/, '');
-    var hashHome = h === '' || h === '/' || h.indexOf('/?') === 0 || h === '/index.html';
-    var pathHome = path === '/' || path === '/index.html';
-    return hashHome && pathHome;
-  }
-  function ready() {
-    if (!homeRoute()) { removeFAQ(); return; }
-    if (injectedRoute === location.hash) return;
-    injectedRoute = location.hash;
-    injectFAQ(false);
-  }
-  function appIsUp() { return document.documentElement.hasAttribute('data-sp-app'); }
-
-  if (appIsUp()) {
-    ready();
-  } else {
-    window.addEventListener('sp-app-ready', ready, { once: true });
-    // Cheap attribute poll (no DOM scans, no injection) in case the event
-    // fired before this deferred script ran.
-    var tries = 0;
-    var iv = setInterval(function () {
-      if (appIsUp()) { clearInterval(iv); ready(); }
-      else if (++tries > 60) { clearInterval(iv); }
-    }, 100);
-  }
-
-  function routeChanged() {
-    injectedRoute = null;
-    if (!homeRoute()) { removeFAQ(); return; }
-    if (appIsUp()) ready();
-  }
-  window.addEventListener('hashchange', routeChanged);
-  window.addEventListener('popstate', routeChanged);
+    meta.content = entry[1];
+  });
 })();

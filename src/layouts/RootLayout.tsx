@@ -13,6 +13,7 @@ import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
 import AscensionSplash from '../components/AscensionSplash';
+import FAQBlock from '../components/FAQBlock';
 
 
 /* ── Header navigation ─────────────────────────────────────────────────
@@ -524,6 +525,7 @@ export const RootLayout: React.FC = () => {
       {/* Main Routed Content */}
       <main className="flex-1 w-full text-center">
         <Outlet />
+        <FAQBlock />
       </main>
 
       {/* Interactive AI Scholar Floating Assistant */}
