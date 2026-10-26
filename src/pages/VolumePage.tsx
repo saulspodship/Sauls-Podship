@@ -26,6 +26,7 @@ import { sceneImageFor, storyArt } from '../components/story/storyScenes';
 import { bibleComUrl } from '../lib/bibleRef';
 import { SITE } from '../config/site';
 import AutoFrame from '../components/modules/AutoFrame';
+import { FAQ_DATA } from '../data/faq';
 
 
 
@@ -239,14 +240,24 @@ export const VolumePage: React.FC = () => {
       {
         "@type": "FAQPage",
         "@id": `https://www.saulspodship.com/encyclopedia/${volume.slug}#faq`,
-        "mainEntity": (volume.faq || []).map(f => ({
-          "@type": "Question",
-          "name": f.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": f.a
-          }
-        }))
+        "mainEntity": [
+          ...(volume.faq || []).map(f => ({
+            "@type": "Question",
+            "name": f.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": f.a
+            }
+          })),
+          ...(slug === 'biblical-maps' ? (FAQ_DATA['/encyclopedia/biblical-maps']?.items ?? []).map(({ question, answer }) => ({
+            "@type": "Question",
+            "name": question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": answer
+            }
+          })) : [])
+        ]
       }
     ]
   };
