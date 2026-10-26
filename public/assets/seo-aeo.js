@@ -89,11 +89,11 @@
         d.faq.map(function(f){return '<details><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>';}).join('');
     }
 
-    var main = document.querySelector('main');
-    var root = document.getElementById('root');
-    var target = main || root || document.body;
-    var footer = document.querySelector('footer');
-    if (footer && footer.parentNode === target) target.insertBefore(sec, footer); else target.appendChild(sec);
+    /* Always the LAST thing on the page. Appending into `main` / `#root` meant
+       the block could land above page content when the React tree was still
+       settling (reported as "the FAQs come on top of the volume page"), so it
+       now mounts straight onto <body>, after the footer. */
+    document.body.appendChild(sec);
   }
 
   function removeFAQ() {
@@ -122,9 +122,17 @@
   }
 
   var injectedRoute = null;
+  /* "Home" means the real front page — on BOTH url styles:
+     • hash routes  -> /#/  (location.pathname is "/" for every deep route)
+     • path routes  -> /encyclopedia/all-bible-stories  (hash is empty there)
+     Ignoring pathname is what used to paint the home FAQ block on top of the
+     51 volume pages, which are all served as path URLs. */
   function homeRoute() {
+    var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
     var h = (location.hash || '').replace(/^#/, '');
-    return h === '' || h === '/' || h.indexOf('/?') === 0 || h === '/index.html';
+    var hashHome = h === '' || h === '/' || h.indexOf('/?') === 0 || h === '/index.html';
+    var pathHome = path === '/' || path === '/index.html';
+    return hashHome && pathHome;
   }
   function ready() {
     if (!homeRoute()) { removeFAQ(); return; }
@@ -147,9 +155,11 @@
     }, 100);
   }
 
-  window.addEventListener('hashchange', function () {
+  function routeChanged() {
     injectedRoute = null;
     if (!homeRoute()) { removeFAQ(); return; }
     if (appIsUp()) ready();
-  });
+  }
+  window.addEventListener('hashchange', routeChanged);
+  window.addEventListener('popstate', routeChanged);
 })();

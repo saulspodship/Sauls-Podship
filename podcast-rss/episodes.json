@@ -1,0 +1,326 @@
+{
+  "_comment": "Saul's Podship — RSS.com publishing metadata. Copy-paste notes live in RSS-COM-SETUP-KIT.md (same order/numbering). drive_folder: https://drive.google.com/drive/folders/1BejmDDZfHc_kRjjJObFJtFMj9TbdKrZg",
+  "podcast": {
+    "title": "Saul's Podship — Urdu Bible Apologetics | ساؤلز پوڈشپ",
+    "slug": "sauls-podship",
+    "feed_url_suggestion": "https://rss.com/podcasts/sauls-podship",
+    "fallback_slug": "sauls-podship-urdu",
+    "category": "Religion & Spirituality > Christianity",
+    "language": "ur",
+    "country": "PK",
+    "explicit": false,
+    "type": "episodic",
+    "owner_name": "Saul's Podship",
+    "owner_email": "saulspodship@gmail.com",
+    "website": "https://www.saulspodship.com/podcast",
+    "cover_art": "podcast-rss/cover-art/sauls-podship-cover-3000x3000.jpg",
+    "cover_art_size_px": 3000
+  },
+  "episodes": [
+    {
+      "number": 1,
+      "title_ur": "کیا سب کچھ پہلے سے لکھا ہے؟ — تقدیر اور آزاد مرضی",
+      "title_roman": "Kya sab kuch pehle se likha hai? — Taqdeer aur azaad marzi",
+      "title_en": "Is Everything Already Written? Predestination vs Free Will",
+      "drive_file": "کیا_سب_کچھ_پہلے_سے_لکھا_ہے.m4a",
+      "drive_file_id": "1mkaKByQOiDvqPpFIRSGBueDU4casXnC5",
+      "bytes": 44686928,
+      "keywords": [
+        "تقدیر",
+        "آزاد مرضی",
+        "predestination",
+        "free will",
+        "qadr"
+      ],
+      "scriptures": [
+        "Romans 8:28-30",
+        "Romans 9:14-24",
+        "Ephesians 1:3-14",
+        "Acts 2:23",
+        "John 3:16",
+        "2 Peter 3:9"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep01-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep01-cover-1400x1400.jpg"
+    },
+    {
+      "number": 2,
+      "title_ur": "آزمائش میں الٰہی وعدوں کی حقیقت",
+      "title_roman": "Aazmaish mein ilahi wadon ki haqeeqat",
+      "title_en": "The Reality of Divine Promises in Trial",
+      "drive_file": "آزمائش_میں_الہی_وعدوں_کی_حقیقت.m4a",
+      "drive_file_id": "1wQ0EX1Ffyi6vMwNFrLs0PVKolB9qMnwG",
+      "bytes": 53818240,
+      "keywords": [
+        "آزمائش",
+        "مصیبت",
+        "divine promises",
+        "suffering",
+        "faith under trial"
+      ],
+      "scriptures": [
+        "James 1:2-4,12",
+        "Romans 5:3-5",
+        "1 Peter 1:6-7",
+        "2 Corinthians 12:7-10",
+        "Psalm 34:19",
+        "Hebrews 12:5-11",
+        "Job 23:10"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep02-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep02-cover-1400x1400.jpg"
+    },
+    {
+      "number": 3,
+      "title_ur": "خوشحالی کی انجیل کا فریب",
+      "title_roman": "Khushhali ki Injeel ka fareb",
+      "title_en": "The Deception of the Prosperity Gospel",
+      "drive_file": "Khushhali_ki_injeel_ka_fareb.m4a",
+      "drive_file_id": "1_SYstszaXHGw9f4vsvR-Q41iRgh1__TK",
+      "bytes": 44442530,
+      "keywords": [
+        "خوشحالی کی انجیل",
+        "prosperity gospel",
+        "قناعت",
+        "wealth",
+        "poverty"
+      ],
+      "scriptures": [
+        "2 Corinthians 8:9",
+        "Philippians 4:11-13",
+        "1 Timothy 6:6-10",
+        "Hebrews 13:5",
+        "John 16:33",
+        "Luke 9:23",
+        "Matthew 6:19-21"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep03-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep03-cover-1400x1400.jpg"
+    },
+    {
+      "number": 4,
+      "title_ur": "یسوع کے دو مختلف شجرۂ نسب",
+      "title_roman": "Yesu ke do mukhtalif shajra-e-nasab",
+      "title_en": "The Two Different Genealogies of Jesus",
+      "drive_file": "یسوع_کے_دو_مختلف_شجرہ_نسب.m4a",
+      "drive_file_id": "16uetGTJFc24J4VkrZdH3JXncslEWto2g",
+      "bytes": 22511367,
+      "keywords": [
+        "شجرہ نسب",
+        "genealogies",
+        "Matthew 1",
+        "Luke 3",
+        "contradiction"
+      ],
+      "scriptures": [
+        "Matthew 1:1-17",
+        "Luke 3:23-38",
+        "1 Chronicles 3",
+        "2 Samuel 7",
+        "Deuteronomy 25:5-6",
+        "Ruth 4"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep04-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep04-cover-1400x1400.jpg"
+    },
+    {
+      "number": 5,
+      "title_ur": "سیکرٹ ریپچر: 1830 کا خواب یا حقیقت؟",
+      "title_roman": "Secret Rapture: 1830 ka khwab ya haqeeqat?",
+      "title_en": "The Secret Rapture: An 1830 Dream or Reality?",
+      "drive_file": "سیکرٹ_رپچر_1830_کا_خواب_یا_حقیقت.m4a",
+      "drive_file_id": "1CXW0yoqvgNiGiZe8JeWiYezWxdUiXZMp",
+      "bytes": 34178243,
+      "keywords": [
+        "ریپچر",
+        "rapture",
+        "Darby",
+        "dispensationalism",
+        "end times",
+        "مکاشفہ"
+      ],
+      "scriptures": [
+        "1 Thessalonians 4:13-18",
+        "Matthew 24:29-31",
+        "2 Thessalonians 2:1-4",
+        "Revelation 20",
+        "Daniel 12"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep05-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep05-cover-1400x1400.jpg"
+    },
+    {
+      "number": 6,
+      "title_ur": "بائبل اور غلامی کی اصل حقیقت",
+      "title_roman": "Bible aur ghulami ki asal haqeeqat",
+      "title_en": "The Bible and the Real Truth About Slavery",
+      "drive_file": "بائبل_اور_غلامی_کی_اصل_حقیقت.m4a",
+      "drive_file_id": "1bJgM74BEvmjVuAVPEInaagbh9PALN9J7",
+      "bytes": 26822475,
+      "keywords": [
+        "غلامی",
+        "slavery",
+        "Old Testament ethics",
+        "فلیمون",
+        "abolition"
+      ],
+      "scriptures": [
+        "Exodus 21:1-11,16",
+        "Leviticus 25:39-43",
+        "Deuteronomy 15:12-15",
+        "Deuteronomy 23:15-16",
+        "Philemon",
+        "Ephesians 6:5-9",
+        "1 Timothy 1:10"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep06-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep06-cover-1400x1400.jpg"
+    },
+    {
+      "number": 7,
+      "title_ur": "بائبل کی جنگیں اور الٰہی انصاف",
+      "title_roman": "Bible ki jangein aur ilahi insaaf",
+      "title_en": "The Wars of the Bible and Divine Justice",
+      "drive_file": "بائبل_کی_جنگیں_اور_الٰہی_انصاف.m4a",
+      "drive_file_id": "1xxDLMufWVmDgWMfKZBrafM0NRpPffSaV",
+      "bytes": 26270182,
+      "keywords": [
+        "جنگ",
+        "herem",
+        "Old Testament violence",
+        "divine justice",
+        "کنعان"
+      ],
+      "scriptures": [
+        "Deuteronomy 20",
+        "Joshua 6-11",
+        "Genesis 15:13-16",
+        "1 Samuel 15",
+        "Jeremiah 18:7-10",
+        "Ezekiel 18:23",
+        "Ezekiel 33:11",
+        "Jonah 4:11",
+        "Matthew 5:43-48"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep07-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep07-cover-1400x1400.jpg"
+    },
+    {
+      "number": 8,
+      "title_ur": "آنکھ کے بدلے آنکھ اور سزائے موت",
+      "title_roman": "Aankh ke badle aankh aur saza-e-maut",
+      "title_en": "An Eye for an Eye and the Death Penalty",
+      "drive_file": "آنکھ_کے_بدلے_آنکھ_اور_سزائے_موت.m4a",
+      "drive_file_id": "1RoHl88RtH7fdmTiW42wO65hTiQhoKL-K",
+      "bytes": 27344887,
+      "keywords": [
+        "آنکھ کے بدلے آنکھ",
+        "lex talionis",
+        "سزائے موت",
+        "death penalty",
+        "انصاف"
+      ],
+      "scriptures": [
+        "Exodus 21:23-25",
+        "Leviticus 24:19-22",
+        "Deuteronomy 19:15-21",
+        "Genesis 9:6",
+        "Romans 13:1-4",
+        "Matthew 5:38-42"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep08-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep08-cover-1400x1400.jpg"
+    },
+    {
+      "number": 9,
+      "title_ur": "مسیحیت میں طلاق اور جذباتی شفا",
+      "title_roman": "Masihiyat mein talaq aur jazbati shifa",
+      "title_en": "Divorce in Christianity and Emotional Healing",
+      "drive_file": "مسیحیت_میں_طلاق_اور_جذباتی_شفا.m4a",
+      "drive_file_id": "17G8EfWIX5XZr0r78UGviwPp4RJtS3FOL",
+      "bytes": 38355697,
+      "keywords": [
+        "طلاق",
+        "divorce",
+        "دوبارہ شادی",
+        "emotional healing",
+        "شفا"
+      ],
+      "scriptures": [
+        "Deuteronomy 24:1-4",
+        "Malachi 2:14-16",
+        "Matthew 19:3-9",
+        "1 Corinthians 7:10-16",
+        "Ephesians 5:25-33",
+        "Psalm 34:18",
+        "Psalm 147:3"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep09-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep09-cover-1400x1400.jpg"
+    },
+    {
+      "number": 10,
+      "title_ur": "کلیسیا میں خواتین کی قیادت اور بائبل",
+      "title_roman": "Kalisia mein khawateen ki qiyadat aur Bible",
+      "title_en": "Women's Leadership in the Church and the Bible",
+      "drive_file": "کلیسیا_میں_خواتین_کی_قیادت_اور_بائبل.m4a",
+      "drive_file_id": "1EUt4HAqpsnQa8lnZK9qbtK-T8blbsEBX",
+      "bytes": 43991834,
+      "keywords": [
+        "خواتین",
+        "women in ministry",
+        "کلیسیا",
+        "۱ تیمتھیس ۲",
+        "leadership"
+      ],
+      "scriptures": [
+        "Genesis 1:27",
+        "Judges 4-5",
+        "2 Kings 22",
+        "Luke 8:1-3",
+        "Luke 24:9-11",
+        "Acts 2:17-18",
+        "Acts 18:26",
+        "Acts 21:9",
+        "Romans 16:1-7",
+        "1 Corinthians 11:5,11-12",
+        "1 Corinthians 14:34-35",
+        "1 Timothy 2:11-15",
+        "Galatians 3:28",
+        "1 Peter 4:10-11"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep10-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep10-cover-1400x1400.jpg"
+    },
+    {
+      "number": 11,
+      "title_ur": "ہم جنس پرستی اور قدیم مذہبی بحث",
+      "title_roman": "Hum jins parasti aur qadeem mazhabi behas",
+      "title_en": "Homosexuality and the Ancient Religious Debate",
+      "drive_file": "ہم_جنس_پرستی_اور_قدیم_مذہبی_بحث.m4a",
+      "drive_file_id": "1rx9eUTjHejTP9lXww5Q9a4UIjKQoPOZN",
+      "bytes": 3195520,
+      "flag": "3.2 MB — about a tenth of the other episodes. Verify the export is complete before publishing.",
+      "keywords": [
+        "ہم جنس پرستی",
+        "homosexuality",
+        "رومیوں ۱",
+        "grace and truth",
+        "pastoral care"
+      ],
+      "scriptures": [
+        "Leviticus 18:22",
+        "Leviticus 20:13",
+        "Genesis 19",
+        "Romans 1:26-27",
+        "1 Corinthians 6:9-11",
+        "1 Timothy 1:10",
+        "Matthew 19:4-6",
+        "John 8:1-11",
+        "1 John 1:9"
+      ],
+      "cover_art_3000": "podcast-rss/cover-art/ep11-cover-3000x3000.jpg",
+      "cover_art_1400": "podcast-rss/cover-art/ep11-cover-1400x1400.jpg"
+    }
+  ]
+}

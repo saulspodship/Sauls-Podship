@@ -249,3 +249,38 @@ th, td {
     background-color: rgba(22, 6, 15, 0.97) !important;
   }
 }
+
+/* ===== Urdu (Nastaliq) — podcast pages =====
+   Declared with unicode-range so the ~158 kB font is fetched only when a page
+   actually renders Urdu and the device has no Nastaliq face of its own. */
+@font-face {
+  font-family: "Noto Nastaliq Urdu";
+  src: url("/fonts/noto-nastaliq-urdu-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200D, U+2010-2011, U+2018-201F;
+}
+@font-face {
+  font-family: "Noto Nastaliq Urdu";
+  src: url("/fonts/noto-nastaliq-urdu-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200D, U+2010-2011, U+2018-201F;
+}
+/* Nastaliq needs a deep line box; never clip it with a tight leading. */
+.urdu {
+  font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  line-height: 2.15;
+  font-weight: 700;
+}
+.urdu-body {
+  font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  line-height: 2.35;
+  font-weight: 400;
+}

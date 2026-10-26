@@ -50,7 +50,9 @@ const bundled = await esbuild({
   stdin: {
     contents:
       "export { TOUGH_QUESTIONS } from './src/data/theology/tough.ts';\n" +
-      "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n",
+      "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n" +
+      "export { PODCAST, EPISODES } from './src/data/episodes.ts';\n" +
+      "export { VIDEO_EPISODES, VIDEO_CHANNEL } from './src/data/videos.ts';\n",
     resolveDir: rootDir,
     loader: 'ts',
   },
@@ -61,7 +63,9 @@ const bundled = await esbuild({
 });
 const tmpFile = path.join(os.tmpdir(), `sp-theology-${process.pid}.mjs`);
 fs.writeFileSync(tmpFile, bundled.outputFiles[0].text);
-const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES } = await import(pathToFileURL(tmpFile).href);
+const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES, VIDEO_EPISODES, VIDEO_CHANNEL } = await import(
+  pathToFileURL(tmpFile).href,
+);
 fs.unlinkSync(tmpFile);
 
 const volumesPath = path.join(rootDir, 'src/data/volumes/volumesData.json');
@@ -226,6 +230,83 @@ pages.set('/cross-references', {
       siteNav(),
   ),
 });
+
+/* ---- Podcast: hub + one crawlable page per published episode ---- */
+// Mirrors https://rss.com/podcasts/sauls-podship — the audio itself stays on RSS.com.
+pages.set('/podcast', {
+  head: {
+    title: `${PODCAST.title} | Saul's Podship`,
+    description: clip(PODCAST.description, 155),
+    canonical: `${BASE_URL}/podcast`,
+  },
+  body: wrap(
+    `<main><h1>${esc(PODCAST.title)}</h1>` +
+      `<p><em>${esc(PODCAST.titleUrdu)} — ${esc(PODCAST.tagline)}</em></p>` +
+      `<p>${esc(PODCAST.description)}</p>` +
+      `<h2>All ${EPISODES.length} episodes</h2>` +
+      `<ol>${[...EPISODES]
+        .reverse()
+        .map(
+          (e) =>
+            `<li><a href="/podcast/${e.slug}">Episode ${e.number}: ${esc(e.title)}</a>` +
+            ` — ${esc(e.titleEnglish)} (${esc(e.duration)})</li>`,
+        )
+        .join('')}</ol>` +
+      `<p>RSS feed: <a href="${PODCAST.feedUrl}">${PODCAST.feedUrl}</a></p>` +
+      `<p><a href="${PODCAST.showUrl}">Listen on RSS.com</a></p></main>` +
+      siteNav(),
+  ),
+});
+
+for (const ep of EPISODES) {
+  pages.set(`/podcast/${ep.slug}`, {
+    head: {
+      title: `${ep.titleEnglish} | ${ep.title} | Saul's Podship Podcast`,
+      description: clip(ep.description, 155),
+      canonical: `${BASE_URL}/podcast/${ep.slug}`,
+    },
+    body: wrap(
+      `<main><h1>${esc(ep.title)}</h1>` +
+        `<p><em>${esc(ep.titleRoman)}</em> — ${esc(ep.titleEnglish)}</p>` +
+        `<p>Season 1 · Episode ${ep.number} · ${esc(ep.duration)} · ${esc(ep.publishDate)}</p>` +
+        `<p>${esc(ep.description)}</p>` +
+        `<h2>Key Scriptures</h2><p>${ep.scriptureReferences.map(esc).join(' · ')}</p>` +
+        `<h2>Show notes (Urdu)</h2><div lang="ur" dir="rtl">${esc(ep.notesUrdu).replace(/\n/g, '<br />')}</div>` +
+        `<p><a href="${ep.rssUrl}">Listen to this episode on RSS.com</a></p>` +
+        `<p><a href="/podcast">All episodes</a> · <a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        siteNav(),
+    ),
+  });
+}
+
+/* ---- YouTube Podcasts: the English video masterclasses ---- */
+// Old /podcast/<slug> URLs are kept alive by the SPA, and they keep a crawlable
+// static page too, clearly labelled as video rather than audio.
+pages.set('/podcast', pages.get('/podcast')); // touch nothing, hub already set
+
+for (const v of VIDEO_EPISODES) {
+  pages.set(`/podcast/${v.slug}`, {
+    head: {
+      title: `${v.title} | ${VIDEO_CHANNEL.label} | Saul's Podship`,
+      description: clip(v.description, 155),
+      canonical: `${BASE_URL}/podcast/${v.slug}`,
+    },
+    body: wrap(
+      `<main><h1>${esc(v.title)}</h1>` +
+        `<p><strong>${esc(VIDEO_CHANNEL.label)}</strong> — ${esc(v.subtitle)}</p>` +
+        `<p>${esc(v.duration)} · ${esc(v.publishDate)} · English video masterclass</p>` +
+        `<p>${esc(v.description)}</p>` +
+        `<h2>Key Scriptures</h2><p>${v.scriptureReferences.map(esc).join(' · ')}</p>` +
+        (v.youtubeUrl
+          ? `<p><a href="${v.youtubeUrl}">Watch on YouTube</a></p>`
+          : `<p>Not yet uploaded to YouTube.</p>`) +
+        `<p>The Urdu audio podcast is published separately: ` +
+        `<a href="/podcast">all ${EPISODES.length} episodes</a> · ` +
+        `<a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        siteNav(),
+    ),
+  });
+}
 
 /* ---- 1. write pages that have their own head ---- */
 let created = 0;

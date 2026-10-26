@@ -327,13 +327,16 @@ export const HomePage: React.FC = () => {
           <div className="space-y-3 max-w-3xl mx-auto">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest bg-[#D4AF37] text-[#1A0812]">
               <Mic className="w-3.5 h-3.5" />
-              Theological Audio Masterclasses
+              Urdu Audio Podcast · YouTube Video Masterclasses
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
               Saul's Podship Podcast
             </h2>
             <p className="text-white/80 text-sm sm:text-base leading-relaxed font-light">
-              Join our audio discussions bridging historical theological analysis with contemporary Christian thought. We break down the covenants, the biblical canon, ancient Near Eastern cultural context, and difficult exegetical questions.
+              Two streams, one scriptorium: the Urdu audio podcast on RSS.com — one hard
+              question per episode, answered from Scripture — and the English video
+              masterclasses on YouTube, working through the covenants, the canon and the
+              ancient Near Eastern background behind the text.
             </p>
           </div>
 
@@ -361,13 +364,14 @@ export const HomePage: React.FC = () => {
           {/* Featured Episode Card - Centered */}
           {latestEpisode && (
             <div className="w-full max-w-2xl bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md text-center space-y-3">
-              <div className="text-xs uppercase font-bold tracking-wider text-[#E8C96A]">Latest Scriptorium Broadcast</div>
-              <h3 className="font-serif text-2xl font-bold text-white">{latestEpisode.title}</h3>
+              <div className="text-xs uppercase font-bold tracking-wider text-[#E8C96A]">Latest episode · Urdu audio podcast</div>
+              <h3 className="urdu text-xl sm:text-2xl text-white leading-snug">{latestEpisode.title}</h3>
+              <p className="text-[11px] font-semibold italic text-[#E8C96A]/90">{latestEpisode.titleRoman}</p>
               <p className="text-xs sm:text-sm text-white/70 line-clamp-3 leading-relaxed font-light">{latestEpisode.description}</p>
               <div className="flex items-center justify-between text-xs text-white/60 pt-4 border-t border-white/10 max-w-md mx-auto">
                 <span>Duration: {latestEpisode.duration}</span>
                 <Link to={`/podcast/${latestEpisode.slug}`} className="text-[#E8C96A] font-bold hover:underline flex items-center gap-1">
-                  <span>Episode Study Notes</span>
+                  <span>Episode &amp; show notes</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
