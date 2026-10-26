@@ -7,11 +7,12 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Play, Calendar, Clock, ChevronLeft, ChevronRight, ExternalLink, Rss,
-  BookOpen, Headphones, ArrowUpRight,
+  BookOpen, Headphones, ArrowUpRight, Youtube, Film,
 } from 'lucide-react';
 import {
   EPISODES, PODCAST, findEpisode, episodeNeighbours,
 } from '../data/episodes';
+import { VIDEO_EPISODES, VIDEO_CHANNEL, findVideoEpisode, youtubeId } from '../data/videos';
 import NotFoundPage from './NotFoundPage';
 
 const dateFmt = (iso: string) =>
@@ -25,11 +26,177 @@ const isoDuration = (mmss: string) => {
   return `PT${parseInt(m, 10) || 0}M${parseInt(s, 10) || 0}S`;
 };
 
+
+/* ------------------------------------------------------------------ *
+ * YouTube Podcast (video masterclass) — same URL space as the audio   *
+ * episodes, but labelled as video and always played on YouTube.       *
+ * ------------------------------------------------------------------ */
+const VideoEpisodePage: React.FC<{ video: ReturnType<typeof findVideoEpisode> }> = ({ video }) => {
+  if (!video) return <NotFoundPage status={404} />;
+  const yt = youtubeId(video.youtubeUrl);
+  const others = VIDEO_EPISODES.filter((v) => v.id !== video.id).slice(0, 3);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: video.title,
+    description: video.description,
+    uploadDate: video.publishDate,
+    duration: isoDuration(video.duration),
+    inLanguage: 'en',
+    ...(yt
+      ? {
+          embedUrl: `https://www.youtube.com/embed/${yt}`,
+          thumbnailUrl: `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`,
+          contentUrl: video.youtubeUrl,
+        }
+      : {}),
+  };
+
+  return (
+    <div className="w-full bg-[#FDFBF7]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <section className="bg-[#1A0812] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-[#D4AF37]/30">
+        <div className="max-w-4xl mx-auto space-y-4">
+          <Link
+            to="/podcast"
+            className="inline-flex items-center gap-1.5 text-xs text-[#D4AF37] hover:underline font-semibold"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Podcast &amp; video library
+          </Link>
+
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#B31217] text-white">
+            <Film className="w-3.5 h-3.5" />
+            {VIDEO_CHANNEL.label}
+          </span>
+
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight">
+            {video.title}
+          </h1>
+          <p className="text-sm sm:text-base text-white/75 font-light">{video.subtitle}</p>
+
+          <div className="flex flex-wrap items-center gap-3 text-xs text-white/60">
+            <span className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" />
+              {video.duration}
+            </span>
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              {dateFmt(video.publishDate)}
+            </span>
+            <span>Video masterclass · English</span>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+        <section className="rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-black">
+          {yt ? (
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${yt}`}
+                title={`${video.title} — YouTube`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          ) : (
+            <div className="p-10 text-center text-white/70 text-sm">
+              This masterclass has not been uploaded to YouTube yet.
+            </div>
+          )}
+        </section>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {video.youtubeUrl && (
+            <a
+              href={video.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#B31217] hover:bg-[#d0181e] text-white font-bold text-xs transition-all"
+            >
+              <Youtube className="w-4 h-4" />
+              Watch on YouTube
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
+          <a
+            href={VIDEO_CHANNEL.channelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-gray-200 text-[#4A152C] font-semibold text-xs hover:border-[#D4AF37] transition-colors"
+          >
+            More on the channel
+          </a>
+          <Link
+            to="/podcast"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4A152C] text-[#E8C96A] font-bold text-xs hover:bg-[#681E3E] transition-colors"
+          >
+            <Headphones className="w-4 h-4" />
+            The Urdu audio podcast
+          </Link>
+        </div>
+
+        <section className="p-7 sm:p-9 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-5">
+          <h2 className="font-serif text-xl font-bold text-[#4A152C]">About this masterclass</h2>
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{video.description}</p>
+          <div className="pt-4 border-t border-gray-100 space-y-2">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#4A152C] flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5 text-[#D4AF37]" />
+              Key Scriptures
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {video.scriptureReferences.map((ref) => (
+                <span
+                  key={ref}
+                  className="px-2.5 py-1 rounded-lg bg-[#4A152C]/8 border border-[#4A152C]/10 text-[#4A152C] font-semibold text-[11px]"
+                >
+                  {ref}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-3">
+          <h2 className="font-serif text-base font-bold text-[#4A152C]">More video masterclasses</h2>
+          <ul className="divide-y divide-gray-100">
+            {others.map((v) => (
+              <li key={v.id}>
+                <Link
+                  to={`/podcast/${v.slug}`}
+                  className="flex items-center justify-between gap-3 py-2.5 text-sm text-[#4A152C] hover:underline"
+                >
+                  <span className="line-clamp-1">{v.title}</span>
+                  <span className="text-[11px] text-gray-500 flex-shrink-0">{v.duration}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+};
+
 export const PodcastEpisodePage: React.FC = () => {
   const { episode: episodeSlug } = useParams<{ episode: string }>();
   const episode = findEpisode(episodeSlug);
 
-  if (!episode) return <NotFoundPage status={404} />;
+  // Old English video masterclasses keep their /podcast/<slug> URLs; they are
+  // rendered as YouTube Podcast pages rather than 404ing.
+  if (!episode) {
+    const video = findVideoEpisode(episodeSlug);
+    if (video) return <VideoEpisodePage video={video} />;
+    return <NotFoundPage status={404} />;
+  }
 
   const { older, newer } = episodeNeighbours(episode);
 

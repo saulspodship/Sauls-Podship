@@ -7,8 +7,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Mic, Play, Calendar, Clock, ExternalLink, Rss, Headphones, Globe2, ArrowRight,
+  Youtube, Film,
 } from 'lucide-react';
 import { EPISODES, PODCAST } from '../data/episodes';
+import { VIDEO_EPISODES, VIDEO_CHANNEL, youtubeId } from '../data/videos';
 
 const dateFmt = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', {
@@ -229,7 +231,82 @@ export const PodcastPage: React.FC = () => {
           ))}
         </div>
 
-        {/* ---------- Subscribe / feed ---------- */}
+      {/* ---------- YouTube Podcasts (video masterclasses) ---------- */}
+      <section aria-labelledby="youtube-podcasts">
+        <div className="rounded-3xl border border-[#4A152C]/10 bg-white shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-gray-100 pb-4">
+            <div>
+              <span className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#B31217]">
+                <Youtube className="w-4 h-4" />
+                {VIDEO_CHANNEL.label}
+              </span>
+              <h2 id="youtube-podcasts" className="font-serif text-2xl font-bold text-[#4A152C] mt-1">
+                English video masterclasses
+              </h2>
+              <p className="text-xs text-gray-600 mt-1 max-w-xl">
+                {VIDEO_CHANNEL.description}
+              </p>
+            </div>
+            <a
+              href={VIDEO_CHANNEL.channelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-gray-200 text-[#4A152C] font-semibold text-[11px] hover:border-[#D4AF37] transition-colors"
+            >
+              <Youtube className="w-3.5 h-3.5 text-[#B31217]" />
+              Open the channel
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {VIDEO_EPISODES.map((video) => {
+              const yt = youtubeId(video.youtubeUrl);
+              return (
+                <Link
+                  key={video.id}
+                  to={`/podcast/${video.slug}`}
+                  className="group flex gap-4 p-3 rounded-2xl border border-gray-200 hover:border-[#D4AF37] hover:shadow-sm transition-all"
+                >
+                  <div className="relative flex-shrink-0 w-28 h-[4.5rem] rounded-xl overflow-hidden bg-[#1A0812]">
+                    {yt ? (
+                      <img
+                        src={`https://i.ytimg.com/vi/${yt}/mqdefault.jpg`}
+                        alt=""
+                        width={112}
+                        height={63}
+                        loading="lazy"
+                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#E8C96A]">
+                        <Film className="w-5 h-5" />
+                      </div>
+                    )}
+                    <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/75 text-[9px] font-bold text-white">
+                      {video.duration}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0 space-y-1">
+                    <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-[#B31217]">
+                      <Youtube className="w-3 h-3" />
+                      YouTube
+                      {!yt && <span className="text-gray-400">· not uploaded yet</span>}
+                    </span>
+                    <h3 className="font-serif text-sm font-bold text-[#4A152C] leading-snug line-clamp-2 group-hover:underline">
+                      {video.title}
+                    </h3>
+                    <p className="text-[11px] text-gray-500 line-clamp-2">{video.subtitle}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- Subscribe / feed ---------- */}
         <section className="mt-4 p-8 rounded-3xl bg-[#1A0812] text-white border-2 border-[#D4AF37]/40 shadow-xl text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
             <Rss className="w-4 h-4 text-[#E8C96A]" />

@@ -51,7 +51,8 @@ const bundled = await esbuild({
     contents:
       "export { TOUGH_QUESTIONS } from './src/data/theology/tough.ts';\n" +
       "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n" +
-      "export { PODCAST, EPISODES } from './src/data/episodes.ts';\n",
+      "export { PODCAST, EPISODES } from './src/data/episodes.ts';\n" +
+      "export { VIDEO_EPISODES, VIDEO_CHANNEL } from './src/data/videos.ts';\n",
     resolveDir: rootDir,
     loader: 'ts',
   },
@@ -62,7 +63,7 @@ const bundled = await esbuild({
 });
 const tmpFile = path.join(os.tmpdir(), `sp-theology-${process.pid}.mjs`);
 fs.writeFileSync(tmpFile, bundled.outputFiles[0].text);
-const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES } = await import(
+const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES, VIDEO_EPISODES, VIDEO_CHANNEL } = await import(
   pathToFileURL(tmpFile).href,
 );
 fs.unlinkSync(tmpFile);
@@ -273,6 +274,35 @@ for (const ep of EPISODES) {
         `<h2>Show notes (Urdu)</h2><div lang="ur" dir="rtl">${esc(ep.notesUrdu).replace(/\n/g, '<br />')}</div>` +
         `<p><a href="${ep.rssUrl}">Listen to this episode on RSS.com</a></p>` +
         `<p><a href="/podcast">All episodes</a> · <a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        siteNav(),
+    ),
+  });
+}
+
+/* ---- YouTube Podcasts: the English video masterclasses ---- */
+// Old /podcast/<slug> URLs are kept alive by the SPA, and they keep a crawlable
+// static page too, clearly labelled as video rather than audio.
+pages.set('/podcast', pages.get('/podcast')); // touch nothing, hub already set
+
+for (const v of VIDEO_EPISODES) {
+  pages.set(`/podcast/${v.slug}`, {
+    head: {
+      title: `${v.title} | ${VIDEO_CHANNEL.label} | Saul's Podship`,
+      description: clip(v.description, 155),
+      canonical: `${BASE_URL}/podcast/${v.slug}`,
+    },
+    body: wrap(
+      `<main><h1>${esc(v.title)}</h1>` +
+        `<p><strong>${esc(VIDEO_CHANNEL.label)}</strong> — ${esc(v.subtitle)}</p>` +
+        `<p>${esc(v.duration)} · ${esc(v.publishDate)} · English video masterclass</p>` +
+        `<p>${esc(v.description)}</p>` +
+        `<h2>Key Scriptures</h2><p>${v.scriptureReferences.map(esc).join(' · ')}</p>` +
+        (v.youtubeUrl
+          ? `<p><a href="${v.youtubeUrl}">Watch on YouTube</a></p>`
+          : `<p>Not yet uploaded to YouTube.</p>`) +
+        `<p>The Urdu audio podcast is published separately: ` +
+        `<a href="/podcast">all ${EPISODES.length} episodes</a> · ` +
+        `<a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
         siteNav(),
     ),
   });
