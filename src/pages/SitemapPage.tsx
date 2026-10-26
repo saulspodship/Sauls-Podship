@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Compass, ExternalLink } from 'lucide-react';
 import { VOLUME_INDEX as VOLUMES } from '../data/volumes/index-lite';
+import { EPISODES, PODCAST } from '../data/episodes';
 
 export const SitemapPage: React.FC = () => {
   return (
@@ -54,6 +55,30 @@ export const SitemapPage: React.FC = () => {
             <Link to="/terms" className="text-[#4A152C] hover:underline font-semibold">Terms of Service</Link>
             <Link to="/disclaimer" className="text-[#4A152C] hover:underline font-semibold">Theological Disclaimer</Link>
           </div>
+        </section>
+
+        {/* Podcast Episodes (mirrored from RSS.com) */}
+        <section className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+          <h2 className="font-serif text-xl font-bold text-[#4A152C] border-b border-gray-100 pb-2">
+            Podcast Episodes ({EPISODES.length})
+          </h2>
+          <p className="text-xs text-gray-600">
+            {PODCAST.title} — published on{' '}
+            <a href={PODCAST.showUrl} target="_blank" rel="noopener noreferrer" className="text-[#4A152C] hover:underline font-semibold">
+              RSS.com
+            </a>
+            . The site mirrors each episode for search and study notes; the audio always streams from the host.
+          </p>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            {[...EPISODES].reverse().map((ep) => (
+              <li key={ep.id} className="flex items-baseline gap-2">
+                <span className="text-[10px] font-bold text-gray-400 w-6 flex-shrink-0">{ep.number}</span>
+                <Link to={`/podcast/${ep.slug}`} className="urdu text-[#4A152C] hover:underline leading-relaxed">
+                  {ep.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* All 51 Volumes */}

@@ -50,7 +50,8 @@ const bundled = await esbuild({
   stdin: {
     contents:
       "export { TOUGH_QUESTIONS } from './src/data/theology/tough.ts';\n" +
-      "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n",
+      "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n" +
+      "export { PODCAST, EPISODES } from './src/data/episodes.ts';\n",
     resolveDir: rootDir,
     loader: 'ts',
   },
@@ -61,7 +62,9 @@ const bundled = await esbuild({
 });
 const tmpFile = path.join(os.tmpdir(), `sp-theology-${process.pid}.mjs`);
 fs.writeFileSync(tmpFile, bundled.outputFiles[0].text);
-const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES } = await import(pathToFileURL(tmpFile).href);
+const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES } = await import(
+  pathToFileURL(tmpFile).href,
+);
 fs.unlinkSync(tmpFile);
 
 const volumesPath = path.join(rootDir, 'src/data/volumes/volumesData.json');
@@ -226,6 +229,54 @@ pages.set('/cross-references', {
       siteNav(),
   ),
 });
+
+/* ---- Podcast: hub + one crawlable page per published episode ---- */
+// Mirrors https://rss.com/podcasts/sauls-podship — the audio itself stays on RSS.com.
+pages.set('/podcast', {
+  head: {
+    title: `${PODCAST.title} | Saul's Podship`,
+    description: clip(PODCAST.description, 155),
+    canonical: `${BASE_URL}/podcast`,
+  },
+  body: wrap(
+    `<main><h1>${esc(PODCAST.title)}</h1>` +
+      `<p><em>${esc(PODCAST.titleUrdu)} — ${esc(PODCAST.tagline)}</em></p>` +
+      `<p>${esc(PODCAST.description)}</p>` +
+      `<h2>All ${EPISODES.length} episodes</h2>` +
+      `<ol>${[...EPISODES]
+        .reverse()
+        .map(
+          (e) =>
+            `<li><a href="/podcast/${e.slug}">Episode ${e.number}: ${esc(e.title)}</a>` +
+            ` — ${esc(e.titleEnglish)} (${esc(e.duration)})</li>`,
+        )
+        .join('')}</ol>` +
+      `<p>RSS feed: <a href="${PODCAST.feedUrl}">${PODCAST.feedUrl}</a></p>` +
+      `<p><a href="${PODCAST.showUrl}">Listen on RSS.com</a></p></main>` +
+      siteNav(),
+  ),
+});
+
+for (const ep of EPISODES) {
+  pages.set(`/podcast/${ep.slug}`, {
+    head: {
+      title: `${ep.titleEnglish} | ${ep.title} | Saul's Podship Podcast`,
+      description: clip(ep.description, 155),
+      canonical: `${BASE_URL}/podcast/${ep.slug}`,
+    },
+    body: wrap(
+      `<main><h1>${esc(ep.title)}</h1>` +
+        `<p><em>${esc(ep.titleRoman)}</em> — ${esc(ep.titleEnglish)}</p>` +
+        `<p>Season 1 · Episode ${ep.number} · ${esc(ep.duration)} · ${esc(ep.publishDate)}</p>` +
+        `<p>${esc(ep.description)}</p>` +
+        `<h2>Key Scriptures</h2><p>${ep.scriptureReferences.map(esc).join(' · ')}</p>` +
+        `<h2>Show notes (Urdu)</h2><div lang="ur" dir="rtl">${esc(ep.notesUrdu).replace(/\n/g, '<br />')}</div>` +
+        `<p><a href="${ep.rssUrl}">Listen to this episode on RSS.com</a></p>` +
+        `<p><a href="/podcast">All episodes</a> · <a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        siteNav(),
+    ),
+  });
+}
 
 /* ---- 1. write pages that have their own head ---- */
 let created = 0;

@@ -26,9 +26,75 @@
   </url>
   <url>
     <loc>https://www.saulspodship.com/podcast</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/kya-sab-kuch-pehle-se-likha-hai</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/aazmaish-mein-ilahi-wadon-ki-haqeeqat</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/khushhali-ki-injeel-ka-fareb</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/yesu-ke-do-mukhtalif-shajra-e-nasab</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/secret-rapture-1830-ka-khwab-ya-haqeeqat</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/bible-aur-ghulami-ki-asal-haqeeqat</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/bible-ki-jangein-aur-ilahi-insaaf</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/aankh-ke-badle-aankh-aur-saza-e-maut</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/masihiyat-mein-talaq-aur-jazbati-shifa</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/kalisia-mein-khawateen-ki-qiyadat</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.saulspodship.com/podcast/hum-jins-parasti-aur-qadeem-mazhabi-behas</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.saulspodship.com/music</loc>
