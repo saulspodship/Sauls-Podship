@@ -276,6 +276,27 @@ export const VolumePage: React.FC = () => {
       {/* 3. Main Volume Body */}
       <div id="volume-content" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
         
+        {/* Interactive overlapped-lifetimes chart */}
+        {slug === 'family-tree-adam-jesus' && (
+          <section id="overlapping-lifetimes" className="pt-8 pb-2 scroll-mt-24">
+            <div className="text-center mb-6">
+              <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[#8B1C2E]">
+                <Network className="w-4 h-4 text-[#D4AF37]" /> Interactive chronology
+              </span>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#4A152C] mt-2">
+                Adam to Jesus: Overlapping Lifetimes
+              </h2>
+              <p className="text-sm text-gray-600 mt-2 mb-6 max-w-3xl mx-auto">
+                Explore which generations lived at the same time. Use the timeline to move through the chronology,
+                play the sequence, or select a person to reveal their contemporaries.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+              <AutoFrame src="/family-tree/adam-to-jesus-overlap.html" title="Interactive overlapping lifetimes map from Adam to Jesus" initial="720px" min={640} />
+            </div>
+          </section>
+        )}
+
         {/* Core Summary / Answer-First Box */}
         {slug === 'biblical-maps' && (
           <section id="biblical-atlas" className="pt-8 pb-2 text-center scroll-mt-24">
