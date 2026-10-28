@@ -48,6 +48,22 @@
       "destination": "/api?originalPath=/Pakistanisingersarchive"
     },
     {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/about/",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
+    },
+    {
+      "source": "/faq/",
+      "destination": "/faq.html"
+    },
+    {
       "source": "/((?!assets/|images/|src/|dist/).*)",
       "destination": "/index.html"
     }

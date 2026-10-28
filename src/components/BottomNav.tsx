@@ -11,11 +11,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home, Globe2, Network, Crown, Video, LayoutGrid, X,
-  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map, GraduationCap, Languages
+  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map, GraduationCap, Languages, Megaphone
 } from 'lucide-react';
 import { SITE } from '../config/site';
+import { PODSHIP_APPS } from '../data/about';
 
 type Item = { to: string; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; static?: boolean; external?: boolean };
+
+const APP_NAV_ICONS: Record<string, Item['icon']> = {
+  'biblical-languages': Languages,
+  'sunday-school': GraduationCap,
+  evangelism: Megaphone,
+  'biblical-cosmos-3d': Globe2,
+};
 
 const TABS: Item[] = [
   { to: '/',                   label: 'Home',        icon: Home },
@@ -33,8 +41,9 @@ const MORE: { heading: string; items: Item[] }[] = [
       { to: '/cross-references',        label: 'Bible Links · Interlinked Cross-References', icon: Network },
       { to: '/kings-of-the-bible',      label: 'Kings of the Bible · Volume 51',         icon: Crown },
       { to: '/encyclopedia/biblical-maps-atlas.html', label: 'Biblical Maps Atlas',       icon: Map, static: true },
-      { to: 'http://saulssundayschool.saulspodship.com', label: "Saul's Sunday School",   icon: GraduationCap, external: true },
-      { to: 'http://biblicallanguages.saulspodship.com', label: 'Biblical Languages',     icon: Languages, external: true },
+      ...PODSHIP_APPS.map((app) => ({
+        to: app.url, label: app.name, icon: APP_NAV_ICONS[app.id] || BookOpen, external: true,
+      })),
     ],
   },
   {

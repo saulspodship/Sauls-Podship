@@ -14,6 +14,7 @@ const distDir = path.resolve(rootDir, 'dist');
 
 // Read volumes and data from src/data/volumes/index.ts or raw JSON
 const volumesDataPath = path.resolve(rootDir, 'src/data/volumes/volumesData.json');
+const podshipApps = JSON.parse(fs.readFileSync(path.resolve(rootDir, 'src/data/podshipApps.json'), 'utf8'));
 let volumes = [];
 if (fs.existsSync(volumesDataPath)) {
   volumes = JSON.parse(fs.readFileSync(volumesDataPath, 'utf8'));
@@ -112,9 +113,16 @@ let llmsTxt = `# Saul's Podship Scriptorium
 - [Scholarly Standards](${BASE_URL}/scholarly-standards): Grammatical-historical hermeneutical framework and original language transliterations.
 - [Punjabi Zaboor](${BASE_URL}/music/punjabi-zaboor): Complete historical record of 150 biblical Psalms in native Punjabi verse (1898–1908).
 - [Pakistani Singers Archive](${BASE_URL}/music/pakistani-singers-archive): Historical archive of South Asian gospel musicians.
+- [About the ministry and its apps](${BASE_URL}/about): The Scriptorium's mission, public subdomains and frequently asked questions.
 
-## All 51 Volumes
+## The Saul's Podship app family
+These free, dedicated sites are Saul's Podship projects, serving readers in Pakistan and worldwide.
 `;
+
+for (const app of podshipApps) {
+  llmsTxt += `- [${app.name}](${app.url}): ${app.description}\n`;
+}
+llmsTxt += '\n## All 51 Volumes\n';
 
 for (const v of volumes) {
   llmsTxt += `- [Vol. ${v.number < 10 ? '0' + v.number : v.number}: ${v.title}](${BASE_URL}/encyclopedia/${v.slug}): ${v.summary || v.overview}\n`;

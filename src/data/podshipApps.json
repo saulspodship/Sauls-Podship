@@ -1,0 +1,34 @@
+[
+  {
+    "id": "biblical-languages",
+    "name": "Biblical Languages",
+    "url": "https://biblicallanguages.saulspodship.com/",
+    "logo": "/images/apps/biblical-languages.webp",
+    "category": "Original-language study",
+    "description": "Study Biblical Hebrew, Koine Greek, Biblical Aramaic and Vulgate Latin through lessons, vocabulary and verse-by-verse tools."
+  },
+  {
+    "id": "sunday-school",
+    "name": "Saul's Sunday School",
+    "url": "https://saulssundayschool.saulspodship.com/",
+    "logo": "/images/apps/sunday-school.webp",
+    "category": "For children & families",
+    "description": "Free, ad-free Bible learning for children ages 3–12, with narrated stories, games, quizzes and memory verses."
+  },
+  {
+    "id": "evangelism",
+    "name": "Evangelism",
+    "url": "https://evangelism.saulspodship.com/",
+    "logo": "/images/apps/evangelism.svg",
+    "category": "Faith in action",
+    "description": "A Scripture-rooted field guide to sharing the gospel with grace, with conversation prompts and practical training resources."
+  },
+  {
+    "id": "biblical-cosmos-3d",
+    "name": "Biblical Cosmos 3D",
+    "url": "https://biblicalcosmos3d.saulspodship.com/",
+    "logo": "/images/apps/biblical-cosmos-3d.svg",
+    "category": "Interactive Bible study",
+    "description": "Explore biblical cosmology and cited Scripture in an interactive 3D interpretation—not a scientific model of the universe."
+  }
+]
