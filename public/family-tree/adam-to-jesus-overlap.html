@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adam to Jesus: Overlapping Lifetimes Map</title>
+<style>
+:root{--bg:#FDFBF7;--fg:#1D2D50;--mut:#6b6256;--card:#fff;--line:#e8dfd1;--bar:#B8893B;--apx:#5b9aa0;--dim:#ddd3bd;--hi:#2f7d6d;--flood:#356b9b;--gold:#8B1C2E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17140f;--fg:#efe7d4;--mut:#a79d86;--card:#221d15;--line:#3a3325;--bar:#d9a849;--apx:#5fa8b0;--dim:#4a4130;--hi:#5fc3ae;--flood:#63a4e8;--gold:#ff7a66}}
+:root[data-theme="dark"]{--bg:#17140f;--fg:#efe7d4;--mut:#a79d86;--card:#221d15;--line:#3a3325;--bar:#d9a849;--apx:#5fa8b0;--dim:#4a4130;--hi:#5fc3ae;--flood:#63a4e8;--gold:#ff7a66}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;line-height:1.45;padding:12px}
+h1{font-size:1.3rem;margin:4px 0}.sub{color:var(--mut);font-size:.88rem;margin:4px 0 8px}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.ctl input{flex:1;min-width:140px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 12px;border-radius:8px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
+.scroll{overflow-x:auto}svg{width:100%;min-width:760px;height:auto;display:block}
+text{fill:var(--fg);font-family:Georgia,serif}.mut{fill:var(--mut)}.row{cursor:pointer}
+.chip{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:.82rem}
+.lg span{display:inline-block;width:14px;height:10px;border-radius:3px;margin:0 4px 0 10px;vertical-align:middle}
+</style></head><body>
+<h1>Adam → Jesus: Overlapping Lifetimes Map</h1>
+<p class="sub">Every bar is one person’s life. Where bars overlap, those people were alive together. Press play, or tap a name to see exactly who they lived alongside.</p>
+<div class="ctl"><button id="play">▶ Play</button><button id="rst">↺ Reset</button><input id="sl" type="range" min="0" max="4040" value="0" aria-label="Year"><b id="yr"></b></div>
+<div class="card lg sub"><span style="background:var(--bar)"></span>ages stated in Genesis<span style="background:var(--apx)"></span>approximate (no ages given)<span style="background:var(--gold)"></span>Jesus<span style="background:var(--flood)"></span>Flood / Exile</div>
+<div class="card scroll"><svg id="svg" role="img" aria-label="Timeline of lifetimes from Adam to Jesus"></svg></div>
+<div class="card" id="alive"></div>
+<div class="card" id="info">Tap a name to see overlaps.</div>
+<p class="sub">Scale: years from creation (AM), with BC shown beneath, following Ussher-style chronology. Adam to Jacob use the ages in Genesis 5 and 11 (Hebrew text; the Septuagint differs). From Judah onward Scripture lists names but not ages, and Matthew’s list skips some generations, so those bars are estimates built from known reign dates and generation spacing. Enoch is shown to age 365, when God took him.</p>
+<script>
+// [name, birthAM, deathAM, approx]
+const P=[['Adam',0,930],['Seth',130,1042],['Enosh',235,1140],['Kenan',325,1235],['Mahalalel',395,1290],['Jared',460,1422],['Enoch',622,987],['Methuselah',687,1656],['Lamech',874,1651],['Noah',1056,2006],['Shem',1558,2158],['Arphaxad',1658,2096],['Shelah',1693,2126],['Eber',1723,2187],['Peleg',1757,1996],['Reu',1787,2026],['Serug',1819,2049],['Nahor',1849,1997],['Terah',1878,2083],['Abraham',2008,2183],['Isaac',2108,2288],['Jacob',2168,2315],
+['Judah',2252,2371,1],['Perez',2275,2395,1],['Hezron',2290,2410,1],['Ram',2370,2480,1],['Amminadab',2440,2550,1],['Nahshon',2480,2590,1],['Salmon',2590,2690,1],['Boaz',2680,2780,1],['Obed',2770,2870,1],['Jesse',2850,2960,1],['David',2919,2989,1],['Solomon',2971,3029,1],['Rehoboam',2988,3046,1],['Abijah',3020,3049,1],['Asa',3025,3090,1],['Jehoshaphat',3055,3115,1],['Joram',3083,3119,1],['Uzziah',3178,3246,1],['Jotham',3221,3262,1],['Ahaz',3242,3278,1],['Hezekiah',3253,3307,1],['Manasseh',3295,3362,1],['Amon',3340,3364,1],['Josiah',3356,3395,1],['Jeconiah',3388,3445,1],['Shealtiel',3400,3465,1],['Zerubbabel',3430,3500,1],['Abiud',3480,3550,1],['Eliakim',3525,3595,1],['Azor',3570,3640,1],['Zadok',3615,3685,1],['Akim',3660,3730,1],['Eliud',3705,3775,1],['Eleazar',3750,3820,1],['Matthan',3810,3880,1],['Jacob (Joseph’s father)',3880,3960,1],['Joseph',3960,4020,1],['Jesus',4000,4033,1]]
+.map(([n,b,d,a])=>({n,b,d,a,l:d-b}));
+const MAX=4040,X0=130,W=850,RH=17,Y0=34,H=Y0+RH*P.length+30,x=y=>X0+y/MAX*W,NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('svg');svg.setAttribute('viewBox','0 0 1000 '+H);
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
+const bot=Y0+RH*P.length;
+for(let y=0;y<=4000;y+=500){el('line',{x1:x(y),x2:x(y),y1:Y0-6,y2:bot,stroke:'var(--line)'});
+ el('text',{x:x(y),y:12,'text-anchor':'middle','font-size':10,class:'mut'}).textContent=y;
+ el('text',{x:x(y),y:24,'text-anchor':'middle','font-size':9,class:'mut'}).textContent=y<4004?(4004-y)+' BC':''}
+const M=[[1656,'🌊 Flood','var(--flood)'],[3418,'Exile','var(--flood)'],[4000,'Jesus born','var(--gold)']];
+M.forEach(([y,t,c],i)=>{el('line',{x1:x(y),x2:x(y),y1:Y0-6,y2:bot,stroke:c,'stroke-width':2.5});
+ el('text',{x:x(y)+(y>3900?-5:5),y:bot+14+(i%2?0:0),'text-anchor':y>3900?'end':'start','font-size':11,style:'fill:'+c+';font-weight:bold'}).textContent=t});
+const bars=[],ages=[];let sel=null,c=0,playing=false,last=0;
+P.forEach((p,i)=>{const y=Y0+i*RH,g=el('g',{class:'row'});
+ el('rect',{x:0,y,width:1000,height:RH,fill:'transparent'},g);
+ el('text',{x:X0-5,y:y+12,'text-anchor':'end','font-size':10.5},g).textContent=p.n;
+ el('rect',{x:x(p.b),y:y+3,width:Math.max(2,x(p.d)-x(p.b)),height:RH-6,rx:3,fill:'none',stroke:'var(--dim)','stroke-dasharray':'2 3'},g);
+ bars.push(el('rect',{x:x(p.b),y:y+3,width:0,height:RH-6,rx:3},g));
+ g.onclick=()=>{sel=sel===i?null:i;draw();info()}});
+const cur=el('line',{y1:Y0-6,y2:bot,stroke:'var(--hi)','stroke-width':2});
+const base=p=>p.n==='Jesus'?'var(--gold)':p.a?'var(--apx)':'var(--bar)';
+function draw(){
+ P.forEach((p,i)=>{const w=c>p.b?Math.max(2,x(Math.min(c,p.d))-x(p.b)):0;
+  const ov=sel!==null&&Math.min(P[sel].d,p.d)>Math.max(P[sel].b,p.b);
+  bars[i].setAttribute('width',w);
+  bars[i].setAttribute('fill',sel===null||ov||i===sel?(i===sel?'var(--hi)':base(p)):'var(--dim)')});
+ cur.setAttribute('x1',x(c));cur.setAttribute('x2',x(c));
+ const bc=4004-c;document.getElementById('yr').textContent='Year '+Math.round(c)+(bc>0?' ('+Math.round(bc)+' BC)':'');
+ document.getElementById('sl').value=c;
+ const al=P.filter(p=>c>=p.b&&c<p.d);
+ let h='<b>Alive now:</b><br>'+(al.map(p=>'<span class="chip">'+p.n+' · '+(p.a?'~':'')+Math.floor(c-p.b)+'</span>').join('')||'—');
+ if(c>=1656&&c<1700)h+='<br><i style="color:var(--flood)">The Flood: only Noah’s family survive (Noah is 600).</i>';
+ document.getElementById('alive').innerHTML=h}
+function info(){const e=document.getElementById('info');if(sel===null){e.textContent='Tap a name to see overlaps.';return}
+ const s=P[sel],t=s.a?'~':'';let h='<b>'+s.n+'</b>: '+t+s.l+' years ('+(s.n==='Enoch'?'taken by God at 365':'AM '+s.b+'–'+s.d)+').<br>';
+ h+=P.map((p,i)=>{if(i===sel)return '';const o=Math.min(s.d,p.d)-Math.max(s.b,p.b);return o>0?'<span class="chip">'+p.n+' · '+(s.a||p.a?'~':'')+o+' yrs together</span>':''}).join('')||'No overlaps';
+ if(s.b<=1656&&s.d>1656)h+='<br>Lived through the Flood.';
+ e.innerHTML=h}
+const pb=document.getElementById('play');
+function tick(t){if(!playing)return;c=Math.min(MAX,c+(t-last)/1000*320);last=t;draw();if(c>=MAX){playing=false;pb.textContent='▶ Play'}else requestAnimationFrame(tick)}
+pb.onclick=()=>{if(c>=MAX)c=0;playing=!playing;pb.textContent=playing?'⏸ Pause':'▶ Play';if(playing){last=performance.now();requestAnimationFrame(tick)}};
+document.getElementById('rst').onclick=()=>{playing=false;pb.textContent='▶ Play';c=0;draw()};
+document.getElementById('sl').oninput=e=>{c=+e.target.value;draw()};
+draw();
+</script></body></html>
