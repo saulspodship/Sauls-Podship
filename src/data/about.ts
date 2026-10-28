@@ -5,26 +5,27 @@ export const PODSHIP_APPS = apps;
 
 export const ABOUT_META = {
   title: "About Saul's Podship | Christian Ministry & Study Apps",
-  description: "Meet Saul's Podship and its free Christian study resources: Biblical Languages, Saul's Sunday School, Evangelism and Biblical Cosmos 3D.",
+  description: "Explore Saul's Podship: Bible study, numerology, word origins, children's learning, evangelism, 3D biblical imagery and FaithConnect Pro.",
   canonical: 'https://www.saulspodship.com/about',
   keywords: [
     "Saul's Podship", 'Christian ministry', 'Bible study apps', 'Biblical Languages',
     "Saul's Sunday School", 'Evangelism field guide', 'Biblical Cosmos 3D',
+    'Biblical Numerology & Etymology', 'Gematria Lab', 'FaithConnect Pro',
     'South Asian Christian heritage',
   ],
   image: 'https://www.saulspodship.com/icons/brand-logo.png',
 };
 
 export const ABOUT_DIRECTORY_INTRO =
-  "From children's Bible learning and original-language study to sharing the gospel and exploring biblical imagery, our dedicated apps serve families, churches and curious readers in Pakistan and around the world.";
+  "From children's Bible learning and original-language study to evangelism, biblical numerology and Christian community, our dedicated apps serve families, churches and curious readers in Pakistan and around the world.";
 
 export const ABOUT_FAQ = {
   eyebrow: 'About the Podship family',
-  summary: "Learn how Saul's Podship's free resources connect Bible study, children's learning, evangelism and interactive exploration.",
+  summary: "Learn how Saul's Podship's resources connect Bible study, children's learning, evangelism, research and Christian community.",
   items: [
     {
       question: "What is Saul's Podship?",
-      answer: "Saul's Podship is an open-access Christian digital ministry and scriptorium, with a 51-volume theological encyclopedia, sacred music and podcasts, and a family of dedicated Bible-learning apps.",
+      answer: "Saul's Podship is an open-access Christian digital ministry and scriptorium, with a 51-volume theological encyclopedia, sacred music and podcasts, and a family of dedicated apps.",
     },
     {
       question: "Which websites are part of Saul's Podship?",
@@ -47,8 +48,16 @@ export const ABOUT_FAQ = {
       answer: 'Biblical Cosmos 3D is an interactive interpretation of biblical cosmological imagery with linked Scripture passages. It is a study aid, not a scientific or scale model of the universe.',
     },
     {
+      question: 'What is Biblical Numerology & Etymology?',
+      answer: 'Gematria Lab is a research workspace for exploring letter values, word histories and biblical text matches with transparent calculations and cited sources. Numerical patterns are not proof of meaning or causation.',
+    },
+    {
+      question: 'What is FaithConnect Pro?',
+      answer: 'FaithConnect Pro brings together a Christian community with career opportunities, networking, learning, prayer and a faith-based marketplace.',
+    },
+    {
       question: "Are Saul's Podship resources free and available worldwide?",
-      answer: "Yes. The Scriptorium and the four apps listed here are free to explore online, serving readers in Pakistan and around the world. Saul's Sunday School also offers narration in English, Urdu, Hindi and Arabic.",
+      answer: "Many Saul's Podship resources, including the Scriptorium, are free to explore online and available to readers around the world. Features and account requirements may vary by app. Saul's Sunday School also offers narration in English, Urdu, Hindi and Arabic.",
     },
   ],
 };
@@ -90,9 +99,9 @@ export function aboutPageSchema() {
             url: app.url,
             description: app.description,
             image: new URL(app.logo, 'https://www.saulspodship.com').href,
-            applicationCategory: 'EducationalApplication',
+            applicationCategory: app.applicationCategory,
             operatingSystem: 'Web browser',
-            isAccessibleForFree: true,
+            ...(app.isAccessibleForFree === null ? {} : { isAccessibleForFree: app.isAccessibleForFree }),
             publisher: organization,
           },
         })),

@@ -5,7 +5,7 @@
 
 import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
-import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages, Megaphone } from 'lucide-react';
+import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages, Megaphone, Calculator, Users } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
 const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'));
@@ -32,6 +32,8 @@ const APP_NAV_ICONS: Record<string, IconType> = {
   'sunday-school': GraduationCap,
   evangelism: Megaphone,
   'biblical-cosmos-3d': Globe2,
+  'biblical-numerology-etymology': Calculator,
+  'faithconnect-pro': Users,
 };
 const isNavGroup = (item: NavItem): item is NavGroup => Array.isArray((item as NavGroup).group);
 
@@ -152,7 +154,7 @@ const NavDropdown: React.FC<{ item: NavGroup; pathname: string }> = ({ item, pat
           open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-1 pointer-events-none'
         }`}
       >
-        <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#1A0812]/97 p-2 text-left shadow-2xl backdrop-blur-xl">
+        <div className="max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-2xl border border-[#D4AF37]/30 bg-[#1A0812]/97 p-2 text-left shadow-2xl backdrop-blur-xl">
           {item.group.map((c) => {
             const CIcon = c.icon;
             const on = leafActive(c, pathname);

@@ -98,6 +98,6 @@ export const FAQ_PAGE_META = {
   title: "Frequently Asked Questions | Saul's Podship",
   description: "Answers about Saul's Podship, its theological encyclopedia, Punjabi Zaboor and free Bible study apps for families and learners worldwide.",
   canonical: 'https://www.saulspodship.com/faq',
-  keywords: ["Saul's Podship FAQ", 'Bible study apps', 'Sunday School', 'Biblical Languages', 'Evangelism', 'Biblical Cosmos 3D'],
+  keywords: ["Saul's Podship FAQ", 'Bible study apps', 'Sunday School', 'Biblical Languages', 'Evangelism', 'Biblical Cosmos 3D', 'Biblical Numerology & Etymology', 'FaithConnect Pro'],
   image: 'https://www.saulspodship.com/icons/brand-logo.png',
 };

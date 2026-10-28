@@ -151,7 +151,7 @@ pages.set('/about', {
       `<h2>Explore the Podship family</h2><p>${esc(ABOUT_DIRECTORY_INTRO)}</p>` +
       `<ul>${PODSHIP_APPS.map((app) =>
         `<li><h3><a href="${esc(app.url)}">${esc(app.name)}</a></h3>` +
-        `<img src="${esc(app.logo)}" alt="${esc(app.name)} logo" width="72" height="72" />` +
+        `<img src="${esc(app.logo)}" alt="" width="72" height="72" />` +
         `<p>${esc(app.description)}</p><p><a href="${esc(app.url)}">${esc(new URL(app.url).hostname)}</a></p></li>`,
       ).join('')}</ul>` +
       `<h2>Explore the Encyclopedia</h2><p><a href="/encyclopedia">Browse the 51-volume catalog</a></p>` +
