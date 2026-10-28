@@ -11,6 +11,7 @@ import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Searc
 const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'));
 import { SITE } from '../config/site';
 import ChromeControls from '../components/ChromeControls';
+import I18nProvider from '../lib/i18n/react';
 import BottomNav from '../components/BottomNav';
 import AscensionSplash from '../components/AscensionSplash';
 import FAQBlock from '../components/FAQBlock';
@@ -419,6 +420,7 @@ export const RootLayout: React.FC = () => {
   };
 
   return (
+    <I18nProvider>
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1D2D50] font-sans antialiased selection:bg-[#4A152C] selection:text-[#E8C96A] pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
       {/* Site-wide splash: plays on every open of the site/app (any link),
           then unmounts. GSAP ascension — Jesus rises, declares, ascends. */}
@@ -721,6 +723,7 @@ export const RootLayout: React.FC = () => {
       <InstallBanner />
       <BottomNav />
     </div>
+    </I18nProvider>
   );
 };
 

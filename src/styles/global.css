@@ -284,3 +284,67 @@ th, td {
   line-height: 2.35;
   font-weight: 400;
 }
+
+/* ===== Site-wide language layer (sp-i18n) ============================
+   The language toggle translates the whole document at runtime (see
+   src/lib/i18n). These rules make the *result* readable: a script change is
+   also a metrics change — Nastaliq needs a deep line box and dies under
+   letter-spacing, Devanagari/Naskh need their own families, and uppercase /
+   nowrap are Latin-only conventions. They are declared here (not only in the
+   JS-injected sheet) so the very first paint after a switch is already
+   correct, and they apply to the prerendered crawler shells too. */
+
+html[data-lang="ur"] body,
+html[data-lang="ur"] #root {
+  font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Jameel Noori Nastaleeq", "Segoe UI", serif;
+}
+html[data-lang="hi"] body,
+html[data-lang="hi"] #root {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", Inter, "Segoe UI", sans-serif;
+}
+html[data-lang="ar"] body,
+html[data-lang="ar"] #root {
+  font-family: "Noto Naskh Arabic", "Traditional Arabic", "Segoe UI", serif;
+}
+
+/* Non-Latin scripts: no letter-spacing, no forced uppercase, generous leading. */
+html[data-lang]:not([data-lang="en"]) * { letter-spacing: normal !important; }
+html[data-lang]:not([data-lang="en"]) .uppercase { text-transform: none; }
+html[data-lang]:not([data-lang="en"]) h1,
+html[data-lang]:not([data-lang="en"]) h2,
+html[data-lang]:not([data-lang="en"]) h3,
+html[data-lang]:not([data-lang="en"]) h4,
+html[data-lang]:not([data-lang="en"]) p,
+html[data-lang]:not([data-lang="en"]) li,
+html[data-lang]:not([data-lang="en"]) td,
+html[data-lang]:not([data-lang="en"]) th,
+html[data-lang]:not([data-lang="en"]) dd,
+html[data-lang]:not([data-lang="en"]) blockquote { line-height: 2.05; }
+html[data-lang]:not([data-lang="en"]) .whitespace-nowrap { white-space: normal; }
+html[data-lang]:not([data-lang="en"]) .truncate { text-overflow: clip; overflow: visible; }
+/* Fixed-height chips/rows clip Nastaliq's tall glyphs — let them grow. */
+html[data-lang="ur"] .h-8, html[data-lang="ur"] .h-9, html[data-lang="ur"] .h-10,
+html[data-lang="ur"] .h-11, html[data-lang="ur"] .h-12 {
+  height: auto; min-height: 2.5rem; padding-top: .4rem; padding-bottom: .4rem;
+}
+html[data-lang="ur"] .leading-none, html[data-lang="ur"] .leading-tight,
+html[data-lang="ur"] .leading-snug { line-height: 1.9 !important; }
+
+/* Already-translated copy must never be re-translated or restyled as Latin. */
+.urdu, .urdu-body, [translate="no"], [data-sp-notranslate] { unicode-bidi: isolate; }
+
+/* Coverage debugging: localStorage['sp-i18n-debug']='1' outlines every string
+   the dictionary does not yet cover, so gaps can be found on a real page. */
+html[data-sp-i18n-debug="1"] [data-sp-i18n-missing] {
+  outline: 1px dashed rgba(212, 175, 55, .85);
+  outline-offset: 1px;
+  background: rgba(212, 175, 55, .08);
+}
+
+/* RTL chrome: mirror the pieces that are pinned to a physical edge. */
+html[dir="rtl"] .sp-desktop-nav { margin-left: 0; margin-right: auto; }
+html[dir="rtl"] body { text-align: right; }
+html[dir="rtl"] .text-left { text-align: right; }
+html[dir="rtl"] .text-right { text-align: left; }
+html[dir="rtl"] table { text-align: right; }
+/* ===== end site-wide language layer ===== */

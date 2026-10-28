@@ -38,6 +38,51 @@ new route `/comparative-apologetics` that hosts the complete interactive codex
   is visually identical to the other four. Do not introduce new colours.
 - Keep the existing four pillars, their links, and their copy unchanged.
 - Preserve `createHashRouter`; do not switch to `createBrowserRouter`.
+- **Do not** add a private translation dictionary anywhere (component, `public/assets/*.js`,
+  or a static module page). The one dictionary lives in `src/data/i18n/` — see
+  [Language layer](#language-layer-sp-i18n). A second copy drifts, and the codex enhancer
+  already proved it.
+- **Do not** hand-edit the generated i18n artifacts: `public/i18n/{ur,hi,ar}.json`,
+  `public/assets/sp-i18n.js`, `src/data/i18n/version.ts`. They are emitted by
+  `scripts/build-i18n.mjs` (and rewritten by every `npm run build` / `npm run dev`).
+
+## Language layer (`sp-i18n`)
+
+The site ships Urdu / Hindi / Arabic alongside English. Translation is **static and
+client-side only** — no translation API, no server round-trip. The dictionary is bundled
+from `src/data/i18n/` into `public/i18n/*.json`; English visitors never download a byte of it.
+
+How it fits together:
+
+| Piece | Path | Role |
+| --- | --- | --- |
+| Dictionary sources (edit these) | `src/data/i18n/dict-{chrome,volumes,pages,modules}.ts` | `[ur, hi, ar]` tuples keyed by the English string |
+| Templated rules (edit these) | `src/data/i18n/patterns.ts` | regex → template for strings built from data (`Vol 12: …`, `Browse 51 Volumes`, `Last Updated: …`, tab titles) |
+| Emitter | `scripts/build-i18n.mjs` (`npm run gen:i18n`) | writes `public/i18n/*.json`, `src/data/i18n/version.ts`, and bundles `public/assets/sp-i18n.js` |
+| Runtime | `src/lib/i18n/{store,engine,react}.ts(x)` | the React translator: `MutationObserver` + per-frame settle passes, `WeakMap` original registry, same-origin iframe walking |
+| Fallback runtime | `src/lib/i18n/standalone.ts` → `public/assets/sp-i18n.js` | `window.__spI18n` for static module docs and the codex enhancer; inside a frame it only sets `lang`/`dir`/fonts and defers to the parent |
+| Gate | `scripts/test-i18n.mjs` (`npm run test:i18n`) | runs inside `npm run build` — fails on stale artifacts, wrong-script values, empty entries, untranslated chrome/volume/module strings |
+| DOM gate (optional) | `scripts/test-i18n-dom.mjs` | jsdom end-to-end proof (needs `npm i -D jsdom`; skips cleanly without it) |
+| Coverage audit | `scripts/harvest-i18n.mjs` | scans `src/` for user-facing strings and reports which have no dictionary entry |
+
+Rules when touching UI text:
+
+1. **Prefer a pattern over a dictionary entry for anything built from data.** Volume
+   numbers, dates, counts and titles are generated, so a literal entry rots the moment a
+   volume is added. Patterns also localise digits (`۵۱` / `५१` / `٥١`).
+2. **A new page/volume/module is not done until its strings translate.** Add entries, run
+   `npm run gen:i18n`, then check `node scripts/harvest-i18n.mjs --missing`.
+3. **Never translate text that is already in the target language.** Mark it
+   `translate="no"` or `data-sp-notranslate` (see `TheologicalArchivePage`, and the `.urdu`
+   / `.urdu-body` classes the engine always skips).
+4. **`codex.html` stays frozen.** It is translated two ways without being edited: the
+   parent engine walks its same-origin iframe, and `podship-enhance.js` injects
+   `sp-i18n.js` for direct visits.
+5. A static module doc gets `<script src="/assets/sp-i18n.js" defer></script>` in `<head>`.
+   Keep it to one reference per page — the gate counts them.
+
+Debugging gaps on the live site: `localStorage['sp-i18n-debug']='1'` (or `?i18n-debug=1`)
+outlines every untranslated node, and `window.__spI18n.report()` lists the misses.
 
 ## Verify before finishing
 

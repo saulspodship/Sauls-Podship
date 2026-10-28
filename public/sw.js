@@ -68,12 +68,18 @@ self.addEventListener('fetch', (event) => {
   }
 
   const isAsset = /\.(css|js|mjs|png|jpe?g|webp|svg|ico|woff2?|manifest)$/i.test(url.pathname);
+  /* Language dictionaries are small, versioned static files (public/i18n/*.json)
+     that the installed app must be able to open offline — otherwise a PWA
+     visitor on a train loses Urdu the moment the network drops. They are
+     cached search-insensitively, so an older ?v= still resolves. */
+  const isI18nDict = url.pathname.startsWith('/i18n/') && url.pathname.endsWith('.json');
+  const cacheable = isAsset || isI18nDict;
   const isLocalPage = url.pathname.startsWith('/music-archive/') || url.pathname === '/Pakistanisingersarchive';
-  if (isAsset || isLocalPage) {
+  if (cacheable || isLocalPage) {
     // stale-while-revalidate for assets and prerendered archive pages
     event.respondWith(
       caches.open(VERSION).then(async (cache) => {
-        let hit = await cache.match(req, { ignoreSearch: isAsset });
+        let hit = await cache.match(req, { ignoreSearch: cacheable });
         // Never serve a poisoned entry: an image/asset path that was once
         // answered by the SPA HTML fallback (status 200, text/html) must be
         // refetched, not replayed as a broken picture.
