@@ -116,7 +116,7 @@ let llmsTxt = `# Saul's Podship Scriptorium
 - [About the ministry and its apps](${BASE_URL}/about): The Scriptorium's mission, public subdomains and frequently asked questions.
 
 ## The Saul's Podship app family
-These free, dedicated sites are Saul's Podship projects, serving readers in Pakistan and worldwide.
+These dedicated sites are Saul's Podship projects, serving readers in Pakistan and worldwide.
 `;
 
 for (const app of podshipApps) {

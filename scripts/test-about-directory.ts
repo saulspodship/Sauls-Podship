@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { MemoryRouter } from 'react-router-dom';
 import { ABOUT_META, PODSHIP_APPS, aboutPageSchema } from '../src/data/about';
 import { FAQ_DATA, FAQ_PAGE_ITEMS, FAQ_PAGE_META, faqSchema } from '../src/data/faq';
+import { AboutPage } from '../src/pages/AboutPage';
 
 const root = process.cwd();
 const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
@@ -13,22 +17,41 @@ const readJsonLd = (html: string, id: string) => {
   return JSON.parse(match[1]);
 };
 
-const expectedHosts = [
-  'biblicallanguages.saulspodship.com',
-  'saulssundayschool.saulspodship.com',
-  'evangelism.saulspodship.com',
-  'biblicalcosmos3d.saulspodship.com',
+const expectedUrls = [
+  'https://biblicallanguages.saulspodship.com/',
+  'https://saulssundayschool.saulspodship.com/',
+  'https://evangelism.saulspodship.com/',
+  'https://biblicalcosmos3d.saulspodship.com/',
+  'https://biblicalnumerologyandetymology.saulspodship.com/',
+  'https://faithconnectpro.saulspodship.com/',
 ].sort();
-assert.deepEqual(PODSHIP_APPS.map((app) => new URL(app.url).hostname).sort(), expectedHosts);
+assert.deepEqual(PODSHIP_APPS.map((app) => app.url).sort(), expectedUrls);
 assert.equal(new Set(PODSHIP_APPS.map((app) => app.id)).size, PODSHIP_APPS.length);
 for (const app of PODSHIP_APPS) {
   assert.equal(new URL(app.url).protocol, 'https:');
   if (app.logo.startsWith('/')) {
-    assert.ok(fs.existsSync(path.join(root, 'public', app.logo.slice(1))), `Missing logo for ${app.name}`);
+    assert.ok(fs.existsSync(path.join(root, 'public', app.logo.slice(1))), `Missing image for ${app.name}`);
   } else {
-    assert.equal(new URL(app.logo).hostname, new URL(app.url).hostname, `Logo must come from ${app.name}'s own site`);
+    assert.equal(new URL(app.logo).hostname, new URL(app.url).hostname, `Image must come from ${app.name}'s own site`);
   }
 }
+
+// Exercise the actual React cards as well as the static crawler-facing HTML below.
+const aboutUi = renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(AboutPage)));
+assert.ok(aboutUi.includes(`>${String(PODSHIP_APPS.length).padStart(2, '0')}</span>`));
+for (const app of PODSHIP_APPS) {
+  assert.ok(aboutUi.includes(`href="${esc(app.url)}" target="_blank" rel="noopener noreferrer"`), `Missing React card for ${app.name}`);
+  assert.ok(aboutUi.includes(esc(app.description)), `Missing React description for ${app.name}`);
+}
+
+const appList = aboutPageSchema()['@graph'].find((node) => node['@type'] === 'ItemList');
+assert.ok(appList?.itemListElement);
+assert.equal(appList.numberOfItems, expectedUrls.length);
+assert.deepEqual(appList.itemListElement.map((entry) => entry.item.url).sort(), expectedUrls);
+const faithConnectSchema = appList.itemListElement.find((entry) => entry.item.url === 'https://faithconnectpro.saulspodship.com/');
+assert.ok(faithConnectSchema);
+assert.equal(faithConnectSchema.item.applicationCategory, 'SocialNetworkingApplication');
+assert.equal('isAccessibleForFree' in faithConnectSchema.item, false, 'Do not claim a price when it is unknown');
 
 const aboutFaq = FAQ_DATA['/about'].items;
 const directoryAnswer = aboutFaq.find((item) => item.question === "Which websites are part of Saul's Podship?");
@@ -37,6 +60,10 @@ for (const app of PODSHIP_APPS) {
   assert.ok(directoryAnswer.answer.includes(app.name));
   assert.ok(directoryAnswer.answer.includes(new URL(app.url).hostname));
 }
+for (const question of ['What is Biblical Numerology & Etymology?', 'What is FaithConnect Pro?']) {
+  assert.ok(aboutFaq.some((item) => item.question === question), `Missing FAQ: ${question}`);
+}
+assert.ok(!aboutFaq.some((item) => item.answer.includes('the four apps')));
 for (const item of aboutFaq) {
   assert.ok(FAQ_PAGE_ITEMS.some((entry) => entry.question === item.question && entry.answer === item.answer));
 }
@@ -61,7 +88,7 @@ assert.ok(aboutHtml.includes(`property="og:url" content="${ABOUT_META.canonical}
 assert.ok(aboutHtml.includes('Explore the Podship family'));
 for (const app of PODSHIP_APPS) {
   assert.ok(aboutHtml.includes(`href="${esc(app.url)}"`), `No crawlable link to ${app.name}`);
-  assert.ok(aboutHtml.includes(`src="${esc(app.logo)}"`), `No original logo for ${app.name}`);
+  assert.ok(aboutHtml.includes(`src="${esc(app.logo)}" alt=""`), `No decorative image for ${app.name}`);
   assert.ok(aboutHtml.includes(esc(app.description)), `Missing description for ${app.name}`);
 }
 assert.deepEqual(readJsonLd(aboutHtml, 'sp-about-apps-jsonld'), aboutPageSchema());
@@ -85,4 +112,4 @@ const sitemap = read('dist/sitemap.xml');
 assert.ok(sitemap.includes(`<loc>${ABOUT_META.canonical}</loc>`));
 assert.ok(sitemap.includes(`<loc>${FAQ_PAGE_META.canonical}</loc>`));
 
-console.log(`[PASS] ${PODSHIP_APPS.length} app links, original logos, About/FAQ structured data, metadata, sitemap and llms.txt agree.`);
+console.log(`[PASS] ${PODSHIP_APPS.length} app links and images, React cards, About/FAQ structured data, metadata, sitemap and llms.txt agree.`);

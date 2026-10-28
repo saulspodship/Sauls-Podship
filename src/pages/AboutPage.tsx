@@ -105,7 +105,7 @@ export const AboutPage: React.FC = () => {
                 <div className="flex items-start gap-3 sm:gap-4">
                   <img
                     src={app.logo}
-                    alt={`${app.name} logo`}
+                    alt=""
                     width="72"
                     height="72"
                     loading="lazy"

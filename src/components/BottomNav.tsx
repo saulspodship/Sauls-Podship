@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home, Globe2, Network, Crown, Video, LayoutGrid, X,
-  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map, GraduationCap, Languages, Megaphone
+  BookOpen, Scale, HelpCircle, Mic, Music, Sparkles, ShieldCheck, Info, Heart, Map, GraduationCap, Languages, Megaphone, Calculator, Users
 } from 'lucide-react';
 import { SITE } from '../config/site';
 import { PODSHIP_APPS } from '../data/about';
@@ -23,6 +23,8 @@ const APP_NAV_ICONS: Record<string, Item['icon']> = {
   'sunday-school': GraduationCap,
   evangelism: Megaphone,
   'biblical-cosmos-3d': Globe2,
+  'biblical-numerology-etymology': Calculator,
+  'faithconnect-pro': Users,
 };
 
 const TABS: Item[] = [
