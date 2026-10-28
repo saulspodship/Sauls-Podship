@@ -79,7 +79,7 @@
       ]
     },
     {
-      "source": "/assets/:file(chrome|site-header|seo-aeo|companion|maps-atlas|prophecy-lens).js",
+      "source": "/assets/:file(chrome|site-header|seo-aeo|companion|maps-atlas|prophecy-lens|sp-i18n).js",
       "headers": [
         {
           "key": "Cache-Control",
@@ -111,6 +111,19 @@
         {
           "key": "Cache-Control",
           "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/i18n/:lang.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
         }
       ]
     }

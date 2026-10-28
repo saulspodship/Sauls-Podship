@@ -1,63 +1,60 @@
 /* ============================================================
    Saul's Podship enhancer — comparative-apologetics add-on
    Injects the shared language (EN/اردو/हिन्दी/العربية) and
-   dark/light toggles at the top, translates section chrome,
-   wires scroll-reveal animations, and shares the main site's
-   sp-lang / sp-theme localStorage preferences.
-   The page's own content markup is never modified.
+   dark/light toggles at the top, wires scroll-reveal animations
+   and the mobile sidebar close control, and shares the main
+   site's sp-lang / sp-theme localStorage preferences.
+
+   LANGUAGE (2026-10-29): this file no longer keeps its own
+   translation table. It loads the site-wide runtime
+   (/assets/sp-i18n.js) and delegates to it, so the codex now
+   translates from the SAME dictionary as every other page —
+   all 400 questions, section chrome, table of contents,
+   sidebar and toolbar, not just the dozen headings the private
+   DICT used to cover. The frozen codex.html is not modified:
+   the runtime is injected from here.
    ============================================================ */
 (function () {
   "use strict";
 
+  var LANG_KEY = "sp-lang";
+  var ORDER = ["en", "ur", "hi", "ar"];
   var RTL = { ur: 1, ar: 1 };
-  // EN → { lang: translation } (exact-match, chrome strings only)
-  var DICT = {
-    "Comparative Apologetics": { ur: "موازنہ دفاعیات", hi: "तुलनात्मक क्षमावाक्य", ar: "الدفاعيّات المقارنة" },
-    "A Christian's Guide to Comparative Apologetics": { ur: "موازنہ دفاعیات کا مسیحی رہنما", hi: "तुलनात्मक क्षमावाक्य का ईसाई मार्गदर्शिका", ar: "دليل المسيحي إلى الدفاعيات المقارنة" },
-    "A Note on Method": { ur: "طریقۂ کار پر نوٹ", hi: "विधि पर टिप्पणी", ar: "ملاحظة في المنهج" },
-    "Points of Critical Inquiry": { ur: "نقدی مطالعے کے نکات", hi: "गहन परीक्षा के बिंदु", ar: "نقاط البحث النقدي" },
-    "Volume I": { ur: "جلد اوّل", hi: "खंड प्रथम", ar: "المجلد الأول" },
-    "Volume II": { ur: "جلد دوم", hi: "खंड द्वितीय", ar: "المجلد الثاني" },
-    "Volume III": { ur: "جلد سوم", hi: "खंड तृतीय", ar: "المجلد الثالث" },
-    "Volume IV": { ur: "جلد چہارم", hi: "खंड चतुर्थ", ar: "المجلد الرابع" },
-    "Islam": { ur: "اسلام", hi: "इस्लाम", ar: "الإسلام" },
-    "Judaism": { ur: "یہودیت", hi: "यहूदी धर्म", ar: "اليهودية" },
-    "Hinduism": { ur: "ہندو مت", hi: "हिन्दू धर्म", ar: "الهندوسية" },
-    "Sikhism": { ur: "سکھ مت", hi: "सिख धर्म", ar: "السيखية" },
-    "Table of Contents": { ur: "فہرست", hi: "विषय-सूची", ar: "جدول المحتويات" },
-    "Search": { ur: "تلاش", hi: "खोज", ar: "بحث" },
-    "Back to top": { ur: "اوپر جائیں", hi: "ऊपर लौटें", ar: "إلى الأعلى" }
-  };
 
   var lang = "en", theme = "light";
   try {
-    lang = localStorage.getItem("sp-lang") || "en";
+    lang = localStorage.getItem(LANG_KEY) || "en";
+    if (ORDER.indexOf(lang) === -1) lang = "en";
     theme = "light"; /* canonical Podship wine/cream look */
   } catch (e) {}
+
+  /* ---- site-wide language runtime ------------------------------------ */
+  function i18n() { return window.__spI18n || null; }
+
+  function loadRuntime() {
+    if (document.getElementById("sp-i18n-runtime")) return;
+    var s = document.createElement("script");
+    s.id = "sp-i18n-runtime";
+    s.src = "/assets/sp-i18n.js";
+    s.defer = true;
+    s.onload = function () { applyLang(lang); };
+    (document.head || document.documentElement).appendChild(s);
+  }
 
   function applyLang(l) {
     document.documentElement.lang = l;
     document.documentElement.dir = RTL[l] ? "rtl" : "ltr";
     document.documentElement.setAttribute("data-lang", l);
-    // restore previous
-    Array.prototype.forEach.call(document.querySelectorAll("[data-sp-i18n]"), function (el) {
-      el.textContent = el.getAttribute("data-sp-orig") || el.textContent;
-      el.removeAttribute("data-sp-i18n");
-    });
-    if (l === "en") return;
-    Array.prototype.forEach.call(
-      document.querySelectorAll("h1, h2, h3, .toc a, nav a, button.doc-title, .hero-eyebrow, .section-eyebrow, .section-sub"),
-      function (el) {
-        if (el.children.length && el.tagName !== "A") return;
-        var t = (el.textContent || "").replace(/\s+/g, " ").trim();
-        var hit = DICT[t];
-        if (hit && hit[l]) {
-          el.setAttribute("data-sp-orig", t);
-          el.setAttribute("data-sp-i18n", l);
-          el.textContent = hit[l];
-        }
-      }
-    );
+    try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+    var rt = i18n();
+    if (rt && typeof rt.set === "function") {
+      /* The runtime translates the whole document (chrome, questions,
+         sidebar, toolbar) and keeps the tab title in sync. */
+      rt.set(l);
+      if (typeof rt.rescan === "function") setTimeout(rt.rescan, 60);
+      return;
+    }
+    /* Runtime not loaded yet — it will apply the language on load. */
   }
 
   function applyTheme(t) {
@@ -71,6 +68,7 @@
     if (window.self !== window.top) return; /* embedded: SPA provides the header */
     var bar = document.createElement("div");
     bar.id = "sp-chrome-bar";
+    bar.setAttribute("data-sp-i18n-skip", "1"); /* never translate the language names */
     bar.style.cssText =
       "position:sticky;top:0;z-index:9999;display:flex;align-items:center;justify-content:flex-end;gap:10px;" +
       "padding:8px 18px;background:rgba(22,6,15,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(212,175,55,.28);" +
@@ -80,14 +78,13 @@
       '<img src="/icons/emblem.png" alt="" width="22" height="22" style="border-radius:50%;" />' +
       '<span style="font:700 17px \'EB Garamond\',\'Merriweather\',Georgia,serif;color:#E8C96A;">\u2393 Saul\u2019s Podship</span>' +
       '<span style="font:800 9.5px Inter,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(248,244,227,.5);">Comparative Apologetics Codex</span></a>' +
-      '<select id="sp-lang" aria-label="Language" style="appearance:none;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(212,175,55,.35);border-radius:10px;padding:5px 22px 5px 9px;font:700 12px Inter,sans-serif;cursor:pointer;">' +
-      '<option value="en">English</option><option value="ur">\u0627\u0631\u062F\u0648</option><option value="hi">\u0939\u093f\u0928\u094d\u0926\u0940</option><option value="ar">\u0627\u0644\u0639\u0631\u0628\u064a\u0629</option></select>' +
+      '<select id="sp-lang" data-sp-lang="1" aria-label="Language" style="appearance:none;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(212,175,55,.35);border-radius:10px;padding:5px 22px 5px 9px;font:700 12px Inter,sans-serif;cursor:pointer;">' +
+      '<option value="en">English</option><option value="ur">\u0627\u0631\u062F\u0648</option><option value="hi">\u0939\u093F\u0928\u094D\u0926\u0940</option><option value="ar">\u0627\u0644\u0639\u0631\u0628\u064A\u0629</option></select>' +
       '<button id="sp-theme" aria-label="Toggle dark mode" title="Toggle dark / light" style="background:rgba(255,255,255,.08);border:1px solid rgba(212,175,55,.35);border-radius:10px;padding:5px 10px;cursor:pointer;color:#E8C96A;font-size:14px;">\u263D</button>';
     document.body.insertBefore(bar, document.body.firstChild);
     bar.querySelector("#sp-lang").value = lang;
     bar.querySelector("#sp-lang").addEventListener("change", function () {
       lang = this.value;
-      try { localStorage.setItem("sp-lang", lang); } catch (e) {}
       applyLang(lang);
     });
     bar.querySelector("#sp-theme").addEventListener("click", function () {
@@ -138,11 +135,27 @@
     });
   }
 
+  /* Keep the selector in step when the language changes elsewhere (the app's
+     header, another tab, or the runtime's own storage sync). */
+  function syncSelector(next) {
+    if (ORDER.indexOf(next) === -1) return;
+    lang = next;
+    var sel = document.getElementById("sp-lang");
+    if (sel && sel.value !== next) sel.value = next;
+  }
+
   function boot() {
     mount(); sidebarClose();
     applyTheme(theme);
+    loadRuntime();
     applyLang(lang);
     reveal();
+    window.addEventListener("sp-lang-change", function (e) { syncSelector(e.detail || lang); });
+    window.addEventListener("storage", function (e) {
+      if (e.key !== LANG_KEY || !e.newValue) return;
+      syncSelector(e.newValue);
+      applyLang(e.newValue);
+    });
     // sections added lazily (print modes etc.)
     new MutationObserver(function () { reveal(); }).observe(document.body, { childList: true, subtree: true });
   }

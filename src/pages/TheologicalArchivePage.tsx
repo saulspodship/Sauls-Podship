@@ -272,8 +272,12 @@ function ToughTrack({ focusSlug }: { focusSlug?: string }) {
                 </figure>
 
                 <h4 className="ta-lbl">Common Ground</h4>
+                {/* These cards are already authored in all four languages, one per
+                    line — the site-wide translator must leave them exactly as
+                    written or an Urdu visitor would see the English line
+                    machine-swapped into the Urdu line's place. */}
                 {LANGUAGES.filter((l) => lang === 'all' || l.key === lang).map((l) => (
-                  <p key={l.key} className="ta-lang" dir={l.dir} lang={l.key}>
+                  <p key={l.key} className="ta-lang" dir={l.dir} lang={l.key} translate="no" data-sp-notranslate="">
                     <span className="ta-lang-tag">{l.label}</span>
                     {q.common[l.key]}
                   </p>
