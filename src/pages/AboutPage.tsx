@@ -5,11 +5,18 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, ShieldCheck, Award, Heart, Globe, Compass, ArrowRight } from 'lucide-react';
+import { BookOpen, ShieldCheck, Award, Globe, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ABOUT_DIRECTORY_INTRO, ABOUT_META, PODSHIP_APPS, aboutPageSchema } from '../data/about';
+import { usePageMetadata } from '../lib/usePageMetadata';
+
+const structuredData = JSON.stringify(aboutPageSchema()).replace(/</g, '\\u003c');
 
 export const AboutPage: React.FC = () => {
+  usePageMetadata(ABOUT_META);
+
   return (
     <div className="w-full bg-[#FDFBF7]">
+      <script id="sp-about-apps-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData }} />
       {/* Hero Section */}
       <section className="bg-[#1A0812] text-white py-20 px-4 sm:px-6 lg:px-8 border-b border-[#D4AF37]/30">
         <div className="max-w-4xl mx-auto text-center space-y-4">
@@ -27,7 +34,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 text-gray-800">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 text-gray-800">
         <section className="bg-white p-8 sm:p-10 rounded-3xl border border-gray-200 shadow-sm space-y-6">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#4A152C]">
             The Scriptorium Vision
@@ -64,6 +71,64 @@ export const AboutPage: React.FC = () => {
               All 51 volumes, audio lectures, data tables, and study materials remain completely free and accessible for worldwide research.
             </p>
           </div>
+        </section>
+
+        <section aria-labelledby="podship-family-title" className="relative overflow-hidden rounded-3xl bg-[#1A0812] p-5 sm:p-8 lg:p-10 text-white shadow-xl">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-28 h-64 w-64 rounded-full border border-[#D4AF37]/15" />
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.22em] text-[#E8C96A]">
+                One ministry &middot; many ways to explore
+              </p>
+              <h2 id="podship-family-title" className="mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                Explore the Podship family
+              </h2>
+              <p className="mt-4 text-sm sm:text-base leading-relaxed text-white/75">
+                {ABOUT_DIRECTORY_INTRO}
+              </p>
+            </div>
+            <div className="hidden sm:block shrink-0 border-l border-[#D4AF37]/40 pl-5 text-left">
+              <span className="block font-serif text-4xl leading-none text-[#E8C96A]">{String(PODSHIP_APPS.length).padStart(2, '0')}</span>
+              <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">Dedicated apps</span>
+            </div>
+          </div>
+
+          <div className="relative mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {PODSHIP_APPS.map((app) => (
+              <a
+                key={app.id}
+                href={app.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full min-w-0 flex-col rounded-2xl border border-[#E7DDCA] bg-[#FFFEFB] p-5 text-left text-gray-800 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-[#D4AF37] hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E8C96A]"
+              >
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <img
+                    src={app.logo}
+                    alt={`${app.name} logo`}
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                    className="h-14 w-14 sm:h-[72px] sm:w-[72px] shrink-0 rounded-xl bg-[#F8F4E3] object-contain"
+                  />
+                  <div className="min-w-0 flex-1 pt-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-[#8B6B28]">{app.category}</p>
+                    <h3 className="mt-2 font-serif text-lg sm:text-xl font-bold leading-tight text-[#4A152C]">{app.name}</h3>
+                  </div>
+                  <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 text-[#8B6B28] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+                <p className="mt-5 flex-1 text-sm leading-relaxed text-gray-600">{app.description}</p>
+                <div className="mt-5 flex items-end justify-between gap-3 border-t border-[#EEE6D8] pt-4">
+                  <span className="min-w-0 break-all text-xs font-semibold leading-relaxed text-[#6B4351]">{new URL(app.url).hostname}</span>
+                  <span className="shrink-0 text-xs font-bold text-[#4A152C]">Visit <span aria-hidden="true">&rarr;</span></span>
+                </div>
+                <span className="sr-only">Opens in a new tab</span>
+              </a>
+            ))}
+          </div>
+          <p className="relative mt-5 text-xs leading-relaxed text-white/55">
+            Each app opens on its own Saul's Podship subdomain.
+          </p>
         </section>
 
         <section className="bg-[#4A152C] text-white p-8 sm:p-10 rounded-3xl shadow-md space-y-4">

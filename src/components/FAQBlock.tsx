@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { FAQ_DATA } from '../data/faq';
+import { FAQ_DATA, faqSchema } from '../data/faq';
 
 const FAQ_JSONLD_ID = 'sp-route-faq-jsonld';
 
@@ -15,15 +15,7 @@ const FAQBlock: React.FC = () => {
   // Merge this route's general FAQ into that node there rather than emitting a
   // second FAQPage script on the Biblical Maps volume.
   const volumeOwnsFaqSchema = pathname === '/encyclopedia/biblical-maps';
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: dataset.items.map(({ question, answer }) => ({
-      '@type': 'Question',
-      name: question,
-      acceptedAnswer: { '@type': 'Answer', text: answer },
-    })),
-  };
+  const structuredData = faqSchema(dataset.items);
 
   return (
     <section
@@ -40,7 +32,7 @@ const FAQBlock: React.FC = () => {
       )}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
         <span className="inline-block border border-[#D4AF37] px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8A6B16]">
-          Theological Inquiries
+          {dataset.eyebrow || 'Theological Inquiries'}
         </span>
         <h2 id="theological-inquiries-title" className="font-serif text-2xl sm:text-3xl font-bold text-[#4A152C] mt-3 mb-3">
           Frequently Asked Questions

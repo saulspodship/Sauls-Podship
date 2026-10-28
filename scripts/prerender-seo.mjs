@@ -52,7 +52,9 @@ const bundled = await esbuild({
       "export { TOUGH_QUESTIONS } from './src/data/theology/tough.ts';\n" +
       "export { ARCHIVE_CATEGORIES } from './src/data/theology/archive.ts';\n" +
       "export { PODCAST, EPISODES } from './src/data/episodes.ts';\n" +
-      "export { VIDEO_EPISODES, VIDEO_CHANNEL } from './src/data/videos.ts';\n",
+      "export { VIDEO_EPISODES, VIDEO_CHANNEL } from './src/data/videos.ts';\n" +
+      "export { ABOUT_META, ABOUT_DIRECTORY_INTRO, PODSHIP_APPS, aboutPageSchema } from './src/data/about.ts';\n" +
+      "export { FAQ_DATA, FAQ_PAGE_ITEMS, FAQ_PAGE_META, faqSchema } from './src/data/faq.ts';\n",
     resolveDir: rootDir,
     loader: 'ts',
   },
@@ -63,9 +65,11 @@ const bundled = await esbuild({
 });
 const tmpFile = path.join(os.tmpdir(), `sp-theology-${process.pid}.mjs`);
 fs.writeFileSync(tmpFile, bundled.outputFiles[0].text);
-const { TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES, VIDEO_EPISODES, VIDEO_CHANNEL } = await import(
-  pathToFileURL(tmpFile).href,
-);
+const {
+  TOUGH_QUESTIONS, ARCHIVE_CATEGORIES, PODCAST, EPISODES, VIDEO_EPISODES, VIDEO_CHANNEL,
+  ABOUT_META, ABOUT_DIRECTORY_INTRO, PODSHIP_APPS, aboutPageSchema,
+  FAQ_DATA, FAQ_PAGE_ITEMS, FAQ_PAGE_META, faqSchema,
+} = await import(pathToFileURL(tmpFile).href);
 fs.unlinkSync(tmpFile);
 
 const volumesPath = path.join(rootDir, 'src/data/volumes/volumesData.json');
@@ -105,10 +109,11 @@ const wrap = (inner) =>
   `<div id="root"><div style="max-width:60rem;margin:0 auto;padding:1.25rem;font-family:Georgia,serif;color:#4A152C;background:#F8F4E3;line-height:1.55">${inner}</div></div>`;
 
 /* ---- rewrite <head> for a prerendered page ---- */
-function withHead(html, { title, description, canonical }) {
+function withHead(html, { title, description, canonical, keywords }) {
   let out = html
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`)
-    .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${canonical}" />`)
+    .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${esc(canonical)}" />`)
+    .replace(/(<meta\s+name="title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/i, `$1${esc(description)}$2`)
     .replace(/(<meta\s+property="og:url"\s+content=")[^"]*(")/i, `$1${canonical}$2`)
     .replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
@@ -116,6 +121,9 @@ function withHead(html, { title, description, canonical }) {
     .replace(/(<meta\s+property="twitter:url"\s+content=")[^"]*(")/i, `$1${canonical}$2`)
     .replace(/(<meta\s+property="twitter:title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
     .replace(/(<meta\s+property="twitter:description"\s+content=")[^"]*(")/i, `$1${esc(description)}$2`);
+  if (keywords) {
+    out = out.replace(/(<meta\s+name="keywords"\s+content=")[^"]*(")/i, `$1${esc(keywords.join(', '))}$2`);
+  }
   return out;
 }
 
@@ -126,6 +134,46 @@ const qSlugs = taPaths.filter((p) => p.startsWith('/theological-archive/question
 const cSlugs = taPaths.filter((p) => p.startsWith('/theological-archive/category/')).map((p) => p.split('/').pop());
 
 const pages = new Map(); // route path -> { head, body }
+
+// The HTML, FAQ schema and React UI all use the same app and FAQ data. Keep
+// these scripts inside #root so React replaces the static copies on hydration.
+const jsonLd = (id, data) =>
+  `<script id="${esc(id)}" type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+const faqContent = (items) =>
+  items.map(({ question, answer }) => `<section><h3>${esc(question)}</h3><p>${esc(answer)}</p></section>`).join('');
+
+pages.set('/about', {
+  head: ABOUT_META,
+  body: wrap(
+    `<main><h1>About Saul's Podship Scriptorium</h1>` +
+      `<p>Dedicated to scholarly biblical exegesis, historic Christian theology, and the preservation of indigenous South Asian hymnody.</p>` +
+      `<h2>The Scriptorium Vision</h2><p>Saul's Podship is an open-access digital scriptorium, offering 51 volumes of biblical study, historic theology and original-language research.</p>` +
+      `<h2>Explore the Podship family</h2><p>${esc(ABOUT_DIRECTORY_INTRO)}</p>` +
+      `<ul>${PODSHIP_APPS.map((app) =>
+        `<li><h3><a href="${esc(app.url)}">${esc(app.name)}</a></h3>` +
+        `<img src="${esc(app.logo)}" alt="${esc(app.name)} logo" width="72" height="72" />` +
+        `<p>${esc(app.description)}</p><p><a href="${esc(app.url)}">${esc(new URL(app.url).hostname)}</a></p></li>`,
+      ).join('')}</ul>` +
+      `<h2>Explore the Encyclopedia</h2><p><a href="/encyclopedia">Browse the 51-volume catalog</a></p>` +
+      `<h2>Frequently Asked Questions</h2><p>${esc(FAQ_DATA['/about'].summary)}</p>` +
+      faqContent(FAQ_DATA['/about'].items) +
+      jsonLd('sp-about-apps-jsonld', aboutPageSchema()) +
+      jsonLd('sp-route-faq-jsonld', faqSchema(FAQ_DATA['/about'].items)) +
+      `</main>` + siteNav(),
+  ),
+});
+
+pages.set('/faq', {
+  head: FAQ_PAGE_META,
+  body: wrap(
+    `<main><h1>Frequently Asked Questions</h1>` +
+      `<p>Answers about our theological library, Punjabi Zaboor, free resources and family of Bible study apps.</p>` +
+      faqContent(FAQ_PAGE_ITEMS) +
+      `<p><a href="/about">Explore the Podship family</a></p>` +
+      jsonLd('sp-faq-page-jsonld', faqSchema(FAQ_PAGE_ITEMS)) +
+      `</main>` + siteNav(),
+  ),
+});
 
 for (const slug of qSlugs) {
   const q = TOUGH_QUESTIONS.find((x) => x.slug === slug);
@@ -314,7 +362,13 @@ for (const [route, page] of pages) {
   if (!page.head) continue;
   const file = path.join(distDir, route.replace(/^\//, ''), 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, withHead(template, page.head).replace(EMPTY_ROOT, page.body), 'utf8');
+  const pageHtml = withHead(template, page.head).replace(EMPTY_ROOT, page.body);
+  fs.writeFileSync(file, pageHtml, 'utf8');
+  // Vite preview and Vercel can resolve clean URLs to .html files. Keeping
+  // these copies makes the About/FAQ content available before JavaScript runs.
+  if (route === '/about' || route === '/faq') {
+    fs.writeFileSync(path.join(distDir, `${route.slice(1)}.html`), pageHtml, 'utf8');
+  }
   created++;
 }
 

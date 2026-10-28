@@ -5,7 +5,7 @@
 
 import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigationType, ScrollRestoration } from 'react-router-dom';
-import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages } from 'lucide-react';
+import { BookOpen, Mic, Music, Compass, Info, ShieldCheck, Heart, Menu, X, Search, ChevronRight, ChevronDown, ExternalLink, Globe, Award, Sparkles, Mail, Play, Video, MapPin, Network, Crown, Scale, HelpCircle, Map, Globe2, Music2, GraduationCap, Languages, Megaphone } from 'lucide-react';
 // Floating AI assistant pulls in framer-motion + the full catalogue — load it
 // after first paint instead of inside the critical bundle.
 const ScholarAssistant = lazy(() => import('../../components/ScholarAssistant'));
@@ -14,6 +14,7 @@ import ChromeControls from '../components/ChromeControls';
 import BottomNav from '../components/BottomNav';
 import AscensionSplash from '../components/AscensionSplash';
 import FAQBlock from '../components/FAQBlock';
+import { PODSHIP_APPS } from '../data/about';
 
 
 /* ── Header navigation ─────────────────────────────────────────────────
@@ -26,6 +27,12 @@ type IconType = React.ComponentType<{ className?: string; strokeWidth?: number }
 type NavLeaf = { name: string; href: string; icon: IconType; isExternal?: boolean; isStatic?: boolean };
 type NavGroup = { name: string; icon: IconType; group: NavLeaf[] };
 type NavItem = NavLeaf | NavGroup;
+const APP_NAV_ICONS: Record<string, IconType> = {
+  'biblical-languages': Languages,
+  'sunday-school': GraduationCap,
+  evangelism: Megaphone,
+  'biblical-cosmos-3d': Globe2,
+};
 const isNavGroup = (item: NavItem): item is NavGroup => Array.isArray((item as NavGroup).group);
 
 /** A leaf is "on" when the current path is it, or sits underneath it. */
@@ -45,8 +52,9 @@ const NAV_ITEMS: NavItem[] = [
       { name: 'Comparative Apologetics', href: '/comparative-apologetics', icon: Scale },
       { name: 'Theological Archive', href: '/theological-archive', icon: HelpCircle },
       { name: 'Biblical Maps Atlas', href: '/encyclopedia/biblical-maps-atlas.html', icon: Map, isStatic: true },
-      { name: "Saul's Sunday School", href: 'http://saulssundayschool.saulspodship.com', icon: GraduationCap, isExternal: true },
-      { name: 'Biblical Languages', href: 'http://biblicallanguages.saulspodship.com', icon: Languages, isExternal: true },
+      ...PODSHIP_APPS.map((app) => ({
+        name: app.name, href: app.url, icon: APP_NAV_ICONS[app.id] || BookOpen, isExternal: true,
+      })),
     ],
   },
   {

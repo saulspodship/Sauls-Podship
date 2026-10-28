@@ -35,6 +35,7 @@
     "build": "node scripts/gen-volume-index.mjs && node scripts/check-links.mjs && tsc --noEmit && vite build && node scripts/postbuild.mjs && node scripts/prerender-music.mjs && node scripts/prerender-seo.mjs && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "test": "node scripts/test-hero-variants.mjs",
+    "test:about": "tsx scripts/test-about-directory.ts",
     "verify": "node scripts/verify-codex.mjs",
     "preview": "vite preview",
     "lint": "tsc --noEmit",

@@ -24,14 +24,19 @@ npm run dev        # dev server on :3000 (tsz server.ts behind gen-volume-index)
 | `npm start` | Run the built server (`dist/server.cjs`) |
 | `npm run lint` | Type-check (`tsc --noEmit`) |
 | `npm test` | Hero-variant integrity test (unique MD5s per variant) |
+| `npm run test:about` | After building, checks the app directory, FAQs, structured data and crawler output |
 | `npm run verify` | Codex integrity gate (`scripts/verify-codex.mjs`, 400/400 cards) |
 | `npm run gen:volumes` | Regenerate `src/data/volumes/volumeIndex.json` |
 
 ## Verify before finishing (required)
 
 ```bash
-npm run lint && npm test && npm run verify && npm run build
+npm run lint && npm test && npm run verify && npm run build && npm run test:about
 ```
+
+## About page: public app directory
+
+`src/data/podshipApps.json` is the shared list of verified public subdomain apps. The About page, navigation, FAQ answers, structured data, prerendered HTML and generated `llms.txt` use this list. Add or change a product there only after checking its public URL and official logo. The locally hosted Biblical Languages and Sunday School WebP icons are optimized from their original 192px app icons ([Biblical Languages](https://biblicallanguages.saulspodship.com/icon-192.png), [Sunday School](https://saulssundayschool.saulspodship.com/assets/icons/icon-192.png)); the Evangelism and Biblical Cosmos SVG marks are copies of those projects' original icons. The About and FAQ page text and structured-data helpers live in `src/data/about.ts` and `src/data/faq.ts`. Run the build and `npm run test:about` after changes.
 
 ## Repo conventions (read before contributing)
 
