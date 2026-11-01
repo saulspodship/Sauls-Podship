@@ -4,8 +4,18 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>World Faith &amp; Population Map | Saul's Podship</title>
-<meta name="description" content="Interactive world map of faith and population by country, with sources, from Saul's Podship." />
+<meta name="description" content="Explore a country-by-country map of religious affiliation and population, with source notes for Christian, Muslim, Hindu, Buddhist and other communities." />
 <link rel="canonical" href="https://www.saulspodship.com/world-religion-map" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.saulspodship.com/world-religion-map" />
+<meta property="og:title" content="World Faith &amp; Population Map | Saul's Podship" />
+<meta property="og:description" content="Explore a country-by-country map of religious affiliation and population, with source notes for Christian, Muslim, Hindu, Buddhist and other communities." />
+<meta property="og:image" content="https://www.saulspodship.com/icons/brand-logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://www.saulspodship.com/world-religion-map" />
+<meta name="twitter:title" content="World Faith &amp; Population Map | Saul's Podship" />
+<meta name="twitter:description" content="Explore a country-by-country map of religious affiliation and population, with source notes for Christian, Muslim, Hindu, Buddhist and other communities." />
+<meta name="twitter:image" content="https://www.saulspodship.com/icons/brand-logo.png" />
 <style>
   html, body { margin: 0; background: #F8F4E3; color: #4A152C; font-family: 'EB Garamond', Georgia, serif; }
   .wrap { max-width: 1400px; margin: 0 auto; padding: 1rem 1rem 1.5rem; }
@@ -16,7 +26,7 @@
 </style>
 <script src="/assets/sp-i18n.js" defer></script></head>
 <body>
-<div class="wrap"><div id="worldmap"></div></div>
+<div class="wrap"><h1 style="margin:0 0 .5rem;font:800 1.35rem Inter,system-ui,sans-serif;text-align:center">World Religion &amp; Population Map</h1><div id="worldmap"></div></div>
 <script type="module">
   import { renderWorldReligionMap } from '../cross-references/engine/worldmap.js';
   renderWorldReligionMap(document.getElementById('worldmap'), { baseUrl: '../cross-references/data' })

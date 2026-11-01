@@ -18,7 +18,7 @@ export function usePageMetadata(meta: PageMetadata) {
     const homeUrl = 'https://www.saulspodship.com/';
     const restoreHome = previousCanonical !== homeUrl;
     const homeTitle = "Saul's Podship | Interactive Theological Encyclopedia";
-    const homeDescription = "Saul's Podship is an interactive theological encyclopedia and digital ministry. Explore 51 volumes of visual Bible study, Christian history, gospel music archives, and deep biblical narratives to worship in Spirit and Truth.";
+    const homeDescription = "Explore 51 volumes of visual Bible study, Christian history, gospel music archives and biblical narratives in Saul's Podship's theological encyclopedia.";
     const homeSocialDescription = 'Explore 51 volumes of visual Bible study, Christian history, gospel music archives, and deep biblical narratives to worship in Spirit and Truth.';
     const homeImage = `${homeUrl}icons/brand-logo.png`;
 

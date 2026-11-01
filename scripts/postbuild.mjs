@@ -25,6 +25,17 @@ if (fs.existsSync(volumesDataPath)) {
 
 console.log(`[POSTBUILD] Starting build artifact generation for ${volumes.length} volumes...`);
 
+const clipText = (value, limit) => {
+  const text = String(value || '').replace(/\s+/g, ' ').trim();
+  if (text.length <= limit) return text;
+  return `${text.slice(0, limit - 1).replace(/\s+\S*$/, '')}…`;
+};
+const escapeHtmlAttribute = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const replaceMeta = (html, attr, key, value) => html.replace(
+  new RegExp(`(<meta\\s+${attr}="${key}"\\s+content=")[^"]*(")`, 'i'),
+  `$1${escapeHtmlAttribute(value)}$2`,
+);
+
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
@@ -171,15 +182,39 @@ for (const v of volumes) {
     fs.mkdirSync(volDir, { recursive: true });
   }
 
-  const volTitle = `${v.title} | Volume ${v.number < 10 ? '0' + v.number : v.number} Theological Encyclopedia | Saul's Podship`;
-  const volDesc = v.metaDescription || v.summary || v.overview;
+  const volTitle = clipText(`${v.title} | Vol ${v.number} | Saul's Podship`, 60);
+  const volDesc = clipText(v.metaDescription || v.summary || v.overview, 155);
   const volCanonical = `${BASE_URL}/encyclopedia/${v.slug}`;
 
-  // Replace title, description, canonical
+  // Keep standard, social and canonical metadata in sync on each static URL.
   let volHtml = baseTemplate
-    .replace(/<title>.*?<\/title>/i, `<title>${volTitle}</title>`)
-    .replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/i, `<meta name="description" content="${volDesc.replace(/"/g, '&quot;')}" />`)
+    .replace(/<title>.*?<\/title>/i, `<title>${escapeHtmlAttribute(volTitle)}</title>`)
     .replace(/<link\s+rel="canonical"\s+href=".*?"\s*\/?>/i, `<link rel="canonical" href="${volCanonical}" />`);
+  volHtml = replaceMeta(volHtml, 'name', 'title', volTitle);
+  volHtml = replaceMeta(volHtml, 'name', 'description', volDesc);
+  volHtml = replaceMeta(volHtml, 'property', 'og:url', volCanonical);
+  volHtml = replaceMeta(volHtml, 'property', 'og:title', volTitle);
+  volHtml = replaceMeta(volHtml, 'property', 'og:description', volDesc);
+  volHtml = replaceMeta(volHtml, 'property', 'twitter:url', volCanonical);
+  volHtml = replaceMeta(volHtml, 'property', 'twitter:title', volTitle);
+  volHtml = replaceMeta(volHtml, 'property', 'twitter:description', volDesc);
+  const volumeSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: v.title,
+    description: volDesc,
+    mainEntityOfPage: volCanonical,
+    author: { '@type': 'Person', name: 'Solat Nadeem' },
+    publisher: {
+      '@type': 'Organization',
+      name: "Saul's Podship",
+      url: `${BASE_URL}/`,
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/icons/brand-logo.png` },
+    },
+    ...(v.lastUpdated ? { dateModified: v.lastUpdated } : {}),
+  };
+  const volumeJsonLd = `<script type="application/ld+json">${JSON.stringify(volumeSchema).replace(/</g, '\\u003c')}</script>`;
+  volHtml = volHtml.replace('</head>', `${volumeJsonLd}\n</head>`);
 
   fs.writeFileSync(path.join(volDir, 'index.html'), volHtml, 'utf8');
 
@@ -218,11 +253,13 @@ for (const p of staticPages) {
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
-  const pageCanonical = `${BASE_URL}${p}`;
-  const pageHtml = baseTemplate.replace(
+  const pageCanonical = `${BASE_URL}${p || '/'}`;
+  let pageHtml = baseTemplate.replace(
     /<link\s+rel="canonical"\s+href=".*?"\s*\/?>/i,
     `<link rel="canonical" href="${pageCanonical}" />`
   );
+  pageHtml = replaceMeta(pageHtml, 'property', 'og:url', pageCanonical);
+  pageHtml = replaceMeta(pageHtml, 'property', 'twitter:url', pageCanonical);
   fs.writeFileSync(path.join(targetDir, 'index.html'), pageHtml, 'utf8');
 }
 
