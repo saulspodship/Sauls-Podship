@@ -205,7 +205,7 @@
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://www.saulspodship.com/videos</loc>
+    <loc>https://www.saulspodship.com/videos/</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1148,12 +1148,6 @@
   </url>
   <url>
     <loc>https://www.saulspodship.com/music-archive/pakistani-christian-musicians</loc>
-    <lastmod>2026-09-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.saulspodship.com/music-archive/pakistani-christian-gospel-singers-group</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

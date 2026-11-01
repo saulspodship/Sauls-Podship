@@ -68,7 +68,15 @@ export function aboutPageSchema() {
     '@type': 'Organization',
     name: "Saul's Podship",
     url: 'https://www.saulspodship.com/',
-    logo: ABOUT_META.image,
+    logo: { '@type': 'ImageObject', url: ABOUT_META.image },
+    email: 'solatnadeem@gmail.com',
+    founder: { '@type': 'Person', name: 'Solat Nadeem' },
+    sameAs: [
+      'https://www.youtube.com/@TheSaulsPodship',
+      'https://www.tiktok.com/@saulspodship',
+      'https://www.facebook.com/saulspodship',
+      'https://www.instagram.com/saulspodship/',
+    ],
   };
   const listId = `${ABOUT_META.canonical}#podship-apps`;
 

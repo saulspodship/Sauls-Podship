@@ -36,18 +36,6 @@
       "destination": "/api?originalPath=/api/$1"
     },
     {
-      "source": "/encyclopedia/(.*)",
-      "destination": "/api?originalPath=/encyclopedia/$1"
-    },
-    {
-      "source": "/music-archive/(.*)",
-      "destination": "/api?originalPath=/music-archive/$1"
-    },
-    {
-      "source": "/Pakistanisingersarchive",
-      "destination": "/api?originalPath=/Pakistanisingersarchive"
-    },
-    {
       "source": "/about",
       "destination": "/about.html"
     },
@@ -62,10 +50,6 @@
     {
       "source": "/faq/",
       "destination": "/faq.html"
-    },
-    {
-      "source": "/((?!assets/|images/|src/|dist/).*)",
-      "destination": "/index.html"
     }
   ],
   "headers": [

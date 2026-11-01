@@ -110,17 +110,21 @@ const wrap = (inner) =>
 
 /* ---- rewrite <head> for a prerendered page ---- */
 function withHead(html, { title, description, canonical, keywords }) {
+  // Keep snippets concise and prevent the same long titles/descriptions from
+  // being emitted on dozens of generated pages. Clip at a word boundary.
+  const pageTitle = clip(title, 60);
+  const pageDescription = clip(description, 155);
   let out = html
-    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(pageTitle)}</title>`)
     .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${esc(canonical)}" />`)
-    .replace(/(<meta\s+name="title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/i, `$1${esc(description)}$2`)
-    .replace(/(<meta\s+property="og:url"\s+content=")[^"]*(")/i, `$1${canonical}$2`)
-    .replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/i, `$1${esc(description)}$2`)
-    .replace(/(<meta\s+property="twitter:url"\s+content=")[^"]*(")/i, `$1${canonical}$2`)
-    .replace(/(<meta\s+property="twitter:title"\s+content=")[^"]*(")/i, `$1${esc(title)}$2`)
-    .replace(/(<meta\s+property="twitter:description"\s+content=")[^"]*(")/i, `$1${esc(description)}$2`);
+    .replace(/(<meta\s+name="title"\s+content=")[^"]*(")/i, `$1${esc(pageTitle)}$2`)
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/i, `$1${esc(pageDescription)}$2`)
+    .replace(/(<meta\s+property="og:url"\s+content=")[^"]*(")/i, `$1${esc(canonical)}$2`)
+    .replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/i, `$1${esc(pageTitle)}$2`)
+    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/i, `$1${esc(pageDescription)}$2`)
+    .replace(/(<meta\s+property="twitter:url"\s+content=")[^"]*(")/i, `$1${esc(canonical)}$2`)
+    .replace(/(<meta\s+property="twitter:title"\s+content=")[^"]*(")/i, `$1${esc(pageTitle)}$2`)
+    .replace(/(<meta\s+property="twitter:description"\s+content=")[^"]*(")/i, `$1${esc(pageDescription)}$2`);
   if (keywords) {
     out = out.replace(/(<meta\s+name="keywords"\s+content=")[^"]*(")/i, `$1${esc(keywords.join(', '))}$2`);
   }
@@ -208,7 +212,7 @@ for (const slug of cSlugs) {
   pages.set(p, {
     head: {
       title: `${c.name} — Book-by-Book Bible Study Archive | Saul's Podship`,
-      description: `${c.items.length} study questions and answers for ${c.name}, quoted from the Revised Version (1885/1895).`,
+      description: `Browse ${c.items.length} study questions and answers for ${c.name}, with Revised Version quotations and book-by-book biblical context across Scripture.`,
       canonical: BASE_URL + p,
     },
     body: wrap(
@@ -232,7 +236,11 @@ const archiveLinks = [
   }),
 ].filter(Boolean);
 pages.set('/theological-archive', {
-  head: null, // keep the head postbuild already wrote
+  head: {
+    title: "100 Tough Bible Questions & 1,000 Answers | Saul's Podship",
+    description: 'Explore 100 tough theology questions and 1,000 book-by-book Bible study answers in English, Urdu, Hindi and Arabic across five Christian traditions.',
+    canonical: `${BASE_URL}/theological-archive`,
+  },
   body: wrap(
     `<main><h1>The Tough Questions Archive</h1>` +
       `<p>Answers to ${TOUGH_QUESTIONS.length} of the hardest questions in Christian theology, in English, Urdu, Hindi and Arabic, across five traditions, plus a book-by-book archive of study questions.</p>` +
@@ -244,7 +252,11 @@ pages.set('/theological-archive', {
 
 // Encyclopedia hub: link every volume.
 pages.set('/encyclopedia', {
-  head: null,
+  head: {
+    title: "51-Volume Theological Encyclopedia | Saul's Podship",
+    description: 'Browse 51 scholarly Bible study volumes covering Scripture, theology, Christian history, apologetics, biblical maps and South Asian Christian heritage.',
+    canonical: `${BASE_URL}/encyclopedia`,
+  },
   body: wrap(
     `<main><h1>The 51-Volume Theological Encyclopedia</h1>` +
       list(volumes.map((v) => [`/encyclopedia/${v.slug}`, `Volume ${v.number}: ${v.title}`])) +
@@ -321,7 +333,18 @@ for (const ep of EPISODES) {
         `<h2>Key Scriptures</h2><p>${ep.scriptureReferences.map(esc).join(' · ')}</p>` +
         `<h2>Show notes (Urdu)</h2><div lang="ur" dir="rtl">${esc(ep.notesUrdu).replace(/\n/g, '<br />')}</div>` +
         `<p><a href="${ep.rssUrl}">Listen to this episode on RSS.com</a></p>` +
-        `<p><a href="/podcast">All episodes</a> · <a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        `<p><a href="/podcast">All episodes</a> · <a href="${PODCAST.feedUrl}">RSS feed</a></p>` +
+        jsonLd('sp-podcast-episode-jsonld', {
+          '@context': 'https://schema.org',
+          '@type': 'PodcastEpisode',
+          name: ep.title,
+          description: clip(ep.description, 300),
+          url: `${BASE_URL}/podcast/${ep.slug}`,
+          datePublished: ep.publishDate,
+          episodeNumber: ep.number,
+          timeRequired: `PT${ep.duration.split(':')[0]}M${ep.duration.split(':')[1]}S`,
+          partOfSeries: { '@type': 'PodcastSeries', name: PODCAST.title, url: `${BASE_URL}/podcast` },
+        }) + `</main>` +
         siteNav(),
     ),
   });

@@ -24,6 +24,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.resolve(rootDir, 'dist');
 const BASE_URL = 'https://www.saulspodship.com';
+const redirectSources = new Set(
+  (JSON.parse(fs.readFileSync(path.join(rootDir, 'vercel.json'), 'utf8')).redirects || [])
+    .map((redirect) => redirect.source),
+);
+const clipText = (value, limit) => {
+  const text = String(value || '').replace(/\s+/g, ' ').trim();
+  if (text.length <= limit) return text;
+  return `${text.slice(0, limit - 1).replace(/\s+\S*$/, '')}…`;
+};
+const escapeAttribute = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 const htmlPath = path.join(rootDir, 'public/singers.html');
 if (!fs.existsSync(htmlPath)) {
@@ -117,6 +127,7 @@ const archiveHtml = content.replace(cardLinkRegex, (match, name, middle, bio) =>
   const slug = slugify(name);
   if (
     slug &&
+    !redirectSources.has(`/music-archive/${slug}`) &&
     !slug.includes('directory') &&
     !slug.includes('collection') &&
     !slug.includes('archive') &&
@@ -134,12 +145,15 @@ fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtml, 'utf8');
 // ---- 2. Artist bio pages (mirror the /music-archive/:slug route) ----
 function renderBio(artist) {
   const canonicalSlug = artist.id;
-  const title =
-    artist.metaTitle ||
-    `${artist.name} | Pakistani Christian Gospel Music Archive | Saul's Podship`;
-  const description =
+  const title = clipText(
+    artist.metaTitle || `${artist.name} | Pakistani Gospel Music | Saul's Podship`,
+    60,
+  );
+  const description = clipText(
     artist.metaDescription ||
-    `Biography, musical legacy, and historical recordings of ${artist.name}, ${artist.role} in Pakistani Christian gospel music.`;
+      `Biography, musical legacy, and historical recordings of ${artist.name}, ${artist.role} in Pakistani Christian gospel music.`,
+    155,
+  );
 
   let linksHtml = '';
   if (artist.links && Object.keys(artist.links).length > 0) {
@@ -152,35 +166,55 @@ function renderBio(artist) {
     linksHtml += `</div></div>`;
   }
 
+  const pageUrl = `${BASE_URL}/music-archive/${canonicalSlug}`;
   const personSchema = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Person',
-    'name': artist.name,
-    'description': description,
-    'jobTitle': artist.role,
-    'url': `${BASE_URL}/music-archive/${canonicalSlug}`,
-    'mainEntityOfPage': `${BASE_URL}/music-archive/${canonicalSlug}`
-  });
+    name: artist.name,
+    description,
+    jobTitle: artist.role,
+    url: pageUrl,
+    mainEntityOfPage: pageUrl,
+  }).replace(/</g, '\\u003c');
+  const articleSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${artist.name} — Pakistani Gospel Music Biography`,
+    description,
+    mainEntityOfPage: pageUrl,
+    author: { '@type': 'Organization', name: "Saul's Podship Editorial Team" },
+    publisher: {
+      '@type': 'Organization',
+      name: "Saul's Podship",
+      url: `${BASE_URL}/`,
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/icons/brand-logo.png` },
+    },
+    mainEntity: { '@type': 'Person', name: artist.name },
+  }).replace(/</g, '\\u003c');
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <meta name="description" content="${description}">
+  <title>${escapeAttribute(title)}</title>
+  <meta name="title" content="${escapeAttribute(title)}">
+  <meta name="description" content="${escapeAttribute(description)}">
   <link rel="canonical" href="${BASE_URL}/music-archive/${canonicalSlug}" />
-  <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:title" content="${escapeAttribute(title)}">
+  <meta property="og:description" content="${escapeAttribute(description)}">
   <meta property="og:url" content="${BASE_URL}/music-archive/${canonicalSlug}">
+  <meta property="og:image" content="${BASE_URL}/icons/brand-logo.png">
   <meta property="og:type" content="profile">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeAttribute(title)}">
+  <meta name="twitter:description" content="${escapeAttribute(description)}">
+  <meta name="twitter:image" content="${BASE_URL}/icons/brand-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script type="application/ld+json">${personSchema}</script>
+  <script type="application/ld+json">${articleSchema}</script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -233,7 +267,10 @@ if (fs.existsSync(sitemapPath)) {
   const urls = [
     `${BASE_URL}/Pakistanisingersarchive`,
     ...artists.map((a) => `${BASE_URL}/music-archive/${a.id}`)
-  ].filter((loc) => !xml.includes(`<loc>${loc}</loc>`));
+  ].filter((loc) => {
+    const pathname = new URL(loc).pathname;
+    return !redirectSources.has(pathname) && !xml.includes(`<loc>${loc}</loc>`);
+  });
   const block = urls
     .map(
       (loc) =>

@@ -66,7 +66,7 @@ export function scholarlyLd(meta: PageMeta) {
     "description": meta.description,
     "author": { "@type": "Person", "name": SITE.author },
     "publisher": { "@type": "Organization", "name": SITE.name },
-    "isAccessibleForFree": "true",
+    "isAccessibleForFree": true,
   };
 }
 
