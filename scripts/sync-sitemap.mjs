@@ -14,7 +14,9 @@ const sitemapFiles = [sitemapPath, path.join(dist, 'sitemap-theological-archive.
 const site = 'https://www.saulspodship.com';
 const today = new Date().toISOString().slice(0, 10);
 const sitemap = fs.readFileSync(sitemapPath, 'utf8');
-const redirects = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8')).redirects || [];
+const deploymentConfig = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+const redirects = deploymentConfig.redirects || [];
+const rewrites = deploymentConfig.rewrites || [];
 const redirectedPaths = new Set(redirects.map((item) => item.source).filter((p) => p && !p.includes(':') && !p.includes('(')));
 const normalizePath = (value) => value === '/' ? '/' : value.replace(/\/+$/, '');
 const normalizeUrl = (value) => {
@@ -98,6 +100,13 @@ for (const file of sitemapFiles) {
         ];
     const htmlFile = candidates.find((candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isFile());
     if (!htmlFile) throw new Error(`Sitemap URL has no built static page: ${url}`);
+    if (htmlFile === path.join(dist, `${pathname}.html`)) {
+      const expectedDestination = `${pathname}.html`;
+      const hasRewrite = rewrites.some((rewrite) =>
+        rewrite.source === pathname && rewrite.destination === expectedDestination,
+      );
+      if (!hasRewrite) throw new Error(`Extensionless sitemap URL lacks a deployment rewrite: ${url}`);
+    }
     const html = fs.readFileSync(htmlFile, 'utf8');
     if (/\bnoindex\b/i.test(toRobots(html))) throw new Error(`Noindex page found in sitemap: ${url}`);
     const canonical = toCanonical(html);

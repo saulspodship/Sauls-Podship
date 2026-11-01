@@ -54,7 +54,7 @@ const NAV_ITEMS: NavItem[] = [
       { name: 'Kings of the Bible', href: '/kings-of-the-bible', icon: Crown },
       { name: 'Comparative Apologetics', href: '/comparative-apologetics', icon: Scale },
       { name: 'Theological Archive', href: '/theological-archive', icon: HelpCircle },
-      { name: 'Biblical Maps Atlas', href: '/encyclopedia/biblical-maps-atlas.html', icon: Map, isStatic: true },
+      { name: 'Biblical Maps Atlas', href: '/encyclopedia/biblical-maps-atlas', icon: Map, isStatic: true },
       ...PODSHIP_APPS.map((app) => ({
         name: app.name, href: app.url, icon: APP_NAV_ICONS[app.id] || BookOpen, isExternal: true,
       })),
