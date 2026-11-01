@@ -42,7 +42,7 @@ const MORE: { heading: string; items: Item[] }[] = [
       { to: '/prophecy-map',            label: 'Prophecy Map · Globe & Timeline',        icon: Globe2 },
       { to: '/cross-references',        label: 'Bible Links · Interlinked Cross-References', icon: Network },
       { to: '/kings-of-the-bible',      label: 'Kings of the Bible · Volume 51',         icon: Crown },
-      { to: '/encyclopedia/biblical-maps-atlas.html', label: 'Biblical Maps Atlas',       icon: Map, static: true },
+      { to: '/encyclopedia/biblical-maps-atlas', label: 'Biblical Maps Atlas',       icon: Map, static: true },
       ...PODSHIP_APPS.map((app) => ({
         to: app.url, label: app.name, icon: APP_NAV_ICONS[app.id] || BookOpen, external: true,
       })),

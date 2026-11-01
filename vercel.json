@@ -36,6 +36,10 @@
       "destination": "/api?originalPath=/api/$1"
     },
     {
+      "source": "/encyclopedia/biblical-maps-atlas",
+      "destination": "/encyclopedia/biblical-maps-atlas.html"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     },

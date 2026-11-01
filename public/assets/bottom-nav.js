@@ -20,7 +20,7 @@
     ['/comparative-apologetics', 'Apologetics', I.scale], ['/videos/', 'Videos', I.video]
   ];
   var MORE = [
-    ['Study modules', [['/prophecy-map', 'Prophecy Map · Globe & Timeline'], ['/cross-references', 'Bible Links · Cross-References'], ['/kings-of-the-bible', 'Kings of the Bible · Volume 51'], ['/encyclopedia/biblical-maps-atlas.html', 'Biblical Maps Atlas']]],
+    ['Study modules', [['/prophecy-map', 'Prophecy Map · Globe & Timeline'], ['/cross-references', 'Bible Links · Cross-References'], ['/kings-of-the-bible', 'Kings of the Bible · Volume 51'], ['/encyclopedia/biblical-maps-atlas', 'Biblical Maps Atlas']]],
     ['Listen & watch', [['/podcast', 'Podcast'], ['/music', 'Sacred Music & Zaboor'], ['/studio', 'Scriptorium Studio']]],
     ['Ministry', [['/scholarly-standards', 'Scholarly Standards'], ['/about', 'About Saul’s Podship'], ['https://www.patreon.com/saulspodship', 'Support on Patreon']]]
   ];
