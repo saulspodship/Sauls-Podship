@@ -43,7 +43,7 @@ interface MetaData {
 
 const META: MetaData = {
   title:
-    "400 Comparative Apologetics Questions — Islam, Judaism, Hinduism & Sikhism | Saul's Podship",
+    "400 Comparative Apologetics Questions | Saul's Podship",
   description:
     "A Christian's guide to comparative apologetics: 100 critical questions each on Islam, Judaism, Hinduism and Sikhism, with primary sources, fair representation and a Christian response. Searchable and ranked for Pakistan & India.",
   canonical: "https://www.saulspodship.com/comparative-apologetics",
