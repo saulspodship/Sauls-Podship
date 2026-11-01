@@ -151,7 +151,7 @@ pages.set('/about', {
       `<h2>Explore the Podship family</h2><p>${esc(ABOUT_DIRECTORY_INTRO)}</p>` +
       `<ul>${PODSHIP_APPS.map((app) =>
         `<li><h3><a href="${esc(app.url)}">${esc(app.name)}</a></h3>` +
-        `<img src="${esc(app.logo)}" alt="" width="72" height="72" />` +
+        `<img src="${esc(app.logo)}" alt="${esc(app.name)} logo" width="72" height="72" />` +
         `<p>${esc(app.description)}</p><p><a href="${esc(app.url)}">${esc(new URL(app.url).hostname)}</a></p></li>`,
       ).join('')}</ul>` +
       `<h2>Explore the Encyclopedia</h2><p><a href="/encyclopedia">Browse the 51-volume catalog</a></p>` +
@@ -256,7 +256,7 @@ pages.set('/encyclopedia', {
 // Pages that had no static file at all.
 pages.set('/comparative-apologetics', {
   head: {
-    title: "400 Comparative Apologetics Questions — Islam, Judaism, Hinduism & Sikhism | Saul's Podship",
+    title: "400 Comparative Apologetics Questions | Saul's Podship",
     description:
       "A Christian's guide to comparative apologetics: 100 critical questions each on Islam, Judaism, Hinduism and Sikhism, with primary sources and a Christian response.",
     canonical: `${BASE_URL}/comparative-apologetics`,
@@ -309,7 +309,7 @@ pages.set('/podcast', {
 for (const ep of EPISODES) {
   pages.set(`/podcast/${ep.slug}`, {
     head: {
-      title: `${ep.titleEnglish} | ${ep.title} | Saul's Podship Podcast`,
+      title: clip(`${ep.titleEnglish} | Saul's Podship Podcast`, 70),
       description: clip(ep.description, 155),
       canonical: `${BASE_URL}/podcast/${ep.slug}`,
     },
@@ -351,6 +351,169 @@ for (const v of VIDEO_EPISODES) {
         `<p>The Urdu audio podcast is published separately: ` +
         `<a href="/podcast">all ${EPISODES.length} episodes</a> · ` +
         `<a href="${PODCAST.feedUrl}">RSS feed</a></p></main>` +
+        siteNav(),
+    ),
+  });
+}
+
+
+/* ---- Static routes that previously shipped the generic home shell ----
+ * Ahrefs flagged these as duplicate title / duplicate description / thin
+ * content: they all received the home <title> and a ~58-word nav-only body.
+ * Each now gets its own head and a real, crawlable summary of the page. */
+const para = (...t) => t.map((x) => `<p>${esc(x)}</p>`).join('');
+const simple = (route, head, h1, inner) =>
+  pages.set(route, {
+    head: { ...head, canonical: `${BASE_URL}${route}` },
+    body: wrap(`<main><h1>${esc(h1)}</h1>${inner}</main>` + siteNav()),
+  });
+
+simple('/contact',
+  { title: "Contact the Scriptorium | Saul's Podship", description: 'Send academic feedback, research collaboration requests, theological questions or corrections to the Saul\u2019s Podship editorial team.' },
+  'Contact Saul\u2019s Podship Scriptorium',
+  para(
+    'We welcome academic feedback, research collaborations, theological inquiries and corrections. Saul\u2019s Podship is an open-access digital scriptorium offering a 51-volume theological encyclopedia, a Tough Bible Questions archive, a comparative apologetics codex and a Pakistani Christian gospel music archive.',
+    'Use the correspondence form to report an error in a volume, to suggest a primary source or citation, to propose a research partnership, or to ask a question about the material. Please include the page address and, where relevant, the passage or citation you are writing about so that our editorial team can review it quickly.',
+    'Privacy and data-removal requests are also handled through this page.',
+  ));
+
+simple('/disclaimer',
+  { title: "Theological Disclaimer & Editorial Position | Saul's Podship", description: 'How Saul\u2019s Podship approaches interpretation: historic creedal Christianity, careful exegesis of contested texts, and verified external links.' },
+  'Disclaimer',
+  para(
+    'Saul\u2019s Podship strives to present rigorous, historically informed biblical scholarship. Our editorial board works within classical historic Christian orthodoxy, the creedal Christianity confessed by the early ecumenical councils.',
+    'Interpretations of complex prophetic texts, millenarian viewpoints and ceremonial typology are presented as careful exegesis intended to stimulate study, not as binding dogma. Readers are encouraged to test every claim against Scripture and against the primary sources cited in each volume.',
+    'External links to companion articles, research archives and YouTube masterclasses are provided for educational enrichment and are checked for accuracy. We are not responsible for the content of third-party sites.',
+  ));
+
+simple('/scholarly-standards',
+  { title: "Scholarly Standards & Exegetical Method | Saul's Podship", description: 'The grammatical-historical method, original-language grounding, creedal framework and verified-link policy behind all 51 volumes of the Scriptorium.' },
+  'Scholarly Standards',
+  `<p>${esc('Our academic criteria for biblical exegesis, primary source attribution and theological objectivity.')}</p>` +
+  `<h2>Core exegetical principles</h2>` + para(
+    'We interpret every passage in light of its original historical context, grammatical structure and authorial intent. We reject speculative eisegesis and allegorization that disconnects Scripture from its covenantal setting.') +
+  `<h2>Original-language grounding</h2>` + para(
+    'Doctrinal definitions across the 51 volumes reference the Hebrew (Masoretic Text), Aramaic (Targums and Daniel) and Greek (Novum Testamentum Graece and the Septuagint) with precise transliterations and morphological breakdowns.') +
+  `<h2>Harmony with the historic creeds</h2>` + para(
+    'Our exegesis is framed by the ecumenical orthodoxy of the historic church, including the Apostles\u2019 Creed, the Nicene-Constantinopolitan Creed and the Chalcedonian Definition.') +
+  `<h2>Verified link policy</h2>` + para(
+    'Every external article link and YouTube reference across the volumes is audited for active status. Broken links and speculative URLs are not permitted in the public record.'));
+
+simple('/music',
+  { title: "Sacred Music & Pakistani Gospel Heritage | Saul's Podship", description: 'The 150 Punjabi Zaboor psalms and the living archive of Pakistani Christian gospel composers, classical vocalists and musical families.' },
+  'Sacred Music & Pakistani Gospel Heritage',
+  para(
+    'This section preserves the 150 Punjabi Zaboor and a living archive of Pakistani Christian gospel composers, classical vocalists and musical patriarchs.',
+    'Between 1898 and 1908 Rev. Imam-ud-Din Shahbaz translated and versified all 150 biblical Psalms into native Punjabi meters, paired with classical North Indian ragas such as Bhairavi, Yaman, Pahadi and Kafi, giving Punjabi Christians a liturgy in their mother tongue.',
+    'The Pakistani Gospel Singers Archive documents historic patriarchs, master classical vocalists, pioneer hymn writers and contemporary worship artists across every decade, including the Din family musical dynasty that began with Pastor Jamil-ud-Din of the City Church of Montgomery, today Sahiwal.',
+  ) + `<ul><li><a href="/music/punjabi-zaboor">The Punjabi Zaboor Heritage</a></li><li><a href="/music/pakistani-singers-archive">Pakistani Singers Archive</a></li></ul>`);
+
+simple('/music/punjabi-zaboor',
+  { title: "Punjabi Zaboor: All 150 Psalms in Punjabi Verse | Saul's Podship", description: 'The 1898\u20131908 metrical Punjabi Psalter by Rev. Imam-ud-Din Shahbaz, set to classical ragas, with all 150 Zaboor mapped to the official 1908 repository.' },
+  'The Punjabi Zaboor Heritage',
+  para(
+    'The historic metrical translation of all 150 biblical Psalms by Rev. Imam-ud-Din Shahbaz (1898\u20131908), preserving Scripture in South Asian classical ragas.',
+    'Between 1898 and 1908 the Sialkot Mission in undivided Punjab produced the Punjabi Zaboor. Translating from the Hebrew Masoretic text, Rev. Shahbaz versified all 150 Psalms into traditional Punjabi poetic meters (Bahr).',
+    'Rather than imposing Western hymn tunes, the metrical psalms were deliberately married to native ragas (Bhairavi, Yaman, Pahadi, Kafi), so that Punjabi Christians could worship the God of Abraham, Isaac and Jacob in their own mother tongue.',
+    'Browse or search all 150 metrical Psalms, with direct links to the official punjabizaboor1908.com digital repository, and see arrangers and tabla masters associated with the tradition.',
+  ));
+
+simple('/music/pakistani-singers-archive',
+  { title: "Pakistani Gospel Composers & Singers Directory | Saul's Podship", description: 'A searchable register of the composers, vocalists, musicologists and hymn writers who shaped Pakistani and South Asian Christian music.' },
+  'Pakistani Gospel Composers & Singers Archive',
+  para(
+    'The historical register of the composers, vocalists, musicologists and hymn writers who shaped South Asian gospel music and the metrical Punjabi Zaboor tradition.',
+    'Search the registry by name, era or role, and read biographical monographs on each artist, including their major contributions and honors. A special memorial tribute honors the four-generation Din family musical dynasty, beginning with Pastor Jamil-ud-Din, one of the first pastors of the City Church of Montgomery (present-day Sahiwal).',
+    'The archive is a living research record and is extended as verified information becomes available.',
+  ) + `<p><a href="/Pakistanisingersarchive">Open the full singers archive</a></p>`);
+
+simple('/prophecy-map',
+  { title: "Biblical Prophecy Map: 247 Prophecies Cross-Referenced | Saul's Podship", description: 'An interactive map of 247 biblical prophecies \u2014 fulfilled, partly fulfilled and future \u2014 with 1,063 cross-reference links and a rotatable 3D globe.' },
+  'The Biblical Prophecy Map',
+  para(
+    'A Saul\u2019s Podship study of prophetic fulfilment. The map charts 247 biblical prophecies: 107 fulfilled, 88 fulfilled in part and 52 still awaiting fulfilment.',
+    'Prophecies are woven together by 1,063 cross-references and placed on a rotatable 3D globe, with historical, metaphorical and futurist fulfilment tags on each one. Every thread opens the passage on bible.com so the text can be read in context.',
+    'Use the map to trace how a prophecy is quoted in the New Testament, to compare views on fulfilment, and to see which regions of the world each prophecy concerns.',
+  ));
+
+simple('/kings-of-the-bible',
+  { title: "Kings of the Bible: Every Throne in Order | Saul's Podship", description: 'Every throne in Scripture in canonical order, from Saul to the Herods, with reign lengths, prophets sent and how each reign ended.' },
+  'Kings of the Bible: The Throne Line',
+  para(
+    'Every throne in the Bible in canonical order, beginning with Jesus the Messiah, King of Kings, and running from Saul through the divided kingdoms of Israel and Judah to the Herods and Nero.',
+    'For each reign the chart gives the length of rule, the prophets sent, the wars fought, synchronisms with neighbouring powers and how the reign ended, so that the royal chronology can be read line by line.',
+    'The sequence closes with the last king of Scripture, the Beast, together with the historic interpretations recorded by Irenaeus and Hippolytus.',
+  ));
+
+simple('/support',
+  { title: "Support Free Christian Scholarship | Saul's Podship", description: 'Help keep 51 encyclopedia volumes, podcast masterclasses and the Punjabi Zaboor archive free for pastors, students and missionaries worldwide.' },
+  'Support Saul\u2019s Podship',
+  para(
+    'Every volume in the 51-volume encyclopedia, every podcast masterclass and every digital hymn archive is provided free of charge to pastors, students, missionaries and believers worldwide.',
+    'Supporters finance independent theological research, original Greek and Hebrew linguistic parsing, podcast studio production and the archival scanning of rare South Asian Christian hymnody, through the official Patreon community.',
+    'Your pledge keeps all volumes and scholarly reference tables free from commercial paywalls, and funds the digitizing of the 150 Punjabi Zaboor, their historic meters and the Pakistani Christian artists who sang them.',
+  ));
+
+simple('/studio',
+  { title: "Interactive Theological Studio | Saul's Podship", description: 'Arrange sacred songs in South Asian ragas and search the Scriptorium\u2019s own scholarship on the Research Desk, all in your browser.' },
+  'Interactive Theological Studio',
+  para(
+    'Compose, hear and download sacred songs in South Asian ragas and global gospel, and search the Scriptorium\u2019s own scholarship. Everything runs in your browser.',
+    'Raga-based sacred music arrangement lets you arrange Christian hymns with traditional scales such as Bhairavi, Yaman Kalyan, Bilawal, Khamaj and Kafi, and indigenous rhythms such as Dadra, Keherwa and Roopak.',
+    'The Scriptorium Research Desk searches the 100 Tough Questions, the 1,000-question archive and all 51 volumes, and quotes what the Scriptorium already teaches. It uses no AI, only the sources. Try a passage such as Isaiah 53, a doctrine such as atonement, or a name such as Melchizedek.',
+  ));
+
+simple('/privacy',
+  { title: "Privacy Policy | Saul's Podship", description: 'What Saul\u2019s Podship collects, how cookies and advertising partners are used, and how to request removal of your data.' },
+  'Privacy Policy',
+  para(
+    'Saul\u2019s Podship operates saulspodship.com as a free public theological scriptorium and educational encyclopedia. We are committed to transparency and respect for user privacy.',
+    'No account or registration is needed to read the encyclopedia or listen to the podcast. We only collect information that you voluntarily submit through our contact or newsletter forms.',
+    'We may partner with third-party advertising networks such as Google AdSense, which may use cookies and similar technologies to serve ads based on prior visits. You can manage cookie preferences in your browser settings or in Google Ad Settings.',
+    'For privacy questions or data-removal requests, please use the contact page.',
+  ));
+
+simple('/terms',
+  { title: "Terms of Use | Saul's Podship", description: 'Terms for using the Saul\u2019s Podship encyclopedia, archives and artwork: educational use, attribution and intellectual property.' },
+  'Terms of Use',
+  para(
+    'By using saulspodship.com you accept these terms. The theological manuscripts, data tables and study monographs are published for educational, ecclesiastical and scholarly research, and proper academic attribution is requested when citing Scriptorium materials.',
+    'Historical art assets are in the public domain where so marked. The homepage artwork, The Last Supper (2026), is an original commission created for and owned by Saul\u2019s Podship. Original exegesis and the compilation of the volumes are the copyright of Saul\u2019s Podship.',
+    'See the disclaimer for our editorial position and the privacy policy for how data is handled.',
+  ));
+
+simple('/sitemap',
+  { title: "HTML Site Directory & Sitemap | Saul's Podship", description: 'A complete directory of all 51 theological volumes, archives, music pages and ministry pages on Saul\u2019s Podship.' },
+  'HTML Site Directory & Sitemap',
+  `<p>${esc('A complete structured directory of all 51 theological volumes and ministry pages.')}</p>` +
+  `<h2>Encyclopedia volumes</h2>` + list(volumes.map((v) => [`/encyclopedia/${v.slug}`, `Volume ${v.number}: ${v.title}`])));
+
+
+/* ---- Encyclopedia volumes: unique short title + crawlable body ----
+ * dist/encyclopedia/<slug>/index.html (written by postbuild) is served by
+ * Vercel before the /encyclopedia/* API rewrite, so Ahrefs saw a ~54-word
+ * shell and titles of up to 100 characters. Give each volume a real summary,
+ * key facts and FAQ, and keep the <title> under ~60 characters. */
+for (const v of volumes) {
+  const n = String(v.number).padStart(2, '0');
+  const route = `/encyclopedia/${v.slug}`;
+  if (pages.has(route)) continue;
+  const summary = v.summary || v.overview || '';
+  pages.set(route, {
+    head: {
+      title: `${clip(v.title, 40)} | Vol. ${n} | Saul's Podship`,
+      description: clip(v.metaDescription || summary, 155),
+      canonical: BASE_URL + route,
+      keywords: Array.isArray(v.keywords) ? v.keywords : undefined,
+    },
+    body: wrap(
+      `<main><h1>Volume ${n}: ${esc(v.title)}</h1>` +
+        (v.subtitle ? `<p><em>${esc(v.subtitle)}</em></p>` : '') +
+        `<p>${esc(summary)}</p>` +
+        (v.overview && v.overview !== summary ? `<p>${esc(v.overview)}</p>` : '') +
+        (v.keyFacts && v.keyFacts.length ? `<h2>Key facts</h2><ul>${v.keyFacts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>` : '') +
+        (v.faq && v.faq.length ? `<h2>Frequently asked questions</h2>${v.faq.map((f) => `<section><h3>${esc(f.q)}</h3><p>${esc(f.a)}</p></section>`).join('')}` : '') +
+        `<p><a href="/encyclopedia">Browse all 51 volumes</a></p></main>` +
         siteNav(),
     ),
   });

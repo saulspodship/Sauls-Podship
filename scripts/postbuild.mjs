@@ -194,6 +194,7 @@ for (const v of volumes) {
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="refresh" content="0; url=/encyclopedia/${v.slug}">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="${volCanonical}">
   <title>Redirecting to Volume ${v.number}...</title>
 </head>

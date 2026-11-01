@@ -6,13 +6,22 @@
 <title>The Biblical Atlas — Interactive Journey Maps | Saul's Podship</title>
 <meta name="description" content="Interactive journey maps of the Bible — Abraham, the Exodus, the divided kingdom, Jesus in the Holy Land, Paul's journeys and the seven churches." />
 <link rel="canonical" href="https://www.saulspodship.com/biblical-maps" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Saul's Podship" />
+<meta property="og:url" content="https://www.saulspodship.com/biblical-maps" />
+<meta property="og:title" content="The Biblical Atlas — Interactive Journey Maps | Saul's Podship" />
+<meta property="og:description" content="Interactive journey maps of the Bible — Abraham, the Exodus, the divided kingdom, Jesus in the Holy Land, Paul's journeys and the seven churches." />
+<meta property="og:image" content="https://www.saulspodship.com/icons/brand-logo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"The Biblical Atlas — Interactive Journey Maps","url":"https://www.saulspodship.com/biblical-maps","description":"Interactive journey maps of the Bible — Abraham, the Exodus, the divided kingdom, Jesus in the Holy Land, Paul's journeys and the seven churches.","isPartOf":{"@type":"WebSite","name":"Saul's Podship","url":"https://www.saulspodship.com/"}}</script>
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #F8F4E3; color: #4A152C; font-family: 'EB Garamond', Georgia, 'Times New Roman', serif; }
   .wrap { max-width: 1300px; margin: 0 auto; padding: 1rem .8rem 1.6rem; text-align: center; }
   .kick { font-family: Inter, system-ui, sans-serif; font-size: .62rem; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; color: #7a2743; margin: 0 0 .3rem; }
   h1 { font-size: 1.5rem; font-weight: 800; margin: 0 0 .2rem; text-transform: uppercase; letter-spacing: .02em; }
-  h1 em { color: #b5952f; font-style: normal; }
+  h1 em, .h1like em { color: #b5952f; font-style: normal; }
+  .h1like { font-size: 1.5rem; font-weight: 800; margin: 0 0 .2rem; text-transform: uppercase; letter-spacing: .02em; }
   .sub { font-size: .85rem; color: rgba(42,35,29,.68); margin: 0 auto .9rem; max-width: 70ch; }
   .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; margin-bottom: .8rem; }
   .tabs button { font-family: Inter, system-ui, sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .04em; padding: .42rem .8rem; border-radius: 999px; border: 1px solid rgba(74,21,44,.28); background: #fff; color: #4A152C; cursor: pointer; }
@@ -52,7 +61,7 @@ html.embedded #atlasTop > .kick,html.embedded #atlasTop > h1,html.embedded #atla
   Press <b>Walk the Journey</b> and footsteps trace the route station by station.</p>
   <div class="tabs" id="tabs" role="tablist"></div>
   <div class="frame"><svg id="map" viewBox="0 0 100 100" role="img" aria-label="Biblical study map"></svg>
-    <img id="rimg" alt="" style="width:100%;display:none">
+    <img id="rimg" alt="Illustration of the selected Bible journey" style="width:100%;display:none">
     <svg id="rsvg" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;display:none"><path id="rpath" fill="none" stroke="#9c3b22" stroke-width="2.4" vector-effect="non-scaling-stroke" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/></svg>
     <div id="rlayer" style="position:absolute;inset:0;pointer-events:none;display:none"></div>
   </div>
@@ -347,7 +356,7 @@ boot();
 
 <div class="wrap" id="worldWrap">
   <p class="kick">At the Foot of the Volume</p>
-  <h1>The <em>World</em> Map</h1>
+  <h2 class="h1like">The <em>World</em> Map</h2>
   <p class="sub">Moved to the bottom by design &mdash; after walking the sacred journeys, lift your eyes to the whole world the gospel now covers.</p>
   <div class="frame"><svg id="wmap" viewBox="0 0 1000 500" role="img" aria-label="World map"></svg></div>
   <p class="srcs">Coastlines: Natural Earth 1:110 m (public domain).</p>
