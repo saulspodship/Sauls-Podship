@@ -32,7 +32,7 @@
   "scripts": {
     "dev": "node scripts/gen-volume-index.mjs && node scripts/build-i18n.mjs && tsx server.ts",
     "prebuild": "(python3 -c 'from PIL import Image' 2>/dev/null && python3 scripts/make_hero_variants.py public/images/hero/last-supper-v2-source.jpg public/images/hero last-supper-v2) || echo '[INFO] Skipping image generation (Python PIL not installed)'; node scripts/test-hero-variants.mjs",
-    "build": "node scripts/gen-volume-index.mjs && node scripts/build-i18n.mjs && node scripts/test-i18n.mjs && node scripts/check-links.mjs && tsc --noEmit && vite build && node scripts/postbuild.mjs && node scripts/prerender-music.mjs && node scripts/prerender-seo.mjs && node scripts/sync-sitemap.mjs && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
+    "build": "node scripts/gen-volume-index.mjs && node scripts/build-i18n.mjs && node scripts/test-i18n.mjs && node scripts/check-links.mjs && tsc --noEmit && vite build && node scripts/postbuild.mjs && node scripts/prerender-music.mjs && node scripts/prerender-seo.mjs && node scripts/sync-sitemap.mjs && node scripts/check-seo.mjs && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "test": "node scripts/test-hero-variants.mjs",
     "test:about": "tsx scripts/test-about-directory.ts",
@@ -41,6 +41,7 @@
     "lint": "tsc --noEmit",
     "gen:volumes": "node scripts/gen-volume-index.mjs",
     "gen:i18n": "node scripts/build-i18n.mjs",
+    "check:seo": "node scripts/check-seo.mjs",
     "test:i18n": "node scripts/test-i18n.mjs"
   }
 }

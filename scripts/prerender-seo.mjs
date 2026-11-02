@@ -39,6 +39,41 @@ const clip = (s, n) => {
   return t.slice(0, n).replace(/\s+\S*$/, '') + '…';
 };
 
+/* ---- Article structured data for every prerendered content page ----
+ * Ahrefs Site Audit (2 Nov 2026), "Article page missing schema" (101 URLs):
+ * Ahrefs classifies these deep pages as articles but the only JSON-LD left in
+ * the served HTML was the site-wide WebSite + Organization graph from
+ * index.html — postbuild's per-volume Article block was being overwritten by
+ * this script. Each content page now carries its own Article node with the
+ * headline, description, canonical URL, image, dates, author and publisher. */
+const CONTENT_CREATED = '2026-09-08';
+const CONTENT_UPDATED = '2026-11-02';
+const DEFAULT_ARTICLE_IMAGE = `${BASE_URL}/images/hero-second-coming.jpg`;
+const AUTHOR = { '@type': 'Person', name: 'Solat Nadeem' };
+const PUBLISHER = {
+  '@type': 'Organization',
+  name: "Saul's Podship",
+  url: `${BASE_URL}/`,
+  logo: { '@type': 'ImageObject', url: `${BASE_URL}/icons/brand-logo.png` },
+};
+const absolute = (src) => (src.startsWith('http') ? src : `${BASE_URL}${src.startsWith('/') ? '' : '/'}${src}`);
+const articleSchema = ({ headline, description, url, image, datePublished, dateModified, section }) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: clip(headline, 110),
+  description: clip(description, 300),
+  url,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  image: [image ? absolute(image) : DEFAULT_ARTICLE_IMAGE],
+  datePublished: datePublished || CONTENT_CREATED,
+  dateModified: dateModified || CONTENT_UPDATED,
+  author: AUTHOR,
+  publisher: PUBLISHER,
+  isPartOf: { '@type': 'WebSite', name: "Saul's Podship", url: `${BASE_URL}/` },
+  inLanguage: 'en',
+  ...(section ? { articleSection: section } : {}),
+});
+
 if (!fs.existsSync(path.join(distDir, 'index.html'))) {
   console.error('[PRERENDER-SEO] dist/index.html missing — run vite build first');
   process.exit(1);
@@ -192,6 +227,11 @@ for (const slug of qSlugs) {
       description: clip(q.common.en, 155),
       canonical: BASE_URL + p,
     },
+    article: {
+      headline: q.q,
+      description: q.common.en,
+      section: 'Theological Archive — Tough Bible Questions',
+    },
     body: wrap(
       `<main><h1>${esc(q.q)}</h1><p>${esc(q.common.en)}</p>` +
         (q.ref ? `<p><strong>Scripture:</strong> ${esc(q.ref)}</p>` : '') +
@@ -214,6 +254,11 @@ for (const slug of cSlugs) {
       title: `${c.name} — Book-by-Book Bible Study Archive | Saul's Podship`,
       description: `Browse ${c.items.length} study questions and answers for ${c.name}, with Revised Version quotations and book-by-book biblical context across Scripture.`,
       canonical: BASE_URL + p,
+    },
+    article: {
+      headline: `${c.name} — Book-by-Book Bible Study Archive`,
+      description: `${c.items.length} study questions and answers for ${c.name}, quoted from the Revised Version (1885/1895).`,
+      section: 'Theological Archive — Book-by-Book Study',
     },
     body: wrap(
       `<main><h1>${esc(c.name)}</h1><p>${c.items.length} study questions and answers, quoted from the Revised Version (1885/1895).</p>` +
@@ -241,6 +286,11 @@ pages.set('/theological-archive', {
     description: 'Explore 100 tough theology questions and 1,000 book-by-book Bible study answers in English, Urdu, Hindi and Arabic across five Christian traditions.',
     canonical: `${BASE_URL}/theological-archive`,
   },
+  article: {
+    headline: 'The Tough Questions Archive',
+    description: `Answers to ${TOUGH_QUESTIONS.length} of the hardest questions in Christian theology, in English, Urdu, Hindi and Arabic, across five traditions, plus a book-by-book archive of study questions.`,
+    section: 'Theological Archive',
+  },
   body: wrap(
     `<main><h1>The Tough Questions Archive</h1>` +
       `<p>Answers to ${TOUGH_QUESTIONS.length} of the hardest questions in Christian theology, in English, Urdu, Hindi and Arabic, across five traditions, plus a book-by-book archive of study questions.</p>` +
@@ -250,16 +300,25 @@ pages.set('/theological-archive', {
   ),
 });
 
-// Encyclopedia hub: link every volume.
+// Encyclopedia hub: link every volume, plus the Volume 11 atlas supplement.
+// Ahrefs Site Audit (2 Nov 2026) flagged /encyclopedia/biblical-maps-atlas as an
+// orphan: it was in the sitemap but no crawlable page linked to it.
 pages.set('/encyclopedia', {
   head: {
     title: "51-Volume Theological Encyclopedia | Saul's Podship",
     description: 'Browse 51 scholarly Bible study volumes covering Scripture, theology, Christian history, apologetics, biblical maps and South Asian Christian heritage.',
     canonical: `${BASE_URL}/encyclopedia`,
   },
+  article: {
+    headline: 'The 51-Volume Theological Encyclopedia',
+    description: 'Browse 51 scholarly Bible study volumes covering Scripture, theology, Christian history, apologetics, biblical maps and South Asian Christian heritage.',
+    section: 'Encyclopedia',
+  },
   body: wrap(
     `<main><h1>The 51-Volume Theological Encyclopedia</h1>` +
       list(volumes.map((v) => [`/encyclopedia/${v.slug}`, `Volume ${v.number}: ${v.title}`])) +
+      `<h2>Volume 11 supplement</h2>` +
+      `<ul><li><a href="/encyclopedia/biblical-maps-atlas">Biblical Maps — Interactive Journey Atlas</a> — eight animated study maps with the world faith map at the foot.</li></ul>` +
       `</main>` +
       siteNav(),
   ),
@@ -272,6 +331,12 @@ pages.set('/comparative-apologetics', {
     description:
       "A Christian's guide to comparative apologetics: 100 critical questions each on Islam, Judaism, Hinduism and Sikhism, with primary sources and a Christian response.",
     canonical: `${BASE_URL}/comparative-apologetics`,
+  },
+  article: {
+    headline: 'Comparative Apologetics Codex',
+    description:
+      '400 critical dialogue questions across Islam, Judaism, Hinduism and Sikhism, with primary sources, fair representation and a Christian response.',
+    section: 'Comparative Apologetics',
   },
   body: wrap(
     `<main><h1>Comparative Apologetics Codex</h1><p>400 critical dialogue questions across Islam, Judaism, Hinduism and Sikhism, with primary sources, fair representation and a Christian response.</p></main>` +
@@ -312,6 +377,14 @@ pages.set('/podcast', {
             ` — ${esc(e.titleEnglish)} (${esc(e.duration)})</li>`,
         )
         .join('')}</ol>` +
+      // Ahrefs Site Audit (2 Nov 2026) reported five orphaned /podcast/<slug>
+      // pages: those are the English video masterclasses, which had a rendered
+      // page but no link from the hub. They are listed here now.
+      `<h2>Video masterclasses (${VIDEO_EPISODES.length})</h2>` +
+      `<ol>${VIDEO_EPISODES.map(
+        (v) => `<li><a href="/podcast/${v.slug}">${esc(v.title)}</a> — ${esc(v.subtitle)} (${esc(v.duration)})</li>`,
+      ).join('')}</ol>` +
+      `<p><a href="/videos/">All video masterclasses</a></p>` +
       `<p>RSS feed: <a href="${PODCAST.feedUrl}">${PODCAST.feedUrl}</a></p>` +
       `<p><a href="${PODCAST.showUrl}">Listen on RSS.com</a></p></main>` +
       siteNav(),
@@ -385,11 +458,16 @@ for (const v of VIDEO_EPISODES) {
  * content: they all received the home <title> and a ~58-word nav-only body.
  * Each now gets its own head and a real, crawlable summary of the page. */
 const para = (...t) => t.map((x) => `<p>${esc(x)}</p>`).join('');
-const simple = (route, head, h1, inner) =>
+// `article` in the head config (headline / section / image) makes the writer
+// emit an Article JSON-LD node for the page — see articleSchema() above.
+const simple = (route, head, h1, inner) => {
+  const { article, ...meta } = head;
   pages.set(route, {
-    head: { ...head, canonical: `${BASE_URL}${route}` },
+    head: { ...meta, canonical: `${BASE_URL}${route}` },
+    article: article && { headline: h1, ...article },
     body: wrap(`<main><h1>${esc(h1)}</h1>${inner}</main>` + siteNav()),
   });
+};
 
 simple('/contact',
   { title: "Contact the Scriptorium | Saul's Podship", description: 'Send academic feedback, research collaboration requests, theological questions or corrections to the Saul\u2019s Podship editorial team.' },
@@ -410,7 +488,7 @@ simple('/disclaimer',
   ));
 
 simple('/scholarly-standards',
-  { title: "Scholarly Standards & Exegetical Method | Saul's Podship", description: 'The grammatical-historical method, original-language grounding, creedal framework and verified-link policy behind all 51 volumes of the Scriptorium.' },
+  { title: "Scholarly Standards & Exegetical Method | Saul's Podship", description: 'The grammatical-historical method, original-language grounding, creedal framework and verified-link policy behind all 51 volumes of the Scriptorium.', article: { section: 'About the Scriptorium', description: 'Our academic criteria for biblical exegesis, primary source attribution and theological objectivity across all 51 volumes.' } },
   'Scholarly Standards',
   `<p>${esc('Our academic criteria for biblical exegesis, primary source attribution and theological objectivity.')}</p>` +
   `<h2>Core exegetical principles</h2>` + para(
@@ -451,7 +529,7 @@ simple('/music/pakistani-singers-archive',
   ) + `<p><a href="/Pakistanisingersarchive">Open the full singers archive</a></p>`);
 
 simple('/prophecy-map',
-  { title: "Biblical Prophecy Map: 247 Prophecies Cross-Referenced | Saul's Podship", description: 'An interactive map of 247 biblical prophecies \u2014 fulfilled, partly fulfilled and future \u2014 with 1,063 cross-reference links and a rotatable 3D globe.' },
+  { title: "Biblical Prophecy Map: 247 Prophecies Cross-Referenced | Saul's Podship", description: 'An interactive map of 247 biblical prophecies \u2014 fulfilled, partly fulfilled and future \u2014 with 1,063 cross-reference links and a rotatable 3D globe.', article: { section: 'Scripture Reference Series', image: '/images/hero-prophecy.jpg', description: 'An interactive map of 247 biblical prophecies \u2014 107 fulfilled, 88 fulfilled in part and 52 still awaiting fulfilment \u2014 woven together by 1,063 cross-references on a rotatable 3D globe.' } },
   'The Biblical Prophecy Map',
   para(
     'A Saul\u2019s Podship study of prophetic fulfilment. The map charts 247 biblical prophecies: 107 fulfilled, 88 fulfilled in part and 52 still awaiting fulfilment.',
@@ -460,7 +538,7 @@ simple('/prophecy-map',
   ));
 
 simple('/kings-of-the-bible',
-  { title: "Kings of the Bible: Every Throne in Order | Saul's Podship", description: 'Every throne in Scripture in canonical order, from Saul to the Herods, with reign lengths, prophets sent and how each reign ended.' },
+  { title: "Kings of the Bible: Every Throne in Order | Saul's Podship", description: 'Every throne in Scripture in canonical order, from Saul to the Herods, with reign lengths, prophets sent and how each reign ended.', article: { section: 'Scripture Reference Series', image: '/images/hero-jesus-alpha-omega.jpg' } },
   'Kings of the Bible: The Throne Line',
   para(
     'Every throne in the Bible in canonical order, beginning with Jesus the Messiah, King of Kings, and running from Saul through the divided kingdoms of Israel and Judah to the Herods and Nero.',
@@ -529,6 +607,15 @@ for (const v of volumes) {
       canonical: BASE_URL + route,
       keywords: Array.isArray(v.keywords) ? v.keywords : undefined,
     },
+    // This script overwrites dist/encyclopedia/<slug>/index.html, so the
+    // Article node postbuild wrote there is gone by now — emit it here.
+    article: {
+      headline: `Volume ${n}: ${v.title}`,
+      description: v.metaDescription || summary || v.overview,
+      image: v.heroImage?.src,
+      dateModified: v.lastUpdated,
+      section: `Encyclopedia — Volume ${n}`,
+    },
     body: wrap(
       `<main><h1>Volume ${n}: ${esc(v.title)}</h1>` +
         (v.subtitle ? `<p><em>${esc(v.subtitle)}</em></p>` : '') +
@@ -548,7 +635,16 @@ for (const [route, page] of pages) {
   if (!page.head) continue;
   const file = path.join(distDir, route.replace(/^\//, ''), 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  const pageHtml = withHead(template, page.head).replace(EMPTY_ROOT, page.body);
+  let pageHtml = withHead(template, page.head).replace(EMPTY_ROOT, page.body);
+  if (page.article) {
+    const schema = articleSchema({
+      headline: page.article.headline || page.head.title,
+      description: page.article.description || page.head.description,
+      url: page.head.canonical,
+      ...page.article,
+    });
+    pageHtml = pageHtml.replace('</head>', `${jsonLd('sp-article-jsonld', schema)}\n</head>`);
+  }
   fs.writeFileSync(file, pageHtml, 'utf8');
   // Vite preview and Vercel can resolve clean URLs to .html files. Keeping
   // these copies makes the About/FAQ content available before JavaScript runs.

@@ -138,9 +138,35 @@ const archiveHtml = content.replace(cardLinkRegex, (match, name, middle, bio) =>
   return match;
 });
 
+// Ahrefs Site Audit (2 Nov 2026) reported three orphaned artist pages:
+// /music-archive/imam-ud-din-shahbaz, /music-archive/saleem-raza-noel-dias and
+// /music-archive/robin-ghosh. All three biographies exist, but the archive only
+// linked the card-style entries — the "Historic Pioneers" rows were left with no
+// link, so give every pioneer row the same "Read Biography" link.
+const bioLink = (slug) =>
+  ` <a href="/music-archive/${slug}" style="color:var(--gold-light); font-weight:bold; text-decoration:underline; display:inline-block; margin-left:0.35rem;">Read Biography &amp; Legacy &rarr;</a>`;
+const pioneerRowRegex =
+  /(<div class="pioneer-name">)([\s\S]*?)(<\/div>\s*<div class="pioneer-bio">)([\s\S]*?)(<\/div>)/g;
+const archiveHtmlWithPioneers = archiveHtml.replace(
+  pioneerRowRegex,
+  (match, nameOpen, nameInner, middle, bio, close) => {
+    const nameOnly = nameInner.replace(/<img\b[^>]*>/gi, '').split('<')[0].trim();
+    const slug = slugify(nameOnly);
+    if (
+      !slug ||
+      bio.includes(`/music-archive/${slug}`) ||
+      redirectSources.has(`/music-archive/${slug}`) ||
+      !artists.some((artist) => artist.id === slug)
+    ) {
+      return match;
+    }
+    return `${nameOpen}${nameInner}${middle}${bio}${bioLink(slug)}${close}`;
+  },
+);
+
 const archDir = path.join(distDir, 'Pakistanisingersarchive');
 fs.mkdirSync(archDir, { recursive: true });
-fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtml, 'utf8');
+fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtmlWithPioneers, 'utf8');
 
 // ---- 2. Artist bio pages (mirror the /music-archive/:slug route) ----
 function renderBio(artist) {

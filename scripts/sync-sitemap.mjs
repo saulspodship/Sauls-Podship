@@ -42,7 +42,14 @@ function visit(directory, relative = '') {
       visit(full, rel);
       continue;
     }
-    if (entry.name !== 'index.html') continue;
+    // Directory pages ship as index.html; the standalone module documents
+    // (prophecy-map.html, kings-of-the-bible.html …) ship as flat .html files at
+    // the deploy root. Both are indexable when they declare themselves
+    // canonical, so both are collected — Ahrefs Site Audit (2 Nov 2026) listed
+    // the two flat module docs as "Indexable page not in sitemap".
+    const isIndexPage = entry.name === 'index.html';
+    const isFlatPage = entry.name.endsWith('.html') && !relative;
+    if (!isIndexPage && !isFlatPage) continue;
 
     const html = fs.readFileSync(full, 'utf8');
     if (/\bnoindex\b/i.test(toRobots(html))) continue;
@@ -54,7 +61,10 @@ function visit(directory, relative = '') {
     } catch {
       continue;
     }
-    if (normalizePath(pathname) !== normalizePath(`/${relative}`)) continue;
+    const expectedPath = isIndexPage
+      ? normalizePath(relative ? `/${relative}` : '/')
+      : normalizePath(`/${entry.name}`);
+    if (normalizePath(pathname) !== expectedPath) continue;
     if (redirectedPaths.has(pathname) || redirectedPaths.has(normalizePath(pathname))) continue;
     const loc = canonical;
     if (!listed.has(normalizeUrl(loc))) additions.add(loc);
