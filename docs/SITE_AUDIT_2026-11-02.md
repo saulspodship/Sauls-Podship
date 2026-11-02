@@ -62,6 +62,63 @@ These URLs are served by the sibling subdomain projects, not by this repository
   the links removed there), and `evangelism` links to eight deleted Google Drive
   PDFs.
 
+## Sibling domains — re-check, 2 November 2026 (live)
+
+The 100 sibling rows were re-tested against the deployed sites after their fixes.
+Method: clone + inspect the repos this account can read (`Evangelism`,
+`Biblical-Cosmos-3D`), then the live HTML/metadata for the four private projects
+(`saulssundayschool`, `biblicalnumerologyandetymology`, `biblicallanguages`,
+`faithconnectpro`) — sitemap XML, `<head>` metadata, `<h1>` structure and the
+stale-host links.
+
+| Domain | Rows | Result |
+| --- | --- | --- |
+| `evangelism` | 32 | **Clear.** 11 pages, all self-canonical and in `sitemap.xml` (11 URLs, declared in `robots.txt`); `/library/index.html` 301s to `/library/`; descriptions 120–155; `setting-goals-for-evangelism` title now under 60; all 15 Google Drive anchors removed, local 1200×630 share image. `scripts/validate.py` passes. |
+| `saulssundayschool` | 10 | **Clear.** Sitemap lists `/`, `/apps/`, `/about/`, `/print/`; `/apps/` description 200 → 146; `/print/` is one `<h1>` with `<h2>` per unit (was 91 `<h1>`s); the `studio.` / `gematria-lab.` / `cdn.` links are gone from `/`, `/apps/` and `/about/` — Studio now points at `www.saulspodship.com/studio`, Gematria Lab at `biblicalnumerologyandetymology.saulspodship.com`, and the CDN card is explained rather than linked. |
+| `biblicalnumerologyandetymology` | 40 | **Clear, with one new defect** (below). Sitemap now exists with 66 URLs covering all 20 audited ones (topics and terms are auto-generated, so future terms cannot be missed); `og:image` (`og-image.png`, 1424×752) and `og:site_name` are present on home, `/about`, every `/term/*` and `/topic/*`. |
+| `biblicalcosmos3d` | 1 | **Clear.** One-URL sitemap, declared in `robots.txt`, full head metadata, single `<h1>`; the legacy `Biblical Cosmos 3D.html` is a `noindex` redirect stub. |
+| `biblicallanguages` | 1 | **Clear.** Sitemap + `robots.txt`, self-canonical root, 1200×630 OG image. |
+| `faithconnectpro` | 4 | **Clear.** Sitemap lists `/`, `/about`, `/faq`, `/privacy`; root has full OG/Twitter set with a 1200×630 card. |
+
+### Open: two 404s inside the Gematria Lab sitemap
+
+```
+https://biblicalnumerologyandetymology.saulspodship.com/term/l   404
+https://biblicalnumerologyandetymology.saulspodship.com/term/n   404
+```
+
+Single-letter slugs (the Arabic article and a bare nun) are emitted by the sitemap
+generator from term data that has no resolvable page. This is a *new* row waiting
+to happen — "sitemap contains a URL that returns 4xx". Fix in that project:
+
+1. Build the sitemap from the same resolution used by `/term/[slug]` (only slugs
+   whose page renders, i.e. `terms.filter(t => t.slug && t.gloss)`), not from the
+   raw term list.
+2. Add the check to that project's build/test so a 404 can never be listed again:
+   fetch every sitemap `<loc>` and fail on anything other than 200.
+3. Audit the remaining short slugs the same way (`haqq`, `nur`, `chaser`, `netiv`,
+   `regel`, `shalah`, `davar`, `melekh`, `ish`, `et`, `or` all rendered 200 in the
+   spot checks; `l` and `n` do not).
+
+Minor, not audit rows:
+
+- `/term/*` and `/topic/*` meta descriptions are clipped mid-sentence at ~139–153
+  characters (`… baselines in Gematria`). They pass the length rule but read as
+  broken text; clip on a sentence boundary and end with `…`.
+- The apostrophe slugs `/term/ra'ah` and `/term/sha'al` are emitted unencoded in
+  the sitemap and canonical. They resolve, but `%27` (or an apostrophe-free slug)
+  is the safer form in XML.
+- `saulssundayschool` uses `assets/icons/icon-512.png` as its `og:image` while
+  declaring `twitter:card=summary_large_image`; a 1200×630 card like the other
+  sites' would avoid the cropped preview.
+
+All four private projects (`Gematria-Lab`, `Sauls-Sunday-School`, and the
+languages / FaithConnect repos) are outside this GitHub connection's permissions —
+`gh` returns *Resource not accessible by integration* — so the two 404 slugs above
+must be fixed in those repositories, not here.
+
+## Pre-existing test failure
+
 `npm run test:about` (`scripts/test-about-directory.ts`) fails on this commit
 *before* these changes too: it still expects a `/index.html` SPA-fallback rewrite
 that `vercel.json` no longer declares. It is not part of `npm run build`.
