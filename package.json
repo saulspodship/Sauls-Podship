@@ -42,6 +42,7 @@
     "gen:volumes": "node scripts/gen-volume-index.mjs",
     "gen:i18n": "node scripts/build-i18n.mjs",
     "check:seo": "node scripts/check-seo.mjs",
-    "test:i18n": "node scripts/test-i18n.mjs"
+    "test:i18n": "node scripts/test-i18n.mjs",
+    "test:i18n:site": "node scripts/test-i18n-site.mjs"
   }
 }
