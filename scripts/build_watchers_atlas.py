@@ -247,7 +247,7 @@ for e in OVERRIDES:
             APPLIED.add(key)
 # Keys that fall back to the generic placeholder but belong to a sourced row:
 # point them at that row's real image instead (same subject, honest depiction).
-FALLBACK_FOR = {'Ashtoreth': 'Asherah / Ashtoreth (Astarte)', 'Astarte': 'Asherah / Ashtoreth (Astarte)'}
+FALLBACK_FOR = {'Ashtoreth': 'Asherah', 'Astarte': 'Asherah'}
 for k, src in FALLBACK_FOR.items():
     if k in A_OBJ and src in A_OBJ:
         A_OBJ[k] = dict(A_OBJ[src])
