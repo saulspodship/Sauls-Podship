@@ -333,15 +333,28 @@ APP_JS = r"""
   const resetZoom = () => { scale = 1; panX = 0; panY = 0; apply(); };
   const zoomBy = f => { scale = Math.min(8, Math.max(.25, scale * f)); apply(); };
 
-  /* Keep the viewer pinned to the host page's visible band while it is open. */
+  /* Keep the viewer pinned to the host page's visible band while it is open.
+     The iframe document does not scroll itself (AutoFrame sizes the frame to
+     the content), so "where the host viewport sits inside this document" is
+     simply -rect.top — NOT scrollY - rect.top, which double-counts the host
+     scroll and pushes the viewer far below the document, stretching it (the
+     "endless scrolling" bug) and dragging focus away from the image. */
   let placeScheduled = false;
+  let viewerExtent = 0; // px of document currently occupied by the open viewer
   function placeViewer(){
     if (!embedded) return;
     try {
       const rect = window.frameElement.getBoundingClientRect();
-      const top = Math.max(0, parentWin.scrollY - rect.top);
+      const offset = Math.max(0, -rect.top);
+      const vh = parentWin.innerHeight;
+      // Document height excluding whatever the viewer itself occupies, so the
+      // clamp can never feed its own growth back into the layout.
+      const contentH = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - viewerExtent;
+      const top = Math.max(0, Math.min(offset, contentH - vh));
       viewer.style.top = top + 'px';
-      viewer.style.height = parentWin.innerHeight + 'px';
+      viewer.style.bottom = 'auto';
+      viewer.style.height = vh + 'px';
+      viewerExtent = Math.min(vh, contentH - top);
     } catch (_) { /* cross-origin guard */ }
   }
   function schedulePlace(){
@@ -352,6 +365,7 @@ APP_JS = r"""
   if (embedded) {
     parentWin.addEventListener('scroll', schedulePlace, { passive: true });
     parentWin.addEventListener('resize', schedulePlace);
+    try { new ResizeObserver(schedulePlace).observe(document.body); } catch (_) {}
   }
 
   function openViewer(name){
@@ -374,14 +388,15 @@ APP_JS = r"""
     viewer.classList.add('open');
     document.body.classList.add('viewer-open');
     if (embedded) placeViewer();
-    $('.viewer-close', viewer).focus();
+    $('.viewer-close', viewer).focus({ preventScroll: true });
   }
   function closeViewer(){
     if (document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
     viewer.classList.remove('open');
     document.body.classList.remove('viewer-open');
     viewerImg.removeAttribute('src');
-    if (previousFocus?.focus) previousFocus.focus();
+    viewerExtent = 0;
+    if (previousFocus?.focus) previousFocus.focus({ preventScroll: true });
   }
   function navigate(delta){
     if (!viewerList.length) return;
@@ -706,7 +721,7 @@ details>p{margin:.4em 0;font-size:.88rem;color:#5c5348}
 /* ---------- viewer ---------- */
 #imageViewer{position:fixed;inset:0;z-index:60;display:none;background:rgba(26,8,18,.96);color:var(--cream)}
 #imageViewer.open{display:flex;flex-direction:column}
-#imageViewer.embedded{position:absolute;top:0;height:100vh;inset:auto 0 0 0;width:100%}
+#imageViewer.embedded{position:absolute;top:0;height:800px;inset:auto 0 auto 0;width:100%}
 body.viewer-open{overflow:hidden}
 .viewer-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(74,21,44,.55);border-bottom:1px solid rgba(212,175,55,.3)}
 .viewer-heading{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}

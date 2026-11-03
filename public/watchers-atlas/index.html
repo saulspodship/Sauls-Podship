@@ -141,7 +141,7 @@ details>p{margin:.4em 0;font-size:.88rem;color:#5c5348}
 /* ---------- viewer ---------- */
 #imageViewer{position:fixed;inset:0;z-index:60;display:none;background:rgba(26,8,18,.96);color:var(--cream)}
 #imageViewer.open{display:flex;flex-direction:column}
-#imageViewer.embedded{position:absolute;top:0;height:100vh;inset:auto 0 0 0;width:100%}
+#imageViewer.embedded{position:absolute;top:0;height:800px;inset:auto 0 auto 0;width:100%}
 body.viewer-open{overflow:hidden}
 .viewer-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(74,21,44,.55);border-bottom:1px solid rgba(212,175,55,.3)}
 .viewer-heading{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}
@@ -196,6 +196,8 @@ body.viewer-open{overflow:hidden}
 </head>
 <body>
 <main>
+
+
 
 
 
@@ -339,7 +341,7 @@ body.viewer-open{overflow:hidden}
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">Ramiel, Danel (judge, rule)</td><td data-label="Mesopotamian / Sumerian">Apkallu sages</td><td data-label="Greek">Minos, Rhadamanthus</td><td data-label="Egyptian">Maat, Osiris as judge</td><td data-label="Norse">Forseti</td><td data-label="Hindu">Yama</td></tr>
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">The Nephilim (giant offspring)</td><td data-label="Mesopotamian / Sumerian">Gilgamesh (two-thirds god), Humbaba</td><td data-label="Greek">Titans, Giants, heroes like Heracles</td><td data-label="Egyptian">Divine pharaohs, demigods</td><td data-label="Norse">Jötnar (giants)</td><td data-label="Hindu">Rakshasas, Daityas</td></tr>
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">Bound under the earth</td><td data-label="Mesopotamian / Sumerian">Kur, Irkalla (underworld)</td><td data-label="Greek">Tartarus</td><td data-label="Egyptian">Duat</td><td data-label="Norse">Niflheim</td><td data-label="Hindu">Patala</td></tr>
-<tr><td colspan="2" data-label="Depiction"><b>Strength of parallel</b></td><td data-label="Watcher / theme">Strongest (shared flood and teacher themes)</td><td data-label="Mesopotamian / Sumerian">Strong (Tartarus, Titans, Prometheus)</td><td data-label="Greek">Medium (Thoth, loose)</td><td data-label="Egyptian">Loose</td><td data-label="Norse">Thematic only</td></tr>
+<tr><td colspan="2" colspan="2" colspan="2" data-label="Depiction"><b>Strength of parallel</b></td><td data-label="Watcher / theme">Strongest (shared flood and teacher themes)</td><td data-label="Mesopotamian / Sumerian">Strong (Tartarus, Titans, Prometheus)</td><td data-label="Greek">Medium (Thoth, loose)</td><td data-label="Egyptian">Loose</td><td data-label="Norse">Thematic only</td></tr>
 </tbody></table></div>
 <p class="c">Sumerian details: Enoch's ch. 6-8 resembles the <i>apkallu</i> tradition. Greek Enoch uses "Tartarus" for the prison (1 Enoch 20:2).</p>
 
@@ -723,15 +725,28 @@ body.viewer-open{overflow:hidden}
   const resetZoom = () => { scale = 1; panX = 0; panY = 0; apply(); };
   const zoomBy = f => { scale = Math.min(8, Math.max(.25, scale * f)); apply(); };
 
-  /* Keep the viewer pinned to the host page's visible band while it is open. */
+  /* Keep the viewer pinned to the host page's visible band while it is open.
+     The iframe document does not scroll itself (AutoFrame sizes the frame to
+     the content), so "where the host viewport sits inside this document" is
+     simply -rect.top — NOT scrollY - rect.top, which double-counts the host
+     scroll and pushes the viewer far below the document, stretching it (the
+     "endless scrolling" bug) and dragging focus away from the image. */
   let placeScheduled = false;
+  let viewerExtent = 0; // px of document currently occupied by the open viewer
   function placeViewer(){
     if (!embedded) return;
     try {
       const rect = window.frameElement.getBoundingClientRect();
-      const top = Math.max(0, parentWin.scrollY - rect.top);
+      const offset = Math.max(0, -rect.top);
+      const vh = parentWin.innerHeight;
+      // Document height excluding whatever the viewer itself occupies, so the
+      // clamp can never feed its own growth back into the layout.
+      const contentH = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - viewerExtent;
+      const top = Math.max(0, Math.min(offset, contentH - vh));
       viewer.style.top = top + 'px';
-      viewer.style.height = parentWin.innerHeight + 'px';
+      viewer.style.bottom = 'auto';
+      viewer.style.height = vh + 'px';
+      viewerExtent = Math.min(vh, contentH - top);
     } catch (_) { /* cross-origin guard */ }
   }
   function schedulePlace(){
@@ -742,6 +757,7 @@ body.viewer-open{overflow:hidden}
   if (embedded) {
     parentWin.addEventListener('scroll', schedulePlace, { passive: true });
     parentWin.addEventListener('resize', schedulePlace);
+    try { new ResizeObserver(schedulePlace).observe(document.body); } catch (_) {}
   }
 
   function openViewer(name){
@@ -764,14 +780,15 @@ body.viewer-open{overflow:hidden}
     viewer.classList.add('open');
     document.body.classList.add('viewer-open');
     if (embedded) placeViewer();
-    $('.viewer-close', viewer).focus();
+    $('.viewer-close', viewer).focus({ preventScroll: true });
   }
   function closeViewer(){
     if (document.fullscreenElement) document.exitFullscreen?.().catch(()=>{});
     viewer.classList.remove('open');
     document.body.classList.remove('viewer-open');
     viewerImg.removeAttribute('src');
-    if (previousFocus?.focus) previousFocus.focus();
+    viewerExtent = 0;
+    if (previousFocus?.focus) previousFocus.focus({ preventScroll: true });
   }
   function navigate(delta){
     if (!viewerList.length) return;
