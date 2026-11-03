@@ -203,6 +203,7 @@ body.viewer-open{overflow:hidden}
 
 
 
+
 <header class="hero">
   <div class="kicker">Interactive research atlas · Texts / traditions / archaeology</div>
   <h1>Watchers of Enoch &amp; the World’s Gods</h1>
@@ -343,7 +344,7 @@ body.viewer-open{overflow:hidden}
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">Ramiel, Danel (judge, rule)</td><td data-label="Mesopotamian / Sumerian">Apkallu sages</td><td data-label="Greek">Minos, Rhadamanthus</td><td data-label="Egyptian">Maat, Osiris as judge</td><td data-label="Norse">Forseti</td><td data-label="Hindu">Yama</td></tr>
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">The Nephilim (giant offspring)</td><td data-label="Mesopotamian / Sumerian">Gilgamesh (two-thirds god), Humbaba</td><td data-label="Greek">Titans, Giants, heroes like Heracles</td><td data-label="Egyptian">Divine pharaohs, demigods</td><td data-label="Norse">Jötnar (giants)</td><td data-label="Hindu">Rakshasas, Daityas</td></tr>
 <tr><td class="image-slot" data-image-cell></td><td data-label="Watcher / theme">Bound under the earth</td><td data-label="Mesopotamian / Sumerian">Kur, Irkalla (underworld)</td><td data-label="Greek">Tartarus</td><td data-label="Egyptian">Duat</td><td data-label="Norse">Niflheim</td><td data-label="Hindu">Patala</td></tr>
-<tr><td colspan="2" colspan="2" colspan="2" colspan="2" colspan="2" data-label="Depiction"><b>Strength of parallel</b></td><td data-label="Watcher / theme">Strongest (shared flood and teacher themes)</td><td data-label="Mesopotamian / Sumerian">Strong (Tartarus, Titans, Prometheus)</td><td data-label="Greek">Medium (Thoth, loose)</td><td data-label="Egyptian">Loose</td><td data-label="Norse">Thematic only</td></tr>
+<tr><td colspan="2" colspan="2" colspan="2" colspan="2" colspan="2" colspan="2" data-label="Depiction"><b>Strength of parallel</b></td><td data-label="Watcher / theme">Strongest (shared flood and teacher themes)</td><td data-label="Mesopotamian / Sumerian">Strong (Tartarus, Titans, Prometheus)</td><td data-label="Greek">Medium (Thoth, loose)</td><td data-label="Egyptian">Loose</td><td data-label="Norse">Thematic only</td></tr>
 </tbody></table></div>
 <p class="c">Sumerian details: Enoch's ch. 6-8 resembles the <i>apkallu</i> tradition. Greek Enoch uses "Tartarus" for the prison (1 Enoch 20:2).</p>
 
@@ -732,15 +733,38 @@ body.viewer-open{overflow:hidden}
      the content), so "where the host viewport sits inside this document" is
      simply -rect.top — NOT scrollY - rect.top, which double-counts the host
      scroll and pushes the viewer far below the document, stretching it (the
-     "endless scrolling" bug) and dragging focus away from the image. */
+     "endless scrolling" bug) and dragging focus away from the image.
+
+     The host page also overlays chrome on top of the frame band: a sticky
+     site header at the top (z-50) and, on phones, a fixed bottom nav. Both
+     paint above the entire iframe, so the viewer must fit BETWEEN them —
+     otherwise its toolbar hides under the header and it looks stuck. */
   let placeScheduled = false;
   let viewerExtent = 0; // px of document currently occupied by the open viewer
+
+  function hostInsets(){
+    const ins = { top: 0, bottom: 0 };
+    if (!embedded) return ins;
+    try {
+      for (const el of parentWin.document.querySelectorAll('header, nav')) {
+        const st = parentWin.getComputedStyle(el);
+        if ((st.position !== 'fixed' && st.position !== 'sticky') || st.display === 'none' || st.visibility === 'hidden') continue;
+        const r = el.getBoundingClientRect();
+        if (r.height <= 0 || r.right <= 0 || r.left >= parentWin.innerWidth) continue;
+        if (r.top <= 2) ins.top = Math.max(ins.top, Math.min(r.bottom, parentWin.innerHeight / 3));
+        if (r.bottom >= parentWin.innerHeight - 2) ins.bottom = Math.max(ins.bottom, Math.min(parentWin.innerHeight - r.top, parentWin.innerHeight / 3));
+      }
+    } catch (_) { /* cross-origin guard */ }
+    return ins;
+  }
+
   function placeViewer(){
     if (!embedded) return;
     try {
       const rect = window.frameElement.getBoundingClientRect();
-      const offset = Math.max(0, -rect.top);
-      const vh = parentWin.innerHeight;
+      const ins = hostInsets();
+      const vh = Math.max(240, parentWin.innerHeight - ins.top - ins.bottom);
+      const offset = Math.max(0, -rect.top) + ins.top;
       // Document height excluding whatever the viewer itself occupies, so the
       // clamp can never feed its own growth back into the layout.
       const contentH = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - viewerExtent;
