@@ -1,0 +1,533 @@
+[
+ {
+  "file": "/watchers-atlas/img/ai/z01-aries.jpg",
+  "keys": [
+   "Aries"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Aries",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Aries. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Hired Man (LU.HUN.GA), Mesopotamian"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z02-taurus.jpg",
+  "keys": [
+   "Taurus"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Taurus",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Taurus. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "Bull of Heaven (GU4.AN.NA)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z03-gemini.jpg",
+  "keys": [
+   "Gemini"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Gemini",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Gemini. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "Great Twins (MASH.TAB.BA.GAL.GAL)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z04-cancer.jpg",
+  "keys": [
+   "Cancer"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Cancer",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Cancer. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Crayfish (AL.LUL)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z05-leo.jpg",
+  "keys": [
+   "Leo"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Leo",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Leo. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Lion (UR.GU.LA)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z06-virgo.jpg",
+  "keys": [
+   "Virgo"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Virgo",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Virgo. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Furrow (AB.SIN)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z07-libra.jpg",
+  "keys": [
+   "Libra"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Libra",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Libra. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Scales (ZI.BA.AN.NA)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z08-scorpio.jpg",
+  "keys": [
+   "Scorpio"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Scorpio",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Scorpio. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Scorpion (GIR.TAB)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z09-sagittarius.jpg",
+  "keys": [
+   "Sagittarius"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Sagittarius",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Sagittarius. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "Pabilsag the centaur-archer"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z10-capricorn.jpg",
+  "keys": [
+   "Capricorn"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Capricorn",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Capricorn. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "Goat-Fish (SUHUR.MASH), Enki's emblem"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z11-aquarius.jpg",
+  "keys": [
+   "Aquarius"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Aquarius",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Aquarius. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Great One (GU.LA)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/z12-pisces.jpg",
+  "keys": [
+   "Pisces"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Constellation figure of Pisces",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Traditional Babylonian constellation figure of Pisces. Scripture names the star groups (Mazzaroth, Job 38:32) but gives no forms; this follows the ancient constellation imagery only.",
+  "s": "The Tails (KUN.MESH)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/nephilim.jpg",
+  "keys": [
+   "Nephilim",
+   "The Nephilim (giant offspring)",
+   "Nephilim / Giants",
+   "Post-Flood \"Nephilim\""
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "The Nephilim, giants of renown",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Ordinary human anatomy at colossal stature - no horns, wings or monstrous features.",
+  "s": "Genesis 6:4; Numbers 13:33"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/naphil.jpg",
+  "keys": [
+   "Naphil",
+   "Naphil (1st)"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Naphil, firstborn generation of the giants",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Crop-devouring giants of the first generation, before the Flood.",
+  "s": "1 Enoch 7:2-3; Jubilees 7:22"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/naphidim.jpg",
+  "keys": [
+   "Naphidim",
+   "Naphidim (2nd)"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Naphidim, second generation of the giants",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The second generation, stronger and violent, ending in mutual slaughter.",
+  "s": "Jubilees 7:22"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/eljo.jpg",
+  "keys": [
+   "Eljo",
+   "Eljo (3rd)"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Eljo, third generation of the giants",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The mightiest of the three giant generations, destroyed in the Flood.",
+  "s": "Jubilees 7:22"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/raguel.jpg",
+  "keys": [
+   "Raguel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Raguel, archangel of justice",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Shown veiled and faceless - Scripture gives no likeness - taking vengeance over the world of the lights, a figure of perfect equity.",
+  "s": "1 Enoch 20:4; 40:9"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/saraqael-sariel.jpg",
+  "keys": [
+   "Saraqael / Sariel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Saraqael / Sariel, archangel of command",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Shown veiled and faceless, raising a commander's standard over a host of lights.",
+  "s": "1 Enoch 20:6; 40:9"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/remiel.jpg",
+  "keys": [
+   "Remiel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Remiel, set over those who rise",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Shown veiled at dawn over a hill of open tombs, the hope of resurrection - no literal likeness is claimed.",
+  "s": "1 Enoch 20:8"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/phanuel.jpg",
+  "keys": [
+   "Phanuel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Phanuel, who stands before the glory",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Shown veiled in intercession before the fourfold radiance of the throne - repentance and hope.",
+  "s": "1 Enoch 40:9"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/ramiel.jpg",
+  "keys": [
+   "Ramiel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Ramiel, thunder of God",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A veiled figure beneath a thunderhead holding the scales of judgment; the text gives no physical form.",
+  "s": "1 Enoch 20:3"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/rameel.jpg",
+  "keys": [
+   "Ramel / Rameel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Rameel, morning of God",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A veiled figure dissolving into dawn mist over broken altars; the text gives no physical form.",
+  "s": "1 Enoch 6:7"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/ezeqel.jpg",
+  "keys": [
+   "Ezeqel / Ezeqeel"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Ezeqeel, strength of God",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A veiled figure wrapped in storm cloud and bows of light, teacher of the signs of the clouds.",
+  "s": "1 Enoch 8:3"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/penemue.jpg",
+  "keys": [
+   "Penemue"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Penemue, who taught writing",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A veiled scribe offering the reed pen and ink - the bitter and the sweet of knowledge.",
+  "s": "1 Enoch 69:8-11"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/azazel-bound.jpg",
+  "keys": [
+   "Azazel (Enoch tradition)",
+   "Bound under the earth"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Azazel bound in the wilderness",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The chief rebel cast into the desert pit of Dudael, bound hand and foot under rough stone until the great day.",
+  "s": "1 Enoch 10:4-6; Leviticus 16"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/prince-power-air.jpg",
+  "keys": [
+   "Prince of the power of the air"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "The prince of the power of the air",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A veiled dominion enthroned in storm winds above the nations - power borrowed, bounded and judged.",
+  "s": "Ephesians 2:2; Daniel 10:13"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/the-adversary.jpg",
+  "keys": [
+   "Lucifer / Helel ben Shachar"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "The Adversary - names and titles",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The fallen one of the shattered crown: morning star fallen to earth, beauty corrupted into ruin. One depiction gathers all the biblical titles of the same being.",
+  "s": "Isaiah 14:12-15; Ezekiel 28:12-17; Revelation 12:9"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/molech.jpg",
+  "keys": [
+   "Molech / Milcom"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Molech, god of the fire sacrifice",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A hollow furnace-headed idol of the Ammonites with outstretched arms over flames - the abomination of the children of Ammon.",
+  "s": "Leviticus 18:21; 2 Kings 23:10"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/chemosh.jpg",
+  "keys": [
+   "Chemosh"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Chemosh, war god of Moab",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The subduer god of Moab armed for battle - the abomination of Moab that Solomon's generation chased.",
+  "s": "Numbers 21:29; 1 Kings 11:7"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/dagon.jpg",
+  "keys": [
+   "Dagon"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Dagon, the grain god of the Philistines",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "A fish-tailed grain god; before the ark his statue fell and broke at Ashdod.",
+  "s": "1 Samuel 5:1-7; Judges 16:23"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/bel-marduk.jpg",
+  "keys": [
+   "Bel / Marduk"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Bel-Marduk, city-slaying dragon conqueror",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "Babylon's chief god trampling the chaos dragon, as on the Ishtar Gate - burdened and carried away, per the prophets.",
+  "s": "Isaiah 46:1-2; Jeremiah 50:2"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/remphan.jpg",
+  "keys": [
+   "Remphan / Kaiwan"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Remphan / Kaiwan, the star god",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The star-god of the wilderness apostasy - Saturn's emblem of rings and star carried in procession.",
+  "s": "Amos 5:26; Acts 7:43"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/gad-meni.jpg",
+  "keys": [
+   "Gad",
+   "Meni"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Gad and Meni, fortune and destiny",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The twin personifications - a troop of good fortune and a numbered destiny - preparing a table for the stars.",
+  "s": "Isaiah 65:11"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/baal-hadad.jpg",
+  "keys": [
+   "Baal (Hadad)",
+   "Rimmon"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Baal the rider on the clouds",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The Canaanite storm god wielding the lightning mace - the god who would not answer on Carmel.",
+  "s": "1 Kings 18:26-29; Judges 2:11-13"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/baal-peor.jpg",
+  "keys": [
+   "Baal-peor"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Baal-peor, lord of the gap",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The Moabite idol of the shrine at Peor, entangling Israel with feasts and immorality.",
+  "s": "Numbers 25:1-5; Psalm 106:28"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/beelzebub.jpg",
+  "keys": [
+   "Beelzebul / Beelzebub",
+   "Baal-zebub",
+   "Beelzebul"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Beelzebul, lord of the flies",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The fly-lord of Ekron whom Jesus identified with Satan's kingdom - swarming, corrupt, commanding.",
+  "s": "2 Kings 1:2-16; Matthew 12:24-27"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/rahab.jpg",
+  "keys": [
+   "Rahab"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Rahab, the storm dragon crushed",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The chaos monster of the sea struck down by the LORD - Egypt's emblem of pride broken.",
+  "s": "Job 26:12; Psalm 89:10; Isaiah 51:9"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/bel-dragon.jpg",
+  "keys": [
+   "Dragon (Bel and the Dragon)"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "The dragon of Bel at Babylon",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The great serpent idol fed by the Babylonians - felled, not by power, but by a cake of pitch and hair.",
+  "s": "Daniel 14 (deuterocanonical)"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/hathor.jpg",
+  "keys": [
+   "Hathor"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "Hathor, the cow-goddess of Egypt",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The Egyptian mother-goddess with the sun disc between horns - among the gods judged in the plagues.",
+  "s": "Exodus 12:12"
+ },
+ {
+  "file": "/watchers-atlas/img/ai/cynocephali.jpg",
+  "keys": [
+   "Cynocephali (\"dog-heads\")"
+  ],
+  "k": "Text-guided AI reconstruction",
+  "ti": "The Cynocephali, dog-headed people",
+  "c": "AI reconstruction commissioned for Saul's Podship",
+  "l": "Original artwork - no third-party licence",
+  "p": "",
+  "d": "The dog-headed race of medieval travel lore, shown in the manner of an orthodox icon of St Christopher.",
+  "s": "Medieval tradition; cf. Philippians 3:2"
+ }
+]

@@ -10,15 +10,21 @@
   /watchers-atlas/img/ (produced by extract_watchers_atlas.py).
 - Strips Cloudflare beacon / Rocket Loader junk.
 One-off migration tool."""
-import json, re, sys
+import json, re, sys, os
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else 'google_drive/Watchers_Atlas_Scripture_Real_Images_Fullscreen.html'
 OUT = 'public/watchers-atlas/index.html'
 ASSETS_JSON = '/tmp/watchers_assets.json'
 
+# ---------- 1. main content ----------
+# Preferred source: the original Drive HTML (pass its path as argv[1]). When it
+# is unavailable (e.g. a fresh sandbox), rebuild from the previously generated
+# module — every pass below is idempotent, so repeated builds are safe.
+if not os.path.isfile(SRC):
+    print(f'source {SRC!r} not found; rebuilding from the existing module {OUT!r}')
+    SRC = OUT
 raw = open(SRC, encoding='utf-8').read()
 
-# ---------- 1. main content ----------
 main = raw[raw.find('<main>') + len('<main>'):raw.find('</main>')]
 
 # Demote the duplicate mid-document <h1> (the hero keeps the single h1).
@@ -42,27 +48,213 @@ def fix_table(m: re.Match) -> str:
 
 main, n_tables = re.subn(r'<table.*?</table>', fix_table, main, flags=re.S)
 
-# ---------- 3. validate every table ----------
+# ---------- 3. validate every table (span-aware) ----------
+from collections import defaultdict
+
+def span_attr(attrs: str, name: str) -> int:
+    m = re.search(name + r'="(\d+)"', attrs)
+    return int(m.group(1)) if m else 1
+
 problems = []
 for i, tbl in enumerate(re.findall(r'<table.*?</table>', main, re.S)):
     thead = re.search(r'<thead>\s*<tr>(.*?)</tr>\s*</thead>', tbl, re.S)
     if not thead:
         continue
     n_th = len(re.findall(r'<th[ >]', thead.group(1)))
-    body_rows = [r for r in re.findall(r'<tr>(.*?)</tr>', tbl, re.S) if '<td' in r]
-    for r in body_rows:
-        n_td = len(re.findall(r'<td[ >]', r))
-        if n_td != n_th:
-            problems.append((i, n_th, n_td, r[:90]))
+    pending: dict[int, int] = defaultdict(int)
+    body_rows = [m.group(1) for m in re.finditer(r'<tr>(.*?)</tr>', tbl, re.S) if '<td' in m.group(1)]
+    for ri, r in enumerate(body_rows):
+        eff = pending.pop(ri, 0)
+        for td in re.finditer(r'<td([^>]*)>', r):
+            attrs = td.group(1)
+            cs, rs = span_attr(attrs, 'colspan'), span_attr(attrs, 'rowspan')
+            eff += cs
+            for k in range(1, rs):
+                pending[ri + k] += cs
+        if eff != n_th:
+            problems.append((i, n_th, eff, r[:90]))
 if problems:
     for p in problems:
         print('ALIGNMENT PROBLEM', p, file=sys.stderr)
     sys.exit(1)
 print(f'tables processed: {n_tables}, all row/column counts verified')
 
+# ---------- 3b. structure passes ----------
+import html as _html
+
+W_BLOCK = re.compile(r'<div class="w">\s*<table.*?</table>\s*</div>', re.S)
+IMG_TD = '<td class="image-slot" data-image-cell></td>'
+DEPICTION_TH = '<th class="img-col" scope="col">Depiction</th>'
+# Tables about claims/views/arguments/places: not beings -> no depiction column.
+SUPPRESS_UNDER = (
+    'Why the "gods" looked righteous',
+    'What were these entities, really?',
+    'Where their power came from',
+    'Lost technology claims',
+    'Lost, sunken or disputed',
+)
+ROWSPAN_UNDER = ('Lucifer: names and titles',)
+
+def heading_for(source: str, start: int) -> str:
+    h = max(source.rfind('<h2', 0, start), source.rfind('<h3', 0, start))
+    if h < 0:
+        return ''
+    e = source.find('</h', h)
+    return re.sub(r'<[^>]+>', '', source[source.find('>', h) + 1:e]).strip()
+
+def add_labels(block: str) -> str:
+    headers = [re.sub(r'<[^>]+>', '', t).strip()
+               for t in re.findall(r'<th[^>]*>(.*?)</th>', re.search(r'<thead>.*?</thead>', block, re.S).group(0), re.S)]
+    def label_row(m: re.Match) -> str:
+        tr, idx = m.group(0), 0
+        def tag_td(td: re.Match) -> str:
+            nonlocal idx
+            tag, i = td.group(0), idx
+            idx += 1
+            if 'image-slot' in tag or 'data-label=' in tag or i >= len(headers):
+                return tag
+            return tag[:-1] + f' data-label="{_html.escape(headers[i], quote=True)}">'
+        return re.sub(r'<td[^>]*>', tag_td, tr)
+    return re.sub(r'<tr>.*?</tr>', label_row, block, flags=re.S)
+
+def structure_pass(source: str) -> str:
+    def fix(m: re.Match) -> str:
+        block = m.group(0)
+        h = heading_for(source, m.start())
+        n_img = block.count(IMG_TD)
+        if any(h.startswith(p) for p in SUPPRESS_UNDER) and n_img:
+            block = block.replace(IMG_TD, '').replace(DEPICTION_TH, '')
+        elif any(h.startswith(p) for p in ROWSPAN_UNDER) and n_img > 1:
+            block = block.replace(DEPICTION_TH, DEPICTION_TH.replace('>', f' rowspan="{n_img}">', 1), 1)
+            block = block.replace(IMG_TD, IMG_TD.replace('>', f' rowspan="{n_img}">', 1), 1)
+            block = block.replace(IMG_TD, '')
+        elif '<b>Strength of parallel</b>' in block:
+            m = re.search(r'<tr>(?:(?!</tr>).)*?<b>Strength of parallel</b>(?:(?!</tr>).)*?</tr>', block, re.S)
+            if m:
+                row = m.group(0).replace(IMG_TD, '', 1)
+                row = row.replace('<td', '<td colspan="2"', 1)
+                block = block.replace(m.group(0), row, 1)
+        return add_labels(block)
+    return W_BLOCK.sub(fix, source)
+
+# ---------- 3c. bible.com reference links ----------
+ALIASES = [
+    ('1 Samuel', '1SA'), ('2 Samuel', '2SA'), ('1 Sam', '1SA'), ('2 Sam', '2SA'),
+    ('1 Kings', '1KI'), ('2 Kings', '2KI'), ('1 Kgs', '1KI'), ('2 Kgs', '2KI'),
+    ('1 Chronicles', '1CH'), ('2 Chronicles', '2CH'), ('1 Chr', '1CH'), ('2 Chr', '2CH'),
+    ('1 Corinthians', '1CO'), ('2 Corinthians', '2CO'), ('1 Cor', '1CO'), ('2 Cor', '2CO'),
+    ('1 Thessalonians', '1TH'), ('2 Thessalonians', '2TH'), ('1 Thess', '1TH'), ('2 Thess', '2TH'),
+    ('1 Timothy', '1TI'), ('2 Timothy', '2TI'), ('1 Tim', '1TI'), ('2 Tim', '2TI'),
+    ('1 Peter', '1PE'), ('2 Peter', '2PE'), ('1 Pet', '1PE'), ('2 Pet', '2PE'),
+    ('1 John', '1JN'), ('2 John', '2JN'), ('3 John', '3JN'),
+    ('Genesis', 'GEN'), ('Exodus', 'EXO'), ('Exod', 'EXO'), ('Leviticus', 'LEV'), ('Numbers', 'NUM'),
+    ('Deuteronomy', 'DEU'), ('Joshua', 'JOS'), ('Josh', 'JOS'), ('Judges', 'JDG'), ('Judg', 'JDG'),
+    ('Ruth', 'RUT'), ('Ezra', 'EZR'), ('Nehemiah', 'NEH'), ('Neh', 'NEH'), ('Esther', 'EST'),
+    ('Job', 'JOB'), ('Psalms', 'PSA'), ('Psalm', 'PSA'), ('Proverbs', 'PRO'), ('Prov', 'PRO'),
+    ('Ecclesiastes', 'ECC'), ('Eccl', 'ECC'), ('Isaiah', 'ISA'), ('Isa', 'ISA'),
+    ('Jeremiah', 'JER'), ('Jer', 'JER'), ('Lamentations', 'LAM'), ('Ezekiel', 'EZK'), ('Ezek', 'EZK'),
+    ('Daniel', 'DAN'), ('Dan', 'DAN'), ('Hosea', 'HOS'), ('Hos', 'HOS'), ('Joel', 'JOL'),
+    ('Amos', 'AMO'), ('Obadiah', 'OBA'), ('Jonah', 'JON'), ('Micah', 'MIC'), ('Mic', 'MIC'),
+    ('Nahum', 'NAM'), ('Habakkuk', 'HAB'), ('Zephaniah', 'ZEP'), ('Haggai', 'HAG'),
+    ('Zechariah', 'ZEC'), ('Zech', 'ZEC'), ('Malachi', 'MAL'), ('Matthew', 'MAT'), ('Matt', 'MAT'),
+    ('Mark', 'MRK'), ('Luke', 'LUK'), ('John', 'JHN'), ('Acts', 'ACT'), ('Romans', 'ROM'),
+    ('Rom', 'ROM'), ('Galatians', 'GAL'), ('Gal', 'GAL'), ('Ephesians', 'EPH'), ('Eph', 'EPH'),
+    ('Philippians', 'PHP'), ('Phil', 'PHP'), ('Colossians', 'COL'), ('Col', 'COL'),
+    ('Titus', 'TIT'), ('Philemon', 'PHM'), ('Phlm', 'PHM'), ('Hebrews', 'HEB'), ('Heb', 'HEB'),
+    ('James', 'JAS'), ('Jas', 'JAS'), ('Jude', 'JUD'), ('Revelation', 'REV'), ('Rev', 'REV'),
+    ('Ps', 'PSA'), ('Pss', 'PSA'), ('Ex', 'EXO'), ('Lev', 'LEV'), ('Num', 'NUM'), ('Deut', 'DEU'),
+]
+ALIASES.sort(key=lambda a: -len(a[0]))
+SINGLE_CHAPTER = {'JUD', 'PHM', 'OBA', '2JN', '3JN'}
+ALIAS_RE = '|'.join(re.escape(a) for a, _ in ALIASES)
+USFM = dict(ALIASES)
+DASH = r'(?:[–—-]|&ndash;)'
+RFULL = re.compile(rf'\b(?P<book>{ALIAS_RE})\.?\s?(?![A-Za-z])(?P<c>\d{{1,3}})(?:(?::(?P<v>\d{{1,3}})(?:\s*{DASH}\s*(?P<v2>\d{{1,3}}))?)|(?:\s*{DASH}\s*(?P<c2>\d{{1,3}})\b))?')
+RBARE = re.compile(rf'(?P<bc>\d{{1,3}}):(?P<bv>\d{{1,3}})(?:\s*{DASH}\s*(?P<bv2>\d{{1,3}}))?')
+GAP = re.compile(r'[\s;,.\u2013\u2014-]*')
+BIBLE_BASE = 'https://www.bible.com/bible/1/'
+
+def ref_href(usfm: str, c: str, v: str | None, v2: str | None) -> str:
+    if usfm in SINGLE_CHAPTER and not v:
+        return f'{BIBLE_BASE}{usfm}.1.{c}'
+    if v:
+        return f'{BIBLE_BASE}{usfm}.{c}.{v}' + (f'-{v2}' if v2 else '')
+    return f'{BIBLE_BASE}{usfm}.{c}'
+
+def link_refs(source: str) -> str:
+    parts = re.split(r'(<a\b[^>]*>.*?</a>)', source, flags=re.S)
+    for pi in range(0, len(parts), 2):  # even indexes are outside existing anchors
+        text, out, p, last = parts[pi], [], 0, None
+        while p < len(text):
+            mb, mi = RFULL.search(text, p), RBARE.search(text, p)
+            if mb and (not mi or mb.start() <= mi.start()):
+                usfm = USFM[mb.group('book')]
+                c = mb.group('c')
+                if usfm == 'DAN' and c == '14':  # deuterocanonical; not on bible.com KJV
+                    out.append(text[p:mb.end()]); last, p = None, mb.end(); continue
+                ref = text[mb.start():mb.end()]
+                a = f'<a class="bref" href="{ref_href(usfm, c, mb.group("v"), mb.group("v2"))}" target="_blank" rel="noopener" title="Open {ref.strip()} on Bible.com">{ref}</a>'
+                out.append(text[p:mb.start()] + a); last, p = (usfm, mb.end()), mb.end()
+            elif mi:
+                if last and GAP.fullmatch(text[last[1]:mi.start()] or ' '):
+                    ref = text[mi.start():mi.end()]
+                    a = f'<a class="bref" href="{ref_href(last[0], mi.group("bc"), mi.group("bv"), mi.group("bv2"))}" target="_blank" rel="noopener" title="Open {ref.strip()} on Bible.com">{ref}</a>'
+                    out.append(text[p:mi.start()] + a); last, p = (last[0], mi.end()), mi.end()
+                else:
+                    out.append(text[p:mi.end()]); p = mi.end()
+            else:
+                out.append(text[p:]); break
+        parts[pi] = ''.join(out)
+    return ''.join(parts)
+
+main = structure_pass(main)
+main = link_refs(main)
+
+# ---------- 3d. edition notice ----------
+main = re.sub(
+    r'<div class="notice changed">.*?</div>',
+    '<div class="notice changed"><strong>About this Saul\u2019s Podship edition:</strong> every profile now carries '
+    'its own distinct artwork \u2014 sourced historical images where they exist, and new text-guided reconstructions, '
+    'strictly limited to the forms the Bible or 1 Enoch describes, where they do not. Concept and claim rows carry no '
+    'images at all, so no picture pretends to be evidence. All verse references open at Bible.com.</div>',
+    main, count=1, flags=re.S)
+
 # ---------- 4. assets ----------
-assets = open(ASSETS_JSON, encoding='utf-8').read()
+if os.path.isfile(ASSETS_JSON):
+    assets = open(ASSETS_JSON, encoding='utf-8').read()
+else:
+    print(f'{ASSETS_JSON} missing; reading atlasAssets from the built module')
+    assets = re.search(r'<script type="application/json" id="atlasAssets">([\s\S]*?)</script>', raw).group(1)
 assert '</script' not in assets.lower()
+
+# ---------- 4b. AI reconstruction overrides ----------
+# scripts/watchers_ai_images.json assigns each duplicated/generic key its own
+# commissioned, text-guided reconstruction. Files are applied only when present,
+# so the remaining batches can be generated and simply rebuilt later.
+import os
+OVERRIDES = json.load(open('scripts/watchers_ai_images.json', encoding='utf-8'))
+A_OBJ = json.loads(assets)
+APPLIED = set()
+PENDING = set()
+for e in OVERRIDES:
+    if not os.path.isfile('public' + e['file']):
+        PENDING.add(e['file'])
+        continue
+    for key in e['keys']:
+        if key in A_OBJ:
+            A_OBJ[key] = {'t': e['file'], 'f': e['file'], 'ti': e['ti'], 'c': e['c'],
+                          'l': e['l'], 'p': e['p'], 'd': e['d'], 's': e['s'], 'k': e['k']}
+            APPLIED.add(key)
+# Keys that fall back to the generic placeholder but belong to a sourced row:
+# point them at that row's real image instead (same subject, honest depiction).
+FALLBACK_FOR = {'Ashtoreth': 'Asherah / Ashtoreth (Astarte)', 'Astarte': 'Asherah / Ashtoreth (Astarte)'}
+for k, src in FALLBACK_FOR.items():
+    if k in A_OBJ and src in A_OBJ:
+        A_OBJ[k] = dict(A_OBJ[src])
+        APPLIED.add(k)
+assets = json.dumps(A_OBJ, ensure_ascii=False, separators=(',', ':'))
+assert '</script' not in assets.lower()
+print(f'AI overrides applied to {len(APPLIED)} asset keys; {len(PENDING)} image files still pending generation')
 
 # ---------- 5. app script (adapted from the source document) ----------
 APP_JS = r"""
@@ -542,6 +734,27 @@ body.viewer-open{overflow:hidden}
 @media (max-width:640px){
   body{padding:8px 8px 56px}
   table{min-width:640px}
+  .claims-table td.assess{white-space:normal}
+}
+
+/* ---------- bible.com verse links ---------- */
+.bref{color:#8B1C2E;text-decoration:underline;text-decoration-color:rgba(212,175,55,.55);text-underline-offset:2px;text-decoration-thickness:1px}
+.bref:hover{color:var(--gold);text-decoration-color:var(--gold)}
+
+/* ---------- phones: tables stack into labelled cards ---------- */
+@media (max-width:760px){
+  .w table{min-width:0;display:block}
+  .w thead{display:none}
+  .w tbody{display:block}
+  .w tr{display:block;border-bottom:1px solid rgba(74,21,44,.12);padding:10px 12px}
+  .w tr:last-child{border-bottom:none}
+  .w td{display:block;border:none;padding:3px 0}
+  .w td.image-slot{background:transparent;width:auto;min-width:0;padding:4px 0 8px}
+  .w td[data-label]::before{content:attr(data-label);display:block;font:700 .6rem/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#9b8d80;margin:6px 0 1px}
+  .profile-button{display:grid;grid-template-columns:56px 1fr;column-gap:12px;row-gap:1px;text-align:left;align-items:center}
+  .profile-circle{grid-row:1/3;width:56px;height:56px}
+  .profile-label{text-align:left;max-width:none}
+  .profile-credit{grid-column:2;text-align:left}
   .claims-table td.assess{white-space:normal}
 }
 """.strip()
