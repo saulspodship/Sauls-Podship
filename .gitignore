@@ -30,3 +30,6 @@ __pycache__/
 .vercel
 
 .tmp-hero-masters/
+
+# One-off Drive migration sources (never commit multi-MB source dumps)
+google_drive/

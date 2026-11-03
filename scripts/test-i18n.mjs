@@ -219,7 +219,7 @@ if (fs.existsSync(indexPath)) {
 /* The static module documents must load the shared shim, or they stay English. */
 const STATIC_PAGES = [
   'public/prophecy-map.html', 'public/kings-of-the-bible.html', 'public/cross-references/viz.html',
-  'public/encyclopedia/biblical-maps-atlas.html', 'public/singers.html', 'public/videos/index.html',
+  'public/encyclopedia/biblical-maps-atlas.html', 'public/encyclopedia/watchers-atlas.html', 'public/singers.html', 'public/videos/index.html',
   'public/biblical-maps/index.html', 'public/world-religion-map/index.html',
   'public/family-tree/adam-to-jesus-overlap.html',
 ];
