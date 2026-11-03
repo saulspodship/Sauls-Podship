@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Extract the embedded webp images from the Watchers Atlas HTML into real
-files under public/encyclopedia/watchers-atlas/img/ and emit a rewritten
+files under public/watchers-atlas/img/ and emit a rewritten
 atlasAssets JSON (data URIs -> site URLs). One-off migration tool."""
 import base64, hashlib, io, json, re, sys, os
 from PIL import Image
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else 'google_drive/Watchers_Atlas_Scripture_Real_Images_Fullscreen.html'
-OUT_DIR = 'public/encyclopedia/watchers-atlas/img'
-URL_BASE = '/encyclopedia/watchers-atlas/img'
+OUT_DIR = 'public/watchers-atlas/img'
+URL_BASE = '/watchers-atlas/img'
 FULL_MAX = 1280   # px, longest side for full-view images
 THUMB_MAX = 420   # px, longest side for thumbnails
 FULL_Q = 78

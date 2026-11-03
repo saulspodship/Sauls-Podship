@@ -323,7 +323,7 @@ export const VolumePage: React.FC = () => {
               where the Bible or 1 Enoch describes a form. Search the tables, filter by section, and click any
               picture for full-screen zoom with credits.
             </p>
-            <AutoFrame src="/encyclopedia/watchers-atlas.html" title="The Watchers Atlas — scripture-first visual atlas of the Watchers of Enoch" initial="70vh" min={520} />
+            <AutoFrame src="/watchers-atlas/index.html" title="The Watchers Atlas — scripture-first visual atlas of the Watchers of Enoch" initial="70vh" min={520} />
           </section>
         )}
 

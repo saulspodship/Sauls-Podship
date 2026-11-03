@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build public/encyclopedia/watchers-atlas.html from the source Drive HTML.
+"""Build public/watchers-atlas/index.html from the source Drive HTML.
 
 - Keeps every word of the original study content (hero, tables, notices, details).
 - Fixes the table alignment bug: 15 tables had one extra image <td> per row with
@@ -7,13 +7,13 @@
 - Re-themes the document to the Saul's Podship palette (wine #4A152C /
   gold #D4AF37 / cream #F8F4E3, Merriweather + Inter + EB Garamond).
 - Rewrites atlasAssets data URIs to optimized files under
-  /encyclopedia/watchers-atlas/img/ (produced by extract_watchers_atlas.py).
+  /watchers-atlas/img/ (produced by extract_watchers_atlas.py).
 - Strips Cloudflare beacon / Rocket Loader junk.
 One-off migration tool."""
 import json, re, sys
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else 'google_drive/Watchers_Atlas_Scripture_Real_Images_Fullscreen.html'
-OUT = 'public/encyclopedia/watchers-atlas.html'
+OUT = 'public/watchers-atlas/index.html'
 ASSETS_JSON = '/tmp/watchers_assets.json'
 
 raw = open(SRC, encoding='utf-8').read()
@@ -554,8 +554,8 @@ HEAD = """<!DOCTYPE html>
 <link rel="shortcut icon" type="image/png" href="../icons/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../icons/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watchers Atlas — Watchers of Enoch &amp; the World's Gods | Saul's Podship</title>
-<meta name="description" content="A scripture-first visual atlas of Watchers traditions: 220 sourced profiles with real images, text-guided reconstructions only where the Bible or 1 Enoch describes a form, full-screen viewing, and a fact-checked speculative-claims section. Volume 4 supplement.">
+<title>Watchers Atlas — The Watchers of Enoch | Saul's Podship</title>
+<meta name="description" content="A scripture-first visual atlas of the Watchers of Enoch: 220 sourced profiles with real images, text-guided reconstructions and a claims evidence check.">
 <meta name="keywords" content="watchers atlas, book of enoch, nephilim, azazel, semyaza, seraphim, cherubim, divine council, biblical monsters, comparative religion">
 <meta name="author" content="Solat Nadeem / Saul's Podship">
 <link rel="canonical" href="https://www.saulspodship.com/encyclopedia/watchers-atlas">
