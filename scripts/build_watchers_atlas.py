@@ -338,15 +338,38 @@ APP_JS = r"""
      the content), so "where the host viewport sits inside this document" is
      simply -rect.top — NOT scrollY - rect.top, which double-counts the host
      scroll and pushes the viewer far below the document, stretching it (the
-     "endless scrolling" bug) and dragging focus away from the image. */
+     "endless scrolling" bug) and dragging focus away from the image.
+
+     The host page also overlays chrome on top of the frame band: a sticky
+     site header at the top (z-50) and, on phones, a fixed bottom nav. Both
+     paint above the entire iframe, so the viewer must fit BETWEEN them —
+     otherwise its toolbar hides under the header and it looks stuck. */
   let placeScheduled = false;
   let viewerExtent = 0; // px of document currently occupied by the open viewer
+
+  function hostInsets(){
+    const ins = { top: 0, bottom: 0 };
+    if (!embedded) return ins;
+    try {
+      for (const el of parentWin.document.querySelectorAll('header, nav')) {
+        const st = parentWin.getComputedStyle(el);
+        if ((st.position !== 'fixed' && st.position !== 'sticky') || st.display === 'none' || st.visibility === 'hidden') continue;
+        const r = el.getBoundingClientRect();
+        if (r.height <= 0 || r.right <= 0 || r.left >= parentWin.innerWidth) continue;
+        if (r.top <= 2) ins.top = Math.max(ins.top, Math.min(r.bottom, parentWin.innerHeight / 3));
+        if (r.bottom >= parentWin.innerHeight - 2) ins.bottom = Math.max(ins.bottom, Math.min(parentWin.innerHeight - r.top, parentWin.innerHeight / 3));
+      }
+    } catch (_) { /* cross-origin guard */ }
+    return ins;
+  }
+
   function placeViewer(){
     if (!embedded) return;
     try {
       const rect = window.frameElement.getBoundingClientRect();
-      const offset = Math.max(0, -rect.top);
-      const vh = parentWin.innerHeight;
+      const ins = hostInsets();
+      const vh = Math.max(240, parentWin.innerHeight - ins.top - ins.bottom);
+      const offset = Math.max(0, -rect.top) + ins.top;
       // Document height excluding whatever the viewer itself occupies, so the
       // clamp can never feed its own growth back into the layout.
       const contentH = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - viewerExtent;
