@@ -319,6 +319,8 @@ pages.set('/encyclopedia', {
       list(volumes.map((v) => [`/encyclopedia/${v.slug}`, `Volume ${v.number}: ${v.title}`])) +
       `<h2>Volume 11 supplement</h2>` +
       `<ul><li><a href="/encyclopedia/biblical-maps-atlas">Biblical Maps — Interactive Journey Atlas</a> — eight animated study maps with the world faith map at the foot.</li></ul>` +
+      `<h2>Volume 4 supplement</h2>` +
+      `<ul><li><a href="/watchers-atlas">Watchers Atlas — Watchers of Enoch &amp; the World's Gods</a> — 220 sourced image profiles, comparative tables and a speculative-claims evidence check.</li></ul>` +
       `</main>` +
       siteNav(),
   ),

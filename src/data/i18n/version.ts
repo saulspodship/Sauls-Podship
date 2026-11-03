@@ -10,4 +10,4 @@
  * when a translation actually changes, so a returning visitor re-downloads
  * /i18n/<lang>.json exactly when there is something new in it.
  */
-export const DICT_VERSION = '5be765beaf';
+export const DICT_VERSION = '66ff1f7339';

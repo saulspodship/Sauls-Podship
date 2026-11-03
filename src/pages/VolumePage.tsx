@@ -311,6 +311,22 @@ export const VolumePage: React.FC = () => {
           </section>
         )}
 
+        {/* Watchers Atlas — Volume 4 supplement (static module, AutoFrame embed) */}
+        {slug === 'angels-demons-beasts-monsters-in-the-bible' && (
+          <section id="watchers-atlas" className="pt-8 pb-2 text-center scroll-mt-24">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#4A152C]">
+              The Watchers Atlas &mdash; Scripture &amp; Real Images
+            </h2>
+            <p className="text-[11px] sm:text-sm text-gray-600 mt-2 mb-6 max-w-2xl mx-auto">
+              A scripture-first visual atlas of the Watchers, the gods of the nations, beasts and beings:
+              220 sourced profiles &mdash; real museum and manuscript images, text-guided reconstructions only
+              where the Bible or 1 Enoch describes a form. Search the tables, filter by section, and click any
+              picture for full-screen zoom with credits.
+            </p>
+            <AutoFrame src="/watchers-atlas/index.html" title="The Watchers Atlas — scripture-first visual atlas of the Watchers of Enoch" initial="70vh" min={520} />
+          </section>
+        )}
+
         {volume.summary && (
           <section id="summary" className="p-8 sm:p-10 rounded-3xl bg-[#4A152C]/5 border-2 border-[#4A152C]/20 shadow-sm relative overflow-hidden text-center">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/10 rounded-full blur-2xl pointer-events-none" />
