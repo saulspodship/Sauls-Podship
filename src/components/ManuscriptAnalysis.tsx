@@ -22,6 +22,9 @@ export const normalizeAnalysis = (raw: string): string => {
 
   let text = raw;
 
+  // Remove legacy chart placeholders that have no client-side renderer.
+  text = text.replace(/\[\[CHART:[\s\S]*?\]\]/g, '');
+
   // 1. Remove literal escaped newlines or tabs
   text = text.replace(/\\n/g, '\n').replace(/\\r/g, '').replace(/\\t/g, '  ');
 
@@ -46,22 +49,40 @@ export const normalizeAnalysis = (raw: string): string => {
   return text.trim();
 };
 
+const slugifyHeading = (text: string): string =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+const getHeadingText = (children: React.ReactNode): string => {
+  if (typeof children === 'string' || typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map(getHeadingText).join('');
+  if (React.isValidElement<{ children?: React.ReactNode }>(children)) {
+    return getHeadingText(children.props.children);
+  }
+  return '';
+};
+
 export const ManuscriptAnalysis: React.FC<ManuscriptAnalysisProps> = ({ content, volumeTitle }) => {
   const cleanedContent = useMemo(() => normalizeAnalysis(content), [content]);
 
-  // Extract headings for "On This Page" Table of Contents
+  // Keep each source line so ReactMarkdown can assign the same unique ID to its rendered heading.
   const headings = useMemo(() => {
     const lines = cleanedContent.split('\n');
-    const list: { level: number; text: string; id: string }[] = [];
-    lines.forEach((line) => {
+    const list: { line: number; level: number; text: string; id: string }[] = [];
+    const idCounts = new Map<string, number>();
+
+    lines.forEach((line, index) => {
       const match = line.match(/^(#{2,3})\s+(.+)$/);
       if (match) {
         const level = match[1].length;
         const text = match[2].replace(/[*_`]/g, '').trim();
-        const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        list.push({ level, text, id });
+        const baseId = slugifyHeading(text) || 'section';
+        const occurrence = idCounts.get(baseId) ?? 0;
+        idCounts.set(baseId, occurrence + 1);
+        const id = occurrence === 0 ? baseId : `${baseId}-${occurrence + 1}`;
+        list.push({ line: index + 1, level, text, id });
       }
     });
+
     return list;
   }, [cleanedContent]);
 
@@ -90,14 +111,18 @@ export const ManuscriptAnalysis: React.FC<ManuscriptAnalysisProps> = ({ content,
             On This Page
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {headings.map((h, i) => (
-              <a
-                key={i}
-                href={`#${h.id}`}
+            {headings.map((h) => (
+              <button
+                key={h.id}
+                type="button"
+                aria-controls={h.id}
+                onClick={() => {
+                  document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
                 className="px-3 py-1 rounded-lg text-xs font-sans font-medium text-[#4A152C] bg-amber-50/60 hover:bg-[#4A152C] hover:text-[#E8C96A] border border-[#D4AF37]/20 transition-colors"
               >
                 {h.text}
-              </a>
+              </button>
             ))}
           </div>
         </nav>
@@ -109,29 +134,27 @@ export const ManuscriptAnalysis: React.FC<ManuscriptAnalysisProps> = ({ content,
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeSanitize]}
           components={{
-            h1: ({ children, ...props }) => {
-              const text = String(children || '');
-              const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            h1: ({ children, ...props }) => (
+              <h1 className="font-serif text-3xl sm:text-4xl font-black text-[#4A152C] mt-12 mb-4 text-center tracking-tight" {...props}>
+                {children}
+              </h1>
+            ),
+            h2: ({ children, node, ...props }) => {
+              const id = headings.find((heading) => heading.line === node?.position?.start?.line)?.id
+                || slugifyHeading(getHeadingText(children))
+                || 'section';
               return (
-                <h1 id={id} className="font-serif text-3xl sm:text-4xl font-black text-[#4A152C] mt-12 mb-4 text-center tracking-tight" {...props}>
-                  {children}
-                </h1>
-              );
-            },
-            h2: ({ children, ...props }) => {
-              const text = String(children || '');
-              const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-              return (
-                <h2 id={id} className="font-serif text-2xl sm:text-3xl font-black text-[#4A152C] mt-12 mb-4 text-center tracking-tight border-b border-[#D4AF37]/20 pb-2" {...props}>
+                <h2 {...props} id={id} className="font-serif text-2xl sm:text-3xl font-black text-[#4A152C] mt-12 mb-4 text-center tracking-tight border-b border-[#D4AF37]/20 pb-2 scroll-mt-24">
                   {children}
                 </h2>
               );
             },
-            h3: ({ children, ...props }) => {
-              const text = String(children || '');
-              const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            h3: ({ children, node, ...props }) => {
+              const id = headings.find((heading) => heading.line === node?.position?.start?.line)?.id
+                || slugifyHeading(getHeadingText(children))
+                || 'section';
               return (
-                <h3 id={id} className="font-serif text-xl sm:text-2xl font-bold text-[#8B1C2E] mt-8 mb-3 text-center" {...props}>
+                <h3 {...props} id={id} className="font-serif text-xl sm:text-2xl font-bold text-[#8B1C2E] mt-8 mb-3 text-center scroll-mt-24">
                   {children}
                 </h3>
               );

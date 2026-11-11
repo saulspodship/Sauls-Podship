@@ -23,6 +23,19 @@ console.log(`[CONTENT REGRESSION] Auditing ${volumes.length} volumes for baselin
 
 let hasError = false;
 
+// Legacy chart tokens were never rendered in the client analysis view. Keep
+// them out of both the generator input and the mirrored volume output.
+const rawCategoriesPath = path.resolve(rootDir, 'data/raw_categories.json');
+if (fs.existsSync(rawCategoriesPath)) {
+  const rawCategories = JSON.parse(fs.readFileSync(rawCategoriesPath, 'utf8'));
+  for (const category of rawCategories) {
+    if (JSON.stringify(category).includes('[[CHART:')) {
+      console.error(`[FAIL] Raw chart placeholder remains in generator source for ${category.title || category.id}.`);
+      hasError = true;
+    }
+  }
+}
+
 // Minimum acceptable baselines
 for (const v of volumes) {
   const panels = v.content?.storyPanels || [];
@@ -37,6 +50,12 @@ for (const v of volumes) {
       console.error(`[FAIL] Volume 22 has ${tables.length} tables (required at least 7).`);
       hasError = true;
     }
+  }
+
+  // No raw chart syntax may leak into any volume field.
+  if (JSON.stringify(v).includes('[[CHART:')) {
+    console.error(`[FAIL] Volume ${v.number} (${v.title}) still contains a raw chart placeholder.`);
+    hasError = true;
   }
 
   // All volumes must have content

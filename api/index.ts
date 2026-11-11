@@ -769,30 +769,8 @@ app.post("/api/volume-images", (req, res) => {
 function markdownToHtml(md: string): string {
   if (!md) return "";
   let html = md;
-  // Convert charts first
-  html = html.replace(/\[\[CHART:(.*?)\]\]/g, (_, chartContent) => {
-    const items = chartContent.split(",").map((item: string) => {
-      const parts = item.trim().split("|");
-      const label = parts[0] || "";
-      const value = parts[1] || "0";
-      const color = parts[2] || "#D4AF37";
-      return `
-        <div style="margin-bottom: 0.75rem;">
-          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: #4A152C; margin-bottom: 0.25rem;">
-            <span>${label}</span>
-            <span style="color: ${color};">${value}%</span>
-          </div>
-          <div style="width: 100%; background-color: rgba(74,21,44,0.05); border: 1px solid rgba(74,21,44,0.08); border-radius: 9999px; height: 10px; overflow: hidden;">
-            <div style="height: 100%; border-radius: 9999px; width: ${value}%; background-color: ${color};"></div>
-          </div>
-        </div>`;
-    }).join("");
-    return `
-      <div style="margin: 2rem 0; padding: 1.5rem; background-color: rgba(74,21,44,0.02); border: 1px solid rgba(74,21,44,0.1); border-radius: 12px;">
-        <h5 style="margin-top: 0; margin-bottom: 1rem; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(74,21,44,0.6);">Visual Metric Breakdown</h5>
-        ${items}
-      </div>`;
-  });
+  // Remove legacy chart placeholders instead of generating chart markup for them.
+  html = html.replace(/\[\[CHART:[\s\S]*?\]\]/g, '');
   // Convert headings (##, ###, #### and # all normalized)
   html = html.replace(/^####\s+(.*?)\n/gm, '<h3 style="font-family:\'Merriweather\', serif; color:#4A152C; font-size:1.2rem; margin-top:1.5rem; margin-bottom:0.75rem; font-weight:700;">$1</h3>');
   html = html.replace(/^###\s+(.*?)\n/gm, '<h2 style="font-family:\'Merriweather\', serif; color:#4A152C; font-size:1.5rem; margin-top:2rem; margin-bottom:1rem; font-weight:700;">$1</h2>');
