@@ -169,7 +169,8 @@ for (const v of volumes) {
     mdContent += `## Key Facts\n${v.keyFacts.map(f => `- ${f}`).join('\n')}\n\n`;
   }
   if (v.content?.analysis) {
-    mdContent += `## Scholarly Exegesis & Analysis\n${v.content.analysis}\n\n`;
+    const analysis = v.content.analysis.replace(/\[\[CHART:[\s\S]*?\]\]/g, '').replace(/\n{3,}/g, '\n\n');
+    mdContent += `## Scholarly Exegesis & Analysis\n${analysis}\n\n`;
   }
   if (v.faq && v.faq.length > 0) {
     mdContent += `## Frequently Asked Questions\n${v.faq.map(f => `### ${f.q}\n${f.a}`).join('\n\n')}\n\n`;

@@ -107,6 +107,11 @@ for meta in ALL_METAS:
                 "maps": []
             }
     
+    # Remove unsupported legacy chart placeholders from generated analysis.
+    if isinstance(content.get("analysis"), str):
+        content["analysis"] = re.sub(r'\[\[CHART:[\s\S]*?\]\]', '', content["analysis"])
+        content["analysis"] = re.sub(r'\n{3,}', '\n\n', content["analysis"]).strip()
+
     unsplash_id = meta.get("unsplashId", "1507608869274-d3177c8bb4c7")
     artwork = meta.get("artwork", f"Historical sacred illustration for {title}")
     
