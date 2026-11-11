@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { Suspense, lazy, useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   BookOpen, Calendar, Clock, ExternalLink, Play, ChevronLeft, 
@@ -27,6 +27,9 @@ import { bibleComUrl } from '../lib/bibleRef';
 import { SITE } from '../config/site';
 import AutoFrame from '../components/modules/AutoFrame';
 import { FAQ_DATA } from '../data/faq';
+
+// Only volumes that carry a lineage tree (content.lineage) download its explorer.
+const LineageExplorer = lazy(() => import('../components/volume/LineageExplorer'));
 
 
 
@@ -410,6 +413,20 @@ export const VolumePage: React.FC = () => {
               }}
             />
           </section>
+        )}
+
+        {/* Lineage of traditions (tree + timeline) — opens the reference layer, ahead of the tables */}
+        {volume.content?.lineage && volume.content.lineage.nodes.length > 0 && (
+          <Suspense
+            fallback={
+              <div className="py-10 flex justify-center" role="status" aria-live="polite">
+                <span className="inline-block h-9 w-9 rounded-full border-2 border-[#D4AF37]/30 border-t-[#D4AF37] animate-spin" />
+                <span className="sr-only">Loading…</span>
+              </div>
+            }
+          >
+            <LineageExplorer lineage={volume.content.lineage} slug={volume.slug} />
+          </Suspense>
         )}
 
         {/* Doctrinal Reference Data Tables with Real-Time Search & CSV Export */}

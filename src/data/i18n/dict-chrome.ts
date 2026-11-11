@@ -39,6 +39,9 @@ export const DICT_CHROME: Record<string, Tr> = {
   'Prophecy Map': ['نقشۂ نبوّت', 'भविष्यवाणी नक्शा', 'خريطة النبوءات'],
   'Interlinked Bible': ['باہمی مربوط بائبل', 'परस्पर-संबद्ध बाइबल', 'الكتاب المقدس المترابط'],
   'The Interlinked Bible': ['باہمی مربوط بائبل', 'परस्पर-संबद्ध बाइबल', 'الكتاب المقدس المترابط'],
+  /* The module's own heading is two text nodes — "The Interlinked" + <em>Bible</em> — so each half
+     needs an entry ("Bible" is in dict-volumes); together they read as the line above. */
+  'The Interlinked': ['باہمی مربوط', 'परस्पर-संबद्ध', 'ترابُط'],
   'Kings of the Bible': ['بائبل کے بادشاہ', 'बाइबल के राजा', 'ملوك الكتاب المقدس'],
   'Comparative Apologetics': ['تقابلی دفاعِ ایمان', 'तुलनात्मक ईसाई युक्तिवाद', 'الدفاعيات المقارنة'],
   'Theological Archive': ['الٰہیاتی آرکائیو', 'धार्मिक अभिलेखागार', 'الأرشيف اللاهوتي'],
