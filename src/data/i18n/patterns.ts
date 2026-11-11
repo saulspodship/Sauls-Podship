@@ -283,6 +283,39 @@ export const PATTERNS: PatternRule[] = [
     out: ['{1} نتائج', '{1} परिणाम', '{1} نتيجة'],
     numeric: [1],
   },
+
+  /* ---- lineage explorer (content.lineage): the counter, the branch toggle and
+         approximate years, all generated from the data ("Showing 11 of 52
+         traditions", "7 branches", "c. 2242 BC"). "1 branch" is a dictionary
+         entry, so the singular never reaches the plural rule. ---- */
+  {
+    id: 'showing-n-of-m-traditions',
+    re: '^Showing\\s+(\\d{1,5})\\s+of\\s+(\\d{1,5})\\s+traditions$',
+    flags: 'i',
+    out: ['{2} میں سے {1} روایات', '{2} में से {1} परंपराएँ', 'عرض {1} من {2} تقليدًا'],
+    numeric: [1, 2],
+  },
+  {
+    id: 'n-branches',
+    re: '^(\\d{1,4})\\s+branches$',
+    flags: 'i',
+    out: ['{1} شاخیں', '{1} शाखाएँ', '{1} فروع'],
+    numeric: [1],
+  },
+  {
+    id: 'circa-year-bc',
+    re: '^c\\.\\s*(\\d[\\d,]*)\\s*BC$',
+    flags: 'i',
+    out: ['تقریباً {1} ق م', 'लगभग {1} ई.पू.', 'نحو {1} ق.م'],
+    numeric: [1],
+  },
+  {
+    id: 'circa-year-ad',
+    re: '^c\\.\\s*(\\d[\\d,]*)\\s*AD$',
+    flags: 'i',
+    out: ['تقریباً {1} عیسوی', 'लगभग {1} ईस्वी', 'نحو {1} م'],
+    numeric: [1],
+  },
 ];
 
 /** Extra single words that appear inside generated sentences. */

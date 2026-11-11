@@ -58,8 +58,52 @@ export interface VolumeFAQ {
   a: string;
 }
 
+/** How a tradition's spiritual-origin claim is sourced (see VolumeLineage.notes). */
+export type LineageClaimType = "Bible" | "Tradition" | "Contested" | "None stated" | "Speculation";
+
+/** One tradition on a volume's lineage tree. */
+export interface LineageNode {
+  id: string;
+  /** id of the tradition this one branches from; null for the root. */
+  parent: string | null;
+  name: string;
+  /** Years are signed: negative = BC. `null` = that dating system gives no date. */
+  biblicalYear: number | null;
+  scholarlyYear: number | null;
+  dateNote?: string;
+  founder: string;
+  claimType: LineageClaimType;
+  /** Omitted when the type badge already says everything ("None stated"). */
+  claim?: string;
+  books: string;
+  symbols: string;
+  /** ids from VolumeLineage.groups — drives the "Show" filter. */
+  tags: string[];
+  /** What occult writers themselves claim about the tradition or its symbols. */
+  occultView?: string;
+  /** Overrides the "Occult view" label where the claim is not an occult one. */
+  occultViewLabel?: string;
+  /** What historians find when that claim is checked. */
+  check?: string;
+}
+
+/**
+ * A family tree of traditions shown as part of a volume's reference layer
+ * (tree + timeline views, biblical vs scholarly dating). Rendered by
+ * src/components/volume/LineageExplorer.tsx.
+ */
+export interface VolumeLineage {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  notes: { label: string; text: string }[];
+  groups: { id: string; label: string }[];
+  nodes: LineageNode[];
+}
+
 export interface VolumeContent {
   analysis: string;
+  lineage?: VolumeLineage;
   tables?: { title: string; headers: string[]; rows: string[][] }[];
   storyPanels?: StoryPanel[];
   timeline?: { year: string; event: string; color?: string; era?: string }[];

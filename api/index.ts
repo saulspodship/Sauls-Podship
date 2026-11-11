@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { GoogleGenAI, Type } from "@google/genai";
-import { CATEGORIES } from "./data.js";
+import { CATEGORIES, lineageTable } from "./data.js";
 import { EMBEDDED_ARTISTS } from "./singersData.js";
 
 // ESM-safe directory anchor: this module may be executed as ESM (where
@@ -1224,12 +1224,33 @@ app.get("/encyclopedia/:slug", async (req, res) => {
       relatedLinksHtml += `</div>`;
     }
 
-    // Convert tables to HTML
+    // Convert tables to HTML. A volume's lineage (content.lineage) leads them as one
+    // more reference table: this article is the no-JavaScript reading of the volume,
+    // so it carries the same facts as the explorer on the volume page.
+    const articleTables: any[] = [];
+    const lineage = volume.content?.lineage;
+    if (lineage && Array.isArray(lineage.nodes) && lineage.nodes.length > 0) {
+      try {
+        const esc = (s: string) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const { headers, rows } = lineageTable(lineage);
+        articleTables.push({
+          title: esc(lineage.title || "Lineage"),
+          intro: lineage.intro ? esc(lineage.intro) : "",
+          headers,
+          rows: rows.map((row) => row.map(esc)),
+        });
+      } catch (_) {
+        // A malformed lineage (e.g. a hand-edited Firestore copy) must not cost the article its tables.
+      }
+    }
+    if (volume.content && Array.isArray(volume.content.tables)) articleTables.push(...volume.content.tables);
+
     let tablesHtml = "";
-    if (volume.content && volume.content.tables && volume.content.tables.length > 0) {
-      for (const tbl of volume.content.tables) {
+    if (articleTables.length > 0) {
+      for (const tbl of articleTables) {
         tablesHtml += `<div style="margin-top:2.5rem; margin-bottom:2.5rem;">
           <h3 style="font-family:'Merriweather', serif; color:#4A152C; font-size:1.25rem; margin-bottom:1rem; font-weight:700;">${tbl.title || 'Theological Reference'}</h3>
+          ${tbl.intro ? `<p style="margin:0 0 1rem 0; font-size:0.9rem; color:rgba(29,45,80,0.75);">${tbl.intro}</p>` : ''}
           <div style="overflow-x:auto;">
             <table style="width:100%; border-collapse:collapse; background-color:#ffffff; border:1px solid rgba(74,21,44,0.15); font-size:0.9rem;">
               <thead>
