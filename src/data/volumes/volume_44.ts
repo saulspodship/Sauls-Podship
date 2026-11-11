@@ -37,7 +37,7 @@ export const volume_44: Volume = {
   "youtubeStatus": "scheduled",
   "youtubePublishDate": "2027-02-14",
   "relatedVolumes": [
-    "the-ark-of-the-covenant-and-biblical-relics",
+    "ark-of-covenant-and-other-biblical-relics",
     "seven-last-words-of-jesus",
     "holy-communion",
     "baptism-sacraments-circumcision"

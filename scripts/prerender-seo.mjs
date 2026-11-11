@@ -23,7 +23,13 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeSanitize from 'rehype-sanitize';
 import { build as esbuild } from 'esbuild';
+import { SEO_ARTICLES } from './seo-articles.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -57,7 +63,7 @@ const PUBLISHER = {
   logo: { '@type': 'ImageObject', url: `${BASE_URL}/icons/brand-logo.png` },
 };
 const absolute = (src) => (src.startsWith('http') ? src : `${BASE_URL}${src.startsWith('/') ? '' : '/'}${src}`);
-const articleSchema = ({ headline, description, url, image, datePublished, dateModified, section }) => ({
+const articleSchema = ({ headline, description, url, image, datePublished, dateModified, section, keywords, about, identifier }) => ({
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: clip(headline, 110),
@@ -70,8 +76,12 @@ const articleSchema = ({ headline, description, url, image, datePublished, dateM
   author: AUTHOR,
   publisher: PUBLISHER,
   isPartOf: { '@type': 'WebSite', name: "Saul's Podship", url: `${BASE_URL}/` },
+  isAccessibleForFree: true,
   inLanguage: 'en',
   ...(section ? { articleSection: section } : {}),
+  ...(identifier ? { identifier } : {}),
+  ...(keywords?.length ? { keywords } : {}),
+  ...(about?.length ? { about } : {}),
 });
 
 if (!fs.existsSync(path.join(distDir, 'index.html'))) {
@@ -109,6 +119,7 @@ fs.unlinkSync(tmpFile);
 
 const volumesPath = path.join(rootDir, 'src/data/volumes/volumesData.json');
 const volumes = fs.existsSync(volumesPath) ? JSON.parse(fs.readFileSync(volumesPath, 'utf8')) : [];
+const volumeBySlug = new Map(volumes.map((volume) => [volume.slug, volume]));
 
 /* ---- shared crawlable navigation ---- */
 const NAV_LINKS = [
@@ -144,7 +155,7 @@ const wrap = (inner) =>
   `<div id="root"><div style="max-width:60rem;margin:0 auto;padding:1.25rem;font-family:Georgia,serif;color:#4A152C;background:#F8F4E3;line-height:1.55">${inner}</div></div>`;
 
 /* ---- rewrite <head> for a prerendered page ---- */
-function withHead(html, { title, description, canonical, keywords }) {
+function withHead(html, { title, description, canonical, keywords, alternateMarkdown }) {
   // Keep snippets concise and prevent the same long titles/descriptions from
   // being emitted on dozens of generated pages. Clip at a word boundary.
   const pageTitle = clip(title, 60);
@@ -163,8 +174,63 @@ function withHead(html, { title, description, canonical, keywords }) {
   if (keywords) {
     out = out.replace(/(<meta\s+name="keywords"\s+content=")[^"]*(")/i, `$1${esc(keywords.join(', '))}$2`);
   }
+  if (alternateMarkdown) {
+    out = out.replace('</head>', `<link rel="alternate" type="text/markdown" href="${esc(alternateMarkdown)}" />\n</head>`);
+  }
   return out;
 }
+
+const stylesheetTags = [...template.matchAll(/<link\b[^>]*>/gi)]
+  .map(([tag]) => tag)
+  .filter((tag) => /\brel="stylesheet"/i.test(tag) && /\bhref="\/assets\/[^" ]+\.css"/i.test(tag));
+
+const standaloneHtml = (body, page) => {
+  const title = clip(page.head.title, 70);
+  const description = clip(page.head.description, 155);
+  const canonical = page.head.canonical;
+  const image = absolute(page.article?.image || '/icons/brand-logo.png');
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${esc(title)}</title>
+  <meta name="description" content="${esc(description)}" />
+  <meta name="keywords" content="${esc((page.head.keywords || []).join(', '))}" />
+  <meta name="author" content="Solat Nadeem" />
+  <link rel="canonical" href="${esc(canonical)}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="${esc(canonical)}" />
+  <meta property="og:title" content="${esc(title)}" />
+  <meta property="og:description" content="${esc(description)}" />
+  <meta property="og:image" content="${esc(image)}" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="${esc(canonical)}" />
+  <meta property="twitter:title" content="${esc(title)}" />
+  <meta property="twitter:description" content="${esc(description)}" />
+  <meta property="twitter:image" content="${esc(image)}" />
+  <link rel="alternate" type="text/markdown" href="${esc(page.head.alternateMarkdown)}" />
+  ${stylesheetTags.join('\n  ')}
+  <style>
+    body{margin:0;background:#F8F4E3;color:#382431;font:16px/1.65 Georgia,"Times New Roman",serif}
+    .seo-article-shell{max-width:72rem;margin:0 auto;padding:clamp(1rem,4vw,3rem)}
+    .seo-article-shell main{max-width:60rem;margin:2rem auto}
+    .seo-article-shell a{color:#6b1f3b;text-underline-offset:.18em}
+    .seo-article-shell h1,.seo-article-shell h2,.seo-article-shell h3{line-height:1.25;color:#4A152C}
+    .seo-article-shell h1{font-size:clamp(2rem,4vw,3.2rem)}
+    .seo-article-shell .eyebrow,.seo-article-shell .article-meta{font:600 .82rem/1.5 system-ui,sans-serif;letter-spacing:.04em}
+    .seo-article-shell .quick-answer{padding:1rem 1.25rem;border-left:4px solid #D4AF37;background:#fffaf0}
+    .table-scroll{overflow-x:auto;margin:1rem 0}table{border-collapse:collapse;min-width:40rem;width:100%;background:#fffaf0}
+    caption{text-align:left;font-weight:bold;padding:.75rem}th,td{border:1px solid #d9c9ae;padding:.7rem;text-align:left;vertical-align:top}
+    nav[aria-label="Breadcrumb"] ol{display:flex;flex-wrap:wrap;gap:.4rem 1rem;padding:0;list-style:none;font:.9rem/1.5 system-ui,sans-serif}
+  </style>
+</head>
+<body>
+${body}
+</body>
+</html>
+`;
+};
 
 /* ---- which URLs does the theological-archive sitemap promise? ---- */
 const taSitemap = fs.readFileSync(path.join(rootDir, 'public/sitemap-theological-archive.xml'), 'utf8');
@@ -180,6 +246,144 @@ const jsonLd = (id, data) =>
   `<script id="${esc(id)}" type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
 const faqContent = (items) =>
   items.map(({ question, answer }) => `<section><h3>${esc(question)}</h3><p>${esc(answer)}</p></section>`).join('');
+
+const safeHttpUrl = (value) => {
+  try {
+    const url = new URL(String(value));
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+};
+
+const renderVolumeAnalysis = (markdown) => {
+  const source = String(markdown || '').replace(/\[\[CHART:[\s\S]*?\]\]/g, '').trim();
+  if (!source) return '';
+  const components = {
+    h1: ({ children, node, ...props }) => React.createElement('h2', props, children),
+  };
+  return renderToStaticMarkup(React.createElement(
+    ReactMarkdown,
+    { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSanitize], components },
+    source,
+  ));
+};
+
+const volumeLineageHtml = (lineage) => {
+  if (!lineage?.nodes?.length) return '';
+  const yearLabel = (year) => year == null ? 'Not stated' : `${Math.abs(year)} ${year < 0 ? 'BCE' : 'CE'}`;
+  const groups = new Map((lineage.groups || []).map((group) => [group.id, group.label]));
+  const notes = (lineage.notes || []).map((note) => `<li><strong>${esc(note.label)}:</strong> ${esc(note.text)}</li>`).join('');
+  const nodes = lineage.nodes.map((node) => {
+    const tags = (node.tags || []).map((tag) => groups.get(tag)).filter(Boolean);
+    return `<li><h4>${esc(node.name)}</h4>` +
+      `<p><strong>Dates:</strong> Biblical ${esc(yearLabel(node.biblicalYear))}; scholarly ${esc(yearLabel(node.scholarlyYear))}.` +
+      (node.dateNote ? ` ${esc(node.dateNote)}` : '') + `</p>` +
+      `<p><strong>Founder or origin:</strong> ${esc(node.founder || 'Not stated')}. ` +
+      `<strong>Sacred texts:</strong> ${esc(node.books || 'Not stated')}. ` +
+      `<strong>Symbols:</strong> ${esc(node.symbols || 'Not stated')}.</p>` +
+      `<p><strong>Source label:</strong> ${esc(node.claimType || 'Not stated')}.` +
+      (tags.length ? ` <strong>Tradition group:</strong> ${esc(tags.join(', '))}.` : '') + `</p>` +
+      (node.claim ? `<p><strong>Origin claim recorded in the tree:</strong> ${esc(node.claim)}</p>` : '') +
+      (node.occultView ? `<p><strong>${esc(node.occultViewLabel || 'Occult view')}:</strong> ${esc(node.occultView)}</p>` : '') +
+      (node.check ? `<p><strong>Historical check:</strong> ${esc(node.check)}</p>` : '') +
+      `</li>`;
+  }).join('');
+  return `<section id="lineage-reference"><h2>${esc(lineage.title)}</h2>` +
+    `<p>${esc(lineage.intro)}</p>` +
+    (notes ? `<h3>Dating and source notes</h3><ul>${notes}</ul>` : '') +
+    `<h3>${lineage.nodes.length} traditions in the tree</h3><ol>${nodes}</ol></section>`;
+};
+
+const markdownLinks = (markdown) => {
+  const links = [];
+  const seen = new Set();
+  for (const match of String(markdown || '').matchAll(/\[([^\]]{1,240})\]\((https?:\/\/[^)\s]+)\)/g)) {
+    const href = safeHttpUrl(match[2]);
+    if (!href || seen.has(href)) continue;
+    seen.add(href);
+    links.push({ href, label: match[1] });
+  }
+  return links;
+};
+
+const volumeResourcesHtml = (volume, volumeBySlug) => {
+  const resources = [];
+  const seen = new Set();
+  const add = (href, label, external = false) => {
+    if (!href || seen.has(href)) return;
+    seen.add(href);
+    resources.push({ href, label, external });
+  };
+  const companion = safeHttpUrl(volume.articleLink);
+  if (companion) add(companion, 'Read the companion article', true);
+  const video = safeHttpUrl(volume.youtubeLink);
+  if (video) add(video, 'Watch the video lesson', true);
+  for (const link of markdownLinks(volume.content?.analysis)) {
+    add(link.href, `Reference: ${link.label}`, true);
+  }
+  for (const slug of volume.relatedVolumes || []) {
+    const related = volumeBySlug.get(slug);
+    if (related) add(`/encyclopedia/${related.slug}`, `Volume ${String(related.number).padStart(2, '0')}: ${related.title}`);
+  }
+  for (const article of volume.relatedArticles || []) {
+    if (article.href?.startsWith('/') && !article.href.startsWith('//')) add(article.href, `Study guide: ${article.title}`);
+  }
+  add(`/encyclopedia/${volume.slug}.md`, 'Open the full Markdown / text edition');
+  return `<section aria-labelledby="further-reading"><h2 id="further-reading">Further reading and resources</h2>` +
+    `<ul>${resources.map(({ href, label, external }) => `<li><a href="${esc(href)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${esc(label)}</a></li>`).join('')}</ul></section>`;
+};
+
+const volumeBreadcrumbHtml = (volume, number) =>
+  `<nav aria-label="Breadcrumb"><ol>` +
+  `<li><a href="/">Home</a></li><li><a href="/encyclopedia">Theological encyclopedia</a></li>` +
+  `<li aria-current="page">Volume ${number}: ${esc(volume.title)}</li></ol></nav>`;
+
+const breadcrumbSchema = (items) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: item.url,
+  })),
+});
+
+const renderSeoArticleBody = (article, volumeBySlug) => {
+  const tableHtml = (table) =>
+    `<div class="table-scroll"><table><caption>${esc(table.caption)}</caption>` +
+    `<thead><tr>${table.headings.map((heading) => `<th scope="col">${esc(heading)}</th>`).join('')}</tr></thead>` +
+    `<tbody>${table.rows.map((row) => `<tr>${row.map((value, index) => index === 0
+      ? `<th scope="row">${esc(value)}</th>`
+      : `<td>${esc(value)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const sections = (article.sections || []).map((section) =>
+    `<section><h2>${esc(section.heading)}</h2>` +
+    (section.table ? tableHtml(section.table) : '') +
+    (section.paragraphs || []).map((paragraph) => `<p>${esc(paragraph)}</p>`).join('') +
+    (section.bullets?.length ? `<ul>${section.bullets.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>` : '') +
+    `</section>`,
+  ).join('');
+  const relatedVolumes = (article.relatedVolumes || []).map((slug) => volumeBySlug.get(slug)).filter(Boolean);
+  const relatedPages = (article.relatedPages || []).filter(({ href }) => href?.startsWith('/') && !href.startsWith('//'));
+  const related = [...relatedVolumes.map((volume) =>
+    `<li><a href="/encyclopedia/${esc(volume.slug)}">Volume ${String(volume.number).padStart(2, '0')}: ${esc(volume.title)}</a></li>`,
+  ), ...relatedPages.map(({ href, label }) => `<li><a href="${esc(href)}">${esc(label)}</a></li>`)].join('');
+  return `<div id="root"><div class="seo-article-shell">` +
+    `<nav aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>` +
+    `<li><a href="/encyclopedia">Theological encyclopedia</a></li>` +
+    `<li><a href="/encyclopedia/comparative-religion">Comparative Religion — Volume 15</a></li>` +
+    `<li aria-current="page">${esc(article.title)}</li></ol></nav>` +
+    `<main><article><header><p class="eyebrow">Comparative religion study guide</p>` +
+    `<h1>${esc(article.title)}</h1><p class="article-meta">Updated ${esc(article.updatedDate)} · Saul's Podship Scriptorium</p>` +
+    `<section class="quick-answer" aria-labelledby="quick-answer-title"><h2 id="quick-answer-title">Quick answer</h2><p>${esc(article.answer)}</p></section></header>` +
+    sections +
+    `<section><h2>Sources and editorial notes</h2><ul>${(article.sourceNotes || []).map((note) => `<li>${esc(note)}</li>`).join('')}</ul></section>` +
+    (article.faqs?.length ? `<section id="faq"><h2>Frequently asked questions</h2>${faqContent(article.faqs)}</section>` : '') +
+    (related ? `<section><h2>Related reading</h2><ul>${related}</ul></section>` : '') +
+    `<p><a href="/encyclopedia">Browse all 51 encyclopedia volumes</a></p></article></main>` +
+    `${siteNav()}</div></div>`;
+};
 
 pages.set('/about', {
   head: ABOUT_META,
@@ -321,10 +525,46 @@ pages.set('/encyclopedia', {
       `<ul><li><a href="/encyclopedia/biblical-maps-atlas">Biblical Maps — Interactive Journey Atlas</a> — eight animated study maps with the world faith map at the foot.</li></ul>` +
       `<h2>Volume 4 supplement</h2>` +
       `<ul><li><a href="/watchers-atlas">Watchers Atlas — Watchers of Enoch &amp; the World's Gods</a> — 220 sourced image profiles, comparative tables and a speculative-claims evidence check.</li></ul>` +
+      `<section><h2>Comparative religion study guides</h2><ul>${SEO_ARTICLES.map((article) => `<li><a href="/resources/${esc(article.slug)}">${esc(article.title)}</a> — ${esc(article.description)}</li>`).join('')}</ul></section>` +
       `</main>` +
       siteNav(),
   ),
 });
+
+for (const article of SEO_ARTICLES) {
+  const route = `/resources/${article.slug}`;
+  const canonical = `${BASE_URL}${route}`;
+  const breadcrumbs = [
+    { name: "Saul's Podship", url: `${BASE_URL}/` },
+    { name: 'Theological encyclopedia', url: `${BASE_URL}/encyclopedia` },
+    { name: 'Comparative Religion — Volume 15', url: `${BASE_URL}/encyclopedia/comparative-religion` },
+    { name: article.title, url: canonical },
+  ];
+  pages.set(route, {
+    standalone: true,
+    head: {
+      title: `${article.metaTitle || article.title} | Saul's Podship`,
+      description: article.description,
+      canonical,
+      keywords: article.keywords,
+      alternateMarkdown: `${canonical}.md`,
+    },
+    article: {
+      headline: article.title,
+      description: article.description,
+      datePublished: article.publishedDate,
+      dateModified: article.updatedDate,
+      section: 'Comparative religion study guides',
+      image: '/icons/brand-logo.png',
+      identifier: article.slug,
+      keywords: article.keywords,
+      about: article.keywords.map((name) => ({ '@type': 'Thing', name })),
+    },
+    faq: article.faqs,
+    breadcrumbs,
+    body: renderSeoArticleBody(article, volumeBySlug),
+  });
+}
 
 // Pages that had no static file at all.
 pages.set('/comparative-apologetics', {
@@ -601,31 +841,61 @@ for (const v of volumes) {
   const n = String(v.number).padStart(2, '0');
   const route = `/encyclopedia/${v.slug}`;
   if (pages.has(route)) continue;
+  const canonical = BASE_URL + route;
   const summary = v.summary || v.overview || '';
+  const faqEntries = (v.faq || []).map(({ q, a }) => ({ question: q, answer: a }));
+  const analysisHtml = renderVolumeAnalysis(v.content?.analysis);
+  const lineageHtml = volumeLineageHtml(v.content?.lineage);
+  const topicList = Array.isArray(v.keywords) && v.keywords.length
+    ? `<section aria-labelledby="topics-covered"><h2 id="topics-covered">Topics covered</h2><ul>${v.keywords.map((keyword) => `<li>${esc(keyword)}</li>`).join('')}</ul></section>`
+    : '';
+  const keyFactsHtml = v.keyFacts?.length
+    ? `<section aria-labelledby="key-facts"><h2 id="key-facts">Key facts</h2><ul>${v.keyFacts.map((fact) => `<li>${esc(fact)}</li>`).join('')}</ul></section>`
+    : '';
+  const faqHtml = faqEntries.length
+    ? `<section id="faq" aria-labelledby="faq-title"><h2 id="faq-title">Frequently asked questions</h2>${faqContent(faqEntries)}</section>`
+    : '';
+  const breadcrumbItems = [
+    { name: "Saul's Podship", url: `${BASE_URL}/` },
+    { name: 'Theological encyclopedia', url: `${BASE_URL}/encyclopedia` },
+    { name: `Volume ${n}: ${v.title}`, url: canonical },
+  ];
+
   pages.set(route, {
     head: {
       title: `${clip(v.title, 40)} | Vol. ${n} | Saul's Podship`,
       description: clip(v.metaDescription || summary, 155),
-      canonical: BASE_URL + route,
+      canonical,
       keywords: Array.isArray(v.keywords) ? v.keywords : undefined,
+      alternateMarkdown: `${canonical}.md`,
     },
-    // This script overwrites dist/encyclopedia/<slug>/index.html, so the
-    // Article node postbuild wrote there is gone by now — emit it here.
+    // This script overwrites dist/encyclopedia/<slug>/index.html, so it also
+    // owns the crawlable article, FAQ and breadcrumb structured data.
     article: {
       headline: `Volume ${n}: ${v.title}`,
       description: v.metaDescription || summary || v.overview,
       image: v.heroImage?.src,
       dateModified: v.lastUpdated,
-      section: `Encyclopedia — Volume ${n}`,
+      section: `Encyclopedia — ${v.category || 'Volume'} ${n}`,
+      identifier: `Volume ${n}`,
+      keywords: Array.isArray(v.keywords) ? v.keywords : [],
+      about: (Array.isArray(v.keywords) ? v.keywords : []).slice(0, 10).map((name) => ({ '@type': 'Thing', name })),
     },
+    faq: faqEntries,
+    breadcrumbs: breadcrumbItems,
     body: wrap(
-      `<main><h1>Volume ${n}: ${esc(v.title)}</h1>` +
+      volumeBreadcrumbHtml(v, n) +
+        `<main><article><h1>Volume ${n}: ${esc(v.title)}</h1>` +
         (v.subtitle ? `<p><em>${esc(v.subtitle)}</em></p>` : '') +
-        `<p>${esc(summary)}</p>` +
-        (v.overview && v.overview !== summary ? `<p>${esc(v.overview)}</p>` : '') +
-        (v.keyFacts && v.keyFacts.length ? `<h2>Key facts</h2><ul>${v.keyFacts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>` : '') +
-        (v.faq && v.faq.length ? `<h2>Frequently asked questions</h2>${v.faq.map((f) => `<section><h3>${esc(f.q)}</h3><p>${esc(f.a)}</p></section>`).join('')}` : '') +
-        `<p><a href="/encyclopedia">Browse all 51 volumes</a></p></main>` +
+        `<section id="quick-answer" aria-labelledby="quick-answer-title"><h2 id="quick-answer-title">Quick answer</h2><p>${esc(summary)}</p></section>` +
+        (v.overview && v.overview !== summary ? `<section><h2>Scope and context</h2><p>${esc(v.overview)}</p></section>` : '') +
+        keyFactsHtml +
+        topicList +
+        (analysisHtml ? `<section id="volume-analysis" aria-label="Detailed scholarly analysis">${analysisHtml}</section>` : '') +
+        lineageHtml +
+        faqHtml +
+        volumeResourcesHtml(v, volumeBySlug) +
+        `<p><a href="/encyclopedia">Browse all 51 volumes</a></p></article></main>` +
         siteNav(),
     ),
   });
@@ -637,7 +907,9 @@ for (const [route, page] of pages) {
   if (!page.head) continue;
   const file = path.join(distDir, route.replace(/^\//, ''), 'index.html');
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  let pageHtml = withHead(template, page.head).replace(EMPTY_ROOT, page.body);
+  let pageHtml = page.standalone
+    ? standaloneHtml(page.body, page)
+    : withHead(template, page.head).replace(EMPTY_ROOT, page.body);
   if (page.article) {
     const schema = articleSchema({
       headline: page.article.headline || page.head.title,
@@ -646,6 +918,12 @@ for (const [route, page] of pages) {
       ...page.article,
     });
     pageHtml = pageHtml.replace('</head>', `${jsonLd('sp-article-jsonld', schema)}\n</head>`);
+  }
+  if (page.faq?.length) {
+    pageHtml = pageHtml.replace('</head>', `${jsonLd('sp-volume-faq-jsonld', faqSchema(page.faq))}\n</head>`);
+  }
+  if (page.breadcrumbs?.length) {
+    pageHtml = pageHtml.replace('</head>', `${jsonLd('sp-volume-breadcrumb-jsonld', breadcrumbSchema(page.breadcrumbs))}\n</head>`);
   }
   fs.writeFileSync(file, pageHtml, 'utf8');
   // Vite preview and Vercel can resolve clean URLs to .html files. Keeping

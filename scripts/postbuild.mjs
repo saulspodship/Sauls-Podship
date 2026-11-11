@@ -6,6 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { SEO_ARTICLES } from './seo-articles.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +44,105 @@ if (!fs.existsSync(distDir)) {
 // 1. Generate sitemap.xml
 const BASE_URL = 'https://www.saulspodship.com';
 const today = new Date().toISOString().split('T')[0];
+const volumeBySlug = new Map(volumes.map((volume) => [volume.slug, volume]));
+
+const formatVolumeYear = (year) => year == null ? 'Not stated' : `${Math.abs(year)} ${year < 0 ? 'BCE' : 'CE'}`;
+const volumeLineageMarkdown = (lineage) => {
+  if (!lineage?.nodes?.length) return '';
+  const groupLabels = new Map((lineage.groups || []).map((group) => [group.id, group.label]));
+  const notes = (lineage.notes || []).map((note) => `- **${note.label}:** ${note.text}`).join('\n');
+  const nodes = lineage.nodes.map((node) => {
+    const groups = (node.tags || []).map((tag) => groupLabels.get(tag)).filter(Boolean);
+    return `- **${node.name}** — Biblical date: ${formatVolumeYear(node.biblicalYear)}; scholarly date: ${formatVolumeYear(node.scholarlyYear)}; founder/origin: ${node.founder || 'Not stated'}; sacred texts: ${node.books || 'Not stated'}; source label: ${node.claimType || 'Not stated'}.` +
+      (node.dateNote ? ` ${node.dateNote}` : '') +
+      ` Symbols: ${node.symbols || 'Not stated'}.` +
+      (groups.length ? ` Group: ${groups.join(', ')}.` : '') +
+      (node.claim ? ` Origin claim recorded in the tree: ${node.claim}` : '') +
+      (node.occultView ? ` ${node.occultViewLabel || 'Occult view'}: ${node.occultView}` : '') +
+      (node.check ? ` Historical check: ${node.check}` : '');
+  }).join('\n');
+  return `## ${lineage.title}\n\n${lineage.intro}\n\n` +
+    (notes ? `### Dating and source notes\n\n${notes}\n\n` : '') +
+    `### ${lineage.nodes.length} traditions in the tree\n\n${nodes}\n`;
+};
+
+const volumeResourcesMarkdown = (volume) => {
+  const resources = [];
+  if (volume.articleLink) resources.push(`[Companion article](${volume.articleLink})`);
+  if (volume.youtubeLink) resources.push(`[Video lesson](${volume.youtubeLink})`);
+  for (const slug of volume.relatedVolumes || []) {
+    const related = volumeBySlug.get(slug);
+    if (related) resources.push(`[Volume ${String(related.number).padStart(2, '0')}: ${related.title}](${BASE_URL}/encyclopedia/${related.slug})`);
+  }
+  for (const article of volume.relatedArticles || []) {
+    if (article.href?.startsWith('/') && !article.href.startsWith('//')) {
+      resources.push(`[Study guide: ${article.title}](${BASE_URL}${article.href})`);
+    }
+  }
+  return resources.length ? `## Further reading and resources\n\n${resources.map((resource) => `- ${resource}`).join('\n')}\n` : '';
+};
+
+const renderVolumeMarkdown = (volume) => {
+  const number = String(volume.number).padStart(2, '0');
+  const canonical = `${BASE_URL}/encyclopedia/${volume.slug}`;
+  const parts = [
+    `# Volume ${number}: ${volume.title}`,
+    `**Canonical article:** [${volume.title}](${canonical})  \n**Category:** ${volume.category || 'theology'} | **Last updated:** ${volume.lastUpdated || today}`,
+    `## Quick answer\n\n${volume.summary || volume.overview || ''}`,
+  ];
+  if (volume.overview && volume.overview !== volume.summary) parts.push(`## Scope and context\n\n${volume.overview}`);
+  if (volume.keywords?.length) parts.push(`## Topics covered\n\n${volume.keywords.map((keyword) => `- ${keyword}`).join('\n')}`);
+  if (volume.keyFacts?.length) parts.push(`## Key facts\n\n${volume.keyFacts.map((fact) => `- ${fact}`).join('\n')}`);
+  if (volume.content?.analysis) {
+    const analysis = volume.content.analysis.replace(/\[\[CHART:[\s\S]*?\]\]/g, '').replace(/\n{3,}/g, '\n\n');
+    parts.push(`## Scholarly exegesis and analysis\n\n${analysis}`);
+  }
+  if (volume.content?.lineage) parts.push(volumeLineageMarkdown(volume.content.lineage));
+  if (volume.faq?.length) {
+    parts.push(`## Frequently asked questions\n\n${volume.faq.map((item) => `### ${item.q}\n\n${item.a}`).join('\n\n')}`);
+  }
+  const resources = volumeResourcesMarkdown(volume);
+  if (resources) parts.push(resources);
+  return parts.filter(Boolean).join('\n\n').trim() + '\n';
+};
+
+const renderSeoArticleMarkdown = (article) => {
+  const canonical = `${BASE_URL}/resources/${article.slug}`;
+  const cell = (value) => String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ');
+  const parts = [
+    `# ${article.title}`,
+    `**Canonical article:** [${article.title}](${canonical})  \n**Updated:** ${article.updatedDate || today}`,
+    `## Quick answer\n\n${article.answer}`,
+  ];
+  for (const section of article.sections || []) {
+    parts.push(`## ${section.heading}`);
+    if (section.table) {
+      parts.push(section.table.caption || '');
+      parts.push(`| ${section.table.headings.map(cell).join(' | ')} |`);
+      parts.push(`| ${section.table.headings.map(() => '---').join(' | ')} |`);
+      for (const row of section.table.rows) parts.push(`| ${row.map(cell).join(' | ')} |`);
+    }
+    for (const paragraph of section.paragraphs || []) parts.push(paragraph);
+    if (section.bullets?.length) parts.push(section.bullets.map((item) => `- ${item}`).join('\n'));
+  }
+  if (article.sourceNotes?.length) {
+    parts.push(`## Sources and editorial notes\n\n${article.sourceNotes.map((note) => `- ${note}`).join('\n')}`);
+  }
+  if (article.faqs?.length) {
+    parts.push(`## Frequently asked questions\n\n${article.faqs.map((item) => `### ${item.question}\n\n${item.answer}`).join('\n\n')}`);
+  }
+  const related = (article.relatedVolumes || []).map((slug) => {
+    const volume = volumeBySlug.get(slug);
+    return volume ? `- [Volume ${String(volume.number).padStart(2, '0')}: ${volume.title}](${BASE_URL}/encyclopedia/${volume.slug})` : '';
+  }).filter(Boolean);
+  for (const resource of article.relatedPages || []) {
+    if (resource.href?.startsWith('/') && !resource.href.startsWith('//')) {
+      related.push(`- [${resource.label}](${BASE_URL}${resource.href})`);
+    }
+  }
+  if (related.length) parts.push(`## Related reading\n\n${related.join('\n')}`);
+  return parts.filter(Boolean).join('\n\n').trim() + '\n';
+};
 
 const staticPages = [
   '',
@@ -112,19 +212,20 @@ Sitemap: ${BASE_URL}/sitemap-theological-archive.xml
 fs.writeFileSync(path.join(distDir, 'robots.txt'), robotsTxt, 'utf8');
 console.log(`[POSTBUILD] Generated dist/robots.txt`);
 
-// 3. Generate llms.txt and llms-full.txt
+// 3. Generate a concise llms.txt and a full, linked volume corpus.
 let llmsTxt = `# Saul's Podship Scriptorium
-> An authoritative, peer-reviewed 51-volume digital Christian theological encyclopedia and South Asian hymnody archive.
+> A scholarly 51-volume Christian theology reference and South Asian hymnody archive.
 
-## Core Sections
-- [Homepage](${BASE_URL}/): Digital scriptorium portal featuring Leonardo da Vinci's Last Supper.
-- [51-Volume Encyclopedia](${BASE_URL}/encyclopedia): The complete catalog of biblical exegesis, data tables, and historical theology.
-- [Theological Archive](${BASE_URL}/theological-archive): 100 Tough Bible Questions & 1,000 Book-by-Book Bible Study Answers in English, Urdu, Hindi and Arabic across 5 traditions.
-- [Comparative Apologetics Codex](${BASE_URL}/comparative-apologetics): 400 critical dialogue questions across Islam, Judaism, Hinduism and Sikhism.
-- [Scholarly Standards](${BASE_URL}/scholarly-standards): Grammatical-historical hermeneutical framework and original language transliterations.
-- [Punjabi Zaboor](${BASE_URL}/music/punjabi-zaboor): Complete historical record of 150 biblical Psalms in native Punjabi verse (1898–1908).
-- [Pakistani Singers Archive](${BASE_URL}/music/pakistani-singers-archive): Historical archive of South Asian gospel musicians.
-- [About the ministry and its apps](${BASE_URL}/about): The Scriptorium's mission, public subdomains and frequently asked questions.
+## Core sections
+- [Homepage](${BASE_URL}/): Digital scriptorium portal.
+- [51-Volume Encyclopedia](${BASE_URL}/encyclopedia): Biblical exegesis, Christian history, doctrine, apologetics and reference.
+- [Theological Archive](${BASE_URL}/theological-archive): Tough Bible questions and book-by-book study answers.
+- [Comparative Apologetics Codex](${BASE_URL}/comparative-apologetics): 400 dialogue questions across Islam, Judaism, Hinduism and Sikhism.
+- [Scholarly Standards](${BASE_URL}/scholarly-standards): Research and hermeneutical method.
+- [Punjabi Zaboor](${BASE_URL}/music/punjabi-zaboor): Historical Punjabi versification of the biblical Psalms.
+- [Pakistani Singers Archive](${BASE_URL}/music/pakistani-singers-archive): South Asian Christian music history.
+- [About](${BASE_URL}/about): Mission, apps and FAQs.
+- [Full machine-readable volume corpus](${BASE_URL}/llms-full.txt): Summaries, topics, key facts, source links, analysis, lineage data and FAQs.
 
 ## The Saul's Podship app family
 These dedicated sites are Saul's Podship projects, serving readers in Pakistan and worldwide.
@@ -133,15 +234,33 @@ These dedicated sites are Saul's Podship projects, serving readers in Pakistan a
 for (const app of podshipApps) {
   llmsTxt += `- [${app.name}](${app.url}): ${app.description}\n`;
 }
-llmsTxt += '\n## All 51 Volumes\n';
+llmsTxt += '\n## Comparative religion study guides\n';
+for (const article of SEO_ARTICLES) {
+  llmsTxt += `- [${article.title}](${BASE_URL}/resources/${article.slug}): ${article.description} ([Markdown](${BASE_URL}/resources/${article.slug}.md))\n`;
+}
+llmsTxt += '\n## All 51 volumes\n';
 
 for (const v of volumes) {
-  llmsTxt += `- [Vol. ${v.number < 10 ? '0' + v.number : v.number}: ${v.title}](${BASE_URL}/encyclopedia/${v.slug}): ${v.summary || v.overview}\n`;
+  const number = String(v.number).padStart(2, '0');
+  llmsTxt += `- [Vol. ${number}: ${v.title}](${BASE_URL}/encyclopedia/${v.slug}): ${v.summary || v.overview} ([Markdown](${BASE_URL}/encyclopedia/${v.slug}.md))\n`;
 }
 
+let llmsFullTxt = `${llmsTxt}\n\n# Detailed volume content\n`;
+for (const v of volumes) {
+  llmsFullTxt += `\n---\n\n${renderVolumeMarkdown(v)}\n`;
+}
+llmsFullTxt += '\n# Comparative religion study guides\n';
+for (const article of SEO_ARTICLES) {
+  llmsFullTxt += `\n---\n\n${renderSeoArticleMarkdown(article)}\n`;
+}
+const resourcesDir = path.join(distDir, 'resources');
+fs.mkdirSync(resourcesDir, { recursive: true });
+for (const article of SEO_ARTICLES) {
+  fs.writeFileSync(path.join(resourcesDir, `${article.slug}.md`), renderSeoArticleMarkdown(article), 'utf8');
+}
 fs.writeFileSync(path.join(distDir, 'llms.txt'), llmsTxt, 'utf8');
-fs.writeFileSync(path.join(distDir, 'llms-full.txt'), llmsTxt, 'utf8');
-console.log(`[POSTBUILD] Generated dist/llms.txt and dist/llms-full.txt`);
+fs.writeFileSync(path.join(distDir, 'llms-full.txt'), llmsFullTxt, 'utf8');
+console.log(`[POSTBUILD] Generated dist/llms.txt (${llmsTxt.length} chars) and llms-full.txt (${llmsFullTxt.length} chars)`);
 
 // 4. Generate Markdown files and static HTML for all 50 volumes
 const encDistDir = path.join(distDir, 'encyclopedia');
@@ -162,19 +281,7 @@ if (fs.existsSync(indexHtmlTemplatePath)) {
 for (const v of volumes) {
   // Markdown output
   const mdPath = path.join(encDistDir, `${v.slug}.md`);
-  let mdContent = `# Volume ${v.number < 10 ? '0' + v.number : v.number}: ${v.title}\n\n`;
-  mdContent += `**Category:** ${v.category} | **Last Updated:** ${v.lastUpdated || today}\n\n`;
-  mdContent += `## Summary\n${v.summary || v.overview}\n\n`;
-  if (v.keyFacts && v.keyFacts.length > 0) {
-    mdContent += `## Key Facts\n${v.keyFacts.map(f => `- ${f}`).join('\n')}\n\n`;
-  }
-  if (v.content?.analysis) {
-    const analysis = v.content.analysis.replace(/\[\[CHART:[\s\S]*?\]\]/g, '').replace(/\n{3,}/g, '\n\n');
-    mdContent += `## Scholarly Exegesis & Analysis\n${analysis}\n\n`;
-  }
-  if (v.faq && v.faq.length > 0) {
-    mdContent += `## Frequently Asked Questions\n${v.faq.map(f => `### ${f.q}\n${f.a}`).join('\n\n')}\n\n`;
-  }
+  const mdContent = renderVolumeMarkdown(v);
   fs.writeFileSync(mdPath, mdContent, 'utf8');
 
   // Static HTML pre-render for /encyclopedia/:slug/index.html
@@ -199,6 +306,7 @@ for (const v of volumes) {
   volHtml = replaceMeta(volHtml, 'property', 'twitter:url', volCanonical);
   volHtml = replaceMeta(volHtml, 'property', 'twitter:title', volTitle);
   volHtml = replaceMeta(volHtml, 'property', 'twitter:description', volDesc);
+  volHtml = volHtml.replace('</head>', `<link rel="alternate" type="text/markdown" href="${volCanonical}.md" />\n</head>`);
   const volumeSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
