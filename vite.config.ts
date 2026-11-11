@@ -7,6 +7,9 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  preview: {
+    allowedHosts: ['.e2b.app'],
+  },
   build: {
     outDir: 'dist',
     target: 'es2019',

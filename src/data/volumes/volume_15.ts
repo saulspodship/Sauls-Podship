@@ -23,7 +23,7 @@ export const volume_15: Volume = {
     "src": "/images/volumes/comparative-religion/hero-1280.webp",
     "alt": "Sacred scriptures of the world's faiths laid side by side on a candlelit scholar's desk"
   },
-  "metaDescription": "Comparative study of world religions: Christianity, Islam, Judaism, Hinduism, and Buddhism. Compare concepts of God, human sin, atonement, and the person of Christ.",
+  "metaDescription": "Compare five world faiths and explore 52 traditions in a biblical-view origins tree with founders, sacred texts and separate biblical and scholarly dates.",
   "keywords": [
     "comparative religion",
     "christianity vs islam",
@@ -38,7 +38,9 @@ export const volume_15: Volume = {
     "biblical vs scholarly dating of religions",
     "hinduism buddhism sikhism origins",
     "mormonism jehovah's witnesses adventism origins",
-    "freemasonry kabbalah hermeticism occult symbols"
+    "freemasonry kabbalah hermeticism occult symbols",
+    "world religions origins family tree",
+    "religion founders and sacred texts timeline"
   ],
   "articleLink": "https://goshsays.blogspot.com/2026/01/comparative-religion-christianity-and.html",
   "youtubeLink": "https://youtu.be/4bd_5F4mEvU",
@@ -52,12 +54,20 @@ export const volume_15: Volume = {
     "forbidden-knowledge-the-watchers",
     "primeval-world-timeline-ancient-civilizations"
   ],
-  "summary": "Comparative Religion contrasts the foundational truth-claims of historic Christianity with those of Judaism, Islam, Hinduism, and Buddhism. It examines divergent views on the nature of God, the human dilemma of sin, and the unique Christian revelation of salvation through divine grace rather than human self-effort.",
+  "relatedArticles": [
+    { "title": "World Religions Compared: Beliefs & Sacred Texts", "href": "/resources/world-religions-comparison-chart" },
+    { "title": "Christianity, Judaism & Islam: Key Differences", "href": "/resources/christianity-judaism-islam" },
+    { "title": "Hinduism vs Buddhism: Beliefs, Texts & Goals", "href": "/resources/hinduism-buddhism-comparison" },
+    { "title": "World Religions Timeline: Biblical & Scholarly Dates", "href": "/resources/world-religions-timeline" }
+  ],
+  "summary": "Comparative Religion compares Christianity with Judaism, Islam, Hinduism, and Buddhism, focusing on God, humanity, salvation, and Jesus Christ. Its 52-tradition biblical-view tree adds origins, founders, sacred texts, and separate biblical and scholarly dates, with source labels that distinguish scriptural claims, traditions, contested assertions, and speculation.",
   "keyFacts": [
     "Christianity is uniquely centered on God pursuing fallen humanity through an incarnate Savior who died for sinners, rather than humanity working to reach God.",
     "Judaism shares the Hebrew Scriptures with Christianity but awaits a non-divine Davidic messiah and relies on Torah observance.",
     "Islam reveres Jesus (Isa) as a major prophet but categorically rejects the Trinity, Christ's divine sonship, and His substitutionary crucifixion.",
-    "Eastern religions such as Hinduism and Buddhism focus on cyclical rebirth (samsara) and liberation through karma or meditative enlightenment."
+    "Eastern religions such as Hinduism and Buddhism focus on cyclical rebirth (samsara) and liberation through karma or meditative enlightenment.",
+    "The biblical-view family tree indexes 52 religious traditions and movements, listing founders, sacred texts, symbols, and separate biblical and scholarly dates where available.",
+    "Origin claims in the tree carry source labels such as Bible, tradition, contested, none stated, or speculation, and the accompanying notes distinguish historical checks from interpretive claims."
   ],
   "faq": [
     {
@@ -75,6 +85,14 @@ export const volume_15: Volume = {
     {
       "q": "Why can't all religions simply be different paths up the same mountain?",
       "a": "The major world religions make fundamentally contradictory claims about who God is, what is wrong with humanity, and how we are saved; logically, contradictory truth claims cannot all be true simultaneously."
+    },
+    {
+      "q": "What does the Religions of the World: Biblical-View Tree show?",
+      "a": "The tree indexes 52 traditions and movements, from its biblical root through later Abrahamic, Asian, American, and occult movements. Each entry lists a founder or origin, sacred books, symbols, and separate biblical and scholarly dates where available. It is a comparative reference; adherents may disagree with its biblical-view interpretation."
+    },
+    {
+      "q": "How are biblical and scholarly dates compared in the religion family tree?",
+      "a": "The tree presents biblical and scholarly dates as separate perspectives rather than blending them into one chronology. Its notes state the biblical chronology being used and identify where scholarly dating differs. Each origin claim is labelled as Bible, tradition, contested, none stated, or speculation, and the page notes that adherents may dispute its biblical framing."
     }
   ],
   "content": {

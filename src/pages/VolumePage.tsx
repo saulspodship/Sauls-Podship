@@ -849,6 +849,27 @@ export const VolumePage: React.FC = () => {
               <span>Print Study Guide</span>
             </button>
           </div>
+
+          {volume.relatedArticles && volume.relatedArticles.length > 0 && (
+            <div className="border-t border-white/15 pt-5">
+              <h3 className="font-serif text-lg font-bold text-[#E8C96A] mb-3">Topical Study Guides</h3>
+              <ul className="flex flex-wrap justify-center gap-3">
+                {volume.relatedArticles
+                  .filter((article) => article.href.startsWith('/') && !article.href.startsWith('//'))
+                  .map((article) => (
+                    <li key={article.href}>
+                      <a
+                        href={article.href}
+                        className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-left text-sm font-semibold text-white hover:bg-white/20 transition-colors"
+                      >
+                        {article.title}
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-[#E8C96A]" aria-hidden="true" />
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
         </section>
 
         {/* Frequently Asked Questions (FAQ) Accordion */}

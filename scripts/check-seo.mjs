@@ -148,25 +148,138 @@ const ARTICLE_FAMILIES = [
   /^\/theological-archive(\/(question|category)\/[^/]+)?$/,
   /^\/music-archive\/[^/]+$/,
   /^\/(prophecy-map|kings-of-the-bible|comparative-apologetics|biblical-maps|scholarly-standards)(\.html)?$/,
+  /^\/resources\/[^/]+$/,
 ];
-const hasArticle = (html) =>
-  [...html.matchAll(/<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].some(([, body]) => {
+const jsonLdNodes = (html, urlPath) => {
+  const nodes = [];
+  for (const [, body] of html.matchAll(/<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
     try {
       const data = JSON.parse(body);
-      return (Array.isArray(data) ? data : [data]).some(
-        (node) => node && ['Article', 'BlogPosting', 'NewsArticle', 'TechArticle'].includes(node['@type']),
-      );
+      const roots = Array.isArray(data) ? data : [data];
+      for (const root of roots) {
+        if (root?.['@graph']) nodes.push(...root['@graph']);
+        else if (root) nodes.push(root);
+      }
     } catch {
-      fail('JSON-LD', 'a script block is not valid JSON');
-      return false;
+      fail(urlPath || 'JSON-LD', 'a script block is not valid JSON');
     }
-  });
+  }
+  return nodes;
+};
+const hasType = (node, type) => Array.isArray(node?.['@type'])
+  ? node['@type'].includes(type)
+  : node?.['@type'] === type;
+const hasArticle = (html, urlPath) =>
+  jsonLdNodes(html, urlPath).some((node) =>
+    ['Article', 'BlogPosting', 'NewsArticle', 'TechArticle'].some((type) => hasType(node, type)),
+  );
+const schemaOfType = (html, type, urlPath) =>
+  jsonLdNodes(html, urlPath).find((node) => hasType(node, type));
+const escapeText = (value) => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 for (const urlPath of promised) {
   if (!ARTICLE_FAMILIES.some((pattern) => pattern.test(urlPath))) continue;
   const page = pageFor(urlPath);
   if (!page || isNoindex(page.html)) continue;
-  if (!hasArticle(page.html)) fail(urlPath, 'content page without Article structured data');
+  if (!hasArticle(page.html, urlPath)) fail(urlPath, 'content page without Article structured data');
+}
+
+/* ---- detailed volume crawlability / AEO regression checks ---- */
+const volumes = JSON.parse(fs.readFileSync(path.join(root, 'src/data/volumes/volumesData.json'), 'utf8'));
+for (const volume of volumes) {
+  const urlPath = `/encyclopedia/${volume.slug}`;
+  const page = pageFor(urlPath);
+  if (!page) {
+    fail(urlPath, 'volume has no prerendered HTML');
+    continue;
+  }
+  const article = schemaOfType(page.html, 'Article', urlPath);
+  if (!article) fail(urlPath, 'missing Article JSON-LD');
+  const faq = schemaOfType(page.html, 'FAQPage', urlPath);
+  if (!faq) fail(urlPath, 'missing visible-volume FAQPage JSON-LD');
+  else {
+    const expected = (volume.faq || []).map((item) => item.q);
+    const actual = (faq.mainEntity || []).map((item) => item.name);
+    if (actual.length !== expected.length || expected.some((question) => !actual.includes(question))) {
+      fail(urlPath, 'FAQPage JSON-LD does not match the visible volume FAQ data');
+    }
+  }
+  const breadcrumb = schemaOfType(page.html, 'BreadcrumbList', urlPath);
+  if (!breadcrumb) fail(urlPath, 'missing BreadcrumbList JSON-LD');
+  else {
+    const crumbs = breadcrumb.itemListElement || [];
+    if (crumbs.length !== 3 || crumbs.at(-1)?.item !== `${SITE}${urlPath}`) {
+      fail(urlPath, 'BreadcrumbList does not end at the canonical volume URL');
+    }
+  }
+  if (!page.html.includes('id="quick-answer"') || !page.html.includes(escapeText(volume.summary || volume.overview || ''))) {
+    fail(urlPath, 'missing crawlable answer-first volume summary');
+  }
+  if (volume.content?.analysis && !page.html.includes('id="volume-analysis"')) {
+    fail(urlPath, 'detailed analysis is not present in prerendered HTML');
+  }
+  const markdownFile = path.join(dist, 'encyclopedia', `${volume.slug}.md`);
+  if (!fs.existsSync(markdownFile)) fail(urlPath, 'missing full Markdown companion');
+  if (!page.html.includes(`href="${SITE}${urlPath}.md"`)) fail(urlPath, 'missing text/Markdown alternate link');
+  const resourceSection = page.html.match(/<section aria-labelledby="further-reading">[\s\S]*?<\/section>/)?.[0] || '';
+  if (!resourceSection) fail(urlPath, 'missing crawlable further-reading resource section');
+  const requireResourceLink = (href, label) => {
+    if (href && !resourceSection.includes(`href="${escapeText(href)}"`)) {
+      fail(urlPath, `${label} is not rendered as a clickable resource link`);
+    }
+  };
+  if (volume.articleLink) requireResourceLink(volume.articleLink, 'companion article');
+  if (volume.youtubeLink) requireResourceLink(volume.youtubeLink, 'video lesson');
+  for (const slug of volume.relatedVolumes || []) {
+    const related = volumes.find((item) => item.slug === slug);
+    if (!related) {
+      fail(urlPath, `invalid related volume slug: ${slug}`);
+      continue;
+    }
+    requireResourceLink(`/encyclopedia/${slug}`, `related Volume ${related.number}`);
+  }
+  for (const articleLink of volume.relatedArticles || []) {
+    if (!articleLink.href?.startsWith('/resources/') || articleLink.href.startsWith('//')) {
+      fail(urlPath, `unsafe or non-resource article link: ${articleLink.href}`);
+      continue;
+    }
+    const target = normalize(new URL(articleLink.href, SITE).pathname);
+    if (!pageFor(target)) fail(urlPath, `related study guide has no prerendered HTML: ${articleLink.href}`);
+    requireResourceLink(articleLink.href, `study guide ${articleLink.href}`);
+  }
+}
+
+/* ---- machine-readable corpus and organic article companions ---- */
+const llmsPath = path.join(dist, 'llms.txt');
+const llmsFullPath = path.join(dist, 'llms-full.txt');
+if (!fs.existsSync(llmsPath) || !fs.existsSync(llmsFullPath)) {
+  fail('/llms-full.txt', 'llms.txt or llms-full.txt is missing');
+} else {
+  const llms = fs.readFileSync(llmsPath, 'utf8');
+  const llmsFull = fs.readFileSync(llmsFullPath, 'utf8');
+  if (llmsFull.length <= llms.length * 1.5) fail('/llms-full.txt', 'full corpus is not meaningfully fuller than llms.txt');
+  for (const volume of volumes) {
+    const title = `# Volume ${String(volume.number).padStart(2, '0')}: ${volume.title}`;
+    if (!llmsFull.includes(title)) fail('/llms-full.txt', `missing detailed entry for Volume ${volume.number}`);
+  }
+}
+const seoArticleSlugs = [
+  'world-religions-comparison-chart',
+  'christianity-judaism-islam',
+  'hinduism-buddhism-comparison',
+  'world-religions-timeline',
+];
+for (const slug of seoArticleSlugs) {
+  const urlPath = `/resources/${slug}`;
+  const page = pageFor(urlPath);
+  if (!page) {
+    fail(urlPath, 'organic study guide has no prerendered HTML');
+    continue;
+  }
+  if (!hasArticle(page.html, urlPath)) fail(urlPath, 'study guide missing Article JSON-LD');
+  if (!schemaOfType(page.html, 'FAQPage', urlPath)) fail(urlPath, 'study guide missing visible FAQPage JSON-LD');
+  if (!schemaOfType(page.html, 'BreadcrumbList', urlPath)) fail(urlPath, 'study guide missing BreadcrumbList JSON-LD');
+  if (!fs.existsSync(path.join(dist, 'resources', `${slug}.md`))) fail(urlPath, 'study guide Markdown companion missing');
 }
 
 if (errors.length) {

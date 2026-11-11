@@ -131,6 +131,7 @@ export interface Volume {
   youtubeStatus: "live" | "scheduled";
   youtubePublishDate?: string;
   relatedVolumes: string[];  // slugs
+  relatedArticles?: { title: string; href: string }[]; // focused, crawlable study guides
   summary: string;           // 40–60 word answer-first definition
   keyFacts: string[];        // 4–6 complete, quotable sentences
   faq: VolumeFAQ[];          // 4–6 real questions + 40–80 word answers

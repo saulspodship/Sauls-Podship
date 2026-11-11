@@ -112,7 +112,7 @@ VOLUMES_METADATA_P5 = [
         "youtubeLink": "https://youtu.be/kU9oZPv_aGE",
         "youtubeStatus": "scheduled",
         "youtubePublishDate": "2027-02-14",
-        "relatedVolumes": ["the-ark-of-the-covenant-and-biblical-relics", "seven-last-words-of-jesus", "holy-communion", "baptism-sacraments-circumcision"],
+        "relatedVolumes": ["ark-of-covenant-and-other-biblical-relics", "seven-last-words-of-jesus", "holy-communion", "baptism-sacraments-circumcision"],
         "summary": "The Five Offerings of Leviticus investigates the sacrificial system given in Leviticus 1–7: the Burnt (Olah), Grain (Minchah), Peace (Shelamim), Sin (Chattat), and Guilt (Asham) offerings. It reveals how each offering foreshadowed an aspect of Christ's perfect self-sacrifice.",
         "keyFacts": [
             "The five offerings are divided into sweet-aroma voluntary offerings (Burnt, Grain, Peace) and non-sweet-aroma mandatory expiatory offerings (Sin, Guilt).",

@@ -140,6 +140,7 @@ for meta in ALL_METAS:
         "youtubeStatus": meta.get("youtubeStatus", "scheduled"),
         "youtubePublishDate": meta.get("youtubePublishDate", "2026-10-01"),
         "relatedVolumes": meta.get("relatedVolumes", []),
+        **({"relatedArticles": meta["relatedArticles"]} if meta.get("relatedArticles") else {}),
         "summary": meta.get("summary", ""),
         "keyFacts": meta.get("keyFacts", []),
         "faq": meta.get("faq", []),
