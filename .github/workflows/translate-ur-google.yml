@@ -1,0 +1,110 @@
+name: Translate book data with Google (ur)
+
+# The Argos models produced Urdu that did not hold together: English words
+# stranded mid-sentence, invented spellings, broken grammar. Google Translate
+# is markedly better on this material but is not reachable from the agent
+# sandbox, so the work runs here.
+#
+# The merge job pushes to its own branch, book-i18n-google, so it never fights
+# with the Argos pipeline over book-i18n.
+
+on:
+  workflow_dispatch:
+    inputs:
+      shards:
+        description: "Shards"
+        required: false
+        default: "30"
+      limit:
+        description: "Translate at most N strings per shard (0 = all; used for pilots)"
+        required: false
+        default: "0"
+  push:
+    paths:
+      - "book/gt_shard.py"
+      - ".github/workflows/translate-ur-google.yml"
+
+concurrency:
+  group: book-i18n-google
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  shard:
+    name: ur shard ${{ matrix.index }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Translate shard
+        run: |
+          set -eux
+          python book/gt_shard.py ur ${{ matrix.index }} ${{ inputs.shards || '30' }} \
+            --limit ${{ inputs.limit || '0' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gt-ur-${{ matrix.index }}
+          # artifact names use --limit to keep a pilot run's output out of the
+          # real cache (they are keyed by shard, so a pilot would seed the full
+          # run with the strings it happened to translate)
+          path: book/data/i18n/_shard_ur_${{ matrix.index }}_${{ inputs.limit || '0' }}.json
+          if-no-files-found: error
+          retention-days: 14
+
+  merge:
+    name: merge and publish
+    # a pilot run only proves the endpoint works; it must not publish
+    if: ${{ (inputs.limit || '0') == '0' }}
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          path: book/data/i18n
+          pattern: gt-ur-*
+          merge-multiple: false
+      - name: Flatten artifacts
+        run: |
+          set -eux
+          # each artifact unpacks into its own directory; the merger wants them
+          # side by side as _shard_ur_<n>.json
+          find book/data/i18n -name '_shard_ur_*_0.json' -print
+          find book/data/i18n -mindepth 2 -name '_shard_ur_*_0.json' \
+            -exec mv -v {} book/data/i18n/ \;
+          ls -la book/data/i18n | head -40
+      - name: Merge shards
+        run: |
+          set -eux
+          python book/merge_shards.py ur
+          du -sh book/data/i18n/ur
+      - name: Commit translations
+        run: |
+          set -eux
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B book-i18n-google
+          git add -f book/data/i18n
+          git status --short | head -40
+          if git diff --cached --quiet; then
+            echo "NOTHING_STAGED"
+            exit 1
+          fi
+          git commit -m "i18n: retranslate book data to Urdu with Google Translate"
+          git push -u origin book-i18n-google --force
+          echo PUSH_OK

@@ -21,7 +21,10 @@ def main(argv):
     if not argv:
         raise SystemExit("usage: merge_shards.py <lang>")
     lang = argv[0]
-    shards = sorted(C.I18N.glob(f"_shard_{lang}_*.json"))
+    # real runs are written as _shard_<lang>_<n>_0.json; the <n>_<limit>
+    # suffix keeps short pilot runs out of the merge
+    shards = sorted(C.I18N.glob(f"_shard_{lang}_*_0.json"))
+    shards += sorted(C.I18N.glob(f"_shard_{lang}_[0-9]*.json"))
     if not shards:
         raise SystemExit(f"no shards found for {lang!r} in {C.I18N}")
 
