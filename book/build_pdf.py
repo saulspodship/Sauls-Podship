@@ -92,6 +92,9 @@ def register_fonts():
         pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoSerifDevanagari.ttf")))
         pdfmetrics.registerFont(TTFont("Sans", str(FONTS / "NotoSansDevanagari.ttf")))
         pdfmetrics.registerFont(TTFont("Sans-Bold", str(FONTS / "NotoSansDevanagari.ttf")))
+    # symbol fallback for colour-key chips (■ ● ★ ...) missing from
+    # the Arabic and Devanagari faces
+    pdfmetrics.registerFont(TTFont("Sy", f"{F}/DejaVuSans.ttf"))
     pdfmetrics.registerFontFamily(
         "Serif", normal="Serif", bold="Serif-Bold", italic="Serif", boldItalic="Serif-Bold"
     )
@@ -189,7 +192,10 @@ EMOJI_RE = re.compile(
     "[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF\U00002190-\U000021FF\U00002B00-\U00002BFF⬀-⯿]"
 )
 def _chip(hex_color: str, glyph: str = "■") -> str:
-    return f'<font color="{hex_color}">{glyph}</font>'
+    # The Urdu/Hindi faces have no geometric shapes, so route the chip glyph
+    # through DejaVu Sans (registered as "Sy") to keep colour keys visible.
+    face = "" if LANG == "en" else ' name="Sy"'
+    return f'<font color="{hex_color}"{face}>{glyph}</font>'
 
 
 # Coloured square emojis keep their hue as ■ chips so colour keys stay colourful.
@@ -199,8 +205,10 @@ EMOJI_MAP = {
     "🟫": _chip("#92400E"),
     "⚫": _chip("#1F2937"), "⚪": _chip("#9CA3AF"), "🔘": _chip("#6B7280"),
     "🔵": _chip("#2563EB", "●"), "✨": "★", "🔥": _chip("#DC2626", "▲"),
-    "✅": "✓", "❌": "✗", "⭐": _chip("#CA8A04", "★"),
-    "📖": "▣", "✟": "✝", "☦": "✝",
+    "✅": _chip("#16A34A", "✓"), "❌": _chip("#DC2626", "✗"),
+    "⭐": _chip("#CA8A04", "★"),
+    "📖": _chip("#4A152C", "▣"), "✟": _chip("#4A152C", "✝"),
+    "☦": _chip("#4A152C", "✝"),
 }
 AR_DIGIT_TABLE = str.maketrans(
     "٠١٢٣٤٥٦٧٨٩"  # Arabic-Indic
@@ -254,6 +262,11 @@ def clean(text: str) -> str:
         text,
     )
     return text
+
+
+def _square(hex_color: str) -> str:
+    """A coloured square for colour keys, in a face that has the glyph."""
+    return _chip(hex_color, "■")
 
 
 def inline_md(text: str) -> str:
@@ -1501,7 +1514,7 @@ def build_volume_chapter(v: dict) -> list:
             key_cells = []
             for col, era in seen_tl:
                 key_cells.append(
-                    f'<font color="{col}">■</font> {htmllib.escape(era or col)}'
+                    _square(col) + " " + htmllib.escape(era or col)
                 )
             # chunk into rows of 3
             key_rows = []
@@ -1515,8 +1528,8 @@ def build_volume_chapter(v: dict) -> list:
         rows = []
         for e in timeline:
             col = (e.get("color") or "#4A152C").strip() or "#4A152C"
-            chip = f'<font color="{col}">■</font>'
-            rows.append([chip + " " + e.get("year", ""),
+            chip_mark = _square(col)
+            rows.append([chip_mark + " " + e.get("year", ""),
                          e.get("event", ""), e.get("era", "")])
         flow += make_table(["When", "Event", "Era"], rows,
                            col_widths=[0.18, 0.57, 0.25])
@@ -1538,7 +1551,7 @@ def build_volume_chapter(v: dict) -> list:
                 chunk = items[i:i+3]
                 row = []
                 for era, col in chunk:
-                    row.append(f'<font color="{col}">■</font> {htmllib.escape(era)}')
+                    row.append(_square(col) + " " + htmllib.escape(era))
                 while len(row) < 3:
                     row.append("")
                 key_rows.append(row)
@@ -1556,10 +1569,10 @@ def build_volume_chapter(v: dict) -> list:
             if p.get("characters"):
                 bits.append(f"Characters: {p['characters']}")
             col = (p.get("colorTheme") or "").strip()
-            chip = f'<font color="{col}">■</font> ' if col else ""
+            chip_mark = (_square(col) + " ") if col else ""
             era_col = col if col else "#7a6a5f"
             rows.append([
-                f"{chip}<b>{p.get('title','')}</b><br/>"
+                f"{chip_mark}<b>{p.get('title','')}</b><br/>"
                 f"<font color='{era_col}'>{p.get('era','')}</font>",
                 "<br/>".join(b for b in bits if b),
             ])
