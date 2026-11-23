@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Download — Saul's Podship Compendium (PDF)</title>
+<style>
+  :root {
+    --wine: #4A152C;
+    --wine2: #8B1C2E;
+    --gold: #B5952F;
+    --gold-l: #E8C96A;
+    --cream: #F8F4E3;
+    --cream2: #FDFBF7;
+    --ink: #2a231d;
+    --muted: #7a6a5f;
+    --line: #E3D8BD;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    padding: 24px;
+  }
+  .card {
+    background: var(--cream2);
+    border: 2px solid var(--gold);
+    outline: 1px solid var(--gold);
+    outline-offset: 4px;
+    max-width: 560px;
+    width: 100%;
+    padding: 40px 36px 36px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(74, 21, 44, 0.12);
+  }
+  .band {
+    background: var(--wine);
+    color: var(--gold-l);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    padding: 12px 10px;
+    margin: -40px -36px 28px;
+  }
+  h1 {
+    color: var(--wine);
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0 0 22px;
+  }
+  .meta {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: var(--wine);
+  }
+  .meta span {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  a.btn {
+    display: inline-block;
+    background: var(--wine);
+    color: var(--gold-l);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 34px;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  a.btn:hover { background: var(--wine2); }
+  a.btn:active { transform: translateY(1px); }
+  a.btn.ghost {
+    background: transparent;
+    color: var(--wine);
+    margin-top: 12px;
+    font-size: 13px;
+    padding: 12px 24px;
+  }
+  a.btn.ghost:hover { background: rgba(74, 21, 44, 0.06); }
+  .hint {
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .rule {
+    width: 40%;
+    height: 1px;
+    background: var(--gold);
+    margin: 20px auto;
+    border: 0;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="band">SAUL'S PODSHIP · SCRIPTORIUM</div>
+    <h1>The Complete<br/>Knowledge Compendium</h1>
+    <p class="sub">
+      Fifty illustrated Bible-encyclopedia volumes · 400-question comparative
+      apologetics codex · biblical atlases · 1,000-entry theological archive ·
+      Watchers atlas · prophecy lenses · Punjabi Zaboor hymnody
+    </p>
+    <div class="meta">
+      <span>750 pages</span>
+      <span>A4 print-ready</span>
+      <span>33 MB PDF</span>
+    </div>
+    <a class="btn" href="/download" download="Sauls-Podship-Compendium.pdf">
+      ⬇ Download PDF
+    </a>
+    <br/>
+    <a class="btn ghost" href="/Sauls-Podship-Compendium.pdf" target="_blank" rel="noopener">
+      Open in browser instead
+    </a>
+    <hr class="rule" />
+    <p class="hint">
+      For printing: A4 portrait · duplex “flip on long edge” · full table of
+      contents with page numbers.
+    </p>
+  </div>
+</body>
+</html>
