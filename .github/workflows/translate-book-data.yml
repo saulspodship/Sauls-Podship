@@ -1,0 +1,51 @@
+name: Translate book data
+on:
+  workflow_dispatch:
+    inputs:
+      langs:
+        description: "Comma-separated langs"
+        default: "ur,hi"
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/53b2d966-sauls-podship
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install argostranslate
+        run: pip install argostranslate
+      - name: Install models and translate
+        run: |
+          set -eux
+          python - <<'PY'
+          import argostranslate.package as pkg
+          import argostranslate.translate as tr
+          pkg.update_package_index()
+          for to in ("ur", "hi"):
+              pkgs = [p for p in pkg.get_available_packages()
+                      if p.from_code == "en" and p.to_code == to]
+              if not pkgs:
+                  raise SystemExit(f"no package for en->{to}")
+              print("installing", pkgs[0])
+              pkg.install_from_path(pkgs[0].download())
+          print("installed:", tr.get_installed_languages())
+          PY
+      - name: Run translation script
+        run: |
+          python book/translate_data.py ur hi
+      - name: Commit translations
+        run: |
+          set -eux
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b book-i18n
+          git add -f book/data/i18n/
+          git commit -m "i18n: translate book data to ur + hi" || echo "nothing to commit"
+          git push -u origin book-i18n
+          echo PUSH_OK

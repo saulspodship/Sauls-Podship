@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Build the Saul's Podship knowledge compendium PDF (print-ready A4)."""
+"""Build the Saul's Podship theological archive as a trade-size open-spread ebook.
+
+Usage:  python book/build_pdf.py [en|ur|hi]
+Outputs book/Sauls-Podship-Compendium[-ur|-hi].pdf
+"""
 from __future__ import annotations
 
 import json, re, os, sys, datetime, html as htmllib
 from pathlib import Path
 from collections import defaultdict
 
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import inch
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -24,12 +28,30 @@ from PIL import Image as PILImage
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
-OUT_PDF = Path(__file__).resolve().parent / "Sauls-Podship-Compendium.pdf"
+FONTS = Path(__file__).resolve().parent / "fonts"
 IMG_TMP = Path(__file__).resolve().parent / "_imgtmp"
 IMG_TMP.mkdir(exist_ok=True)
 
-PAGE_W, PAGE_H = A4
-MARGIN = 16 * mm
+# ---------------------------------------------------------------- language
+# en | ur | hi  — three editions of the same theological archive
+LANG = (sys.argv[1] if len(sys.argv) > 1 else os.environ.get("BOOK_LANG", "en")).lower()
+if LANG not in ("en", "ur", "hi"):
+    sys.exit(f"unknown language {LANG!r} (use en, ur or hi)")
+
+LANG_NAMES = {"en": "English", "ur": "اردو", "hi": "हिन्दी"}
+if LANG == "en":
+    OUT_PDF = Path(__file__).resolve().parent / "Sauls-Podship-Compendium.pdf"
+elif LANG == "ur":
+    OUT_PDF = Path(__file__).resolve().parent / "Sauls-Podship-Compendium-Urdu.pdf"
+else:
+    OUT_PDF = Path(__file__).resolve().parent / "Sauls-Podship-Compendium-Hindi.pdf"
+
+# Trade book trim (6 in × 9 in) — standard theological paperback size
+BOOK_W, BOOK_H = 6 * inch, 9 * inch
+# Each PDF sheet is an open spread: verso (left) + recto (right)
+PAGE_W, PAGE_H = BOOK_W * 2, BOOK_H
+MARGIN = 14 * mm          # outer/inner margin on each book half
+GUTTER = 8 * mm           # breathing room at the spine
 WINE = colors.HexColor("#4A152C")
 WINE2 = colors.HexColor("#8B1C2E")
 GOLD = colors.HexColor("#B5952F")
@@ -44,11 +66,23 @@ INK = colors.HexColor("#2a231d")
 # ---------------------------------------------------------------- fonts
 def register_fonts():
     F = "/usr/share/fonts/truetype/dejavu"
-    pdfmetrics.registerFont(TTFont("Serif", f"{F}/DejaVuSerif.ttf"))
-    pdfmetrics.registerFont(TTFont("Serif-Bold", f"{F}/DejaVuSerif-Bold.ttf"))
-    pdfmetrics.registerFont(TTFont("Sans", f"{F}/DejaVuSans.ttf"))
-    pdfmetrics.registerFont(TTFont("Sans-Bold", f"{F}/DejaVuSans-Bold.ttf"))
     pdfmetrics.registerFont(TTFont("Mono", f"{F}/DejaVuSansMono.ttf"))
+    if LANG == "en":
+        pdfmetrics.registerFont(TTFont("Serif", f"{F}/DejaVuSerif.ttf"))
+        pdfmetrics.registerFont(TTFont("Serif-Bold", f"{F}/DejaVuSerif-Bold.ttf"))
+        pdfmetrics.registerFont(TTFont("Sans", f"{F}/DejaVuSans.ttf"))
+        pdfmetrics.registerFont(TTFont("Sans-Bold", f"{F}/DejaVuSans-Bold.ttf"))
+    elif LANG == "ur":
+        # Nastaliq for body, Naskh/Arabic sans for labels & tables
+        pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoNastaliqUrdu.ttf")))
+        pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoNastaliqUrdu.ttf")))
+        pdfmetrics.registerFont(TTFont("Sans", str(FONTS / "NotoSansArabic.ttf")))
+        pdfmetrics.registerFont(TTFont("Sans-Bold", str(FONTS / "NotoSansArabic.ttf")))
+    else:  # hi
+        pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoSerifDevanagari.ttf")))
+        pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoSerifDevanagari.ttf")))
+        pdfmetrics.registerFont(TTFont("Sans", str(FONTS / "NotoSansDevanagari.ttf")))
+        pdfmetrics.registerFont(TTFont("Sans-Bold", str(FONTS / "NotoSansDevanagari.ttf")))
     pdfmetrics.registerFontFamily(
         "Serif", normal="Serif", bold="Serif-Bold", italic="Serif", boldItalic="Serif-Bold"
     )
@@ -207,6 +241,11 @@ def inline_md(text: str) -> str:
 
 
 def load(name):
+    """Load a data file, preferring the translated copy for ur/hi editions."""
+    if LANG != "en":
+        tr = DATA / "i18n" / LANG / name
+        if tr.exists():
+            return json.loads(tr.read_text(encoding="utf-8"))
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
@@ -270,7 +309,7 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
                zebra=True, align_left=True):
     if not rows and not headers:
         return []
-    avail = PAGE_W - 2 * MARGIN
+    avail = BOOK_W - 2 * MARGIN - GUTTER
     data = []
     if headers:
         data.append([safe_para(clean(str(h)), ST["cell_h"]) for h in headers])
@@ -413,32 +452,46 @@ def md_to_flowables(md: str, style=None) -> list:
 
 # ---------------------------------------------------------------- doc template
 BOOK_TITLE = "Saul's Podship — The Complete Knowledge Book"
+if LANG == "ur":
+    BOOK_TITLE = "سولز پاڈشپ — مکمل علمی کتاب"
+elif LANG == "hi":
+    BOOK_TITLE = "सॉल्स पॉडशिप — सम्पूर्ण ज्ञान पुस्तक"
 
 
 class BookDoc(BaseDocTemplate):
+    """One PDF sheet = one open spread (verso left | recto right)."""
+
     def __init__(self, filename, **kw):
-        super().__init__(filename, pagesize=A4,
-                         leftMargin=MARGIN, rightMargin=MARGIN,
-                         topMargin=18 * mm, bottomMargin=16 * mm,
-                         title="Saul's Podship — The Complete Knowledge Book",
+        super().__init__(filename, pagesize=(PAGE_W, PAGE_H),
+                         leftMargin=0, rightMargin=0,
+                         topMargin=0, bottomMargin=0,
+                         title=BOOK_TITLE,
                          author="Solat Jamil",
-                         subject="Bible encyclopedia, comparative apologetics, atlases and archives",
+                         subject="Theological archive — Bible encyclopedia, apologetics, prophecy",
                          **kw)
-        frame_cover = Frame(0, 0, PAGE_W, PAGE_H, 0, 0, 0, 0, id="cover")
-        # single body frame; side is decided by which template (left / right page) is active
-        def body_frame(fid):
-            return Frame(MARGIN, 16 * mm, PAGE_W - 2 * MARGIN,
-                         PAGE_H - 18 * mm - 16 * mm, id=fid)
+        half = BOOK_W
+        # frames live in sheet coordinates: left half [0, half), right half [half, 2*half)
+        def half_frame(side, fid):
+            x0 = 0.0 if side == "L" else half
+            # inner margin near gutter, outer margin at sheet edge
+            if side == "L":
+                lm, rm = MARGIN, GUTTER
+            else:
+                lm, rm = GUTTER, MARGIN
+            return Frame(x0 + lm, 14 * mm,
+                         half - lm - rm, BOOK_H - 14 * mm - 14 * mm,
+                         id=fid)
         self.addPageTemplates([
-            PageTemplate(id="cover", frames=[frame_cover], onPage=self._cover_page),
-            PageTemplate(id="front", frames=[body_frame("front")],
+            PageTemplate(id="cover", frames=[Frame(0, 0, PAGE_W, PAGE_H, 0, 0, 0, 0, id="cover")],
+                         onPage=self._cover_page),
+            PageTemplate(id="front", frames=[half_frame("R", "front")],
                          onPageEnd=lambda c, d: self._side_page(c, d, "front")),
-            PageTemplate(id="bodyL", frames=[body_frame("L")],
+            PageTemplate(id="bodyL", frames=[half_frame("L", "L")],
                          onPageEnd=lambda c, d: self._side_page(c, d, "L")),
-            PageTemplate(id="bodyR", frames=[body_frame("R")],
+            PageTemplate(id="bodyR", frames=[half_frame("R", "R")],
                          onPageEnd=lambda c, d: self._side_page(c, d, "R")),
-            # silent blank used only to pad part openers onto right-hand pages
-            PageTemplate(id="blank", frames=[body_frame("B")],
+            # blank half used to pad part openers onto the right page of a spread
+            PageTemplate(id="blank", frames=[half_frame("L", "B")],
                          onPage=lambda c, d: None),
         ])
         self._tpls = {pt.id: pt for pt in self.pageTemplates}
@@ -446,89 +499,114 @@ class BookDoc(BaseDocTemplate):
         self._last_side = "R"
         self.chapter_label = ""
         self.part_label = ""
+        self._spread_no = 0
 
     def handle_nextPageTemplate(self, name):
-        # accept our ids (and legacy alias)
         if name == "body":
             name = "bodyR"
         self._pending_tpl = name
 
     def handle_pageBegin(self):
+        # each reportlab "page" is one spread; number it once
         if self._pending_tpl and self._pending_tpl in self._tpls:
             self.pageTemplate = self._tpls[self._pending_tpl]
             self._pending_tpl = None
         elif self.pageTemplate.id in ("bodyL", "bodyR"):
-            # auto-alternate so verso/recto work like a real printed book
             self.pageTemplate = self._tpls["bodyR" if self.pageTemplate.id == "bodyL" else "bodyL"]
         if self.pageTemplate.id in ("bodyL", "bodyR"):
             self._last_side = self.pageTemplate.id
         super().handle_pageBegin()
 
+    def _spread_index(self):
+        # physical book-page number for the recto (right) half of this sheet
+        return self.page  # 1-based sheet number
+
     def _cover_page(self, canv, doc):
         canv.saveState()
+        # full-bleed cream on the whole spread; artwork centred on right half (recto)
         canv.setFillColor(CREAM)
         canv.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
-        canv.setStrokeColor(GOLD)
-        canv.setLineWidth(2)
-        canv.rect(12 * mm, 12 * mm, PAGE_W - 24 * mm, PAGE_H - 24 * mm, fill=0, stroke=1)
-        canv.setLineWidth(0.5)
-        canv.rect(14 * mm, 14 * mm, PAGE_W - 28 * mm, PAGE_H - 28 * mm, fill=0, stroke=1)
+        # spine hint
+        canv.setStrokeColor(LINE)
+        canv.setLineWidth(0.6)
+        canv.line(BOOK_W, 0, BOOK_W, PAGE_H)
+        # left half: quiet quarter-title
         canv.setFillColor(WINE)
-        canv.rect(12 * mm, PAGE_H - 48 * mm, PAGE_W - 24 * mm, 22 * mm, fill=1, stroke=0)
+        canv.setFont("Serif-Bold", 16)
+        canv.drawCentredString(BOOK_W / 2, PAGE_H * 0.55, "SAUL'S PODSHIP")
+        canv.setFont("Sans", 9)
+        canv.setFillColor(MUTED)
+        canv.drawCentredString(BOOK_W / 2, PAGE_H * 0.55 - 18, "The Complete Knowledge Book")
+        # right half: formal cover panel
+        rx = BOOK_W
+        canv.setStrokeColor(GOLD)
+        canv.setLineWidth(1.6)
+        canv.rect(rx + 10 * mm, 10 * mm, BOOK_W - 20 * mm, PAGE_H - 20 * mm, fill=0, stroke=1)
+        canv.setLineWidth(0.5)
+        canv.rect(rx + 12 * mm, 12 * mm, BOOK_W - 24 * mm, PAGE_H - 24 * mm, fill=0, stroke=1)
+        canv.setFillColor(WINE)
+        canv.rect(rx + 10 * mm, PAGE_H - 42 * mm, BOOK_W - 20 * mm, 18 * mm, fill=1, stroke=0)
         canv.setFillColor(GOLD_L)
-        canv.setFont("Sans-Bold", 13)
-        canv.drawCentredString(PAGE_W / 2, PAGE_H - 40 * mm, "SAUL'S PODSHIP")
+        canv.setFont("Sans-Bold", 11)
+        canv.drawCentredString(rx + BOOK_W / 2, PAGE_H - 34 * mm, "SAUL'S PODSHIP")
         canv.restoreState()
 
     def _side_page(self, canv, doc, side):
-        """Running header/footer. side: front | L (left/verso) | R (right/recto)."""
+        """Running head/foot. side: front | L | R — page numbers on outer edges of the spread."""
         canv.saveState()
-        y = PAGE_H - 13 * mm
-        canv.setStrokeColor(LINE)
-        canv.setLineWidth(0.5)
-        canv.line(MARGIN, y + 4 * mm, PAGE_W - MARGIN, y + 4 * mm)
-        n = str(canv.getPageNumber())
-        chapter = (self.chapter_label or "")[:58]
-        if side == "front":
-            # first pages after the cover: quiet header, number outside (left)
-            canv.setFont("Sans", 7.5)
-            canv.setFillColor(MUTED)
-            canv.drawString(MARGIN, y, BOOK_TITLE)
-            canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8.5)
-            canv.drawString(MARGIN, 8.5 * mm, n)
-            canv.setFont("Sans", 7.5)
-            canv.setFillColor(MUTED)
-            canv.drawRightString(PAGE_W - MARGIN, 8.5 * mm, "saulspodship.com")
-        elif side == "L":
-            # verso: book title outer (left), chapter inner (right); page no. outer
-            canv.setFont("Sans", 7.5)
-            canv.setFillColor(MUTED)
-            canv.drawString(MARGIN, y, BOOK_TITLE)
-            if chapter:
-                canv.setFillColor(WINE)
-                canv.drawRightString(PAGE_W - MARGIN, y, chapter)
-            canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8.5)
-            canv.drawString(MARGIN, 8.5 * mm, n)
-            canv.setFont("Sans", 7.5)
-            canv.setFillColor(MUTED)
-            canv.drawRightString(PAGE_W - MARGIN, 8.5 * mm, "saulspodship.com")
+        n = str(doc.page * 2 - (0 if side in ("R", "front") else 1))
+        # sheet-level book page: recto = 2k, verso = 2k-1 for sheet k? keep simple:
+        # verso shows odd, recto shows even so outer edges read correctly when bound
+        if side == "L":
+            book_pg = str(doc.page * 2 - 1)
+        elif side == "R":
+            book_pg = str(doc.page * 2)
         else:
-            # recto: chapter inner (left), book title outer (right); page no. outer
-            if chapter:
-                canv.setFont("Sans", 7.5)
-                canv.setFillColor(WINE)
-                canv.drawString(MARGIN, y, chapter)
-            canv.setFont("Sans", 7.5)
+            book_pg = str(doc.page * 2)
+        chapter = (self.chapter_label or "")[:52]
+        y = PAGE_H - 11 * mm
+        if side == "front":
+            x0 = BOOK_W + GUTTER
+            x1 = PAGE_W - MARGIN
+            canv.setFont("Sans", 7)
             canv.setFillColor(MUTED)
-            canv.drawRightString(PAGE_W - MARGIN, y, BOOK_TITLE)
-            canv.setFont("Sans", 7.5)
-            canv.setFillColor(MUTED)
-            canv.drawString(MARGIN, 8.5 * mm, "saulspodship.com")
+            canv.drawRightString(x1, y, BOOK_TITLE)
             canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8.5)
-            canv.drawRightString(PAGE_W - MARGIN, 8.5 * mm, n)
+            canv.setFont("Sans-Bold", 8)
+            canv.drawRightString(x1, 8 * mm, book_pg)
+            canv.restoreState()
+            return
+        if side == "L":
+            # verso: outer edge = left of sheet
+            x_out, x_in = MARGIN, BOOK_W - GUTTER
+            canv.setFont("Sans", 7)
+            canv.setFillColor(MUTED)
+            canv.drawString(x_out, y, BOOK_TITLE)
+            if chapter:
+                canv.setFillColor(WINE)
+                canv.drawRightString(x_in, y, chapter)
+            canv.setFillColor(WINE)
+            canv.setFont("Sans-Bold", 8)
+            canv.drawString(x_out, 8 * mm, book_pg)          # outer = left
+            canv.setFillColor(MUTED)
+            canv.setFont("Sans", 7)
+            canv.drawRightString(x_in, 8 * mm, "saulspodship.com")
+        else:
+            # recto: outer edge = right of sheet
+            x_in, x_out = BOOK_W + GUTTER, PAGE_W - MARGIN
+            if chapter:
+                canv.setFont("Sans", 7)
+                canv.setFillColor(WINE)
+                canv.drawString(x_in, y, chapter)
+            canv.setFont("Sans", 7)
+            canv.setFillColor(MUTED)
+            canv.drawRightString(x_out, y, BOOK_TITLE)
+            canv.setFont("Sans", 7)
+            canv.setFillColor(MUTED)
+            canv.drawString(x_in, 8 * mm, "saulspodship.com")
+            canv.setFillColor(WINE)
+            canv.setFont("Sans-Bold", 8)
+            canv.drawRightString(x_out, 8 * mm, book_pg)      # outer = right
         canv.restoreState()
 
     def beforeDocument(self):
@@ -543,11 +621,11 @@ class BookDoc(BaseDocTemplate):
                 self.notify("TOCEntry", (0, text, self.page))
                 self.part_label = text
                 self.chapter_label = ""
-                # chapter that follows a part opener starts on the left page
                 self._pending_tpl = "bodyL"
             elif style == "chap_title":
                 self.notify("TOCEntry", (1, text, self.page))
                 self.chapter_label = re.sub(r"\s*[—–]\s*", " · ", text)[:60]
+
 
 
 # ---------------------------------------------------------------- TOC
@@ -578,7 +656,7 @@ def part_page(num: str, title: str, subtitle: str, hero: Path | None = None) -> 
         Spacer(1, 8 * mm),
     ]
     if hero and Path(hero).exists():
-        flow += img_flowable(Path(hero), PAGE_W - 2 * MARGIN, 88 * mm)
+        flow += img_flowable(Path(hero), BOOK_W - 2 * MARGIN - GUTTER, 88 * mm)
     # no trailing PageBreak: the next chapter_head() breaks once (no blank between)
     return flow
 
@@ -602,7 +680,7 @@ def chapter_head(no: str, title: str, subtitle: str | None = None,
         flow.append(Paragraph(clean_plain(subtitle), ST["chap_sub"]))
     flow.append(Spacer(1, 4))
     if hero and Path(hero).exists():
-        flow.extend(img_flowable(Path(hero), PAGE_W - 2 * MARGIN, 70 * mm))
+        flow.extend(img_flowable(Path(hero), BOOK_W - 2 * MARGIN - GUTTER, 70 * mm))
     return flow
 
 
@@ -615,14 +693,14 @@ def sub_h(text: str) -> list:
 
 
 class EnsureRecto(ActionFlowable):
-    """Pad with one blank verso so the next content starts on a right-hand page."""
+    """Force the part opener onto the right-hand half of a fresh spread."""
 
     def apply(self, doc):
-        # Runs right after a PageBegin for the page that will hold a part opener.
-        if getattr(doc, "page", 0) % 2 == 0:  # even → left/verso; we need odd/recto
-            doc.pageTemplate = doc._tpls["blank"]
-            doc.handle_nextPageTemplate("bodyR")
-            doc.handle_pageBreak()
+        # After PageBreak we are at the start of a new spread. Content should
+        # sit on the recto (right half). If the active template is not bodyR,
+        # switch it so the left half stays empty (no header drawn there).
+        if getattr(doc, "pageTemplate", None) is not None and doc.pageTemplate.id != "bodyR":
+            doc.pageTemplate = doc._tpls["bodyR"]
 
 
 # ================================================================ BUILD
@@ -662,7 +740,7 @@ def build():
     if not hero_path.exists():
         hero_path = ROOT / "public/images/volumes/all-bible-stories/hero-1920.jpg"
     if hero_path.exists():
-        story += img_flowable(hero_path, PAGE_W - 40 * mm, 70 * mm)
+        story += img_flowable(hero_path, BOOK_W - 30 * mm, 70 * mm)
     story += [
         Spacer(1, 3 * mm),
         Paragraph(
@@ -719,54 +797,52 @@ def build():
     ]
 
     # ================= ABOUT THIS BOOK =================
+    # Scripture source note varies by edition
+    if LANG == "ur":
+        scripture_note = (
+            "Urdu Scripture references follow کِتابِ مُقادّس (Revised Urdu Bible, "
+            "Bible Society 2010) — bible.com version 189."
+        )
+    elif LANG == "hi":
+        scripture_note = (
+            "Hindi Scripture references follow the standard Hindi Bible; "
+            "cross-reference data is credited to openbible.info."
+        )
+    else:
+        scripture_note = (
+            "Bible quotes are from the King James Version, which is free to print. "
+            "The cross reference data is credited to openbible.info."
+        )
     story += [
-        Paragraph("About This Book", ST["h1"]),
+        Paragraph("About This Book" if LANG == "en" else (
+            "اس کتاب کے بارے میں" if LANG == "ur" else "इस पुस्तक के बारे में"
+        ), ST["h1"]),
         Paragraph(
-            "This book gathers everything the Saul's Podship project has written and "
-            "studied over the years. It is an open Christian ministry library that lives "
-            "on the internet at saulspodship.com, now set down on paper so you can hold "
-            "it, mark it, and share it.",
+            "This book is a complete theological archive: fifty illustrated Bible volumes, "
+            "four hundred questions about other faiths, eight journey maps across the Holy "
+            "Land, one thousand short Bible study answers, one hundred hard questions with "
+            "replies from five Christian traditions, a full atlas of angels and the "
+            "Watchers, two hundred and forty seven prophecy notes, the story of the "
+            "world's religions, the family line from Adam to Jesus, and the archive of "
+            "Pakistani Christian music and podcasts. It is set in a traditional book size "
+            "and laid out as open two-page spreads, the way a printed volume sits in the hand.",
             ST["body"],
         ),
-        Paragraph(
-            "Inside you will find fifty illustrated Bible volumes, four hundred questions "
-            "about other faiths, eight journey maps across the Holy Land, one thousand "
-            "short Bible study answers, one hundred hard questions with replies from five "
-            "Christian traditions, a full atlas of angels and the Watchers, two hundred "
-            "and forty seven prophecy notes, the story of the world's religions, the "
-            "family line from Adam to Jesus, and the archive of Pakistani Christian music "
-            "and podcasts.",
-            ST["body"],
-        ),
-        Paragraph(
-            "Every chapter is taken straight from the project's own files. The pictures, "
-            "maps and tables come from the same artwork and data you see on the website. "
-            "Bible quotes are from the King James Version, which is free to print. The "
-            "cross reference data is credited to openbible.info.",
-            ST["body"],
-        ),
-        sub_h("How to print this book"),
-        Paragraph(
-            "The pages are A4, set up as a two sided book. Page numbers sit on the outer "
-            "edge of every page. When you print, choose duplex printing and flip on the "
-            "long edge. The table of contents lists every part and chapter with its page "
-            "number, so you can print only the parts you want.",
-            ST["body"],
-        ),
-        sub_h("What is inside"),
+        Paragraph(scripture_note, ST["body"]),
+        sub_h("What is inside" if LANG == "en" else (
+            "اندر کیا ہے" if LANG == "ur" else "इसमें क्या है"
+        )),
     ]
     include_rows = [
-        ["Part 1", "How this project began", "The story, the tools, and the list of fifty volumes"],
-        ["Part 2", "The fifty volumes", "The full Bible encyclopedia with tables and pictures"],
-        ["Part 3", "Bible maps", "Eight journey maps with every stop named"],
-        ["Part 4", "Four hundred questions", "Islam, Judaism, Hinduism and Sikhism, answered with care"],
-        ["Part 5", "One thousand answers", "Short Bible study questions sorted by book"],
-        ["Part 6", "Hard questions", "One hundred tough questions, five Christian views each"],
-        ["Part 7", "Angels and the Watchers", "Enoch, holy beings, beasts, and a picture gallery"],
-        ["Part 8", "Prophecy and world faiths", "Fulfillment notes, world religions, Adam to Jesus"],
-        ["Part 9", "Music and podcasts", "Pakistani gospel singers, Punjabi Zaboor, episodes"],
-        ["Part 10", "Notes and records", "Project documents and audits"],
-        ["Appendix", "Directory and reference", "Apps, questions and answer, Bible book counts"],
+        ["Part 1", "The fifty volumes", "The full Bible encyclopedia with tables and pictures"],
+        ["Part 2", "Bible maps", "Eight journey maps with every stop named"],
+        ["Part 3", "Four hundred questions", "Islam, Judaism, Hinduism and Sikhism, answered with care"],
+        ["Part 4", "One thousand answers", "Short Bible study questions sorted by book"],
+        ["Part 5", "Hard questions", "One hundred tough questions, five Christian views each"],
+        ["Part 6", "Angels and the Watchers", "Enoch, holy beings, beasts, and a picture gallery"],
+        ["Part 7", "Prophecy and world faiths", "Fulfillment notes, world religions, Adam to Jesus"],
+        ["Part 8", "Music and podcasts", "Pakistani gospel singers, Punjabi Zaboor, episodes"],
+        ["Appendix", "Directory and reference", "Websites, questions and answers, Bible book counts"],
     ]
     story += make_table(["Part", "You will find", "In short"], include_rows,
                         col_widths=[0.12, 0.34, 0.54])
@@ -777,9 +853,6 @@ def build():
               Spacer(1, 4),
               make_toc(), PageBreak()]
 
-    # ================================================================
-    # PART 1 — HOW THIS PROJECT BEGAN
-    # ================================================================
     def hero(name, *fallbacks):
         for n in (name, *fallbacks):
             pp = ROOT / "public" / n.lstrip("/")
@@ -787,119 +860,11 @@ def build():
                 return pp
         return None
 
-    story += part_page(
-        "1", "How This Project Began",
-        "Where these pages come from, what tools keep them true, and the list of fifty volumes",
-        hero("images/volumes/family-tree-adam-jesus/hero-1920.jpg"),
-    )
-
-    story += chapter_head("", "What Is Saul's Podship?",
-                          kicker="Part 1")
-    story += md_to_flowables(
-        "Saul's Podship is a Christian study project that lives on the internet at "
-        "saulspodship.com. It brings together more than fifty illustrated Bible volumes, "
-        "a Bible maps atlas, four hundred questions about other faiths, a Pakistani "
-        "Christian music archive, and tools for studying prophecy."
-    )
-    story += sub_h("Five things this project is known for")
-    pillars = [
-        ["1", "Fifty Illustrated Volumes", "Bible-encyclopedia chapters from All Bible Stories to the 1-Year Sermon Guide — with tables, timelines, story panels, maps and FAQs."],
-        ["2", "Biblical Maps & Atlas", "Eight journey maps (Abraham, Exodus, Paul, Seven Churches, Holy Land, kingdoms, Ancient Near East, Roman Empire) plus the world-faith map."],
-        ["3", "Comparative Apologetics Codex", "400 questions — 100 each on Islam, Judaism, Hinduism and Sikhism — with context, primary sources, Christian response and discussion points."],
-        ["4", "Prophecy & Reference Tools", "A 247-prophecy fulfilment lens (historical / metaphorical / futurist), the Interlinked Bible, Kings of the Bible, cross-references."],
-        ["5", "Sacred Music & Podcasts", "The living archive of Punjabi Zaboor hymnody (150 Psalms in classical meters), Pakistani gospel musicians, and Urdu + English podcasts."],
-    ]
-    story += make_table(["#", "Pillar", "Description"], pillars, col_widths=[0.05, 0.27, 0.68])
-    story += sub_h("Technology stack")
-    story += [Paragraph(
-        "React 19 + Vite 6 + TypeScript · Tailwind CSS 4 · Express (served via a single "
-        "Vercel function) · Firestore REST API · React Router (createHashRouter). The site "
-        "ships English, Urdu, Hindi and Arabic through a fully static client-side "
-        "translation layer — no translation API and no server round-trip.",
-        ST["body"],
-    )]
-    story += sub_h("Languages")
-    story += [Paragraph(
-        "The language switcher translates the whole site — React pages, every volume's body "
-        "text, tables, timelines, story panels, the Companion bar, the static module docs "
-        "and the comparative apologetics codex. The dictionary lives in "
-        "<font name='Mono'>src/data/i18n/</font> and is emitted to "
-        "<font name='Mono'>public/i18n/{ur,hi,ar}.json</font>; English visitors download "
-        "nothing. Patterns localise data-built strings and digits (51 in each script).",
-        ST["body"],
-    )]
-
-    # Ch 2 architecture
-    story += chapter_head("", "How the Project Is Built", kicker="Part 1")
-    arch_rows = [
-        ["src/data/volumes/", "50 TypeScript volume records (analysis, tables, panels, timelines, FAQ)", "1.8 MB"],
-        ["src/data/theology/", "Theological Archive (1,000 entries) + 100 Tough Questions", "576 KB"],
-        ["src/data/", "Singers, zaboor list, podcast episodes, videos, FAQ, apps", "~120 KB"],
-        ["public/comparative-apologetics/", "Frozen codex.html — 400 question cards", "1.6 MB"],
-        ["public/watchers-atlas/", "Watchers Atlas HTML + 317 images", "29 MB"],
-        ["public/images/", "Volume heroes, maps, stories, podcast art", "48 MB"],
-        ["public/cross-references/", "KJV text + openbible.info cross-reference data", "12 MB"],
-        ["public/assets/", "maps-atlas, prophecy-lens, i18n, chrome scripts", "—"],
-        ["docs/", "Audits, URL maps, sequence freeze, performance notes", "92 KB"],
-        ["scripts/", "Verify codex, i18n gates, image optimisation, heroes", "—"],
-        [".github/workflows/", "videos-sync (daily), vercel-cleanup", "—"],
-    ]
-    story += make_table(["Path", "Contents", "Size"], arch_rows,
-                        col_widths=[0.30, 0.55, 0.15])
-    story += sub_h("Required verification before shipping")
-    story += [Paragraph(
-        "<font name='Mono'>npm run lint && npm test && npm run verify && npm run build && "
-        "npm run test:about</font> — type-check, hero-variant integrity, codex 400/400 gate, "
-        "full build, and the About/FAQ/structured-data crawler check.",
-        ST["body"],
-    )]
-    story += sub_h("Repository rules that protect the knowledge")
-    rules = [
-        "codex.html is frozen: 400 verified cards, stable IDs, never reformatted; changes must pass scripts/verify-codex.mjs.",
-        "main is the only long-lived branch; batch related changes into one push (each push is a full production deploy).",
-        "Never hand-edit generated data: videos sync, i18n artifacts, volumeIndex.json.",
-        "Run python3 scripts/optimize_images.py before committing any new image under public/.",
-        "Commit as saulspodship &lt;saulspodship@gmail.com&gt; — the Vercel-linked account.",
-    ]
-    story += [ListFlowable(
-        [ListItem(safe_para(inline_md(r), ST["bullet"]), leftIndent=12) for r in rules],
-        bulletType="bullet", start="•", leftIndent=14, bulletFontName="Sans", bulletFontSize=7,
-    )]
-
-    # Ch 3 sequence
-    story += chapter_head("", "The Fifty Volume List", kicker="Part 1")
-    story += [Paragraph(
-        "The volumes are numbered in alphabetical order, with the one year sermon guide "
-        "always placed last. This list is the master order used on the website and in "
-        "this book.",
-        ST["body"],
-    )]
-    seq_rows = []
-    for v in vols:
-        seq_rows.append([
-            f"{v['number']:02d}", v["title"], v.get("category", ""),
-            v.get("lastUpdated", ""),
-        ])
-    story += make_table(["#", "Title", "Category", "Updated"], seq_rows,
-                        col_widths=[0.06, 0.62, 0.16, 0.16])
-    story += sub_h("The encyclopedia at a glance")
-    stats = [
-        ["Volumes", str(len(vols))],
-        ["Data tables", str(sum(len(v["content"].get("tables") or []) for v in vols))],
-        ["Story panels", str(sum(len(v["content"].get("storyPanels") or []) for v in vols))],
-        ["Timeline entries", str(sum(len(v["content"].get("timeline") or []) for v in vols))],
-        ["FAQ pairs", str(sum(len(v.get("faq") or []) for v in vols))],
-        ["Key facts", str(sum(len(v.get("keyFacts") or []) for v in vols))],
-        ["Embedded maps", str(sum(len(v["content"].get("maps") or []) for v in vols))],
-        ["Scripture passages", str(sum(len(v["content"].get("scriptures") or []) for v in vols))],
-    ]
-    story += make_table(["Metric", "Count"], stats, col_widths=[0.6, 0.4])
-
     # ================================================================
-    # PART II — THE FIFTY VOLUMES
+    # PART 1 — THE FIFTY VOLUMES
     # ================================================================
     story += part_page(
-        "2", "The Fifty Volumes",
+        "1", "The Fifty Volumes",
         "The full Bible encyclopedia, volume by volume, with tables, timelines and pictures",
         hero("images/volumes/all-bible-stories/hero-1920.jpg"),
     )
@@ -908,15 +873,15 @@ def build():
         story += build_volume_chapter(v)
 
     # ================================================================
-    # PART III — BIBLICAL ATLAS
+    # PART 2 — BIBLICAL ATLAS
     # ================================================================
     story += part_page(
-        "3", "Bible Maps",
+        "2", "Bible Maps",
         "Eight journey maps that walk the routes of Abraham, Moses, Paul and Jesus",
         hero("images/hero-biblical-maps.jpg"),
     )
 
-    story += chapter_head("", "Walking the Bible Maps", kicker="Part 3",
+    story += chapter_head("", "Walking the Bible Maps", kicker="Part 2",
                           hero=hero("images/volumes/biblical-maps/hero-1920.jpg"))
     story += [Paragraph(
         "These eight maps show real places on true geography. On the website you can "
@@ -944,11 +909,11 @@ def build():
         story += [safe_para(f"{idx}. {clean_plain(name)}", ST["h2"])]
         if blurb:
             story += [safe_para(clean_plain(blurb), ST["body"])]
-        story += img_flowable(img, PAGE_W - 2 * MARGIN, 118 * mm)
+        story += img_flowable(img, BOOK_W - 2 * MARGIN - GUTTER, 118 * mm)
         stop_rows = [[str(i + 1), s[2]] for i, s in enumerate(stops)]
         if stop_rows:
             story += make_table(["Stop", "Station"], stop_rows, col_widths=[0.1, 0.9])
-    story += chapter_head("", "The World Map", kicker="Part 3",
+    story += chapter_head("", "The World Map", kicker="Part 2",
                           hero=hero("images/hero-prophecy.jpg"))
     story += [Paragraph(
         "After walking the sacred journeys, lift your eyes to the whole world the gospel now "
@@ -959,15 +924,15 @@ def build():
     )]
 
     # ================================================================
-    # PART IV — CODEX
+    # PART 3 — CODEX
     # ================================================================
     story += part_page(
-        "4", "Four Hundred Questions",
+        "3", "Four Hundred Questions",
         "One hundred questions each on Islam, Judaism, Hinduism and Sikhism, answered with care",
         hero("images/volumes/comparative-religion/hero-1920.jpg"),
     )
 
-    story += chapter_head("", "How These Answers Were Written", kicker="Part 4",
+    story += chapter_head("", "How These Answers Were Written", kicker="Part 3",
                           hero=hero("images/hero-jesus-alpha-omega.jpg"))
     story += [Paragraph(clean(codex.get("sidebar", "")), ST["lead"])]
     story += [Paragraph(clean(codex.get("preface_title", "A Note on Method")), ST["h2"])]
@@ -991,22 +956,22 @@ def build():
         title = sec.get("title", rel.title())
         sub = sec.get("sub", "")
         story += chapter_head("", f"{title}", subtitle=sub if sub else None,
-                              kicker=f"Part 4 · {eyebrow}")
+                              kicker=f"Part 3 · {eyebrow}")
         if sec.get("lead"):
             story += [Paragraph(clean_plain(sec["lead"]), ST["lead"])]
         for q in qs:
             story += build_codex_question(q)
 
     # ================================================================
-    # PART V — THEOLOGICAL ARCHIVE
+    # PART 4 — THEOLOGICAL ARCHIVE
     # ================================================================
     story += part_page(
-        "5", "One Thousand Answers",
+        "4", "One Thousand Answers",
         "Short Bible study questions sorted by book, from the Law to Revelation",
         hero("images/volumes/complete-christian-theology-map/hero-1920.jpg"),
     )
 
-    story += chapter_head("", "The Study Archive", kicker="Part 5",
+    story += chapter_head("", "The Study Archive", kicker="Part 4",
                           hero=hero("images/stories/scenes/book.webp"))
     total_items = sum(len(c["items"]) for c in archive)
     story += [Paragraph(
@@ -1033,15 +998,15 @@ def build():
                             col_widths=[0.82, 0.18])
 
     # ================================================================
-    # PART VI — TOUGH QUESTIONS
+    # PART 5 — TOUGH QUESTIONS
     # ================================================================
     story += part_page(
-        "6", "Hard Questions",
+        "5", "Hard Questions",
         "One hundred tough questions, with answers from five Christian traditions",
         hero("images/volumes/apologetics-40-critical-questions/hero-1920.jpg"),
     )
 
-    story += chapter_head("", "One Hundred Tough Questions", kicker="Part 6",
+    story += chapter_head("", "One Hundred Tough Questions", kicker="Part 5",
                           hero=hero("images/volumes/jesus-is-god-full-references-ot-nt/hero-1920.jpg"))
     tier_names = {1: "Tier 1 — Most asked", 2: "Tier 2 — Common", 3: "Tier 3 — Advanced"}
     view_names = {
@@ -1091,16 +1056,16 @@ def build():
             story += make_table(["Tradition", "Response"], rows, col_widths=[0.16, 0.84])
 
     # ================================================================
-    # PART VII — WATCHERS ATLAS
+    # PART 6 — WATCHERS ATLAS
     # ================================================================
     story += part_page(
-        "7", "Angels and the Watchers",
+        "6", "Angels and the Watchers",
         "Holy beings, fallen watchers, beasts and the stories the Bible tells about them",
         hero("images/volumes/angels-demons-beasts-monsters-in-the-bible/hero-1920.jpg"),
     )
 
     story += chapter_head("", watchers.get("title", "Angels and the Watchers"),
-                          kicker="Part 7",
+                          kicker="Part 6",
                           hero=hero("images/volumes/forbidden-knowledge-the-watchers/hero-1920.jpg"))
     if watchers.get("lede"):
         story += [Paragraph(clean_plain(watchers["lede"]), ST["lead"])]
@@ -1131,15 +1096,15 @@ def build():
     story += asset_grid(list(assets.keys()), assets, cols=4, thumb=True)
 
     # ================================================================
-    # PART VIII — PROPHECY, WORLD FAITHS, GENEALOGY
+    # PART 7 — PROPHECY, WORLD FAITHS, GENEALOGY
     # ================================================================
     story += part_page(
-        "8", "Prophecy and World Faiths",
+        "7", "Prophecy and World Faiths",
         "How prophecies were fulfilled, the religions of the world, and the family line from Adam to Jesus",
         hero("images/hero-second-coming.jpg", "images/hero-prophecy.jpg"),
     )
 
-    story += chapter_head("", "Two Hundred Forty Seven Prophecies", kicker="Part 8",
+    story += chapter_head("", "Two Hundred Forty Seven Prophecies", kicker="Part 7",
                           hero=hero("images/hero-prophecy.jpg"))
     story += [Paragraph(
         "Every prophecy on the live prophecy map carries three ways of reading it. "
@@ -1165,7 +1130,7 @@ def build():
     story += make_table(["Historical-lens tag", "Prophecies"], gloss_rows,
                         col_widths=[0.75, 0.25])
 
-    story += chapter_head("", "World Religions and People", kicker="Part 8",
+    story += chapter_head("", "World Religions and People", kicker="Part 7",
                           hero=hero("images/volumes/worlds-all-big-churches/hero-1920.jpg"))
     story += [Paragraph(
         f"Total world population represented: {world['worldPop']:,}. The dominant-tradition "
@@ -1192,7 +1157,7 @@ def build():
     story += make_table(["Tradition", "Country", "% dominant", "Population"],
                         rows, col_widths=[0.25, 0.35, 0.15, 0.25])
 
-    story += chapter_head("", "From Adam to Jesus", kicker="Part 8",
+    story += chapter_head("", "From Adam to Jesus", kicker="Part 7",
                           hero=hero("images/volumes/family-tree-adam-jesus/hero-1920.jpg"))
     story += [Paragraph(
         "Every row is one person's life; where lives overlap, those people were alive "
@@ -1220,15 +1185,15 @@ def build():
         story += [Paragraph(clean(gene["page_text"][:1200]), ST["small"])]
 
     # ================================================================
-    # PART IX — MUSIC & BROADCAST
+    # PART 8 — MUSIC & BROADCAST
     # ================================================================
     story += part_page(
-        "9", "Music and Podcasts",
+        "8", "Music and Podcasts",
         "Pakistani gospel singers, the Punjabi Zaboor psalms, and the podcast episodes",
         hero("images/podcast/show-cover.jpg"),
     )
 
-    story += chapter_head("", "The Singers and Their Story", kicker="Part 9",
+    story += chapter_head("", "The Singers and Their Story", kicker="Part 8",
                           hero=hero("images/volumes/guide-to-christian-living/hero-1920.jpg"))
     story += [Paragraph(
         "This is a living archive of Pakistani Christian music. It follows four "
@@ -1260,7 +1225,7 @@ def build():
         for b in s.get("majorContributions", []):
             story += [Paragraph(f"• {inline_md(b)}", ST["bullet"])]
 
-    story += chapter_head("", "Punjabi Zaboor, the Psalm Songs", kicker="Part 9",
+    story += chapter_head("", "Punjabi Zaboor, the Psalm Songs", kicker="Part 8",
                           hero=hero("images/volumes/lords-prayer/hero-1920.jpg"))
     story += [Paragraph(
         "These are the biblical Psalms put into classical Punjabi meters by Imam-ud-Din "
@@ -1275,7 +1240,7 @@ def build():
     story += make_table(["Psalm", "Punjabi title", "English theme", "Raga"],
                         z_rows, col_widths=[0.08, 0.32, 0.40, 0.20])
 
-    story += chapter_head("", "Podcasts and Video Lessons", kicker="Part 9",
+    story += chapter_head("", "Podcasts and Video Lessons", kicker="Part 8",
                           hero=hero("images/podcast/ep01-cover.jpg"))
     pod = music.get("podcast", {})
     story += [Paragraph(clean_plain(pod.get("title", "Podcast")), ST["h2"])]
@@ -1340,29 +1305,6 @@ def build():
                         v_rows, col_widths=[0.05, 0.45, 0.10, 0.14, 0.26])
 
     # ================================================================
-    # PART X — DOCUMENTATION
-    # ================================================================
-    story += part_page(
-        "10", "Notes and Records",
-        "Project documents, audits and guides kept with the source files",
-        hero("images/hero-interlinked.jpg"),
-    )
-
-    doc_order = [
-        "README.md", "SEQUENCE_50.md", "MASTER_AUDIT_RECORD_50.md", "URL_MAP_50.md",
-        "SITE_AUDIT_2026-11-02.md", "VOLUME_15_LINEAGE_2026-11-10.md",
-        "LINK_RESTORE.md", "HERO_IMAGE_PLAN.md", "PHASE_10_HERO_BANNERS.md",
-        "PERFORMANCE_2026-10-25.md", "INTEGRATION_GUIDE.md", "AGENTS.md", "RULES.md",
-    ]
-    for i, name in enumerate(doc_order):
-        md = docs.get(name)
-        if not md:
-            continue
-        title = name.replace(".md", "").replace("_", " ")
-        story += chapter_head("", title, kicker="Part 10")
-        story += md_to_flowables(md)
-
-    # ================================================================
     # APPENDICES
     # ================================================================
     story += part_page(
@@ -1414,7 +1356,7 @@ def build():
     story += sub_h("World faith dataset (as shipped)")
     story += [Paragraph(
         "The world map module ships dominant-tradition polygons for 175 countries with "
-        "population and percentage shares — the same data tabulated earlier in Part VIII.",
+        "population and percentage shares — the same data tabulated earlier in Part 7.",
         ST["body"],
     )]
 
@@ -1427,11 +1369,20 @@ def build():
                   "Solat Jamil · saulspodship.com · "
                   + datetime.date.today().strftime("%d %B %Y"),
                   ST["part_sub"]),
+              Spacer(1, 4 * mm),
+              Paragraph(
+                  "Urdu Scripture: کِتابِ مُقادّس (Revised Urdu Bible) · bible.com/189"
+                  if LANG == "ur" else
+                  "Hindi Scripture: standard Hindi Bible · saulspodship.com"
+                  if LANG == "hi" else
+                  "Scripture: King James Version",
+                  S("end_script", fontName="Sans", fontSize=8, leading=11,
+                    textColor=MUTED, alignment=TA_CENTER)),
               Spacer(1, 10 * mm),
               ]
     end_hero = hero("images/hero/last-supper-v2-1920.jpg")
     if end_hero:
-        story += img_flowable(end_hero, PAGE_W - 40 * mm, 60 * mm)
+        story += img_flowable(end_hero, BOOK_W - 30 * mm, 60 * mm)
 
     # ================= BUILD =================
     flat = []
@@ -1464,7 +1415,7 @@ def build_volume_chapter(v: dict) -> list:
         if not hero.exists():
             hero = None
     flow = chapter_head("", v["title"], v.get("subtitle"), hero=hero,
-                        kicker=f"Part 2 · Volume {v['number']:02d}")
+                        kicker=f"Part 1 · Volume {v['number']:02d}")
     meta = [v.get("category", "").title(), f"Updated {v.get('lastUpdated','')}"]
     if v.get("featured"):
         meta.append("Featured")
@@ -1489,13 +1440,61 @@ def build_volume_chapter(v: dict) -> list:
     timeline = c.get("timeline") or []
     if timeline:
         flow += sub_h("Timeline")
-        rows = [[e.get("year", ""), e.get("event", ""), e.get("era", "")]
-                for e in timeline]
+        # colour key for this timeline
+        seen_tl = []
+        for e in timeline:
+            col = (e.get("color") or "").strip()
+            era = e.get("era") or ""
+            if col and (col, era) not in seen_tl:
+                seen_tl.append((col, era))
+        if seen_tl:
+            flow += [Paragraph("<b>Colour key</b>", ST["h4"])]
+            key_cells = []
+            for col, era in seen_tl:
+                key_cells.append(
+                    f'<font color="{col}">■</font> {htmllib.escape(era or col)}'
+                )
+            # chunk into rows of 3
+            key_rows = []
+            for i in range(0, len(key_cells), 3):
+                chunk = key_cells[i:i+3]
+                while len(chunk) < 3:
+                    chunk.append("")
+                key_rows.append(chunk)
+            flow += make_table(["Era colours", "", ""], key_rows,
+                               col_widths=[0.34, 0.33, 0.33], font_size=7.2)
+        rows = []
+        for e in timeline:
+            col = (e.get("color") or "#4A152C").strip() or "#4A152C"
+            chip = f'<font color="{col}">■</font>'
+            rows.append([chip + " " + e.get("year", ""),
+                         e.get("event", ""), e.get("era", "")])
         flow += make_table(["When", "Event", "Era"], rows,
                            col_widths=[0.18, 0.57, 0.25])
     panels = c.get("storyPanels") or []
     if panels:
         flow += [CondPageBreak(30 * mm), sub_h(f"Story panels ({len(panels)})")]
+        # Build a colourful era → colour key from the panels' colourTheme
+        era_colors = {}
+        for p in panels:
+            era = p.get("era") or ""
+            col = (p.get("colorTheme") or "").strip()
+            if era and col and era not in era_colors:
+                era_colors[era] = col
+        if era_colors:
+            flow += [Paragraph("<b>Colour key by era</b>", ST["h4"])]
+            key_rows = []
+            items = list(era_colors.items())
+            for i in range(0, len(items), 3):
+                chunk = items[i:i+3]
+                row = []
+                for era, col in chunk:
+                    row.append(f'<font color="{col}">■</font> {htmllib.escape(era)}')
+                while len(row) < 3:
+                    row.append("")
+                key_rows.append(row)
+            flow += make_table(["Era", "Era", "Era"], key_rows,
+                               col_widths=[0.34, 0.33, 0.33], font_size=7.2)
         rows = []
         for p in panels:
             bits = [p.get("description", "")]
@@ -1507,8 +1506,12 @@ def build_volume_chapter(v: dict) -> list:
                 bits.append(f"Connections: {p['connections']}")
             if p.get("characters"):
                 bits.append(f"Characters: {p['characters']}")
+            col = (p.get("colorTheme") or "").strip()
+            chip = f'<font color="{col}">■</font> ' if col else ""
+            era_col = col if col else "#7a6a5f"
             rows.append([
-                f"<b>{p.get('title','')}</b><br/><font color='#7a6a5f'>{p.get('era','')}</font>",
+                f"{chip}<b>{p.get('title','')}</b><br/>"
+                f"<font color='{era_col}'>{p.get('era','')}</font>",
                 "<br/>".join(b for b in bits if b),
             ])
         flow += make_table(["Panel", "Detail"], rows, col_widths=[0.32, 0.68])
@@ -1544,7 +1547,7 @@ def build_volume_chapter(v: dict) -> list:
             url = m.get("url", "")
             if url.startswith("/"):
                 p = ROOT / "public" / url.lstrip("/")
-                flow += img_flowable(p, PAGE_W - 2 * MARGIN, 90 * mm)
+                flow += img_flowable(p, BOOK_W - 2 * MARGIN - GUTTER, 90 * mm)
     lineage = c.get("lineage")
     if lineage:
         flow += [CondPageBreak(40 * mm), sub_h(lineage.get("title", "Lineage"))]
@@ -1654,7 +1657,7 @@ def watchers_blocks_to_flowables(blocks: list) -> list:
 
 # ---------------------------------------------------------------- asset gallery
 def asset_grid(names, assets, cols=4, thumb=True) -> list:
-    avail = PAGE_W - 2 * MARGIN
+    avail = BOOK_W - 2 * MARGIN - GUTTER
     gap = 3 * mm
     cell_w = (avail - gap * (cols - 1)) / cols
     cell_h = cell_w * 0.78 + 14

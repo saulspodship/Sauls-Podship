@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       - name: Download models
         run: |
           mkdir -p argos_models
@@ -19,20 +19,17 @@ jobs:
           curl -fsSL --retry 3 -o argos_models/translate-en_hi-1_1.argosmodel \
             "https://argos-net.com/v1/translate-en_hi-1_1.argosmodel"
           ls -la argos_models/
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: argos-models
-          path: argos_models/
-          retention-days: 7
-      - name: Commit to argos-models branch
+          # sanity: files must be zip archives (PK header)
+          file argos_models/* || true
+          head -c 2 argos_models/translate-en_ur-1_9.argosmodel | grep -q PK
+          head -c 2 argos_models/translate-en_hi-1_1.argosmodel | grep -q PK
+      - name: Push models branch
         run: |
+          set -eux
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin argos-models || true
-          git checkout -B argos-models
-          mkdir -p argos_models
-          # files already in workspace from download step
+          git checkout -b argos-models
           git add -f argos_models/
-          git commit -m "chore: argos translation models" || echo "nothing to commit"
-          git push origin argos-models --force
+          git commit -m "chore: add argos en-ur and en-hi translation models"
+          git push origin argos-models
+          echo PUSH_OK
