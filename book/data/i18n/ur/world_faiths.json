@@ -2,17 +2,17 @@
   "worldPop": 8232000000,
   "cats": {
     "christian": {
-      "label": "Christianity",
+      "label": "مسیحیت",
       "color": "#2e7d32",
       "adherents": 2440000000
     },
     "muslim": {
-      "label": "Islam",
+      "label": "اسلام",
       "color": "#00838f",
       "adherents": 2000000000
     },
     "hindu": {
-      "label": "Hinduism",
+      "label": "ہندومت",
       "color": "#ef6c00",
       "adherents": 1220000000
     },
@@ -22,17 +22,17 @@
       "adherents": 1190000000
     },
     "buddhist": {
-      "label": "Buddhism",
+      "label": "بدھ مت",
       "color": "#c49000",
       "adherents": 520000000
     },
     "folk": {
-      "label": "نقل‌مکانی کرنا / روایتی ہونا",
+      "label": "روایتی و مقامی",
       "color": "#6a1b9a",
       "adherents": 430000000
     },
     "jewish": {
-      "label": "Judaism",
+      "label": "یہودیت",
       "color": "#1e88e5",
       "adherents": 15700000
     }

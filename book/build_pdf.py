@@ -484,7 +484,7 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
         cell_st, head_st = _cell_styles(scale)
         data = []
         if headers:
-            data.append([safe_para(clean(str(h)), head_st) for h in headers])
+            data.append([safe_para(clean(chrome(str(h))), head_st) for h in headers])
         for row in rows:
             data.append([
                 safe_para(inline_md(str(c)) if c is not None else "", cell_st)
@@ -988,6 +988,12 @@ class BookDoc(BaseDocTemplate):
         if isinstance(flowable, Paragraph):
             style = flowable.style.name
             text = getattr(flowable, "_logical_text", None) or flowable.getPlainText()
+            # getPlainText() un-escapes the entities that para() added, so a
+            # heading such as "Big Denominations &amp; Their Differences" came
+            # back with a literal ampersand and the running head printed the
+            # escaped form.  Headings leave here as plain reading text.
+            text = (text.replace("&amp;", "&").replace("&lt;", "<")
+                        .replace("&gt;", ">"))
             if style == "part_title":
                 self.notify("TOCEntry", (0, text, self.page))
                 self.part_label = text
@@ -1306,12 +1312,191 @@ def chapter_head(no: str, title: str, subtitle: str | None = None,
     return flow
 
 
+# ---------------------------------------------------------------- chrome wording
+# Section headings, table headers, captions and small labels are chrome: they
+# are part of the book's apparatus rather than its translated content, so they
+# live in the build script and were printing in English in the middle of the
+# Urdu and Hindi books.  These tables give each one a local wording.  Latin
+# proper nouns (Catholic, Anglican, Photoshop) are transliterated only where a
+# reader would expect it; brand names are left alone on purpose.
+_CAPTIONS = {
+    "ur": {
+        "Key facts": "اہم حقائق", "Fact": "حقیقت", "Analysis": "تجزیہ",
+        "Table": "جدول", "Timeline": "زمانی خاکہ", "Era colours": "دور کے رنگ",
+        "Story panels": "کہانی کے منظرنامے", "Character profiles": "کرداروں کا تعارف",
+        "Scripture passages": "صحیفوں کے اقتباسات", "Maps": "نقشے",
+        "Lineage": "نسب کا سلسلہ",
+        "Frequently asked questions": "اکثر پوچھے جانے والے سوالات",
+        "Question & answer": "سوال و جواب", "Question": "سوال",
+        "Tradition": "روایت", "Response": "جواب", "Reference": "حوالہ",
+        "Historical": "تاریخی", "Metaphorical": "استعاراتی", "Futurist": "مستقبلی",
+        "Prophecy": "پیش گوئی", "Scripture": "صحیفہ", "Notes": "نوٹ",
+        "Summary": "خلاصہ", "Meaning": "معنی", "Significance": "اہمیت",
+        "Feature": "خصوصیت", "Subject": "موضوع", "Title": "عنوان",
+        "Category": "زمرہ", "Description": "تفصیل", "Name": "نام",
+        "Role": "کردار", "Dates / Era": "تاریخیں / دور", "Era": "دور",
+        "Event": "واقعہ", "When": "کب", "Panel": "منظر", "Detail": "تفصیل",
+        "Rank": "درجہ", "View": "نظریہ", "Claim": "دعویٰ", "Books": "کتابیں",
+        "Founder": "بانی", "Biblical date": "بائبلی تاریخ", "Text": "متن",
+        "Notes.": "نوٹ:", "Week": "ہفتہ", "Day": "دن", "Book": "کتاب",
+        "Language": "زبان", "Verse": "آیت", "Order": "ترتیب", "Focus": "مرکوز",
+        "Origin": "اصلیت", "Section": "حصہ", "Series": "سلسلہ",
+        "Length": "دورانیہ", "Published": "تاریخِ اشاعت", "Topics": "موضوعات",
+        "Episode notes": "اقتباس کے نوٹس", "Masterclass": "ماسٹر کلاس",
+        "Podcast": "پوڈ کاسٹ", "Ep.": "قسط", "Psalm": "زبور",
+        "Punjabi title": "پنجابی عنوان", "English theme": "انگریزی موضوع",
+        "Raga": "راگ", "Country": "ملک", "Population": "آبادی",
+        "Adherents (est.)": "پیروکار (تخمینہ)", "Share of world": "دنیا میں حصہ",
+        "Person": "شخص", "Born (AM)": "پیدائش (عالمی سال)", "Died (AM)": "وفات (عالمی سال)",
+        "Lifespan": "عمر", "Death (BC)": "وفات (ق م)", "Chapters": "ابواب",
+        "Verses": "آیات", "Abbr.": "مخفف", "Category ": "زمرہ",
+        "Appendix": "ضمیمہ",
+        "Walking the Bible Maps": "بائبل کے نقشوں کی سیر",
+        "The World Map": "دنیا کا نقشہ", "Stop": "پڑاؤ", "Station": "منزل",
+        "Entries": "اندراجات",
+        "The Fifty Volumes": "پچاس جلدیں", "Bible Maps": "بائبل کے نقشے",
+        "Four Hundred Questions": "چار سو سوالات",
+        "One Thousand Answers": "ہزار جوابات",
+        "Hard Questions": "دشوار سوالات",
+        "Prophecy and World Faiths": "پیش گوئیاں اور عالمی مذاہب",
+        "Music and Podcasts": "موسیقی اور پوڈ کاسٹ",
+        "The Study Archive": "مطالعاتی محفوظہ",
+        "The Singers and Their Story": "گلوکار اور ان کی کہانی",
+        "Punjabi Zaboor, the Psalm Songs": "پنجابی زبور، زبور کے گیت",
+        "Podcasts and Video Lessons": "پوڈ کاسٹ اور ویڈیو اسباق",
+        "Video masterclasses": "ویڈیو ماسٹر کلاسز",
+        "Our Family of Websites": "ہماری ویب سائٹس کا خاندان",
+        "About FAQ": "تعارف کے سوالات",
+        "Questions People Ask": "لوگوں کے پوچھے گئے سوالات",
+        "Bible Books and Counts": "بائبل کی کتابیں اور شمار",
+        "Thank you for reading": "پڑھنے کا شکریہ",
+        "Featured gallery": "منتخب تصویریں",
+        "Complete image catalogue": "تصویروں کی مکمل فہرست",
+        "Visual index — key figures and beings": "بصری فہرست — اہم ہستیاں",
+        "Reading the tags": "علامتوں کو پڑھنا",
+        "Historical-lens tag": "تاریخی زاویے کا نشان",
+        "Largest countries by dominant tradition": "غالب روایت کے مطابق بڑے ممالک",
+        "Full profiles — the honored Din dynasty": "مکمل تعارف — معزز دین خاندان",
+        "How These Answers Were Written": "یہ جوابات کیسے لکھے گئے",
+        "A Note on Method": "طریقۂ کار پر ایک نوٹ",
+        "Saul's Podship Scriptorium": "ساؤلز پوڈشپ کتب خانہ",
+        "Scripture: King James Version": "صحیفہ: کنگ جیمز ورژن",
+        "Hindi Scripture: standard Hindi Bible": "صحیفہ: معیاری ہندی بائبل",
+        "Representative": "مثالی", "Photo": "تصویر",
+        "Theme": "موضوع", "Connections": "ربط", "Characters": "کردار",
+        "Article": "مضمون", "Video": "ویڈیو", "Asked in": "پوچھا گیا",
+        "Updated": "تازہ کاری", "Part": "حصہ", "Part 3": "حصہ 3",
+        "Colour key": "رنگوں کی کلید", "Colour key by era": "دور کے مطابق رنگوں کی کلید",
+        "Catholic": "کیتھولک", "Orthodox": "آرتھوڈکس", "Protestant": "پروٹسٹنٹ",
+        "Common answer": "عام جواب", "Featured": "نمایاں",
+        "Anglican": "اینگلیکن", "Pentecostal": "پینتی کاسٹل", "Rep.": "مثالی",
+        "The cross reference data is credited to openbible.info.":
+            "کراس ریفرنس کا ڈیٹا openbible.info کے تعاون سے ہے۔",
+    },
+    "hi": {
+        "Key facts": "मुख्य तथ्य", "Fact": "तथ्य", "Analysis": "विश्लेषण",
+        "Table": "तालिका", "Timeline": "समयरेखा", "Story panels": "कहानी के दृश्य",
+        "Character profiles": "पात्र परिचय", "Scripture passages": "पवित्रशास्त्र के अंश",
+        "Maps": "मानचित्र", "Lineage": "वंशावली",
+        "Frequently asked questions": "अक्सर पूछे जाने वाले प्रश्न",
+        "Question & answer": "प्रश्न और उत्तर", "Tradition": "परंपरा",
+        "Response": "उत्तर", "Reference": "संदर्भ", "Notes": "टिप्पणियाँ",
+        "Summary": "सार", "Tradition ": "परंपरा", "Era": "युग", "Panel": "दृश्य",
+        "Detail": "विवरण", "Era colours": "युगों के रंग", "Name": "नाम",
+        "Reference ": "संदर्भ", "Text": "पाठ", "Book": "पुस्तक",
+        "Chapters": "अध्याय", "Verses": "पद", "Appendix": "परिशिष्ट",
+        "The Fifty Volumes": "पचास खंड", "Bible Maps": "बाइबल के मानचित्र",
+        "Four Hundred Questions": "चार सौ प्रश्न",
+        "One Thousand Answers": "हज़ार उत्तर",
+        "Hard Questions": "कठिन प्रश्न",
+        "Prophecy and World Faiths": "भविष्यवाणियाँ और विश्व धर्म",
+        "Music and Podcasts": "संगीत और पॉडकास्ट",
+        "Thank you for reading": "पढ़ने के लिए धन्यवाद",
+        "Representative": "प्रतिनिधि", "Photo": "चित्र", "Rep.": "प्रतिनिधि",
+        "Founder": "संस्थापक", "Biblical date": "बाइबलीय तिथि",
+        "Claim": "दावा", "Books": "पुस्तकें", "Catholic": "कैथोलिक",
+        "Orthodox": "ऑर्थोडॉक्स", "Protestant": "प्रोटेस्टेंट",
+        "Anglican": "एंग्लिकन", "Pentecostal": "पेंटेकोस्टल",
+        "Historical": "ऐतिहासिक", "Metaphorical": "रूपकात्मक",
+        "Futurist": "भविष्यवादी", "Prophecy": "भविष्यवाणी",
+        "Scripture": "पवित्रशास्त्र", "Meaning": "अर्थ", "Subject": "विषय",
+        "Title": "शीर्षक", "Category": "श्रेणी", "Description": "विवरण",
+        "Role": "भूमिका", "Dates / Era": "तिथियाँ / युग", "Event": "घटना",
+        "When": "कब", "Rank": "श्रेणी", "View": "मत", "Week": "सप्ताह",
+        "Day": "दिन", "Language": "भाषा", "Verse": "पद", "Order": "क्रम",
+        "Focus": "केंद्र", "Section": "खंड", "Series": "शृंखला",
+        "Length": "अवधि", "Published": "प्रकाशित", "Topics": "विषय-सूची",
+        "Episode notes": "एपिसोड टिप्पणियाँ", "Masterclass": "मास्टरक्लास",
+        "Podcast": "पॉडकास्ट", "Ep.": "एपि.", "Psalm": "भजन",
+        "Punjabi title": "पंजाबी शीर्षक", "English theme": "अंग्रेज़ी विषय",
+        "Raga": "राग", "Country": "देश", "Population": "जनसंख्या",
+        "Adherents (est.)": "अनुयायी (अनुमानित)", "Share of world": "विश्व में हिस्सा",
+        "Person": "व्यक्ति", "Born (AM)": "जन्म (AM)", "Died (AM)": "मृत्यु (AM)",
+        "Lifespan": "आयु", "Death (BC)": "मृत्यु (ई.पू.)",
+        "Abbr.": "संक्षेप", "Walking the Bible Maps": "बाइबल मानचित्रों की यात्रा",
+        "The World Map": "विश्व मानचित्र", "Stop": "पड़ाव", "Station": "स्थान",
+        "Entries": "प्रविष्टियाँ", "The Study Archive": "अध्ययन संग्रह",
+        "The Singers and Their Story": "गायक और उनकी कहानी",
+        "Punjabi Zaboor, the Psalm Songs": "पंजाबी ज़बूर, भजन गीत",
+        "Podcasts and Video Lessons": "पॉडकास्ट और वीडियो पाठ",
+        "Video masterclasses": "वीडियो मास्टरक्लास",
+        "Our Family of Websites": "हमारी वेबसाइट परिवार",
+        "About FAQ": "परिचय प्रश्न", "Questions People Ask": "लोगों के प्रश्न",
+        "Bible Books and Counts": "बाइबल की पुस्तकें और गणना",
+        "Featured gallery": "चयनित चित्र", "Featured": "विशेष",
+        "Common answer": "सामान्य उत्तर",
+        "Colour key": "रंग संकेत", "Colour key by era": "युग के अनुसार रंग संकेत",
+        "Historical-lens tag": "ऐतिहासिक दृष्टि चिह्न",
+        "Reading the tags": "चिह्नों को पढ़ना",
+        "Complete image catalogue": "चित्रों की पूरी सूची",
+        "Visual index — key figures and beings": "दृश्य सूची — प्रमुख आकृतियाँ",
+        "Character profiles": "पात्र परिचय", "Lineage": "वंशावली",
+        "How These Answers Were Written": "ये उत्तर कैसे लिखे गए",
+        "A Note on Method": "विधि पर एक टिप्पणी",
+        "Saul's Podship Scriptorium": "सॉल्स पॉडशिप पुस्तकालय",
+    },
+}
+
+
+def chrome(text: str) -> str:
+    """Local wording for a piece of book apparatus, in the current language.
+
+    Handles three shapes: an exact caption, a caption with a trailing count
+    ("Story panels (3)") and a label followed by content ("Scripture: John
+    3:16").  Anything not in the table is returned untouched, so proper nouns
+    and user data pass through unchanged.
+    """
+    if LANG == "en":
+        return text
+    table = _CAPTIONS.get(LANG) or {}
+    if text in table:
+        return table[text]
+    m = re.match(r"^(.*?)\s*\((\d+)\)$", text)
+    if m and m.group(1) in table:
+        return f"{table[m.group(1)]} ({m.group(2)})"
+    m = re.match(r"^([A-Z][^:]{1,30}):\s*(.*)$", text, re.S)
+    if m and m.group(1) in table:
+        return f"{table[m.group(1)]}: {m.group(2)}"
+    return text
+
+
+def chrome_prefix(text: str, prefix: str) -> str:
+    """Translate a caption such as 'Story panels (3)' keeping its count."""
+    if LANG == "en" or not text.startswith(prefix):
+        return chrome(text)
+    rest = text[len(prefix):]
+    return chrome(prefix) + rest
+
+
+section_h_orig = None
+
+
 def section_h(text: str) -> list:
-    return [para(clean(text), ST["h2"])]
+    return [para(clean(chrome(text)), ST["h2"])]
 
 
 def sub_h(text: str) -> list:
-    return [para(clean(text), ST["h3"])]
+    return [para(clean(chrome(text)), ST["h3"])]
 
 
 # ================================================================ BUILD
@@ -1591,8 +1776,9 @@ def build():
                           hero=hero("images/volumes/jesus-is-god-full-references-ot-nt/hero-1920.jpg"))
     tier_names = {1: "Tier 1 — Most asked", 2: "Tier 2 — Common", 3: "Tier 3 — Advanced"}
     view_names = {
-        "catholic": "Catholic", "orthodox": "Orthodox", "protestant": "Protestant",
-        "anglican": "Anglican", "pentecostal": "Pentecostal",
+        "catholic": chrome("Catholic"), "orthodox": chrome("Orthodox"),
+        "protestant": chrome("Protestant"), "anglican": chrome("Anglican"),
+        "pentecostal": chrome("Pentecostal"),
     }
     story += [para(
         "Each question below comes with a plain answer, a verse from the King James "
@@ -1611,7 +1797,7 @@ def build():
         if tier in tier_names:
             meta_bits.append(tier_names[tier])
         if q.get("region"):
-            meta_bits.append(f"Asked in: {q['region']}")
+            meta_bits.append(chrome(f"Asked in: {q['region']}"))
         if q.get("ref"):
             meta_bits.append(q["ref"])
         story += [para(clean(" · ".join(meta_bits)), ST["small"])]
@@ -1619,7 +1805,7 @@ def build():
             story += [para(f"<i>{inline_md(q['rv'])}</i>", ST["quote"])]
         common = (q.get("common") or {}).get("en", "")
         if common:
-            story += [para(f"<b>Common answer.</b> {inline_md(common)}", ST["body"])]
+            story += [para(f"<b>{chrome('Common answer')}.</b> {inline_md(common)}", ST["body"])]
         views = q.get("views") or []
         if views:
             rows = []
@@ -1671,7 +1857,7 @@ def build():
     assets = watchers.get("assets", {})
     feature_names = watchers.get("feature_names", [])
     if feature_names:
-        story += [para("Featured gallery", ST["h3"])]
+        story += [para(chrome("Featured gallery"), ST["h3"])]
         story += asset_grid(feature_names, assets, cols=3, thumb=True)
     story += [para("Complete image catalogue", ST["h3"])]
     story += asset_grid(list(assets.keys()), assets, cols=4, thumb=True)
@@ -1999,9 +2185,9 @@ def build_volume_chapter(v: dict) -> list:
             hero = None
     flow = chapter_head("", v["title"], v.get("subtitle"), hero=hero,
                         kicker=f"Part 1 · Volume {v['number']:02d}")
-    meta = [v.get("category", "").title(), f"Updated {v.get('lastUpdated','')}"]
+    meta = [v.get("category", "").title(), chrome(f"Updated {v.get('lastUpdated','')}")]
     if v.get("featured"):
-        meta.append("Featured")
+        meta.append(chrome("Featured"))
     flow += [para(" · ".join(m for m in meta if m), ST["small"])]
     if v.get("overview"):
         flow += [para(clean_plain(v["overview"]), ST["lead"])]
@@ -2031,7 +2217,7 @@ def build_volume_chapter(v: dict) -> list:
             if col and (col, era) not in seen_tl:
                 seen_tl.append((col, era))
         if seen_tl:
-            flow += [para("<b>Colour key</b>", ST["h4"])]
+            flow += [para(f"<b>{chrome('Colour key')}</b>", ST["h4"])]
             key_cells = []
             for col, era in seen_tl:
                 key_cells.append(
@@ -2065,7 +2251,7 @@ def build_volume_chapter(v: dict) -> list:
             if era and col and era not in era_colors:
                 era_colors[era] = col
         if era_colors:
-            flow += [para("<b>Colour key by era</b>", ST["h4"])]
+            flow += [para(f"<b>{chrome('Colour key by era')}</b>", ST["h4"])]
             key_rows = []
             items = list(era_colors.items())
             for i in range(0, len(items), 3):
@@ -2082,13 +2268,13 @@ def build_volume_chapter(v: dict) -> list:
         for p in panels:
             bits = [p.get("description", "")]
             if p.get("scripture"):
-                bits.append(f"Scripture: {p['scripture']}")
+                bits.append(chrome(f"Scripture: {p['scripture']}"))
             if p.get("theologicalTheme"):
-                bits.append(f"Theme: {p['theologicalTheme']}")
+                bits.append(chrome(f"Theme: {p['theologicalTheme']}"))
             if p.get("connections"):
-                bits.append(f"Connections: {p['connections']}")
+                bits.append(chrome(f"Connections: {p['connections']}"))
             if p.get("characters"):
-                bits.append(f"Characters: {p['characters']}")
+                bits.append(chrome(f"Characters: {p['characters']}"))
             col = (p.get("colorTheme") or "").strip()
             chip_mark = (_square(col) + " ") if col else ""
             era_col = col if col else "#7a6a5f"
@@ -2107,9 +2293,9 @@ def build_volume_chapter(v: dict) -> list:
             if p.get("description"):
                 bits.append(p["description"])
             if p.get("scriptureReference"):
-                bits.append(f"Reference: {p['scriptureReference']}")
+                bits.append(chrome(f"Reference: {p['scriptureReference']}"))
             if p.get("significance"):
-                bits.append(f"Significance: {p['significance']}")
+                bits.append(chrome(f"Significance: {p['significance']}"))
             flow += [para(inline_md(" ".join(bits)), ST["body"])]
             if p.get("keyActions"):
                 for a in p["keyActions"]:
@@ -2159,9 +2345,9 @@ def build_volume_chapter(v: dict) -> list:
         flow += [para("<b>Related volumes:</b> " + clean(", ".join(rel)), ST["small"])]
     links = []
     if v.get("articleLink"):
-        links.append(f"Article: {v['articleLink']}")
+        links.append(chrome(f"Article: {v['articleLink']}"))
     if v.get("youtubeLink"):
-        links.append(f"Video: {v['youtubeLink']}")
+        links.append(chrome(f"Video: {v['youtubeLink']}"))
     if links:
         flow += [para(clean(" · ".join(links)), ST["small"])]
     return flow
@@ -2265,7 +2451,8 @@ def asset_grid(names, assets, cols=4, thumb=True) -> list:
         w, h = iw * scale, ih * scale
         kind = d.get("k", "")
         short_kind = ("AI" if kind.startswith("Text") else
-                      "Rep." if kind.startswith("Representative") else "Photo")
+                      chrome("Rep.") if kind.startswith("Representative")
+                      else chrome("Photo"))
         label = para(
             f"{clean(name)}<br/><font color='#7a6a5f' size='6'>{short_kind}</font>",
             S("gl", fontName="Sans", fontSize=6.5, leading=8, alignment=TA_CENTER,
