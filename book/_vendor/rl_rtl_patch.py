@@ -78,12 +78,48 @@ def _retry_without_wordwrap(f):
 
 def _patched_split(self, f, canv=None):
     try:
-        return _orig_split(self, f, canv)
+        r = _orig_split(self, f, canv)
     except Exception:
         retry = _retry_without_wordwrap(f)
         if retry is None:
             raise
         return _orig_split(self, retry, canv)
+
+    # doctemplate raises when S[0] still does not fit the space that is left,
+    # which kills the build.  That can happen with a right-to-left paragraph
+    # whose split lines come back reordered and slightly too tall.  Keep
+    # splitting the first part until it does fit, and hand the leftover back
+    # on the flowable list.
+    if not r or getattr(self, "_aW", 0) <= 0:
+        return r
+    h = self._y - self._y1p
+    if not self._atTop:
+        s = f.getSpaceBefore()
+        if self._oASpace:
+            s = max(s - self._prevASpace, 0)
+        h -= s
+    if h <= 0:
+        return r
+
+    for _ in range(8):
+        head = r[0]
+        wrap = getattr(head, "wrap", None)
+        if wrap is None:
+            break
+        try:
+            _, hh = wrap(self._aW, 1e6)
+        except Exception:
+            break
+        if hh <= h + 1e-6:
+            break
+        try:
+            more = head.split(self._aW, h)
+        except Exception:
+            break
+        if not more or len(more) < 2:
+            break
+        r = [more[0]] + list(more[1:]) + list(r[1:])
+    return r
 
 
 _Frame.split = _patched_split
@@ -122,7 +158,7 @@ def _bidi_word_list(words, direction="RTL", clean=True, wx=False):
     raw = " ".join(words)
     v2l = []
     bidi = _to.log2vis(raw, base_direction=direction, clean=clean, positions_V_to_L=v2l)
-    if len(v2l) != len(raw) or len(bidi) != len(raw):
+    if len(v2l) != len(bidi):
         return list(words)  # cannot map reliably; leave ReportLab's order
 
     lspan = [m.span() for m in _wordpat.finditer(raw)]
@@ -130,7 +166,10 @@ def _bidi_word_list(words, direction="RTL", clean=True, wx=False):
     if len(lspan) != n or len(vspan) != n:
         return list(words)
 
-    l2v = [0] * len(raw)
+    # ZWNJ (U+200C) is a "boundary neutral" that the Unicode X9 rule removes,
+    # so the visual string can be shorter than the logical one.  Those
+    # characters are invisible, so simply leave them out of the mapping.
+    l2v = {}
     for v, l in enumerate(v2l):
         l2v[l] = v
 
@@ -142,7 +181,7 @@ def _bidi_word_list(words, direction="RTL", clean=True, wx=False):
     votes = [{} for _ in range(n)]
     for wi, (a, b) in enumerate(lspan):
         for l in range(a, b):
-            if raw[l] == " ":
+            if raw[l] == " " or l not in l2v:
                 continue
             d = votes[slot_of[l2v[l]]]
             d[wi] = d.get(wi, 0) + 1
@@ -166,16 +205,27 @@ def _bidi_word_list(words, direction="RTL", clean=True, wx=False):
                     used.add(wi)
                     break
 
-    if wx:
-        return order
-
+    # ``order`` maps a visual slot to the logical word in it; ReportLab wants
+    # the inverse, indexed by logical word.
     slot_for_word = {wi: si for si, wi in enumerate(order)}
+    if wx:
+        return [slot_for_word[wi] for wi in range(n)]
+
+    # ReportLab's drawing code sorts each line by __bidiV__ and takes the text
+    # from the list, so the list must stay in *logical* order and every entry
+    # must carry its visual slot.  BidiStr has to be built directly: going
+    # through bidiStrWrap() silently returns a plain str and drops the slot,
+    # which leaves the paragraph in source order and reverses the display.
     out = []
     aR = out.append
-    for wi, w in enumerate(words):
+    for wi in range(n):
         si = slot_for_word[wi]
-        aR(_to.bidiStrWrap(bidi[vspan[si][0]:vspan[si][1]], _to.BidiIndex(si, wi)))
+        a, b = vspan[si]
+        aR(_to.BidiStr(bidi[a:b], bidiV=si, bidiL=wi))
     return out
+
+
+_orig_bidiWordList = _to.bidiWordList
 
 
 def apply_bidi_words():
@@ -185,3 +235,30 @@ def apply_bidi_words():
 
 
 apply_bidi_words()
+
+
+# --- 5. setRise crashes when the text buffer is empty ------------------------
+# ReportLab's setRise() looks at the previous operator to collapse redundant
+# rise changes ("... Ts" pairs).  With shaped right-to-left text the buffer can
+# be flushed before the rise is reset, so _code is empty and the lookup raises
+# "IndexError: list index out of range", killing the build mid-book.
+from reportlab.pdfgen.textobject import PDFTextObject as _PDFTextObject
+
+_orig_setRise = _PDFTextObject.setRise
+
+
+def _setRise(self, rise):
+    if not getattr(self, "_code", None):
+        # restore the buffer to a sane state instead of indexing into nothing
+        self._rise = rise
+        self._y -= rise
+        self._code = [f"{_fmt_float(rise)} Ts"]
+        return
+    return _orig_setRise(self, rise)
+
+
+def _fmt_float(v):
+    return ("%f" % v).rstrip("0").rstrip(".")
+
+
+_PDFTextObject.setRise = _setRise

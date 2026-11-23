@@ -24,7 +24,7 @@ except Exception as exc:  # pragma: no cover - import guard
 __all__ = ["log2vis", "get_display"]
 
 
-def _resolve(text, base_direction, positions_V_to_L):
+def _resolve(text, base_direction, positions_V_to_L, clean=True):
     storage = _alg.get_empty_storage()
     bd = str(base_direction or "R")[0].upper()
     if bd not in ("L", "R"):
@@ -45,6 +45,11 @@ def _resolve(text, base_direction, positions_V_to_L):
     chars = storage["chars"]
     if positions_V_to_L is not None:
         positions_V_to_L.extend(c["index"] for c in chars)
+
+    # Note: the Unicode X9 rule removes "boundary neutral" characters such as
+    # U+200C ZWNJ, which Urdu uses to stop letters joining, so the visual
+    # string can be shorter than the logical one.  Callers that map between
+    # the two by index must therefore tolerate gaps (see rl_rtl_patch.py).
     return "".join(c["ch"] for c in chars)
 
 
@@ -54,7 +59,7 @@ def log2vis(text, base_direction=None, clean=True, positions_V_to_L=None):
         text = str(text)
     if not text:
         return text
-    return _resolve(text, base_direction, positions_V_to_L)
+    return _resolve(text, base_direction, positions_V_to_L, clean)
 
 
 def get_display(text, base_direction=None, clean=True):

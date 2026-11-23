@@ -122,6 +122,10 @@ def S(name, **kw):
         # Right-to-left paragraph engine: wordWrap="RTL" drives ReportLab's
         # bidi reordering + HarfBuzz shaping; alignment is mirrored here.
         base["wordWrap"] = "RTL"
+        # HarfBuzz shaping must be switched on explicitly: with shaping off
+        # ReportLab draws the font's default glyph for each character, so the
+        # letters never take their contextual (joined) forms.
+        base["shaping"] = 1
         size = base.get("fontSize", 9.5)
         # Table cells and captions live in narrow columns, so they keep a
         # smaller floor; body text gets the readable minimum.
@@ -196,6 +200,11 @@ ST = {
 
 # RTL list defaults: bullets hang off the right edge in the Urdu edition
 if LANG == "ur":
+    # Mirrored indents: in a right-to-left list the marker belongs at the
+    # right edge and the text hangs to its left, so the indents are set on the
+    # right and the left ones are cleared.  Without this the bullet is drawn at
+    # the far left margin while the text starts at the right, which reads as a
+    # stray dot in the gutter.
     RTL_LIST = dict(bulletDir="rtl", bulletAlign="right", rightIndent=14)
     RTL_BULLET = dict(rightIndent=12)
 else:
@@ -571,10 +580,10 @@ def _cell_styles(scale):
     size = base.fontSize * scale
     lead = base.leading * scale
     cell = ParagraphStyle(base.name + f"-{scale}", parent=base,
-                          fontSize=size, leading=lead)
+                          fontSize=size, leading=lead, shaping=1)
     hsize = head.fontSize * scale
     headst = ParagraphStyle(head.name + f"-{scale}", parent=head,
-                            fontSize=hsize, leading=lead)
+                            fontSize=hsize, leading=lead, shaping=1)
     _CELL_STYLE_CACHE[scale] = (cell, headst)
     return cell, headst
 
@@ -646,10 +655,12 @@ def md_to_flowables(md: str, style=None) -> list:
                 items.append(re.sub(r"^[-*•]\s+", "", lines[i].strip()))
                 i += 1
             out.append(ListFlowable(
-                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=12,
+                [ListItem(safe_para(inline_md(it), ST["bullet"]),
+                          leftIndent=0 if LANG == "ur" else 12,
                           **RTL_BULLET)
                  for it in items],
-                bulletType="bullet", start="•", leftIndent=14,
+                bulletType="bullet", start="•",
+                leftIndent=0 if LANG == "ur" else 14,
                 bulletFontName="Sans", bulletFontSize=7, **RTL_LIST,
             ))
             continue
@@ -659,10 +670,11 @@ def md_to_flowables(md: str, style=None) -> list:
                 items.append(re.sub(r"^\d+[.)]\s+", "", lines[i].strip()))
                 i += 1
             out.append(ListFlowable(
-                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=14,
+                [ListItem(safe_para(inline_md(it), ST["bullet"]),
+                          leftIndent=0 if LANG == "ur" else 14,
                           **RTL_BULLET)
                  for it in items],
-                bulletType="1", leftIndent=18,
+                bulletType="1", leftIndent=0 if LANG == "ur" else 18,
                 bulletFontName="Sans", bulletFontSize=8, **RTL_LIST,
             ))
             continue
@@ -684,6 +696,46 @@ if LANG == "ur":
     BOOK_TITLE = "سولز پاڈشپ — مکمل علمی کتاب"
 elif LANG == "hi":
     BOOK_TITLE = "सॉल्स पॉडशिप — सम्पूर्ण ज्ञान पुस्तक"
+
+
+
+# ------------------------------------------------- canvas (header/footer) text
+def rtl_text(text, font_name, size):
+    """Return canvas-ready text: shaped and reordered for Urdu, plain otherwise.
+
+    Canvas drawing bypasses the paragraph engine, so running heads and page
+    furniture would otherwise print unjoined and in the wrong order.
+    """
+    if LANG != "ur" or not text:
+        return text
+    try:
+        from reportlab.pdfgen.textobject import bidiShapedText
+        shaped, _w = bidiShapedText(text, direction="RTL", fontName=font_name,
+                                    fontSize=size, shaping=True)
+        return shaped
+    except Exception:
+        return text
+
+
+def draw_rtl(canv, x, y, text, font_name, size, align="left"):
+    """drawString/drawRightString/drawCentredString with Urdu shaping."""
+    canv.setFont(font_name, size)
+    t = rtl_text(text, font_name, size)
+    if align == "right":
+        canv.drawRightString(x, y, t)
+    elif align == "center":
+        canv.drawCentredString(x, y, t)
+    else:
+        canv.drawString(x, y, t)
+
+COVER_BRAND = "SAUL'S PODSHIP"
+COVER_SUBTITLE = "The Complete Knowledge Book"
+if LANG == "ur":
+    COVER_BRAND = "سولز پاڈشپ"
+    COVER_SUBTITLE = "مکمل علمی کتاب"
+elif LANG == "hi":
+    COVER_BRAND = "सॉल्स पॉडशिप"
+    COVER_SUBTITLE = "सम्पूर्ण ज्ञान पुस्तक"
 
 
 class BookDoc(BaseDocTemplate):
@@ -763,11 +815,9 @@ class BookDoc(BaseDocTemplate):
         canv.line(BOOK_W, 0, BOOK_W, PAGE_H)
         # left half: quiet quarter-title
         canv.setFillColor(WINE)
-        canv.setFont("Serif-Bold", 16)
-        canv.drawCentredString(BOOK_W / 2, PAGE_H * 0.55, "SAUL'S PODSHIP")
-        canv.setFont("Sans", 9)
+        draw_rtl(canv, BOOK_W / 2, PAGE_H * 0.55, COVER_BRAND, "Serif-Bold", 16, "center")
         canv.setFillColor(MUTED)
-        canv.drawCentredString(BOOK_W / 2, PAGE_H * 0.55 - 18, "The Complete Knowledge Book")
+        draw_rtl(canv, BOOK_W / 2, PAGE_H * 0.55 - 18, COVER_SUBTITLE, "Sans", 9, "center")
         # right half: formal cover panel
         rx = BOOK_W
         canv.setStrokeColor(GOLD)
@@ -778,8 +828,7 @@ class BookDoc(BaseDocTemplate):
         canv.setFillColor(WINE)
         canv.rect(rx + 10 * mm, PAGE_H - 42 * mm, BOOK_W - 20 * mm, 18 * mm, fill=1, stroke=0)
         canv.setFillColor(GOLD_L)
-        canv.setFont("Sans-Bold", 11)
-        canv.drawCentredString(rx + BOOK_W / 2, PAGE_H - 34 * mm, "SAUL'S PODSHIP")
+        draw_rtl(canv, rx + BOOK_W / 2, PAGE_H - 34 * mm, COVER_BRAND, "Sans-Bold", 11, "center")
         canv.restoreState()
 
     def _side_page(self, canv, doc, side):
@@ -799,45 +848,36 @@ class BookDoc(BaseDocTemplate):
         if side == "front":
             x0 = BOOK_W + GUTTER
             x1 = PAGE_W - MARGIN
-            canv.setFont("Sans", 7)
             canv.setFillColor(MUTED)
-            canv.drawRightString(x1, y, BOOK_TITLE)
+            draw_rtl(canv, x1, y, BOOK_TITLE, "Sans", 7, "right")
             canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8)
-            canv.drawRightString(x1, 8 * mm, book_pg)
+            draw_rtl(canv, x1, 8 * mm, book_pg, "Sans-Bold", 8, "right")
             canv.restoreState()
             return
         if side == "L":
             # verso: outer edge = left of sheet
             x_out, x_in = MARGIN, BOOK_W - GUTTER
-            canv.setFont("Sans", 7)
             canv.setFillColor(MUTED)
-            canv.drawString(x_out, y, BOOK_TITLE)
+            draw_rtl(canv, x_out, y, BOOK_TITLE, "Sans", 7)
             if chapter:
                 canv.setFillColor(WINE)
-                canv.drawRightString(x_in, y, chapter)
+                draw_rtl(canv, x_in, y, chapter, "Sans", 7, "right")
             canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8)
-            canv.drawString(x_out, 8 * mm, book_pg)          # outer = left
+            draw_rtl(canv, x_out, 8 * mm, book_pg, "Sans-Bold", 8)          # outer = left
             canv.setFillColor(MUTED)
-            canv.setFont("Sans", 7)
-            canv.drawRightString(x_in, 8 * mm, "saulspodship.com")
+            draw_rtl(canv, x_in, 8 * mm, "saulspodship.com", "Sans", 7, "right")
         else:
             # recto: outer edge = right of sheet
             x_in, x_out = BOOK_W + GUTTER, PAGE_W - MARGIN
             if chapter:
-                canv.setFont("Sans", 7)
                 canv.setFillColor(WINE)
-                canv.drawString(x_in, y, chapter)
-            canv.setFont("Sans", 7)
+                draw_rtl(canv, x_in, y, chapter, "Sans", 7)
             canv.setFillColor(MUTED)
-            canv.drawRightString(x_out, y, BOOK_TITLE)
-            canv.setFont("Sans", 7)
+            draw_rtl(canv, x_out, y, BOOK_TITLE, "Sans", 7, "right")
             canv.setFillColor(MUTED)
-            canv.drawString(x_in, 8 * mm, "saulspodship.com")
+            draw_rtl(canv, x_in, 8 * mm, "saulspodship.com", "Sans", 7)
             canv.setFillColor(WINE)
-            canv.setFont("Sans-Bold", 8)
-            canv.drawRightString(x_out, 8 * mm, book_pg)      # outer = right
+            draw_rtl(canv, x_out, 8 * mm, book_pg, "Sans-Bold", 8, "right")      # outer = right
         canv.restoreState()
 
     def beforeDocument(self):
@@ -875,14 +915,71 @@ def make_toc():
 
 
 # ---------------------------------------------------------------- part/chapter helpers
+
+# ---------------------------------------------------------------- part openers
+# Part dividers and the closing page are chrome rather than translated content,
+# so their wording lives here.  Urdu strings were added because the dividers
+# were printing English headings in the middle of the Urdu book.
+_PART_EN = {
+    "1": ("The Fifty Volumes",
+          "The full Bible encyclopedia, volume by volume, with tables, timelines and pictures"),
+    "2": ("Bible Maps",
+          "Eight journey maps that walk the routes of Abraham, Moses, Paul and Jesus"),
+    "3": ("Four Hundred Questions",
+          "One hundred questions each on Islam, Judaism, Hinduism and Sikhism, answered with care"),
+    "4": ("One Thousand Answers",
+          "Short Bible study questions sorted by book, from the Law to Revelation"),
+    "5": ("Hard Questions",
+          "One hundred tough questions, with answers from five Christian traditions"),
+    "6": ("Angels and the Watchers",
+          "Holy beings, fallen watchers, beasts and the stories the Bible tells about them"),
+    "7": ("Prophecy and World Faiths",
+          "How prophecies were fulfilled, the religions of the world, and the family line from Adam to Jesus"),
+    "8": ("Music and Podcasts",
+          "Pakistani gospel singers, the Punjabi Zaboor psalms, and the podcast episodes"),
+    "A": ("Appendix",
+          "The family of websites, common questions, and Bible book counts"),
+}
+_PART_UR = {
+    "1": ("پچاس جلدوں کا مجموعہ",
+          "مکمل بائبل دائرۃ المعارف، جلد بہ جلد، جدولوں، زمانوں اور تصویروں کے ساتھ"),
+    "2": ("بائبل کے نقشے",
+          "آٹھ سفری نقشے جو ابراہیم، موسیٰ، پولس اور یسوع کے راستوں پر لے جاتے ہیں"),
+    "3": ("چار سو سوالات",
+          "اسلام، یہودیت، ہندومت اور سکھ مت پر ایک ایک سو سوالات، احتیاط سے دیے گئے جوابات"),
+    "4": ("ایک ہزار جوابات",
+          "بائبل کے مختصر مطالعاتی سوالات، کتاب بہ کتاب، توریت سے مکاشفہ تک"),
+    "5": ("مشکل سوالات",
+          "ایک سو مشکل سوالات، پانچ مسیحی روایات کے جوابات کے ساتھ"),
+    "6": ("فرشتے اور نگہبان",
+          "مقدس ہستیاں، گِرے ہوئے نگہبان، حیوانات اور اُن کے بارے میں بائبل کی روایات"),
+    "7": ("پیشین گوئی اور عالمی مذاہب",
+          "کیسے پیشین گوئیاں پوری ہوئیں، دنیا کے مذاہب، اور آدم سے یسوع تک کا نسب"),
+    "8": ("موسیقی اور پوڈکاسٹ",
+          "پاکستانی انجیلی گلوکار، پنجابی زبور کے بھجن، اور پوڈکاسٹ اقساط"),
+    "A": ("ضمیمہ",
+          "ویب سائٹس کا خاندان، عام سوالات، اور بائبل کی کتابوں کی تعداد"),
+}
+_HI_KEEP = _PART_EN
+
+
+def part_text(num, title, subtitle):
+    """Localised wording for a part divider."""
+    if LANG == "ur":
+        t, sub = _PART_UR.get(num, (title, subtitle))
+        return f"حصہ {num}", t, sub
+    return f"PART {num}", title, subtitle
+
+
 def part_page(num: str, title: str, subtitle: str, hero: Path | None = None) -> list:
     """Part divider: opens on a right-hand page with a full-width picture."""
+    kicker, title, subtitle = part_text(num, title, subtitle)
     flow = [
         NextPageTemplate("bodyR"),
         PageBreak(),
         EnsureRecto(),
         Spacer(1, 14 * mm),
-        para(f"PART {num}", ST["part"]),
+        para(kicker, ST["part"]),
         para(clean_plain(title), ST["part_title"]),
         Spacer(1, 3 * mm),
         para(clean_plain(subtitle), ST["part_sub"]),
@@ -1559,8 +1656,10 @@ def build():
 
     story += [PageBreak(),
               Spacer(1, 42 * mm),
-              para("THE END", ST["part"]),
-              para("Thank you for reading", ST["part_title"]),
+              para("اختتام" if LANG == "ur" else "THE END", ST["part"]),
+              para("پڑھنے کا شکریہ" if LANG == "ur"
+                   else ("पढ़ने के लिए धन्यवाद" if LANG == "hi" else "Thank you for reading"),
+                   ST["part_title"]),
               Spacer(1, 6 * mm),
               para(
                   "Solat Jamil · saulspodship.com · "
