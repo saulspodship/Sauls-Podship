@@ -4,21 +4,35 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download models
         run: |
           mkdir -p argos_models
-          curl -fsSL -o argos_models/translate-en_ur-1_9.argosmodel \
+          curl -fsSL --retry 3 -o argos_models/translate-en_ur-1_9.argosmodel \
             "https://argos-net.com/v1/translate-en_ur-1_9.argosmodel"
-          curl -fsSL -o argos_models/translate-en_hi-1_1.argosmodel \
+          curl -fsSL --retry 3 -o argos_models/translate-en_hi-1_1.argosmodel \
             "https://argos-net.com/v1/translate-en_hi-1_1.argosmodel"
           ls -la argos_models/
-      - name: Commit to branch
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: argos-models
+          path: argos_models/
+          retention-days: 7
+      - name: Commit to argos-models branch
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin argos-models || true
           git checkout -B argos-models
+          mkdir -p argos_models
+          # files already in workspace from download step
           git add -f argos_models/
-          git commit -m "chore: add argos translation models" || true
+          git commit -m "chore: argos translation models" || echo "nothing to commit"
           git push origin argos-models --force
