@@ -1,0 +1,24 @@
+name: Fetch Argos models
+on:
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download models
+        run: |
+          mkdir -p argos_models
+          curl -fsSL -o argos_models/translate-en_ur-1_9.argosmodel \
+            "https://argos-net.com/v1/translate-en_ur-1_9.argosmodel"
+          curl -fsSL -o argos_models/translate-en_hi-1_1.argosmodel \
+            "https://argos-net.com/v1/translate-en_hi-1_1.argosmodel"
+          ls -la argos_models/
+      - name: Commit to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B argos-models
+          git add -f argos_models/
+          git commit -m "chore: add argos translation models" || true
+          git push origin argos-models --force
