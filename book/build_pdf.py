@@ -64,6 +64,7 @@ BOOK_W, BOOK_H = 6 * inch, 9 * inch
 PAGE_W, PAGE_H = BOOK_W * 2, BOOK_H
 MARGIN = 14 * mm          # outer/inner margin on each book half
 GUTTER = 8 * mm           # breathing room at the spine
+AVAIL_W = BOOK_W - 2 * MARGIN - GUTTER   # usable width of one book half
 WINE = colors.HexColor("#4A152C")
 WINE2 = colors.HexColor("#8B1C2E")
 GOLD = colors.HexColor("#B5952F")
@@ -85,13 +86,15 @@ def register_fonts():
         pdfmetrics.registerFont(TTFont("Sans", f"{F}/DejaVuSans.ttf"))
         pdfmetrics.registerFont(TTFont("Sans-Bold", f"{F}/DejaVuSans-Bold.ttf"))
     elif LANG == "ur":
-        # Naskh (Noto Sans Arabic) for body — ReportLab's Nastaliq subsetting
-        # drops glyph outlines, so Nastaliq is only used for display headings
-        # when it survives; body text stays in the reliable Naskh face.
-        pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoSansArabic.ttf")))
-        pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoSansArabic.ttf")))
-        pdfmetrics.registerFont(TTFont("Sans", str(FONTS / "NotoSansArabic.ttf")))
-        pdfmetrics.registerFont(TTFont("Sans-Bold", str(FONTS / "NotoSansArabic.ttf")))
+        # Jameel Noori Nastaleeq for everything readable: it is the face Urdu
+        # readers actually expect, and ReportLab shapes and embeds it cleanly.
+        # Nastaliq needs deep descenders and stacked marks, so it is set at a
+        # larger size with generous leading (see ST below).
+        nastaliq = FONTS / "JameelNooriNastaleeq.ttf"
+        pdfmetrics.registerFont(TTFont("Serif", str(nastaliq)))
+        pdfmetrics.registerFont(TTFont("Serif-Bold", str(nastaliq)))
+        pdfmetrics.registerFont(TTFont("Sans", str(nastaliq)))
+        pdfmetrics.registerFont(TTFont("Sans-Bold", str(nastaliq)))
     else:  # hi
         pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoSerifDevanagari.ttf")))
         pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoSerifDevanagari.ttf")))
@@ -114,17 +117,24 @@ register_fonts()
 def S(name, **kw):
     base = dict(fontName="Serif", fontSize=9.5, leading=13.2, textColor=INK,
                 alignment=TA_JUSTIFY, spaceBefore=0, spaceAfter=4)
-    if LANG == "ur":
-        # Right-to-left paragraph engine: wordWrap="RTL" drives ReportLab's
-        # bidi reordering + HarfBuzz shaping; alignment is mirrored below.
-        base["wordWrap"] = "RTL"
-        base["leading"] = 16.5
     base.update(kw)
     if LANG == "ur":
-        al = base.get("alignment")
-        if al == TA_LEFT:
+        # Right-to-left paragraph engine: wordWrap="RTL" drives ReportLab's
+        # bidi reordering + HarfBuzz shaping; alignment is mirrored here.
+        base["wordWrap"] = "RTL"
+        size = base.get("fontSize", 9.5)
+        # Table cells and captions live in narrow columns, so they keep a
+        # smaller floor; body text gets the readable minimum.
+        floor = 8.0 if name.startswith(("cell", "caption", "small")) else 9.6
+        if size < floor:
+            size = base["fontSize"] = floor
+        # Nastaliq hangs well below the baseline and stacks marks above it,
+        # so it needs far more leading than a Latin face at the same size.
+        tight = name.startswith(("cell", "caption"))
+        base["leading"] = size * (1.75 if tight else (2.0 if size <= 12 else 1.55))
+        if base.get("alignment") == TA_LEFT:
             base["alignment"] = TA_RIGHT
-        elif al == TA_RIGHT:
+        elif base.get("alignment") == TA_RIGHT:
             base["alignment"] = TA_LEFT
     return ParagraphStyle(name, **base)
 
@@ -345,71 +355,200 @@ def img_flowable(path: Path, max_w: float, max_h: float, caption: str | None = N
     w, h = iw * scale, ih * scale
     out = [Image(str(prepared), width=w, height=h)]
     if caption:
-        out.append(Paragraph(clean(caption), ST["caption"]))
+        out.append(para(clean(caption), ST["caption"]))
     else:
         out.append(Spacer(1, 4))
     return out
 
 
 # ---------------------------------------------------------------- tables
+_ARABIC_RE = re.compile(r"[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]")
+_LATIN_RE = re.compile(r"[A-Za-z]")
+_LTR_STYLE_CACHE = {}
+
+
+def _is_latin_only(text: str) -> bool:
+    """True when a string has no Arabic-script letters at all.
+
+    Urdu translation left some passages in English (proper nouns, untranslated
+    study notes).  Laying those out right-to-left reverses their punctuation
+    and reads as garbage, so they are set left to right even in the Urdu book.
+    """
+    plain = re.sub(r"<[^>]+>", "", text or "")
+    return not _ARABIC_RE.search(plain) and bool(_LATIN_RE.search(plain))
+
+
+def _mixed_script(text: str) -> bool:
+    """True when a string mixes Arabic-script letters with a foreign run.
+
+    Colour-key chips are drawn from DejaVu; putting that font next to a
+    Nastaliq run inside a right-to-left frame makes ReportLab wrap one word
+    per line, so mixed cells are set left to right instead.
+    """
+    plain = re.sub(r"<[^>]+>", "", text or "")
+    if not _ARABIC_RE.search(plain):
+        return False
+    return bool(re.search(r'name="Sy"', text or "")) or bool(_LATIN_RE.search(plain))
+
+
+def _ltr_variant(style):
+    key = id(style)
+    hit = _LTR_STYLE_CACHE.get(key)
+    if hit is not None:
+        return hit
+    d = style.__dict__.copy()
+    d["wordWrap"] = None
+    d["alignment"] = TA_LEFT
+    d["name"] = style.name + "-ltr"
+    out = ParagraphStyle(d.pop("name"), **{k: v for k, v in d.items() if k != "name"})
+    _LTR_STYLE_CACHE[key] = out
+    return out
+
+
+def para(text, style):
+    """Paragraph() with per-string direction resolution for the Urdu book."""
+    if LANG == "ur" and (_is_latin_only(text) or _mixed_script(text)):
+        return Paragraph(text, _ltr_variant(style))
+    return Paragraph(text, style)
+
+
 def safe_para(text, style):
     try:
-        return Paragraph(text, style)
+        return para(text, style)
     except Exception:
         plain = re.sub(r"<[^>]+>", "", str(text))
-        return Paragraph(clean(plain), style)
+        return para(clean(plain), style)
 
 
 def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
                zebra=True, align_left=True):
+    """Build a themed table, sized to fit a single book page.
+
+    Nastaliq runs tall, so Urdu tables are laid out repeatedly at falling font
+    sizes until the whole table fits the frame. Without this an unlucky table
+    overruns the height and ReportLab aborts the entire build.
+    """
     if not rows and not headers:
         return []
-    avail = BOOK_W - 2 * MARGIN - GUTTER
-    data = []
-    if headers:
-        data.append([safe_para(clean(str(h)), ST["cell_h"]) for h in headers])
-    for row in rows:
-        data.append([
-            safe_para(inline_md(str(c)) if c is not None else "", ST["cell"])
-            for c in row
-        ])
-    n_cols = max(len(r) for r in data)
-    for r in data:
-        while len(r) < n_cols:
-            r.append(safe_para("", ST["cell"]))
-    if col_widths:
-        widths = [avail * w for w in col_widths]
-    else:
-        widths = [avail / n_cols] * n_cols
+
+    avail = AVAIL_W
+    sizes = [1.0]
     if LANG == "ur":
-        # Right-to-left reading order: last column is read first.
-        data = [list(reversed(r)) for r in data]
-        widths = list(reversed(widths))
-    total = sum(widths)
-    widths = [w * avail / total for w in widths]
-    t = Table(data, colWidths=widths, repeatRows=1 if headers else 0)
-    style_cmds = [
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("GRID", (0, 0), (-1, -1), 0.4, LINE),
-        ("LEFTPADDING", (0, 0), (-1, -1), 4),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-    ]
-    if headers:
-        style_cmds += [
-            ("BACKGROUND", (0, 0), (-1, 0), header_bg),
-            ("LINEBELOW", (0, 0), (-1, 0), 0.8, GOLD),
+        sizes = [1.0, 0.92, 0.84, 0.76, 0.68, 0.6]
+
+    last = None
+    for scale in sizes:
+        cell_st, head_st = _cell_styles(scale)
+        data = []
+        if headers:
+            data.append([safe_para(clean(str(h)), head_st) for h in headers])
+        for row in rows:
+            data.append([
+                safe_para(inline_md(str(c)) if c is not None else "", cell_st)
+                for c in row
+            ])
+        n_cols = max(len(r) for r in data)
+        for r in data:
+            while len(r) < n_cols:
+                r.append(safe_para("", cell_st))
+
+        if col_widths:
+            widths = [avail * w for w in col_widths]
+        else:
+            widths = [avail / n_cols] * n_cols
+            if LANG == "ur":
+                # weight columns by how much text they actually hold
+                # Measure, don't guess: weight columns by how wide their text
+                # actually sets, and never let a column be narrower than its
+                # longest unbreakable word (otherwise ReportLab breaks words
+                # like "Week" mid-glyph).
+                need = [0.0] * n_cols
+                min_w = [0.0] * n_cols
+                for r in data:
+                    for i, cell in enumerate(r[:n_cols]):
+                        st = cell.style
+                        indent = (getattr(st, "leftIndent", 0) or 0) + \
+                                 (getattr(st, "rightIndent", 0) or 0)
+                        for para_text in re.sub(r"<[^>]+>", "",
+                                                getattr(cell, "text", "") or "").split("\n"):
+                            try:
+                                w = pdfmetrics.stringWidth(para_text, st.fontName,
+                                                           st.fontSize) + indent
+                            except Exception:
+                                w = len(para_text) * st.fontSize * 0.5
+                            need[i] = max(need[i], w)
+                            for word in para_text.split():
+                                try:
+                                    ww = pdfmetrics.stringWidth(
+                                        word, st.fontName, st.fontSize) + 14
+                                except Exception:
+                                    ww = len(word) * st.fontSize * 0.5
+                                min_w[i] = max(min_w[i], ww)
+                total = sum(need) or 1.0
+                widths = [avail * n / total for n in need]
+                widths = [max(w, m) for w, m in zip(widths, min_w)]
+        total_w = sum(widths)
+        widths = [w * avail / total_w for w in widths]
+
+        if LANG == "ur":
+            # right-to-left reading order: last column is read first
+            data = [list(reversed(r)) for r in data]
+            widths = list(reversed(widths))
+
+        t = Table(data, colWidths=widths, repeatRows=1 if headers else 0)
+        cmds = [
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("GRID", (0, 0), (-1, -1), 0.4, LINE),
+            ("LEFTPADDING", (0, 0), (-1, -1), 4),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
         ]
-        start = 1
-    else:
-        start = 0
-    if zebra:
-        for i in range(start, len(data)):
-            if (i - start) % 2 == 1:
-                style_cmds.append(("BACKGROUND", (0, i), (-1, i), CREAM2))
-    t.setStyle(TableStyle(style_cmds))
-    return [t, Spacer(1, 6)]
+        if headers:
+            cmds += [
+                ("BACKGROUND", (0, 0), (-1, 0), header_bg),
+                ("LINEBELOW", (0, 0), (-1, 0), 0.8, GOLD),
+            ]
+        start = 1 if headers else 0
+        if zebra:
+            for i in range(start, len(data)):
+                if (i - start) % 2 == 1:
+                    cmds.append(("BACKGROUND", (0, i), (-1, i), CREAM2))
+        t.setStyle(TableStyle(cmds))
+        last = t
+        if LANG != "ur":
+            break
+        try:
+            _, h = t.wrap(avail, PAGE_H)
+        except Exception:
+            continue
+        if h <= PAGE_H - 120:
+            break
+
+    return [last, Spacer(1, 6)]
+
+
+_CELL_STYLE_CACHE = {}
+
+
+def _cell_styles(scale):
+    """Return (cell, header) paragraph styles at a scale of the base size."""
+    if LANG != "ur":
+        return ST["cell"], ST["cell_h"]
+    hit = _CELL_STYLE_CACHE.get(scale)
+    if hit:
+        return hit
+    base = ST["cell"]
+    head = ST["cell_h"]
+    size = base.fontSize * scale
+    lead = base.leading * scale
+    cell = ParagraphStyle(base.name + f"-{scale}", parent=base,
+                          fontSize=size, leading=lead)
+    hsize = head.fontSize * scale
+    headst = ParagraphStyle(head.name + f"-{scale}", parent=head,
+                            fontSize=hsize, leading=lead)
+    _CELL_STYLE_CACHE[scale] = (cell, headst)
+    return cell, headst
 
 
 # ---------------------------------------------------------------- markdown
@@ -715,10 +854,10 @@ def part_page(num: str, title: str, subtitle: str, hero: Path | None = None) -> 
         PageBreak(),
         EnsureRecto(),
         Spacer(1, 14 * mm),
-        Paragraph(f"PART {num}", ST["part"]),
-        Paragraph(clean_plain(title), ST["part_title"]),
+        para(f"PART {num}", ST["part"]),
+        para(clean_plain(title), ST["part_title"]),
         Spacer(1, 3 * mm),
-        Paragraph(clean_plain(subtitle), ST["part_sub"]),
+        para(clean_plain(subtitle), ST["part_sub"]),
         Spacer(1, 8 * mm),
     ]
     if hero and Path(hero).exists():
@@ -740,10 +879,10 @@ def chapter_head(no: str, title: str, subtitle: str | None = None,
                  hero: Path | None = None, kicker: str | None = None) -> list:
     flow = [PageBreak()]
     if kicker:
-        flow.append(Paragraph(clean_plain(kicker), ST["chap_no"]))
-    flow.append(Paragraph(clean_plain(title), ST["chap_title"]))
+        flow.append(para(clean_plain(kicker), ST["chap_no"]))
+    flow.append(para(clean_plain(title), ST["chap_title"]))
     if subtitle:
-        flow.append(Paragraph(clean_plain(subtitle), ST["chap_sub"]))
+        flow.append(para(clean_plain(subtitle), ST["chap_sub"]))
     flow.append(Spacer(1, 4))
     if hero and Path(hero).exists():
         flow.extend(img_flowable(Path(hero), BOOK_W - 2 * MARGIN - GUTTER, 70 * mm))
@@ -751,11 +890,11 @@ def chapter_head(no: str, title: str, subtitle: str | None = None,
 
 
 def section_h(text: str) -> list:
-    return [Paragraph(clean(text), ST["h2"])]
+    return [para(clean(text), ST["h2"])]
 
 
 def sub_h(text: str) -> list:
-    return [Paragraph(clean(text), ST["h3"])]
+    return [para(clean(text), ST["h3"])]
 
 
 class EnsureRecto(ActionFlowable):
@@ -793,11 +932,11 @@ def build():
     story += [
         NextPageTemplate("cover"),
         Spacer(1, 34 * mm),  # clear the wine banner drawn by _cover_page
-        Paragraph(clean_plain(fm["cover_kicker"]), ST["cover_kicker"]),
+        para(clean_plain(fm["cover_kicker"]), ST["cover_kicker"]),
         Spacer(1, 5 * mm),
-        Paragraph("Saul's Podship", ST["cover_title"]),
+        para("Saul's Podship", ST["cover_title"]),
         Spacer(1, 6 * mm),
-        Paragraph(clean(fm["cover_lede"]), ST["cover_sub"]),
+        para(clean(fm["cover_lede"]), ST["cover_sub"]),
         Spacer(1, 6 * mm),
     ]
     hero_path = ROOT / "public/images/hero/last-supper-v2-1920.jpg"
@@ -807,13 +946,13 @@ def build():
         story += img_flowable(hero_path, BOOK_W - 36 * mm, 50 * mm)
     story += [
         Spacer(1, 3 * mm),
-        Paragraph(
+        para(
             clean(fm["cover_note"]),
             S("cover_f", fontName="Sans", fontSize=9.5, leading=14, textColor=MUTED,
               alignment=TA_CENTER),
         ),
         Spacer(1, 2 * mm),
-        Paragraph(
+        para(
             "Solat Jamil · " + datetime.date.today().strftime("%d %B %Y"),
             S("cover_d", fontName="Sans-Bold", fontSize=10, leading=14, textColor=GOLD,
               alignment=TA_CENTER),
@@ -826,22 +965,22 @@ def build():
     ded_lead = 13 if LANG == "hi" else 19
     story += [
         Spacer(1, 48 * mm),
-        Paragraph(clean_plain(fm["dedication_title"]), S(
+        para(clean_plain(fm["dedication_title"]), S(
             "ded_k", fontName="Sans-Bold", fontSize=11, leading=15, textColor=GOLD,
             alignment=TA_CENTER, spaceAfter=14)),
-        Paragraph(clean_plain(fm["dedication_heading"]), S(
+        para(clean_plain(fm["dedication_heading"]), S(
             "ded_h", fontName="Serif-Bold", fontSize=20, leading=27, textColor=WINE,
             alignment=TA_CENTER, spaceAfter=18)),
-        Paragraph(clean(fm["dedication_body1"]), S(
+        para(clean(fm["dedication_body1"]), S(
             "ded_b", fontName="Serif", fontSize=12, leading=ded_lead, textColor=INK,
             alignment=TA_CENTER, spaceAfter=14)),
-        Paragraph(clean(fm["dedication_body2"]), S(
+        para(clean(fm["dedication_body2"]), S(
             "ded_b2", fontName="Serif", fontSize=12, leading=ded_lead, textColor=INK,
             alignment=TA_CENTER, spaceAfter=14)),
-        Paragraph(clean(fm["dedication_body3"]), S(
+        para(clean(fm["dedication_body3"]), S(
             "ded_b3", fontName="Serif", fontSize=12, leading=ded_lead, textColor=WINE,
             alignment=TA_CENTER, spaceBefore=6, spaceAfter=22)),
-        Paragraph(clean_plain(fm["dedication_sign"]), S(
+        para(clean_plain(fm["dedication_sign"]), S(
             "ded_sig", fontName="Serif-Bold", fontSize=13, leading=17, textColor=WINE,
             alignment=TA_CENTER)),
         NextPageTemplate("bodyR"),
@@ -868,9 +1007,9 @@ def build():
             "The cross reference data is credited to openbible.info."
         )
     story += [
-        Paragraph(clean_plain(fm["about_title"]), ST["h1"]),
-        Paragraph(clean(fm["about_body"]), ST["body"]),
-        Paragraph(scripture_note, ST["body"]),
+        para(clean_plain(fm["about_title"]), ST["h1"]),
+        para(clean(fm["about_body"]), ST["body"]),
+        para(scripture_note, ST["body"]),
         sub_h(fm["inside_title"]),
     ]
     story += make_table([clean_plain(h) for h in fm["table_headers"]],
@@ -879,7 +1018,7 @@ def build():
     story.append(PageBreak())
 
     # ================= TOC =================
-    story += [Paragraph(clean_plain(fm["toc_title"]), ST["h1"]),
+    story += [para(clean_plain(fm["toc_title"]), ST["h1"]),
               Spacer(1, 4),
               make_toc(), PageBreak()]
 
@@ -913,7 +1052,7 @@ def build():
 
     story += chapter_head("", "Walking the Bible Maps", kicker="Part 2",
                           hero=hero("images/volumes/biblical-maps/hero-1920.jpg"))
-    story += [Paragraph(
+    story += [para(
         "These eight maps show real places on true geography. On the website you can "
         "press a button and watch footsteps trace each route, stop by stop. The coastlines "
         "come from Natural Earth, which is free for everyone to use. The routes follow "
@@ -945,7 +1084,7 @@ def build():
             story += make_table(["Stop", "Station"], stop_rows, col_widths=[0.1, 0.9])
     story += chapter_head("", "The World Map", kicker="Part 2",
                           hero=hero("images/hero-prophecy.jpg"))
-    story += [Paragraph(
+    story += [para(
         "After walking the sacred journeys, lift your eyes to the whole world the gospel now "
         "covers. The world-faith map (Part VIII) carries the same dataset the live site "
         "woven into its Interlinked Bible module: seven tradition categories across 175 "
@@ -964,11 +1103,11 @@ def build():
 
     story += chapter_head("", "How These Answers Were Written", kicker="Part 3",
                           hero=hero("images/hero-jesus-alpha-omega.jpg"))
-    story += [Paragraph(clean(codex.get("sidebar", "")), ST["lead"])]
-    story += [Paragraph(clean(codex.get("preface_title", "A Note on Method")), ST["h2"])]
+    story += [para(clean(codex.get("sidebar", "")), ST["lead"])]
+    story += [para(clean(codex.get("preface_title", "A Note on Method")), ST["h2"])]
     for p in codex.get("preface", []):
         story += [safe_para(inline_md(p), ST["body"])]
-    story += [Paragraph(
+    story += [para(
         "Each entry follows the same structure: Context; the mainstream position with "
         "primary sources; a Christian apologetic response; and points for respectful "
         "discussion — because a debate opponent who feels straw-manned will not listen, no "
@@ -988,7 +1127,7 @@ def build():
         story += chapter_head("", f"{title}", subtitle=sub if sub else None,
                               kicker=f"Part 3 · {eyebrow}")
         if sec.get("lead"):
-            story += [Paragraph(clean_plain(sec["lead"]), ST["lead"])]
+            story += [para(clean_plain(sec["lead"]), ST["lead"])]
         for q in qs:
             story += build_codex_question(q)
 
@@ -1004,7 +1143,7 @@ def build():
     story += chapter_head("", "The Study Archive", kicker="Part 4",
                           hero=hero("images/stories/scenes/book.webp"))
     total_items = sum(len(c["items"]) for c in archive)
-    story += [Paragraph(
+    story += [para(
         f"This archive holds {total_items} questions in {len(archive)} groups of "
         "Scripture. Each one gives a short answer, a Bible reference, and when it helps, "
         "a note that opens up the meaning behind the answer.",
@@ -1014,7 +1153,7 @@ def build():
     story += make_table(["Category", "Entries"], idx_rows, col_widths=[0.8, 0.2])
 
     for c in archive:
-        story += [CondPageBreak(40 * mm), Paragraph(clean(c["name"]), ST["h2"])]
+        story += [CondPageBreak(40 * mm), para(clean(c["name"]), ST["h2"])]
         rows = []
         for it in c["items"]:
             ans = it.get("a") or ""
@@ -1043,7 +1182,7 @@ def build():
         "catholic": "Catholic", "orthodox": "Orthodox", "protestant": "Protestant",
         "anglican": "Anglican", "pentecostal": "Pentecostal",
     }
-    story += [Paragraph(
+    story += [para(
         "Each question below comes with a plain answer, a verse from the King James "
         "Bible, and five responses from different Christian traditions. Where a tradition "
         "has a famous quotation to offer, it is included.",
@@ -1052,7 +1191,7 @@ def build():
     for q in tough:
         tier = q.get("tier", 1)
         story += [CondPageBreak(30 * mm)]
-        story += [Paragraph(
+        story += [para(
             f"Q{q.get('id')}. {clean(q.get('q',''))}",
             ST["q_title"],
         )]
@@ -1063,12 +1202,12 @@ def build():
             meta_bits.append(f"Asked in: {q['region']}")
         if q.get("ref"):
             meta_bits.append(q["ref"])
-        story += [Paragraph(clean(" · ".join(meta_bits)), ST["small"])]
+        story += [para(clean(" · ".join(meta_bits)), ST["small"])]
         if q.get("rv"):
-            story += [Paragraph(f"<i>{inline_md(q['rv'])}</i>", ST["quote"])]
+            story += [para(f"<i>{inline_md(q['rv'])}</i>", ST["quote"])]
         common = (q.get("common") or {}).get("en", "")
         if common:
-            story += [Paragraph(f"<b>Common answer.</b> {inline_md(common)}", ST["body"])]
+            story += [para(f"<b>Common answer.</b> {inline_md(common)}", ST["body"])]
         views = q.get("views") or []
         if views:
             rows = []
@@ -1098,19 +1237,19 @@ def build():
                           kicker="Part 6",
                           hero=hero("images/volumes/forbidden-knowledge-the-watchers/hero-1920.jpg"))
     if watchers.get("lede"):
-        story += [Paragraph(clean_plain(watchers["lede"]), ST["lead"])]
+        story += [para(clean_plain(watchers["lede"]), ST["lead"])]
     for n in watchers.get("notices", []):
-        story += [Paragraph(clean(n), ST["body"])]
+        story += [para(clean(n), ST["body"])]
 
     for sec in watchers.get("sections", []):
         title = sec.get("title") or ""
         if title:
-            story += [CondPageBreak(35 * mm), Paragraph(clean(title), ST["h2"])]
+            story += [CondPageBreak(35 * mm), para(clean(title), ST["h2"])]
         story += watchers_blocks_to_flowables(sec.get("blocks", []))
 
     story += [CondPageBreak(60 * mm),
-              Paragraph("Visual index — key figures and beings", ST["h2"])]
-    story += [Paragraph(
+              para("Visual index — key figures and beings", ST["h2"])]
+    story += [para(
         "Each profile in the atlas carries its own distinct artwork — sourced historical "
         "images where they exist, and text-guided reconstructions strictly limited to the "
         "forms the Bible or 1 Enoch describes. Concept and claim rows carry no images, so "
@@ -1120,9 +1259,9 @@ def build():
     assets = watchers.get("assets", {})
     feature_names = watchers.get("feature_names", [])
     if feature_names:
-        story += [Paragraph("Featured gallery", ST["h3"])]
+        story += [para("Featured gallery", ST["h3"])]
         story += asset_grid(feature_names, assets, cols=3, thumb=True)
-    story += [Paragraph("Complete image catalogue", ST["h3"])]
+    story += [para("Complete image catalogue", ST["h3"])]
     story += asset_grid(list(assets.keys()), assets, cols=4, thumb=True)
 
     # ================================================================
@@ -1136,7 +1275,7 @@ def build():
 
     story += chapter_head("", "Two Hundred Forty Seven Prophecies", kicker="Part 7",
                           hero=hero("images/hero-prophecy.jpg"))
-    story += [Paragraph(
+    story += [para(
         "Every prophecy on the live prophecy map carries three ways of reading it. "
         "The historical view looks at what happened in the past. The metaphorical view "
         "sees a spiritual meaning in Christ. The futurist view waits for a literal "
@@ -1152,7 +1291,7 @@ def build():
         ])
     story += make_table(["Prophecy", "Historical", "Metaphorical", "Futurist"],
                         lens_rows, col_widths=[0.28, 0.24, 0.24, 0.24])
-    story += [Paragraph("Reading the tags", ST["h3"])]
+    story += [para("Reading the tags", ST["h3"])]
     tag_counts = defaultdict(int)
     for v in lens.values():
         tag_counts[v.get("h", "")] += 1
@@ -1162,7 +1301,7 @@ def build():
 
     story += chapter_head("", "World Religions and People", kicker="Part 7",
                           hero=hero("images/volumes/worlds-all-big-churches/hero-1920.jpg"))
-    story += [Paragraph(
+    story += [para(
         f"Total world population represented: {world['worldPop']:,}. The dominant-tradition "
         "map colours each of 175 countries by its largest religious community.",
         ST["lead"],
@@ -1173,7 +1312,7 @@ def build():
                          f"{100 * c['adherents'] / world['worldPop']:.1f}%"])
     story += make_table(["Tradition", "Adherents (est.)", "Share of world"],
                         cat_rows, col_widths=[0.4, 0.3, 0.3])
-    story += [Paragraph("Largest countries by dominant tradition", ST["h3"])]
+    story += [para("Largest countries by dominant tradition", ST["h3"])]
     by_cat = defaultdict(list)
     for c in world["countries"]:
         by_cat[c["cat"]].append(c)
@@ -1189,7 +1328,7 @@ def build():
 
     story += chapter_head("", "From Adam to Jesus", kicker="Part 7",
                           hero=hero("images/volumes/family-tree-adam-jesus/hero-1920.jpg"))
-    story += [Paragraph(
+    story += [para(
         "Every row is one person's life; where lives overlap, those people were alive "
         "together. Ages in Genesis 5 and 11 (Hebrew text; the Septuagint differs) give "
         "absolute dates for the antediluvian and early postdiluvian patriarchs. From Judah "
@@ -1212,7 +1351,7 @@ def build():
     story += make_table(["Person", "Born (AM)", "Died (AM)", "Lifespan", "Death (BC)"],
                         g_rows, col_widths=[0.34, 0.16, 0.16, 0.14, 0.20])
     if gene.get("page_text"):
-        story += [Paragraph(clean(gene["page_text"][:1200]), ST["small"])]
+        story += [para(clean(gene["page_text"][:1200]), ST["small"])]
 
     # ================================================================
     # PART 8 — MUSIC & BROADCAST
@@ -1225,7 +1364,7 @@ def build():
 
     story += chapter_head("", "The Singers and Their Story", kicker="Part 8",
                           hero=hero("images/volumes/guide-to-christian-living/hero-1920.jpg"))
-    story += [Paragraph(
+    story += [para(
         "This is a living archive of Pakistani Christian music. It follows four "
         "generations of one family, beginning with a founding pastor in Montgomery, "
         "which is now called Sahiwal, and running through to today's composers and "
@@ -1245,19 +1384,19 @@ def build():
         ])
     story += make_table(["Name", "Role", "Dates / Era", "Major contributions"],
                         s_rows, col_widths=[0.18, 0.22, 0.18, 0.42])
-    story += [Paragraph("Full profiles — the honored Din dynasty", ST["h3"])]
+    story += [para("Full profiles — the honored Din dynasty", ST["h3"])]
     for s in music.get("dynasty", []):
         story += [CondPageBreak(25 * mm)]
-        story += [Paragraph(clean(f"{s.get('name')} — {s.get('badge','')}"), ST["q_title"])]
+        story += [para(clean(f"{s.get('name')} — {s.get('badge','')}"), ST["q_title"])]
         if s.get("lineageNote"):
-            story += [Paragraph(clean(s["lineageNote"]), ST["small"])]
-        story += [Paragraph(inline_md(s.get("bio", "")), ST["body"])]
+            story += [para(clean(s["lineageNote"]), ST["small"])]
+        story += [para(inline_md(s.get("bio", "")), ST["body"])]
         for b in s.get("majorContributions", []):
-            story += [Paragraph(f"• {inline_md(b)}", ST["bullet"])]
+            story += [para(f"• {inline_md(b)}", ST["bullet"])]
 
     story += chapter_head("", "Punjabi Zaboor, the Psalm Songs", kicker="Part 8",
                           hero=hero("images/volumes/lords-prayer/hero-1920.jpg"))
-    story += [Paragraph(
+    story += [para(
         "These are the biblical Psalms put into classical Punjabi meters by Imam-ud-Din "
         "Shahbaz in 1908. Each one is listed with its raga and its English theme. The "
         "full hymn texts live at punjabizaboor1908.com.",
@@ -1273,8 +1412,8 @@ def build():
     story += chapter_head("", "Podcasts and Video Lessons", kicker="Part 8",
                           hero=hero("images/podcast/ep01-cover.jpg"))
     pod = music.get("podcast", {})
-    story += [Paragraph(clean_plain(pod.get("title", "Podcast")), ST["h2"])]
-    story += [Paragraph(clean_plain(pod.get("description", "")), ST["body"])]
+    story += [para(clean_plain(pod.get("title", "Podcast")), ST["h2"])]
+    story += [para(clean_plain(pod.get("description", "")), ST["body"])]
     # show a few episode covers as a strip
     cover_flow = []
     for ep_i in range(1, 7):
@@ -1283,7 +1422,7 @@ def build():
             cover_flow += img_flowable(cp, 28 * mm, 28 * mm)
     if cover_flow:
         story += [Spacer(1, 4)] + cover_flow + [Spacer(1, 4)]
-    story += [Paragraph(
+    story += [para(
         f"Show: {pod.get('showUrl','')} · Language: {pod.get('languageLabel','')} · "
         f"Category: {pod.get('category','')}",
         ST["small"],
@@ -1300,10 +1439,10 @@ def build():
         ])
     story += make_table(["Ep.", "Episode (English working title)", "Length", "Published", "Topics"],
                         e_rows, col_widths=[0.06, 0.44, 0.10, 0.14, 0.26])
-    story += [Paragraph("Episode notes", ST["h3"])]
+    story += [para("Episode notes", ST["h3"])]
     for e in music.get("episodes", []):
         story += [CondPageBreak(22 * mm)]
-        story += [Paragraph(
+        story += [para(
             f"<b>Ep. {e.get('number')} · {clean_plain(e.get('titleEnglish',''))}</b> "
             f"<font color='#7a6a5f'>({e.get('duration','')}, {e.get('publishDate','')})</font>",
             ST["faq_q"])]
@@ -1311,20 +1450,20 @@ def build():
         if ecp.exists():
             story += img_flowable(ecp, 34 * mm, 34 * mm)
         if e.get("titleRoman"):
-            story += [Paragraph(f"<i>{clean(e['titleRoman'])}</i> · {clean(e.get('title',''))}",
+            story += [para(f"<i>{clean(e['titleRoman'])}</i> · {clean(e.get('title',''))}",
                                 ST["small"])]
-        story += [Paragraph(inline_md(e.get("description", "")), ST["body"])]
+        story += [para(inline_md(e.get("description", "")), ST["body"])]
         if e.get("notesUrdu"):
-            story += [Paragraph(
+            story += [para(
                 f"<font color='#7a6a5f'>Full Urdu show notes on the live episode page "
                 f"({len(e['notesUrdu'])} characters).</font>", ST["small"])]
         refs = e.get("scriptureReferences") or []
         if refs:
-            story += [Paragraph(f"<b>Scripture:</b> {clean(', '.join(refs))}", ST["small"])]
+            story += [para(f"<b>Scripture:</b> {clean(', '.join(refs))}", ST["small"])]
 
     ch = music.get("video_channel", {})
-    story += [Spacer(1, 6), Paragraph(clean(ch.get("name", "Video masterclasses")), ST["h2"])]
-    story += [Paragraph(clean(ch.get("description", "")), ST["body"])]
+    story += [Spacer(1, 6), para(clean(ch.get("name", "Video masterclasses")), ST["h2"])]
+    story += [para(clean(ch.get("description", "")), ST["body"])]
     v_rows = []
     for v in music.get("videos", []):
         v_rows.append([
@@ -1345,7 +1484,7 @@ def build():
 
     story += chapter_head("", "Our Family of Websites", kicker="Appendix",
                           hero=hero("images/stories/scenes/city.webp"))
-    story += [Paragraph(clean_plain(about.get("directory_intro", "")), ST["lead"])]
+    story += [para(clean_plain(about.get("directory_intro", "")), ST["lead"])]
     a_rows = []
     for app in about.get("apps", []):
         a_rows.append([app.get("name", ""), app.get("category", ""),
@@ -1355,23 +1494,23 @@ def build():
                         col_widths=[0.16, 0.16, 0.24, 0.44])
     story += sub_h("About FAQ")
     for f in about.get("about_faq", []):
-        story += [Paragraph(clean(f["question"]), ST["faq_q"]),
-                  Paragraph(inline_md(f["answer"]), ST["body"])]
+        story += [para(clean(f["question"]), ST["faq_q"]),
+                  para(inline_md(f["answer"]), ST["body"])]
 
     story += chapter_head("", "Questions People Ask", kicker="Appendix",
                           hero=hero("images/stories/scenes/scroll.webp", "images/stories/scenes/book.webp"))
     for f in about.get("faq", []):
-        story += [Paragraph(clean(f["question"]), ST["faq_q"]),
-                  Paragraph(inline_md(f["answer"]), ST["body"])]
+        story += [para(clean(f["question"]), ST["faq_q"]),
+                  para(inline_md(f["answer"]), ST["body"])]
 
     story += chapter_head("", "Bible Books and Counts", kicker="Appendix",
                           hero=hero("images/stories/scenes/book.webp"))
-    story += [Paragraph(
+    story += [para(
         f"License: {clean(xref.get('license',''))}. Credits: {clean(xref.get('credits',''))}. "
         f"Generated {xref.get('generated','')}.",
         ST["body"],
     )]
-    story += [Paragraph(
+    story += [para(
         "The Interlinked Bible / cross-reference module maps every verse of the King James "
         "Version against openbible.info's topical links — 66 books, with chapter and verse "
         "counts used to lay out the classic chord diagram.",
@@ -1384,7 +1523,7 @@ def build():
     story += make_table(["Book", "Abbr.", "Chapters", "Verses"], x_rows,
                         col_widths=[0.44, 0.16, 0.2, 0.2])
     story += sub_h("World faith dataset (as shipped)")
-    story += [Paragraph(
+    story += [para(
         "The world map module ships dominant-tradition polygons for 175 countries with "
         "population and percentage shares — the same data tabulated earlier in Part 7.",
         ST["body"],
@@ -1392,15 +1531,15 @@ def build():
 
     story += [PageBreak(),
               Spacer(1, 42 * mm),
-              Paragraph("THE END", ST["part"]),
-              Paragraph("Thank you for reading", ST["part_title"]),
+              para("THE END", ST["part"]),
+              para("Thank you for reading", ST["part_title"]),
               Spacer(1, 6 * mm),
-              Paragraph(
+              para(
                   "Solat Jamil · saulspodship.com · "
                   + datetime.date.today().strftime("%d %B %Y"),
                   ST["part_sub"]),
               Spacer(1, 4 * mm),
-              Paragraph(
+              para(
                   "Urdu Scripture: کِتابِ مُقادّس (Revised Urdu Bible) · bible.com/189"
                   if LANG == "ur" else
                   "Hindi Scripture: standard Hindi Bible · saulspodship.com"
@@ -1449,11 +1588,11 @@ def build_volume_chapter(v: dict) -> list:
     meta = [v.get("category", "").title(), f"Updated {v.get('lastUpdated','')}"]
     if v.get("featured"):
         meta.append("Featured")
-    flow += [Paragraph(" · ".join(m for m in meta if m), ST["small"])]
+    flow += [para(" · ".join(m for m in meta if m), ST["small"])]
     if v.get("overview"):
-        flow += [Paragraph(clean_plain(v["overview"]), ST["lead"])]
+        flow += [para(clean_plain(v["overview"]), ST["lead"])]
     if v.get("summary"):
-        flow += [Paragraph(f"<b>Summary.</b> {inline_md(v['summary'])}", ST["body"])]
+        flow += [para(f"<b>Summary.</b> {inline_md(v['summary'])}", ST["body"])]
     kf = v.get("keyFacts") or []
     if kf:
         flow += sub_h("Key facts")
@@ -1478,7 +1617,7 @@ def build_volume_chapter(v: dict) -> list:
             if col and (col, era) not in seen_tl:
                 seen_tl.append((col, era))
         if seen_tl:
-            flow += [Paragraph("<b>Colour key</b>", ST["h4"])]
+            flow += [para("<b>Colour key</b>", ST["h4"])]
             key_cells = []
             for col, era in seen_tl:
                 key_cells.append(
@@ -1512,7 +1651,7 @@ def build_volume_chapter(v: dict) -> list:
             if era and col and era not in era_colors:
                 era_colors[era] = col
         if era_colors:
-            flow += [Paragraph("<b>Colour key by era</b>", ST["h4"])]
+            flow += [para("<b>Colour key by era</b>", ST["h4"])]
             key_rows = []
             items = list(era_colors.items())
             for i in range(0, len(items), 3):
@@ -1549,7 +1688,7 @@ def build_volume_chapter(v: dict) -> list:
     if profiles:
         flow += [CondPageBreak(30 * mm), sub_h("Character profiles")]
         for p in profiles:
-            flow += [Paragraph(clean(f"{p.get('name')} — {p.get('role','')}"), ST["q_title"])]
+            flow += [para(clean(f"{p.get('name')} — {p.get('role','')}"), ST["q_title"])]
             bits = []
             if p.get("description"):
                 bits.append(p["description"])
@@ -1557,10 +1696,10 @@ def build_volume_chapter(v: dict) -> list:
                 bits.append(f"Reference: {p['scriptureReference']}")
             if p.get("significance"):
                 bits.append(f"Significance: {p['significance']}")
-            flow += [Paragraph(inline_md(" ".join(bits)), ST["body"])]
+            flow += [para(inline_md(" ".join(bits)), ST["body"])]
             if p.get("keyActions"):
                 for a in p["keyActions"]:
-                    flow += [Paragraph(f"• {inline_md(a)}", ST["bullet"])]
+                    flow += [para(f"• {inline_md(a)}", ST["bullet"])]
     scriptures = c.get("scriptures") or []
     if scriptures:
         flow += sub_h("Scripture passages")
@@ -1572,7 +1711,7 @@ def build_volume_chapter(v: dict) -> list:
     if maps:
         flow += sub_h("Maps")
         for m in maps:
-            flow += [Paragraph(f"<b>{clean(m.get('title',''))}</b> — {inline_md(m.get('description',''))}",
+            flow += [para(f"<b>{clean(m.get('title',''))}</b> — {inline_md(m.get('description',''))}",
                                ST["body"])]
             url = m.get("url", "")
             if url.startswith("/"):
@@ -1582,7 +1721,7 @@ def build_volume_chapter(v: dict) -> list:
     if lineage:
         flow += [CondPageBreak(40 * mm), sub_h(lineage.get("title", "Lineage"))]
         if lineage.get("intro"):
-            flow += [Paragraph(clean(lineage["intro"]), ST["body"])]
+            flow += [para(clean(lineage["intro"]), ST["body"])]
         nodes = lineage.get("nodes") or []
         if nodes:
             rows = []
@@ -1599,18 +1738,18 @@ def build_volume_chapter(v: dict) -> list:
     if faq:
         flow += [CondPageBreak(30 * mm), sub_h("Frequently asked questions")]
         for f in faq:
-            flow += [Paragraph(clean(f.get("q", "")), ST["faq_q"]),
-                     Paragraph(inline_md(f.get("a", "")), ST["body"])]
+            flow += [para(clean(f.get("q", "")), ST["faq_q"]),
+                     para(inline_md(f.get("a", "")), ST["body"])]
     rel = v.get("relatedVolumes") or []
     if rel:
-        flow += [Paragraph("<b>Related volumes:</b> " + clean(", ".join(rel)), ST["small"])]
+        flow += [para("<b>Related volumes:</b> " + clean(", ".join(rel)), ST["small"])]
     links = []
     if v.get("articleLink"):
         links.append(f"Article: {v['articleLink']}")
     if v.get("youtubeLink"):
         links.append(f"Video: {v['youtubeLink']}")
     if links:
-        flow += [Paragraph(clean(" · ".join(links)), ST["small"])]
+        flow += [para(clean(" · ".join(links)), ST["small"])]
     return flow
 
 
@@ -1618,21 +1757,21 @@ def build_volume_chapter(v: dict) -> list:
 def build_codex_question(q: dict) -> list:
     flow = [CondPageBreak(28 * mm)]
     n = q.get("n", "")
-    flow += [Paragraph(f"Q{n}. {clean(q.get('title',''))}", ST["q_title"])]
+    flow += [para(f"Q{n}. {clean(q.get('title',''))}", ST["q_title"])]
     for b in q.get("blocks", []):
         head = b.get("heading", "")
         items = b.get("items") or []
         if not items:
             continue
-        flow += [Paragraph(clean(head), ST["q_block_h"])]
+        flow += [para(clean(head), ST["q_block_h"])]
         lis = [t for k, t in items if k == "li"]
         ps = [t for k, t in items if k == "p"]
         imgs = [t for k, t in items if k == "img"]
         for p in ps:
-            flow += [Paragraph(inline_md(p), ST["body"])]
+            flow += [para(inline_md(p), ST["body"])]
         if lis:
             flow += [ListFlowable(
-                [ListItem(Paragraph(inline_md(li), ST["bullet"]), leftIndent=12)
+                [ListItem(para(inline_md(li), ST["bullet"]), leftIndent=12)
                  for li in lis],
                 bulletType="bullet", start="•", leftIndent=14,
                 bulletFontName="Sans", bulletFontSize=6.5,
@@ -1713,7 +1852,7 @@ def asset_grid(names, assets, cols=4, thumb=True) -> list:
         kind = d.get("k", "")
         short_kind = ("AI" if kind.startswith("Text") else
                       "Rep." if kind.startswith("Representative") else "Photo")
-        label = Paragraph(
+        label = para(
             f"{clean(name)}<br/><font color='#7a6a5f' size='6'>{short_kind}</font>",
             S("gl", fontName="Sans", fontSize=6.5, leading=8, alignment=TA_CENTER,
               textColor=INK),
