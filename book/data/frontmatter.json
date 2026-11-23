@@ -2,21 +2,66 @@
   "about_title": "About This Book",
   "about_body": "This book is a complete theological archive: fifty illustrated Bible volumes, four hundred questions about other faiths, eight journey maps across the Holy Land, one thousand short Bible study answers, one hundred hard questions with replies from five Christian traditions, a full atlas of angels and the Watchers, two hundred and forty seven prophecy notes, the story of the world's religions, the family line from Adam to Jesus, and the archive of Pakistani Christian music and podcasts. It is set in a traditional book size and laid out as open two-page spreads, the way a printed volume sits in the hand.",
   "inside_title": "What is inside",
-  "table_headers": ["Part", "You will find", "In short"],
+  "table_headers": [
+    "Part",
+    "You will find",
+    "In short"
+  ],
   "table_rows": [
-    ["Part 1", "The fifty volumes", "The full Bible encyclopedia with tables and pictures"],
-    ["Part 2", "Bible maps", "Eight journey maps with every stop named"],
-    ["Part 3", "Four hundred questions", "Islam, Judaism, Hinduism and Sikhism, answered with care"],
-    ["Part 4", "One thousand answers", "Short Bible study questions sorted by book"],
-    ["Part 5", "Hard questions", "One hundred tough questions, five Christian views each"],
-    ["Part 6", "Angels and the Watchers", "Enoch, holy beings, beasts, and a picture gallery"],
-    ["Part 7", "Prophecy and world faiths", "Fulfillment notes, world religions, Adam to Jesus"],
-    ["Part 8", "Music and podcasts", "Pakistani gospel singers, Punjabi Zaboor, episodes"],
-    ["Appendix", "Directory and reference", "Websites, questions and answers, Bible book counts"]
+    [
+      "Part 1",
+      "The fifty volumes",
+      "The full Bible encyclopedia with tables and pictures"
+    ],
+    [
+      "Part 2",
+      "Bible maps",
+      "Eight journey maps with every stop named"
+    ],
+    [
+      "Part 3",
+      "Four hundred questions",
+      "Islam, Judaism, Hinduism and Sikhism, answered with care"
+    ],
+    [
+      "Part 4",
+      "One thousand answers",
+      "Short Bible study questions sorted by book"
+    ],
+    [
+      "Part 5",
+      "Hard questions",
+      "One hundred tough questions, five Christian views each"
+    ],
+    [
+      "Part 6",
+      "Angels and the Watchers",
+      "Enoch, holy beings, beasts, and a picture gallery"
+    ],
+    [
+      "Part 7",
+      "Prophecy and world faiths",
+      "Fulfillment notes, world religions, Adam to Jesus"
+    ],
+    [
+      "Part 8",
+      "Music and podcasts",
+      "Pakistani gospel singers, Punjabi Zaboor, episodes"
+    ],
+    [
+      "Appendix",
+      "Directory and reference",
+      "Websites, questions and answers, Bible book counts"
+    ]
   ],
   "toc_title": "Table of Contents",
   "dedication_title": "DEDICATION",
   "cover_kicker": "THE COMPLETE KNOWLEDGE BOOK",
   "cover_lede": "Fifty Bible-encyclopedia volumes, a 400-question faith codex, Bible maps, a 1,000-answer study archive, angels and prophecy, and the Punjabi Zaboor hymn collection",
-  "cover_note": "Collected from the Saul's Podship project and set in print for study and devotion"
+  "cover_note": "Collected from the Saul's Podship project and set in print for study and devotion",
+  "dedication_heading": "To the seed my grandparents planted in me",
+  "dedication_body1": "I, Solat Jamil, dedicate this book, and the research that lies behind it, to my grandparents, Jamson Jamil-ud-Din and my grandmother Mercy Jamson. They planted a seed in me, and everything you are about to read grew from it.",
+  "dedication_body2": "More than sixty percent of the knowledge and the questions gathered in these pages belongs to them. It is knowledge they handed down to me, and work they had already laboured over and written in their own hands. I have taken that treasure, studied it, and shaped it into this book so that the truth they loved may be brought out clearly for others.",
+  "dedication_body3": "With love and gratitude, and in hope that the seed keeps growing.",
+  "dedication_sign": "Solat Jamil"
 }

@@ -30,6 +30,11 @@ from reportlab.platypus import (
     ActionFlowable,
     HRFlowable, CondPageBreak, Flowable,
 )
+# ReportLab 5.x crashes when an RTL paragraph with inline markup is split
+# across a frame; install the tolerant splitter before building anything.
+import rl_rtl_patch
+rl_rtl_patch.apply()
+
 from reportlab.platypus.tableofcontents import TableOfContents
 from PIL import Image as PILImage
 
@@ -818,39 +823,27 @@ def build():
     ]
 
     # ================= DEDICATION =================
+    ded_lead = 13 if LANG == "hi" else 19
     story += [
         Spacer(1, 48 * mm),
-        Paragraph("DEDICATION", S("ded_k", fontName="Sans-Bold", fontSize=11,
-                                  leading=15, textColor=GOLD, alignment=TA_CENTER,
-                                  spaceAfter=14)),
-        Paragraph(
-            "To the seed my grandparents planted in me",
-            S("ded_h", fontName="Serif-Bold", fontSize=20, leading=27, textColor=WINE,
-              alignment=TA_CENTER, spaceAfter=18),
-        ),
-        Paragraph(
-            "I, Solat Jamil, dedicate this book, and the research that lies behind it, "
-            "to my grandparents, Jamson Jamil-ud-Din and my grandmother Mercy Jamson. "
-            "They planted a seed in me, and everything you are about to read grew from it.",
-            S("ded_b", fontName="Serif", fontSize=12, leading=19, textColor=INK,
-              alignment=TA_CENTER, spaceAfter=14),
-        ),
-        Paragraph(
-            "More than sixty percent of the knowledge and the questions gathered in these "
-            "pages belongs to them. It is knowledge they handed down to me, and work they "
-            "had already laboured over and written in their own hands. I have taken that "
-            "treasure, studied it, and shaped it into this book so that the truth they "
-            "loved may be brought out clearly for others.",
-            S("ded_b2", fontName="Serif", fontSize=12, leading=19, textColor=INK,
-              alignment=TA_CENTER, spaceAfter=14),
-        ),
-        Paragraph(
-            "With love and gratitude, and in hope that the seed keeps growing.",
-            S("ded_b3", fontName="Serif", fontSize=12, leading=19, textColor=WINE,
-              alignment=TA_CENTER, spaceBefore=6, spaceAfter=22),
-        ),
-        Paragraph("Solat Jamil", S("ded_sig", fontName="Serif-Bold", fontSize=13,
-                                   leading=17, textColor=WINE, alignment=TA_CENTER)),
+        Paragraph(clean_plain(fm["dedication_title"]), S(
+            "ded_k", fontName="Sans-Bold", fontSize=11, leading=15, textColor=GOLD,
+            alignment=TA_CENTER, spaceAfter=14)),
+        Paragraph(clean_plain(fm["dedication_heading"]), S(
+            "ded_h", fontName="Serif-Bold", fontSize=20, leading=27, textColor=WINE,
+            alignment=TA_CENTER, spaceAfter=18)),
+        Paragraph(clean(fm["dedication_body1"]), S(
+            "ded_b", fontName="Serif", fontSize=12, leading=ded_lead, textColor=INK,
+            alignment=TA_CENTER, spaceAfter=14)),
+        Paragraph(clean(fm["dedication_body2"]), S(
+            "ded_b2", fontName="Serif", fontSize=12, leading=ded_lead, textColor=INK,
+            alignment=TA_CENTER, spaceAfter=14)),
+        Paragraph(clean(fm["dedication_body3"]), S(
+            "ded_b3", fontName="Serif", fontSize=12, leading=ded_lead, textColor=WINE,
+            alignment=TA_CENTER, spaceBefore=6, spaceAfter=22)),
+        Paragraph(clean_plain(fm["dedication_sign"]), S(
+            "ded_sig", fontName="Serif-Bold", fontSize=13, leading=17, textColor=WINE,
+            alignment=TA_CENTER)),
         NextPageTemplate("bodyR"),
         PageBreak(),
     ]
@@ -866,8 +859,8 @@ def build():
         )
     elif LANG == "hi":
         scripture_note = (
-            "Hindi Scripture references follow the standard Hindi Bible; "
-            "cross-reference data is credited to openbible.info."
+            "इस संस्करण में बाइबल के सभी सन्दर्भ मानक हिन्दी बाइबल से लिए गए हैं; "
+            "क्रॉस-रेफ़रंस डेटा का श्रेय openbible.info को है।"
         )
     else:
         scripture_note = (

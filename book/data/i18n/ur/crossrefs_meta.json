@@ -5511,8 +5511,8 @@
     ]
   },
   "encoding": {
-    "links": "link.bin: 16-byte ser ('SPCR's جادو, v16 version, v16 Centre County, v32 Qac County, v32 dataOffet) پھر چار کوانتی کم سن ستون: Uint16 Src [, Uint16  littlecounts], Int16 voubles[)۔ سرکل باب سے ترتیب دیا گیا پھر اپریپس ڈیسک۔",
-    "refs": "Rephics/Provbook Idx.json: ہمہ پہلوؤں v=sports v (book-local, 0- بنیادوں پر)، T=target آیت (گلبل، 0 پر مبنی)، E=target settlement ختم، w=publible ووٹوں پر مشتمل ہے۔",
+    "links": "link.bin: 16-byte ser ('SPCR's جادو, v16 ورژن, v16 Cons County, v32 Qark County, v32 dataOffet) پھر چار کوانتی کم سن ستون: Uint16 Src [, Uint16 ac], Uint16 acubles[, Int16 vounts[])۔ سرکل باب سے ترتیب دیا گیا ہے بعد میں اپs ڈیسک۔",
+    "refs": "Rephics/Preatbook Idx.json: ہمہ پہلوؤں v=storial websites v (book-local, 0- بنیادوں پر)، T=target آیت (Global, 0- بنیاد پر)، E=target settlement, w=publible ووٹوں پر مشتمل ہے۔",
     "kjv": "kjv/Pornbook Idx &json: cell of special territory in canonical ترتیب سے شروع ہوتا ہے۔"
   }
 }
