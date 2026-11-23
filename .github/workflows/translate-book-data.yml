@@ -18,14 +18,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install argostranslate
-        run: pip install argostranslate
-      - name: Install models and translate
+      - name: Verify data files present
         run: |
           set -eux
+          ls -la book/data/*.json | head
+          test -f book/data/volumes.json
+          test -f book/translate_data.py
+      - name: Install argostranslate + models
+        run: |
+          set -eux
+          pip install argostranslate
           python - <<'PY'
           import argostranslate.package as pkg
-          import argostranslate.translate as tr
           pkg.update_package_index()
           for to in ("ur", "hi"):
               pkgs = [p for p in pkg.get_available_packages()
@@ -33,19 +37,44 @@ jobs:
               if not pkgs:
                   raise SystemExit(f"no package for en->{to}")
               print("installing", pkgs[0])
-              pkg.install_from_path(pkgs[0].download())
-          print("installed:", tr.get_installed_languages())
+              path = pkgs[0].download()
+              print("downloaded", path)
+              pkg.install_from_path(path)
+          from argostranslate import translate
+          print("installed:", [(l.code, l.name) for l in translate.get_installed_languages()])
+          print("smoke:", translate.translate("The Flood", "en", "ur")[:80])
           PY
       - name: Run translation script
         run: |
+          set -eux
           python book/translate_data.py ur hi
+          echo "=== output tree ==="
+          find book/data/i18n -type f | head -50
+          find book/data/i18n -type f | wc -l
+          du -sh book/data/i18n
+          # show a sample
+          python - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("book/data/i18n/ur/volumes.json")
+          if p.exists():
+              data = json.loads(p.read_text())
+              print("ur volumes type", type(data), "len", len(data) if hasattr(data,"__len__") else "?")
+              print(json.dumps(data, ensure_ascii=False)[:500])
+          else:
+              raise SystemExit("ur volumes.json missing")
+          PY
       - name: Commit translations
         run: |
           set -eux
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b book-i18n
-          git add -f book/data/i18n/
-          git commit -m "i18n: translate book data to ur + hi" || echo "nothing to commit"
-          git push -u origin book-i18n
+          git checkout -B book-i18n
+          git add -f book/data/i18n
+          git status --short | head -40
+          if git diff --cached --quiet; then
+            echo "NOTHING_STAGED"
+            exit 1
+          fi
+          git commit -m "i18n: translate book data to ur + hi"
+          git push -u origin book-i18n --force
           echo PUSH_OK
