@@ -780,22 +780,19 @@ def build():
     about = load("about.json")
     xref = load("crossrefs_meta.json")
 
+    fm = load("frontmatter.json")
+
     story = []
 
     # ================= COVER =================
     story += [
         NextPageTemplate("cover"),
         Spacer(1, 34 * mm),  # clear the wine banner drawn by _cover_page
-        Paragraph("THE COMPLETE KNOWLEDGE BOOK", ST["cover_kicker"]),
+        Paragraph(clean_plain(fm["cover_kicker"]), ST["cover_kicker"]),
         Spacer(1, 5 * mm),
         Paragraph("Saul's Podship", ST["cover_title"]),
         Spacer(1, 6 * mm),
-        Paragraph(
-            "Fifty Bible-encyclopedia volumes, a 400-question faith codex, "
-            "Bible maps, a 1,000-answer study archive, angels and prophecy, "
-            "and the Punjabi Zaboor hymn collection",
-            ST["cover_sub"],
-        ),
+        Paragraph(clean(fm["cover_lede"]), ST["cover_sub"]),
         Spacer(1, 6 * mm),
     ]
     hero_path = ROOT / "public/images/hero/last-supper-v2-1920.jpg"
@@ -806,7 +803,7 @@ def build():
     story += [
         Spacer(1, 3 * mm),
         Paragraph(
-            "Collected from the Saul's Podship project and set in print for study and devotion",
+            clean(fm["cover_note"]),
             S("cover_f", fontName="Sans", fontSize=9.5, leading=14, textColor=MUTED,
               alignment=TA_CENTER),
         ),
@@ -862,8 +859,10 @@ def build():
     # Scripture source note varies by edition
     if LANG == "ur":
         scripture_note = (
-            "Urdu Scripture references follow کِتابِ مُقادّس (Revised Urdu Bible, "
-            "Bible Society 2010) — bible.com version 189."
+            "اس ایڈیشن میں بائبل کے تمام حوالے کِتابِ مُقادّس "
+            "(Revised Urdu Bible, Bible Society 2010) سے لیے گئے ہیں، جو "
+            "YouVersion پر version 189 کے نام سے دستیاب ہے "
+            "(bible.com/versions/189)۔"
         )
     elif LANG == "hi":
         scripture_note = (
@@ -876,42 +875,18 @@ def build():
             "The cross reference data is credited to openbible.info."
         )
     story += [
-        Paragraph("About This Book" if LANG == "en" else (
-            "اس کتاب کے بارے میں" if LANG == "ur" else "इस पुस्तक के बारे में"
-        ), ST["h1"]),
-        Paragraph(
-            "This book is a complete theological archive: fifty illustrated Bible volumes, "
-            "four hundred questions about other faiths, eight journey maps across the Holy "
-            "Land, one thousand short Bible study answers, one hundred hard questions with "
-            "replies from five Christian traditions, a full atlas of angels and the "
-            "Watchers, two hundred and forty seven prophecy notes, the story of the "
-            "world's religions, the family line from Adam to Jesus, and the archive of "
-            "Pakistani Christian music and podcasts. It is set in a traditional book size "
-            "and laid out as open two-page spreads, the way a printed volume sits in the hand.",
-            ST["body"],
-        ),
+        Paragraph(clean_plain(fm["about_title"]), ST["h1"]),
+        Paragraph(clean(fm["about_body"]), ST["body"]),
         Paragraph(scripture_note, ST["body"]),
-        sub_h("What is inside" if LANG == "en" else (
-            "اندر کیا ہے" if LANG == "ur" else "इसमें क्या है"
-        )),
+        sub_h(fm["inside_title"]),
     ]
-    include_rows = [
-        ["Part 1", "The fifty volumes", "The full Bible encyclopedia with tables and pictures"],
-        ["Part 2", "Bible maps", "Eight journey maps with every stop named"],
-        ["Part 3", "Four hundred questions", "Islam, Judaism, Hinduism and Sikhism, answered with care"],
-        ["Part 4", "One thousand answers", "Short Bible study questions sorted by book"],
-        ["Part 5", "Hard questions", "One hundred tough questions, five Christian views each"],
-        ["Part 6", "Angels and the Watchers", "Enoch, holy beings, beasts, and a picture gallery"],
-        ["Part 7", "Prophecy and world faiths", "Fulfillment notes, world religions, Adam to Jesus"],
-        ["Part 8", "Music and podcasts", "Pakistani gospel singers, Punjabi Zaboor, episodes"],
-        ["Appendix", "Directory and reference", "Websites, questions and answers, Bible book counts"],
-    ]
-    story += make_table(["Part", "You will find", "In short"], include_rows,
+    story += make_table([clean_plain(h) for h in fm["table_headers"]],
+                        [[clean_plain(c) for c in row] for row in fm["table_rows"]],
                         col_widths=[0.12, 0.34, 0.54])
     story.append(PageBreak())
 
     # ================= TOC =================
-    story += [Paragraph("Table of Contents", ST["h1"]),
+    story += [Paragraph(clean_plain(fm["toc_title"]), ST["h1"]),
               Spacer(1, 4),
               make_toc(), PageBreak()]
 
