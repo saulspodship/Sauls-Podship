@@ -28,14 +28,14 @@ from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table, TableStyle,
     PageBreak, Image, KeepTogether, NextPageTemplate, ListFlowable, ListItem,
     ActionFlowable,
-    HRFlowable, CondPageBreak, Flowable,
+    HRFlowable, CondPageBreak, Flowable, FrameBreak,
 )
 # ReportLab 5.x crashes when an RTL paragraph with inline markup is split
 # across a frame; install the tolerant splitter before building anything.
 import rl_rtl_patch
 rl_rtl_patch.apply()
 
-from reportlab.platypus.tableofcontents import TableOfContents
+from reportlab.platypus.tableofcontents import TableOfContents, IndexingFlowable
 from PIL import Image as PILImage
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -205,7 +205,13 @@ if LANG == "ur":
     # right and the left ones are cleared.  Without this the bullet is drawn at
     # the far left margin while the text starts at the right, which reads as a
     # stray dot in the gutter.
-    RTL_LIST = dict(bulletDir="rtl", bulletAlign="right", rightIndent=14)
+    # bulletDir/bulletAlign alone only set the glyph position inside the
+    # bullet box; the box itself still sits on the left, so the marker drifted
+    # into the outer margin with the text far away on the right.  A negative
+    # bulletIndent pushes the box out to the left of the item, which in a
+    # right-to-left list is the gutter side, next to the text.
+    RTL_LIST = dict(bulletDir="rtl", bulletAlign="right", rightIndent=14,
+                    bulletIndent=-12)
     RTL_BULLET = dict(rightIndent=12)
 else:
     RTL_LIST = {}
@@ -430,6 +436,15 @@ def _ltr_variant(style):
 
 def para(text, style):
     """Paragraph() with per-string direction resolution for the Urdu book."""
+    p = _para(text, style)
+    # Keep the logical (unshaped) wording: getPlainText() on a shaped Urdu
+    # paragraph returns the visual glyph run, which is useless as a heading
+    # and unreadable once re-shaped (as the contents page used to do).
+    p._logical_text = re.sub(r"<[^>]+>", "", text or "")
+    return p
+
+
+def _para(text, style):
     # Only fully-Latin strings take the LTR style. Anything containing Urdu
     # must stay on the RTL path, because ReportLab shapes Arabic script only
     # when wordWrap="RTL"; the LTR style would print unjoined letters.
@@ -738,6 +753,29 @@ elif LANG == "hi":
     COVER_SUBTITLE = "सम्पूर्ण ज्ञान पुस्तक"
 
 
+class SetFlow(ActionFlowable):
+    """Switch between "fill both halves" and "one dedicated page" layouts."""
+
+    def __init__(self, mode):
+        ActionFlowable.__init__(self)
+        self.mode = mode
+
+    def apply(self, doc):
+        doc._flow_mode = self.mode
+        doc._flow_pos = 0
+
+
+class EnsureRecto(ActionFlowable):
+    """Force the part opener onto the right-hand half of a fresh spread."""
+
+    def apply(self, doc):
+        # Only used by the single-page part dividers: start them on the recto.
+        if getattr(doc, "pageTemplate", None) is None:
+            return
+        if doc._flow_mode != "flow" and doc.pageTemplate.id != "bodyR":
+            doc.pageTemplate = doc._tpls["bodyR"]
+
+
 class BookDoc(BaseDocTemplate):
     """One PDF sheet = one open spread (verso left | recto right)."""
 
@@ -761,6 +799,14 @@ class BookDoc(BaseDocTemplate):
             return Frame(x0 + lm, 14 * mm,
                          half - lm - rm, BOOK_H - 14 * mm - 14 * mm,
                          id=fid)
+        # Reading order inside one spread.  Urdu is bound on the right, so a
+        # spread is read right page then left page; every other edition reads
+        # left then right.
+        def _spread_frames(hf):
+            if LANG == "ur":
+                return [hf("R", "R"), hf("L", "L")]
+            return [hf("L", "L"), hf("R", "R")]
+
         self.addPageTemplates([
             # front cover sits on the recto (right half), inset inside the gold border
             PageTemplate(id="cover",
@@ -773,6 +819,15 @@ class BookDoc(BaseDocTemplate):
                          onPageEnd=lambda c, d: self._side_page(c, d, "L")),
             PageTemplate(id="bodyR", frames=[half_frame("R", "R")],
                          onPageEnd=lambda c, d: self._side_page(c, d, "R")),
+            # One story page in each half of the sheet, so the two facing pages
+            # of a spread both carry text (left first, then right).
+            PageTemplate(id="bodyLR", frames=_spread_frames(half_frame),
+                         onPageEnd=lambda c, d: (self._side_page(c, d, "R")
+                                                 if d._flow_pos == 0
+                                                 else self._side_page(c, d, "L"))
+                         if LANG == "ur" else
+                         (self._side_page(c, d, "L") if d._flow_pos == 0
+                          else self._side_page(c, d, "R"))),
             # blank half used to pad part openers onto the right page of a spread
             PageTemplate(id="blank", frames=[half_frame("L", "B")],
                          onPage=lambda c, d: None),
@@ -780,6 +835,10 @@ class BookDoc(BaseDocTemplate):
         self._tpls = {pt.id: pt for pt in self.pageTemplates}
         self._pending_tpl = None
         self._last_side = "R"
+        # "flow" spreads fill both halves; "single" spreads use one half only
+        # (covers, part dividers, chapter openers, the contents)
+        self._flow_mode = "single"
+        self._flow_pos = 0        # 0 = next story page goes on the left half
         self.chapter_label = ""
         self.part_label = ""
         self._spread_no = 0
@@ -794,11 +853,50 @@ class BookDoc(BaseDocTemplate):
         if self._pending_tpl and self._pending_tpl in self._tpls:
             self.pageTemplate = self._tpls[self._pending_tpl]
             self._pending_tpl = None
-        elif self.pageTemplate.id in ("bodyL", "bodyR"):
-            self.pageTemplate = self._tpls["bodyR" if self.pageTemplate.id == "bodyL" else "bodyL"]
-        if self.pageTemplate.id in ("bodyL", "bodyR"):
-            self._last_side = self.pageTemplate.id
+        elif self.pageTemplate.id in ("bodyL", "bodyR", "bodyLR"):
+            if self._flow_mode == "flow":
+                self.pageTemplate = self._tpls["bodyLR"]
+                self._flow_pos = 0
+            else:
+                # a dedicated divider page: verso on the left, recto on the right
+                self.pageTemplate = self._tpls[
+                    "bodyR" if self._flow_pos % 2 == 0 else "bodyL"]
+        if self.pageTemplate.id in ("bodyL", "bodyR", "bodyLR"):
+            self._last_side = ("L" if self.pageTemplate.id == "bodyL"
+                               else "R")
         super().handle_pageBegin()
+
+    def handle_flowable(self, flowables):
+        """Fill both halves of a flowing spread before starting a new sheet.
+
+        The story is one long stream of small flowables, so this is the place
+        to decide "the left page is full, carry on at the right page of the
+        same spread": ReportLab would otherwise open a fresh sheet and leave a
+        blank facing page, which is what made every spread half empty.
+        """
+        if flowables and self._flow_mode == "flow":
+            from reportlab.platypus.doctemplate import PageBreak as _PB
+            f = flowables[0]
+            trusted = isinstance(f, (_PB, NextPageTemplate, EnsureRecto,
+                                     CondPageBreak)) or \
+                f is FrameBreak or isinstance(f, type(FrameBreak))
+            if not trusted and self.pageTemplate.id == "bodyLR":
+                frames = self.pageTemplate.frames
+                if self._flow_pos == 0 and self.frame is frames[0] \
+                        and not self.frame._atTop:
+                    # the left page has content and the next flowable did not
+                    # fit: continue at the top of the right page
+                    self._flow_pos = 1
+                    # mirror what handle_frameEnd() does when it advances a
+                    # frame, otherwise the frame starts without its background
+                    # state attached
+                    self._leftExtraIndent = self.frame._leftExtraIndent
+                    self._rightExtraIndent = self.frame._rightExtraIndent
+                    self._frameBGs = self.frame._frameBGs
+                    self.frame = frames[1]
+                    self.frame._debug = self._debug
+                    self.handle_frameBegin()
+        return BaseDocTemplate.handle_flowable(self, flowables)
 
     def _spread_index(self):
         # physical book-page number for the recto (right) half of this sheet
@@ -889,7 +987,7 @@ class BookDoc(BaseDocTemplate):
     def afterFlowable(self, flowable):
         if isinstance(flowable, Paragraph):
             style = flowable.style.name
-            text = flowable.getPlainText()
+            text = getattr(flowable, "_logical_text", None) or flowable.getPlainText()
             if style == "part_title":
                 self.notify("TOCEntry", (0, text, self.page))
                 self.part_label = text
@@ -902,14 +1000,204 @@ class BookDoc(BaseDocTemplate):
 
 
 # ---------------------------------------------------------------- TOC
+class _RTLContents(IndexingFlowable):
+    """Contents page for right-to-left books.
+
+    Two things in ReportLab's TableOfContents do not survive right-to-left,
+    shaped text:
+
+    * each entry carries an ``<onDraw>`` callback that draws the leader dots
+      and folio; with shaped RTL text that callback makes breakLines() index a
+      fragment list it has already consumed, raising IndexError mid-build;
+    * the folio always goes in a right-hand column, which is the wrong side
+      for Urdu, and laying the entries into a table clips the RTL paragraphs.
+
+    This builds the entries as ordinary right-to-left paragraphs instead.  The
+    folio is appended to the logical end of the line, which shaping places at
+    the left edge where an Urdu reader expects it, and the leader dots are
+    measured so the numbers line up.
+    """
+
+    def __init__(self):
+        self.levelStyles = []
+        self.dotsMinLevel = 0
+        self._entries = []
+        self._lastEntries = []
+        self._rows = []
+        self._built_for = None
+        self._cursors = []
+        self._notifyKind = "TOCEntry"
+
+    # -- indexing ---------------------------------------------------------
+    def beforeBuild(self):
+        self._lastEntries = self._entries[:]
+        self._entries = []
+
+    def isIndexing(self):
+        return 1
+
+    def isSatisfied(self):
+        return self._entries == self._lastEntries
+
+    def isSplit(self):
+        return getattr(self, "_is_split_part", False)
+
+    def notify(self, kind, stuff):
+        if kind == self._notifyKind:
+            self._entries.append(tuple(stuff))
+
+    def getLevelStyle(self, n):
+        n = min(n, len(self.levelStyles) - 1)
+        return self.levelStyles[n]
+
+    # -- layout -----------------------------------------------------------
+    def _rows_for(self, availWidth):
+        """One entry per line: (style, title text, folio string)."""
+        entries = self._lastEntries or [(0, "Placeholder for table of contents", 0)]
+        rows = []
+        for entry in entries:
+            level, text, page = entry[0], entry[1], entry[2]
+            rows.append((self.getLevelStyle(level), text, str(page)))
+        return rows
+
+    def _metrics(self, style, availWidth):
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        return stringWidth, availWidth - style.leftIndent - style.rightIndent
+
+    def wrap(self, availWidth, availHeight):
+        self._availWidth = availWidth
+        if getattr(self, "_is_split_part", False) and getattr(self, "_lines", None):
+            # a continuation keeps exactly the entries it was given
+            rows = self._lines
+        else:
+            rows = self._rows_for(availWidth)
+            self._lines = rows
+        total = sum((st.spaceBefore or 0) + st.leading for st, _t, _p in rows)
+        self.width, self.height = availWidth, total
+        return self.width, self.height
+
+    def split(self, availWidth, availHeight):
+        """Break between entries, never inside one."""
+        if len(getattr(self, "_lines", []) or []) <= 1:
+            return []
+        if not getattr(self, "_lines", None):
+            self.wrap(availWidth, availHeight)
+        used = 0.0
+        cut = 0
+        for style, _t, _p in self._lines:
+            step = (style.spaceBefore or 0) + style.leading
+            if used + step > availHeight and cut:
+                break
+            used += step
+            cut += 1
+        if cut == 0 or cut >= len(self._lines):
+            # nothing (or everything) fits in what is left of this page: let
+            # the document move on rather than emit an oversized part
+            return []
+        head = self._part(self._lines[:cut])
+        if head.height > availHeight:
+            # not even the first entry fits here; let the document page-break
+            return []
+        tail = self._part(self._lines[cut:])
+        return [head, tail]
+
+    def _part(self, chunk):
+        part = _RTLContents()
+        part.levelStyles = self.levelStyles
+        part.dotsMinLevel = self.dotsMinLevel
+        part._availWidth = self._availWidth
+        part._lines = chunk
+        part._lastEntries = []
+        part._is_split_part = True
+        part.width = self._availWidth
+        part.height = sum((st.spaceBefore or 0) + st.leading for st, _t, _p in chunk)
+        return part
+
+    def draw(self):
+        """Draw each entry as a right-to-left line with a leader and a folio.
+
+        The line is composed here rather than as one Paragraph because the
+        leader is a run of glyphs with no spaces: given to the wrapper it is
+        treated as separate words and pushed onto a second line.
+
+        Anchors are fixed -- title at the right margin, folio at the left --
+        and the leader fills whatever is left between them, so the folio never
+        drifts depending on how long the title is.
+        """
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        canv = self.canv
+        y = self.height
+        for style, title, page in self._lines:
+            y -= (style.spaceBefore or 0)
+            y -= style.leading
+            indent_l = style.leftIndent or 0
+            indent_r = style.rightIndent or 0
+            right = self._availWidth - indent_r
+            left = indent_l
+            size = style.fontSize
+            gap = 4.0
+
+            title = self._fit(title, style.fontName, size, right - left - 40)
+            tw = stringWidth(title, style.fontName, size)
+            nw = stringWidth(page, "Serif", size)
+            room = (right - tw) - (left + nw) - 2 * gap
+
+            baseline = y + style.leading - size
+            canv.setFillColor(style.textColor)
+            draw_rtl(canv, right, baseline, title, style.fontName, size, "right")
+
+            if room > 4:
+                dot_w = stringWidth(". ", "Serif", size)
+                n = int(room / dot_w)
+                if n > 0:
+                    canv.setFont("Serif", size)
+                    x = right - tw - gap
+                    for i in range(n):
+                        canv.drawString(x - (i + 1) * dot_w, baseline, ".")
+
+            canv.setFont("Serif", size)
+            canv.setFillColor(style.textColor)
+            canv.drawString(left, baseline, page)
+
+    def _fit(self, text, font, size, width):
+        """Shorten a title with an ellipsis so it cannot collide with the folio."""
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        if stringWidth(text, font, size) <= width:
+            return text
+        out = ""
+        for ch in text:
+            if stringWidth(out + ch + "…", font, size) > width:
+                break
+            out += ch
+        return out.rstrip() + "…"
+
+    def _clip(self, text, font, size, width):
+        from reportlab.pdfbase.pdfmetrics import stringWidth
+        out = ""
+        for ch in text:
+            if stringWidth(out + ch, font, size) > width:
+                break
+            out += ch
+        return out.rstrip() + "…"
+
+
 def make_toc():
-    toc = TableOfContents()
-    toc.levelStyles = [
-        ParagraphStyle(name="toc0", fontName="Sans-Bold", fontSize=11.5, leading=19,
-                       textColor=WINE, spaceBefore=12, spaceAfter=3),
-        ParagraphStyle(name="toc1", fontName="Serif", fontSize=9.5, leading=14.5,
-                       textColor=INK, leftIndent=12, spaceBefore=2),
-    ]
+    toc = _RTLContents() if LANG == "ur" else TableOfContents()
+    # Build these through S() so they inherit the Urdu typography (shaped
+    # Nastaliq, RTL wrapping, mirrored indents).  Hand-made ParagraphStyles
+    # bypass that and the contents page came out left to right with the page
+    # numbers on the right and Latin-shaped Urdu.
+    lv0 = S("toc0", fontName="Sans-Bold", fontSize=11.5, leading=19,
+            textColor=WINE, spaceBefore=12, spaceAfter=3, alignment=TA_LEFT)
+    lv1 = S("toc1", fontName="Serif", fontSize=9.5, leading=14.5,
+            textColor=INK, leftIndent=12, spaceBefore=2, alignment=TA_LEFT)
+    if LANG == "ur":
+        # right-to-left: the entry hangs from the right, the leaders and the
+        # folio sit at the left edge
+        lv1.leftIndent = 0
+        lv1.rightIndent = 12
+        lv0.leftIndent = 0
+    toc.levelStyles = [lv0, lv1]
     toc.dotsMinLevel = 0
     return toc
 
@@ -975,6 +1263,7 @@ def part_page(num: str, title: str, subtitle: str, hero: Path | None = None) -> 
     """Part divider: opens on a right-hand page with a full-width picture."""
     kicker, title, subtitle = part_text(num, title, subtitle)
     flow = [
+        SetFlow("single"),
         NextPageTemplate("bodyR"),
         PageBreak(),
         EnsureRecto(),
@@ -987,7 +1276,8 @@ def part_page(num: str, title: str, subtitle: str, hero: Path | None = None) -> 
     ]
     if hero and Path(hero).exists():
         flow += img_flowable(Path(hero), BOOK_W - 2 * MARGIN - GUTTER, 88 * mm)
-    # no trailing PageBreak: the next chapter_head() breaks once (no blank between)
+    # the divider is a single page; the chapters that follow fill whole spreads
+    flow += [SetFlow("flow"), NextPageTemplate("bodyLR"), PageBreak()]
     return flow
 
 
@@ -1002,6 +1292,8 @@ def clean_plain(s: str) -> str:
 
 def chapter_head(no: str, title: str, subtitle: str | None = None,
                  hero: Path | None = None, kicker: str | None = None) -> list:
+    # Chapters flow continuously so both halves of every spread are used;
+    # only part dividers take a page of their own.
     flow = [PageBreak()]
     if kicker:
         flow.append(para(clean_plain(kicker), ST["chap_no"]))
@@ -1020,17 +1312,6 @@ def section_h(text: str) -> list:
 
 def sub_h(text: str) -> list:
     return [para(clean(text), ST["h3"])]
-
-
-class EnsureRecto(ActionFlowable):
-    """Force the part opener onto the right-hand half of a fresh spread."""
-
-    def apply(self, doc):
-        # After PageBreak we are at the start of a new spread. Content should
-        # sit on the recto (right half). If the active template is not bodyR,
-        # switch it so the left half stays empty (no header drawn there).
-        if getattr(doc, "pageTemplate", None) is not None and doc.pageTemplate.id != "bodyR":
-            doc.pageTemplate = doc._tpls["bodyR"]
 
 
 # ================================================================ BUILD
@@ -1110,6 +1391,7 @@ def build():
             alignment=TA_CENTER)),
         NextPageTemplate("bodyR"),
         PageBreak(),
+        SetFlow("flow"),
     ]
 
     # ================= ABOUT THIS BOOK =================
@@ -1143,9 +1425,14 @@ def build():
     story.append(PageBreak())
 
     # ================= TOC =================
-    story += [para(clean_plain(fm["toc_title"]), ST["h1"]),
+    # The contents start a fresh spread: collapsing it into the space left by
+    # the previous section made the first page carry one entry and then the
+    # rest of the list split awkwardly.
+    story += [SetFlow("single"), NextPageTemplate("bodyR"), PageBreak(),
+              para(clean_plain(fm["toc_title"]), ST["h1"]),
               Spacer(1, 4),
-              make_toc(), PageBreak()]
+              make_toc(), NextPageTemplate("bodyLR"), SetFlow("flow"),
+              PageBreak()]
 
     def hero(name, *fallbacks):
         for n in (name, *fallbacks):
