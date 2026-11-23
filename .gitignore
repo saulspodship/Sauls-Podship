@@ -51,3 +51,8 @@ book/__pycache__/
 # per-shard scratch dictionaries; only the merged caches are kept in git
 book/data/i18n/_shard_*.json
 book/data/_imgtmp/
+
+# scratch previews and probes from book layout work
+book/_*.png
+book/_*.pdf
+book/_imgtmp/
