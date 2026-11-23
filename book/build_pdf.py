@@ -258,6 +258,11 @@ def clean(text: str) -> str:
         text = text.replace(k, v)
     text = EMOJI_RE.sub("", text)
     text = text.translate(AR_DIGIT_TABLE)
+    # Markdown rules and other repeated punctuation survive translation as one
+    # enormous unbreakable "word" (a 190-char run of "=" was aborting the
+    # build), so collapse them to nothing.
+    text = re.sub(r"[=\-_*~#]{4,}", " ", text)
+    text = re.sub(r"\s{2,}", " ", text)
     # plain wording: drop the ornamental "Scriptorium" brand label
     text = text.replace("Saul's Podship Scriptorium", "Saul's Podship")
     text = text.replace("SCRIPTORIUM", "LIBRARY")
@@ -378,17 +383,26 @@ def _is_latin_only(text: str) -> bool:
     return not _ARABIC_RE.search(plain) and bool(_LATIN_RE.search(plain))
 
 
-def _mixed_script(text: str) -> bool:
-    """True when a string mixes Arabic-script letters with a foreign run.
+MAX_WORD_CHARS = 34
 
-    Colour-key chips are drawn from DejaVu; putting that font next to a
-    Nastaliq run inside a right-to-left frame makes ReportLab wrap one word
-    per line, so mixed cells are set left to right instead.
+
+def _break_long_tokens(text: str) -> str:
+    """Insert soft break points in absurdly long tokens (URLs, hash runs).
+
+    ReportLab cannot break a word that has no spaces, so one such token is
+    enough to overflow a line and abort the build.
     """
-    plain = re.sub(r"<[^>]+>", "", text or "")
-    if not _ARABIC_RE.search(plain):
-        return False
-    return bool(re.search(r'name="Sy"', text or "")) or bool(_LATIN_RE.search(plain))
+    if not text:
+        return text
+
+    def fix(m):
+        w = m.group(0)
+        if len(w) <= MAX_WORD_CHARS or "://" in w:
+            return w
+        return "\u200b".join(w[i:i + MAX_WORD_CHARS]
+                             for i in range(0, len(w), MAX_WORD_CHARS))
+
+    return re.sub(r"\S+", fix, text)
 
 
 def _ltr_variant(style):
@@ -407,8 +421,13 @@ def _ltr_variant(style):
 
 def para(text, style):
     """Paragraph() with per-string direction resolution for the Urdu book."""
-    if LANG == "ur" and (_is_latin_only(text) or _mixed_script(text)):
-        return Paragraph(text, _ltr_variant(style))
+    # Only fully-Latin strings take the LTR style. Anything containing Urdu
+    # must stay on the RTL path, because ReportLab shapes Arabic script only
+    # when wordWrap="RTL"; the LTR style would print unjoined letters.
+    if LANG == "ur":
+        text = _break_long_tokens(text)
+        if _is_latin_only(text):
+            return Paragraph(text, _ltr_variant(style))
     return Paragraph(text, style)
 
 
@@ -490,6 +509,19 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
         total_w = sum(widths)
         widths = [w * avail / total_w for w in widths]
 
+        # Probe the fit BEFORE mirroring: the column widths above belong to
+        # the logical (source) column order, so measuring after reversing them
+        # would test the wrong columns.
+        if LANG == "ur":
+            probe = Table(data, colWidths=widths,
+                          repeatRows=1 if headers else 0)
+            try:
+                _, probe_h = probe.wrap(avail, PAGE_H)
+            except Exception:
+                probe_h = 0
+            if probe_h > PAGE_H - 120 and scale != sizes[-1]:
+                continue
+
         if LANG == "ur":
             # right-to-left reading order: last column is read first
             data = [list(reversed(r)) for r in data]
@@ -518,11 +550,7 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
         last = t
         if LANG != "ur":
             break
-        try:
-            _, h = t.wrap(avail, PAGE_H)
-        except Exception:
-            continue
-        if h <= PAGE_H - 120:
+        if probe_h <= PAGE_H - 120:
             break
 
     return [last, Spacer(1, 6)]
