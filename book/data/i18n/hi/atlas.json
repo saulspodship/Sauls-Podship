@@ -1,0 +1,278 @@
+[
+  {
+    "key": "abraham-journey",
+    "name": "इब्राहीम की यात्रा",
+    "img": "/images/maps/abraham-journey.png",
+    "stops": [
+      [
+        63,
+        76,
+        "चालीसा के Ur"
+      ],
+      [
+        65.5,
+        25,
+        "Haran"
+      ],
+      [
+        75,
+        60,
+        "Canaan — Shechem."
+      ]
+    ]
+  },
+  {
+    "key": "exodus",
+    "name": "मिस्र से प्रस्थान",
+    "img": "/images/maps/exodus.png",
+    "stops": [
+      [
+        29,
+        35,
+        "Rameses"
+      ],
+      [
+        19,
+        30,
+        "Succoth"
+      ],
+      [
+        36,
+        44,
+        "Pi-hahiroth — सागर पार"
+      ],
+      [
+        41,
+        43,
+        "Elim · माउंट Sinai"
+      ],
+      [
+        53,
+        53,
+        "स्वर्ग की जंगल"
+      ],
+      [
+        75,
+        28,
+        "Kadesh-barnea"
+      ],
+      [
+        80,
+        23,
+        "Hebron"
+      ]
+    ]
+  },
+  {
+    "key": "paul-journeys",
+    "name": "पॉल की मिशनरी यात्रा",
+    "img": "/images/maps/paul-journeys.png",
+    "stops": [
+      [
+        34,
+        91,
+        "Jerusalem"
+      ],
+      [
+        62,
+        71,
+        "सीरिया के Antioch"
+      ],
+      [
+        64,
+        52,
+        "Seleucia"
+      ],
+      [
+        59,
+        67,
+        "Tarsus"
+      ],
+      [
+        50,
+        45,
+        "Derbe"
+      ],
+      [
+        61,
+        44,
+        "Iconium"
+      ],
+      [
+        51,
+        40,
+        "Pisidia Antioch"
+      ],
+      [
+        31,
+        49,
+        "Attalia"
+      ],
+      [
+        33,
+        42,
+        "Athens"
+      ],
+      [
+        23,
+        28,
+        "Berea"
+      ],
+      [
+        23,
+        33,
+        "Philippi"
+      ]
+    ]
+  },
+  {
+    "key": "seven-churches",
+    "name": "प्रकाशन के सात चर्च",
+    "img": "/images/maps/seven-churches.png",
+    "stops": [
+      [
+        36,
+        58,
+        "Ephesus"
+      ],
+      [
+        44,
+        64,
+        "Smyrna"
+      ],
+      [
+        44,
+        42,
+        "Pergamum"
+      ],
+      [
+        48,
+        47,
+        "Thyatira"
+      ],
+      [
+        45,
+        50,
+        "Sardis"
+      ],
+      [
+        50,
+        55,
+        "Philadelphia"
+      ],
+      [
+        53,
+        75,
+        "Laodicea"
+      ],
+      [
+        36,
+        58,
+        "Ephesus में वापसी"
+      ]
+    ]
+  },
+  {
+    "key": "holy-land-jesus",
+    "name": "पवित्र भूमि यीशु के समय में",
+    "img": "/images/maps/holy-land-jesus.png",
+    "stops": [
+      [
+        52,
+        20,
+        "गैलीले के नज़रे"
+      ],
+      [
+        37,
+        37,
+        "Capernaum"
+      ],
+      [
+        55,
+        47,
+        "Jericho"
+      ],
+      [
+        54,
+        70,
+        "Bethlehem"
+      ],
+      [
+        50,
+        60,
+        "Jerusalem"
+      ]
+    ]
+  },
+  {
+    "key": "kingdom-israel-judah",
+    "name": "इज़राइल और यहूदी साम्राज्य",
+    "img": "/images/maps/kingdom-israel-judah.png",
+    "stops": [
+      [
+        45,
+        44,
+        "सामरिया - 10 जनजातियों की राजधानी"
+      ],
+      [
+        85,
+        16,
+        "→ Assyria (722 BC)"
+      ],
+      [
+        34,
+        87,
+        "यरूशलेम - यहूदा की राजधानी"
+      ]
+    ]
+  },
+  {
+    "key": "ancient-near-east",
+    "name": "पूर्व के पास प्राचीन - साम्राज्य और एक्सिल",
+    "img": "/images/maps/ancient-near-east.png",
+    "stops": [
+      [
+        38,
+        50,
+        "इज़राइल (सामारिया)"
+      ],
+      [
+        62,
+        36,
+        "722 BC"
+      ],
+      [
+        35,
+        68,
+        "यहूदा (Jerusalem)"
+      ],
+      [
+        55,
+        66,
+        "बेबीलोनियन एक्सिल - 586 ई.पू."
+      ]
+    ]
+  },
+  {
+    "key": "roman-empire-jesus",
+    "name": "रोमन साम्राज्य यीशु के समय में",
+    "img": "/images/maps/roman-empire-jesus.png",
+    "stops": [
+      [
+        64,
+        64,
+        "Jerusalem"
+      ],
+      [
+        70,
+        58,
+        "एंटीच - विश्वासियों ने पहले ईसाई कहा"
+      ],
+      [
+        28,
+        46,
+        "रोम — सुसमाचार पृथ्वी के अंत तक"
+      ]
+    ]
+  }
+]

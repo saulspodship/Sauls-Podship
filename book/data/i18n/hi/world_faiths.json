@@ -1,0 +1,1092 @@
+{
+  "worldPop": 8232000000,
+  "cats": {
+    "christian": {
+      "label": "Christianity",
+      "color": "#2e7d32",
+      "adherents": 2440000000
+    },
+    "muslim": {
+      "label": "Islam",
+      "color": "#00838f",
+      "adherents": 2000000000
+    },
+    "hindu": {
+      "label": "Hinduism",
+      "color": "#ef6c00",
+      "adherents": 1220000000
+    },
+    "unaffiliated": {
+      "label": "असंबद्ध / नहीं",
+      "color": "#78909c",
+      "adherents": 1190000000
+    },
+    "buddhist": {
+      "label": "Buddhism",
+      "color": "#c49000",
+      "adherents": 520000000
+    },
+    "folk": {
+      "label": "लोक / पारंपरिक",
+      "color": "#6a1b9a",
+      "adherents": 430000000
+    },
+    "jewish": {
+      "label": "Judaism",
+      "color": "#1e88e5",
+      "adherents": 15700000
+    }
+  },
+  "countries": [
+    {
+      "name": "Fiji",
+      "cat": "christian",
+      "pct": 64,
+      "pop": 902623
+    },
+    {
+      "name": "Tanzania",
+      "cat": "christian",
+      "pct": 61,
+      "pop": 70038850
+    },
+    {
+      "name": "W. Sahara",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 610813
+    },
+    {
+      "name": "Canada",
+      "cat": "christian",
+      "pct": 53,
+      "pop": 41417056
+    },
+    {
+      "name": "संयुक्त राज्य अमेरिका",
+      "cat": "christian",
+      "pct": 64,
+      "pop": 341784857
+    },
+    {
+      "name": "Kazakhstan",
+      "cat": "muslim",
+      "pct": 72,
+      "pop": 20604819
+    },
+    {
+      "name": "Uzbekistan",
+      "cat": "muslim",
+      "pct": 96,
+      "pop": 39047321
+    },
+    {
+      "name": "पापुआ न्यू गिनी",
+      "cat": "christian",
+      "pct": 96,
+      "pop": 10185363
+    },
+    {
+      "name": "Indonesia",
+      "cat": "muslim",
+      "pct": 87,
+      "pop": 288315089
+    },
+    {
+      "name": "Argentina",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 46466688
+    },
+    {
+      "name": "Chile",
+      "cat": "christian",
+      "pct": 60,
+      "pop": 20150948
+    },
+    {
+      "name": "डेम। Rep. Congo",
+      "cat": "christian",
+      "pct": 96,
+      "pop": 116452162
+    },
+    {
+      "name": "Somalia",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 20305907
+    },
+    {
+      "name": "Kenya",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 54227015
+    },
+    {
+      "name": "Sudan",
+      "cat": "muslim",
+      "pct": 91,
+      "pop": 53282719
+    },
+    {
+      "name": "Chad",
+      "cat": "muslim",
+      "pct": 56,
+      "pop": 20031602
+    },
+    {
+      "name": "Haiti",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 11867032
+    },
+    {
+      "name": "डोमिनिकन प्रतिनिधि",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 10771504
+    },
+    {
+      "name": "Russia",
+      "cat": "christian",
+      "pct": 71,
+      "pop": 146028325
+    },
+    {
+      "name": "Bahamas",
+      "cat": "christian",
+      "pct": 90,
+      "pop": 398165
+    },
+    {
+      "name": "फ़ॉकलैंड है।",
+      "cat": "christian",
+      "pct": 66,
+      "pop": 3662
+    },
+    {
+      "name": "Norway",
+      "cat": "christian",
+      "pct": 68,
+      "pop": 5636904
+    },
+    {
+      "name": "Greenland",
+      "cat": "christian",
+      "pct": 95,
+      "pop": 56945
+    },
+    {
+      "name": "Timor-Leste",
+      "cat": "christian",
+      "pct": 99,
+      "pop": 1409452
+    },
+    {
+      "name": "दक्षिण अफ्रीका",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 63522380
+    },
+    {
+      "name": "Lesotho",
+      "cat": "christian",
+      "pct": 90,
+      "pop": 2116427
+    },
+    {
+      "name": "Mexico",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 131231919
+    },
+    {
+      "name": "Uruguay",
+      "cat": "christian",
+      "pct": 47,
+      "pop": 3480601
+    },
+    {
+      "name": "Brazil",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 214211951
+    },
+    {
+      "name": "Bolivia",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 11365333
+    },
+    {
+      "name": "Peru",
+      "cat": "christian",
+      "pct": 89,
+      "pop": 34157732
+    },
+    {
+      "name": "Colombia",
+      "cat": "christian",
+      "pct": 89,
+      "pop": 53399171
+    },
+    {
+      "name": "Panama",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 4064780
+    },
+    {
+      "name": "कोस्टा रिका",
+      "cat": "christian",
+      "pct": 84,
+      "pop": 5217296
+    },
+    {
+      "name": "Nicaragua",
+      "cat": "christian",
+      "pct": 84,
+      "pop": 6874748
+    },
+    {
+      "name": "Honduras",
+      "cat": "christian",
+      "pct": 87,
+      "pop": 10186738
+    },
+    {
+      "name": "अल साल्वाडोर",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 6029976
+    },
+    {
+      "name": "Guatemala",
+      "cat": "christian",
+      "pct": 94,
+      "pop": 18312373
+    },
+    {
+      "name": "Belize",
+      "cat": "christian",
+      "pct": 84,
+      "pop": 418982
+    },
+    {
+      "name": "Venezuela",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 28633711
+    },
+    {
+      "name": "Guyana",
+      "cat": "christian",
+      "pct": 64,
+      "pop": 956044
+    },
+    {
+      "name": "Suriname",
+      "cat": "christian",
+      "pct": 52,
+      "pop": 616500
+    },
+    {
+      "name": "France",
+      "cat": "christian",
+      "pct": 51,
+      "pop": 69081996
+    },
+    {
+      "name": "Ecuador",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 18243816
+    },
+    {
+      "name": "प्यूर्टो रिको",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 3184835
+    },
+    {
+      "name": "Jamaica",
+      "cat": "christian",
+      "pct": 69,
+      "pop": 2774538
+    },
+    {
+      "name": "Cuba",
+      "cat": "christian",
+      "pct": 60,
+      "pop": 9434593
+    },
+    {
+      "name": "Zimbabwe",
+      "cat": "christian",
+      "pct": 87,
+      "pop": 17073087
+    },
+    {
+      "name": "Botswana",
+      "cat": "christian",
+      "pct": 79,
+      "pop": 2359609
+    },
+    {
+      "name": "Namibia",
+      "cat": "christian",
+      "pct": 90,
+      "pop": 3022401
+    },
+    {
+      "name": "Senegal",
+      "cat": "muslim",
+      "pct": 96,
+      "pop": 19575061
+    },
+    {
+      "name": "Mali",
+      "cat": "muslim",
+      "pct": 94,
+      "pop": 23929000
+    },
+    {
+      "name": "Mauritania",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 4927532
+    },
+    {
+      "name": "Benin",
+      "cat": "christian",
+      "pct": 48,
+      "pop": 13551992
+    },
+    {
+      "name": "Niger",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 27522750
+    },
+    {
+      "name": "Nigeria",
+      "cat": "muslim",
+      "pct": 53,
+      "pop": 223800000
+    },
+    {
+      "name": "Cameroon",
+      "cat": "christian",
+      "pct": 69,
+      "pop": 29442327
+    },
+    {
+      "name": "Togo",
+      "cat": "christian",
+      "pct": 48,
+      "pop": 8095498
+    },
+    {
+      "name": "Ghana",
+      "cat": "christian",
+      "pct": 71,
+      "pop": 34378768
+    },
+    {
+      "name": "कोटे डी आइवरी",
+      "cat": "muslim",
+      "pct": 43,
+      "pop": 32494020
+    },
+    {
+      "name": "Guinea",
+      "cat": "muslim",
+      "pct": 86,
+      "pop": 17521167
+    },
+    {
+      "name": "Guinea-Bissau",
+      "cat": "muslim",
+      "pct": 46,
+      "pop": 1890252
+    },
+    {
+      "name": "Liberia",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 5248621
+    },
+    {
+      "name": "सिएरा लियोन",
+      "cat": "muslim",
+      "pct": 78,
+      "pop": 9270700
+    },
+    {
+      "name": "बुर्किना फासो",
+      "cat": "muslim",
+      "pct": 63,
+      "pop": 24736828
+    },
+    {
+      "name": "मध्य अफ़्रीकी प्रतिनिधि",
+      "cat": "christian",
+      "pct": 89,
+      "pop": 6470307
+    },
+    {
+      "name": "Congo",
+      "cat": "christian",
+      "pct": 86,
+      "pop": 6142180
+    },
+    {
+      "name": "Gabon",
+      "cat": "christian",
+      "pct": 82,
+      "pop": 2469296
+    },
+    {
+      "name": "Eq. Guinea",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 1668768
+    },
+    {
+      "name": "Zambia",
+      "cat": "christian",
+      "pct": 95,
+      "pop": 23003214
+    },
+    {
+      "name": "Malawi",
+      "cat": "christian",
+      "pct": 82,
+      "pop": 21201635
+    },
+    {
+      "name": "Mozambique",
+      "cat": "christian",
+      "pct": 55,
+      "pop": 34958973
+    },
+    {
+      "name": "eSwatini",
+      "cat": "christian",
+      "pct": 90,
+      "pop": 1235549
+    },
+    {
+      "name": "Angola",
+      "cat": "christian",
+      "pct": 79,
+      "pop": 38778554
+    },
+    {
+      "name": "Burundi",
+      "cat": "christian",
+      "pct": 89,
+      "pop": 12332788
+    },
+    {
+      "name": "Israel",
+      "cat": "jewish",
+      "pct": 74,
+      "pop": 10273700
+    },
+    {
+      "name": "Lebanon",
+      "cat": "muslim",
+      "pct": 61,
+      "pop": 5895466
+    },
+    {
+      "name": "Madagascar",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 32658977
+    },
+    {
+      "name": "Palestine",
+      "cat": "muslim",
+      "pct": 93,
+      "pop": 5557096
+    },
+    {
+      "name": "Gambia",
+      "cat": "muslim",
+      "pct": 96,
+      "pop": 2422712
+    },
+    {
+      "name": "Tunisia",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 11992843
+    },
+    {
+      "name": "Algeria",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 47400000
+    },
+    {
+      "name": "Jordan",
+      "cat": "muslim",
+      "pct": 97,
+      "pop": 11937000
+    },
+    {
+      "name": "संयुक्त अरब अमीरात",
+      "cat": "muslim",
+      "pct": 76,
+      "pop": 11294243
+    },
+    {
+      "name": "Qatar",
+      "cat": "muslim",
+      "pct": 68,
+      "pop": 3370611
+    },
+    {
+      "name": "Kuwait",
+      "cat": "muslim",
+      "pct": 74,
+      "pop": 4881254
+    },
+    {
+      "name": "Iraq",
+      "cat": "muslim",
+      "pct": 95,
+      "pop": 46118793
+    },
+    {
+      "name": "Oman",
+      "cat": "muslim",
+      "pct": 86,
+      "pop": 5398645
+    },
+    {
+      "name": "Vanuatu",
+      "cat": "christian",
+      "pct": 83,
+      "pop": 321409
+    },
+    {
+      "name": "Cambodia",
+      "cat": "buddhist",
+      "pct": 97,
+      "pop": 17816143
+    },
+    {
+      "name": "Thailand",
+      "cat": "buddhist",
+      "pct": 93,
+      "pop": 70250751
+    },
+    {
+      "name": "Laos",
+      "cat": "buddhist",
+      "pct": 66,
+      "pop": 7745000
+    },
+    {
+      "name": "Myanmar",
+      "cat": "buddhist",
+      "pct": 88,
+      "pop": 51375327
+    },
+    {
+      "name": "Vietnam",
+      "cat": "folk",
+      "pct": 46,
+      "pop": 102300000
+    },
+    {
+      "name": "उत्तर कोरिया",
+      "cat": "unaffiliated",
+      "pct": 70,
+      "pop": 25950000
+    },
+    {
+      "name": "दक्षिण कोरिया",
+      "cat": "unaffiliated",
+      "pct": 56,
+      "pop": 51088284
+    },
+    {
+      "name": "Mongolia",
+      "cat": "buddhist",
+      "pct": 55,
+      "pop": 3591120
+    },
+    {
+      "name": "India",
+      "cat": "hindu",
+      "pct": 79,
+      "pop": 1429404000
+    },
+    {
+      "name": "Bangladesh",
+      "cat": "muslim",
+      "pct": 91,
+      "pop": 169828911
+    },
+    {
+      "name": "Bhutan",
+      "cat": "buddhist",
+      "pct": 75,
+      "pop": 784043
+    },
+    {
+      "name": "Nepal",
+      "cat": "hindu",
+      "pct": 81,
+      "pop": 30034040
+    },
+    {
+      "name": "Pakistan",
+      "cat": "muslim",
+      "pct": 96,
+      "pop": 241499431
+    },
+    {
+      "name": "Afghanistan",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 43844000
+    },
+    {
+      "name": "Tajikistan",
+      "cat": "muslim",
+      "pct": 98,
+      "pop": 10721000
+    },
+    {
+      "name": "Kyrgyzstan",
+      "cat": "muslim",
+      "pct": 90,
+      "pop": 7404300
+    },
+    {
+      "name": "Turkmenistan",
+      "cat": "muslim",
+      "pct": 93,
+      "pop": 7057841
+    },
+    {
+      "name": "Iran",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 87134000
+    },
+    {
+      "name": "Syria",
+      "cat": "muslim",
+      "pct": 87,
+      "pop": 26472497
+    },
+    {
+      "name": "Armenia",
+      "cat": "christian",
+      "pct": 95,
+      "pop": 3096900
+    },
+    {
+      "name": "Sweden",
+      "cat": "christian",
+      "pct": 63,
+      "pop": 10610483
+    },
+    {
+      "name": "Belarus",
+      "cat": "christian",
+      "pct": 83,
+      "pop": 9056080
+    },
+    {
+      "name": "Ukraine",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 28700000
+    },
+    {
+      "name": "Poland",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 37243000
+    },
+    {
+      "name": "Austria",
+      "cat": "christian",
+      "pct": 68,
+      "pop": 9217573
+    },
+    {
+      "name": "Hungary",
+      "cat": "christian",
+      "pct": 69,
+      "pop": 9488428
+    },
+    {
+      "name": "Moldova",
+      "cat": "christian",
+      "pct": 90,
+      "pop": 2365600
+    },
+    {
+      "name": "Romania",
+      "cat": "christian",
+      "pct": 86,
+      "pop": 19041322
+    },
+    {
+      "name": "Lithuania",
+      "cat": "christian",
+      "pct": 74,
+      "pop": 2886179
+    },
+    {
+      "name": "Latvia",
+      "cat": "christian",
+      "pct": 68,
+      "pop": 1832100
+    },
+    {
+      "name": "Estonia",
+      "cat": "unaffiliated",
+      "pct": 54,
+      "pop": 1360745
+    },
+    {
+      "name": "Germany",
+      "cat": "christian",
+      "pct": 55,
+      "pop": 83467117
+    },
+    {
+      "name": "Bulgaria",
+      "cat": "christian",
+      "pct": 60,
+      "pop": 6423207
+    },
+    {
+      "name": "Greece",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 10372335
+    },
+    {
+      "name": "Turkey",
+      "cat": "muslim",
+      "pct": 98,
+      "pop": 86092168
+    },
+    {
+      "name": "Albania",
+      "cat": "muslim",
+      "pct": 60,
+      "pop": 2335930
+    },
+    {
+      "name": "Croatia",
+      "cat": "christian",
+      "pct": 86,
+      "pop": 3866233
+    },
+    {
+      "name": "Switzerland",
+      "cat": "christian",
+      "pct": 61,
+      "pop": 9154896
+    },
+    {
+      "name": "Luxembourg",
+      "cat": "christian",
+      "pct": 60,
+      "pop": 690959
+    },
+    {
+      "name": "Belgium",
+      "cat": "christian",
+      "pct": 55,
+      "pop": 11942772
+    },
+    {
+      "name": "Netherlands",
+      "cat": "unaffiliated",
+      "pct": 57,
+      "pop": 18153271
+    },
+    {
+      "name": "Portugal",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 11424031
+    },
+    {
+      "name": "Spain",
+      "cat": "christian",
+      "pct": 58,
+      "pop": 49801559
+    },
+    {
+      "name": "Ireland",
+      "cat": "christian",
+      "pct": 69,
+      "pop": 5525600
+    },
+    {
+      "name": "न्यू कैलेडोनिया",
+      "cat": "christian",
+      "pct": 85,
+      "pop": 264596
+    },
+    {
+      "name": "सोलोमन है।",
+      "cat": "christian",
+      "pct": 96,
+      "pop": 750325
+    },
+    {
+      "name": "न्यूजीलैंड",
+      "cat": "unaffiliated",
+      "pct": 49,
+      "pop": 5357300
+    },
+    {
+      "name": "Australia",
+      "cat": "christian",
+      "pct": 44,
+      "pop": 27801023
+    },
+    {
+      "name": "श्रीलंका",
+      "cat": "buddhist",
+      "pct": 70,
+      "pop": 21756000
+    },
+    {
+      "name": "China",
+      "cat": "unaffiliated",
+      "pct": 52,
+      "pop": 1404890000
+    },
+    {
+      "name": "Taiwan",
+      "cat": "folk",
+      "pct": 48,
+      "pop": 23235002
+    },
+    {
+      "name": "Italy",
+      "cat": "christian",
+      "pct": 76,
+      "pop": 58940756
+    },
+    {
+      "name": "Denmark",
+      "cat": "christian",
+      "pct": 65,
+      "pop": 6031699
+    },
+    {
+      "name": "यूनाइटेड किंगडम",
+      "cat": "christian",
+      "pct": 46,
+      "pop": 69487000
+    },
+    {
+      "name": "Iceland",
+      "cat": "christian",
+      "pct": 71,
+      "pop": 396500
+    },
+    {
+      "name": "Azerbaijan",
+      "cat": "muslim",
+      "pct": 95,
+      "pop": 10273450
+    },
+    {
+      "name": "Georgia",
+      "cat": "christian",
+      "pct": 88,
+      "pop": 3941100
+    },
+    {
+      "name": "Philippines",
+      "cat": "christian",
+      "pct": 92,
+      "pop": 114849400
+    },
+    {
+      "name": "Malaysia",
+      "cat": "muslim",
+      "pct": 63,
+      "pop": 34389400
+    },
+    {
+      "name": "Brunei",
+      "cat": "muslim",
+      "pct": 82,
+      "pop": 458600
+    },
+    {
+      "name": "Slovenia",
+      "cat": "christian",
+      "pct": 68,
+      "pop": 2136385
+    },
+    {
+      "name": "Finland",
+      "cat": "christian",
+      "pct": 66,
+      "pop": 5655296
+    },
+    {
+      "name": "Slovakia",
+      "cat": "christian",
+      "pct": 65,
+      "pop": 5403009
+    },
+    {
+      "name": "Czechia",
+      "cat": "unaffiliated",
+      "pct": 72,
+      "pop": 10896003
+    },
+    {
+      "name": "Eritrea",
+      "cat": "christian",
+      "pct": 63,
+      "pop": 3682669
+    },
+    {
+      "name": "Japan",
+      "cat": "unaffiliated",
+      "pct": 60,
+      "pop": 122680000
+    },
+    {
+      "name": "Paraguay",
+      "cat": "christian",
+      "pct": 89,
+      "pop": 6109644
+    },
+    {
+      "name": "Yemen",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 32684503
+    },
+    {
+      "name": "सऊदी अरब",
+      "cat": "muslim",
+      "pct": 97,
+      "pop": 35300280
+    },
+    {
+      "name": "N. Cyprus",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 476214
+    },
+    {
+      "name": "Cyprus",
+      "cat": "christian",
+      "pct": 78,
+      "pop": 983000
+    },
+    {
+      "name": "Morocco",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 37254695
+    },
+    {
+      "name": "Egypt",
+      "cat": "muslim",
+      "pct": 90,
+      "pop": 108613296
+    },
+    {
+      "name": "Libya",
+      "cat": "muslim",
+      "pct": 97,
+      "pop": 7539852
+    },
+    {
+      "name": "Ethiopia",
+      "cat": "christian",
+      "pct": 67,
+      "pop": 111652998
+    },
+    {
+      "name": "Djibouti",
+      "cat": "muslim",
+      "pct": 94,
+      "pop": 1066809
+    },
+    {
+      "name": "Somaliland",
+      "cat": "muslim",
+      "pct": 99,
+      "pop": 5750000
+    },
+    {
+      "name": "Uganda",
+      "cat": "christian",
+      "pct": 84,
+      "pop": 45905417
+    },
+    {
+      "name": "Rwanda",
+      "cat": "christian",
+      "pct": 93,
+      "pop": 14418145
+    },
+    {
+      "name": "बोस्निया और हर्ज़।",
+      "cat": "muslim",
+      "pct": 51,
+      "pop": 3412000
+    },
+    {
+      "name": "Macedonia",
+      "cat": "christian",
+      "pct": 64,
+      "pop": 1819074
+    },
+    {
+      "name": "Serbia",
+      "cat": "christian",
+      "pct": 84,
+      "pop": 6532019
+    },
+    {
+      "name": "Montenegro",
+      "cat": "christian",
+      "pct": 72,
+      "pop": 622902
+    },
+    {
+      "name": "Kosovo",
+      "cat": "muslim",
+      "pct": 95,
+      "pop": 1582322
+    },
+    {
+      "name": "त्रिनिदाद और टोबैगो",
+      "cat": "christian",
+      "pct": 81,
+      "pop": 1367764
+    },
+    {
+      "name": "S. सूडान",
+      "cat": "christian",
+      "pct": 60,
+      "pop": 15786898
+    }
+  ]
+}

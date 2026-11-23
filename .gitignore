@@ -48,4 +48,6 @@ book/__pycache__/
 !book/data/*.json
 !book/data/i18n/
 !book/data/i18n/**
+# per-shard scratch dictionaries; only the merged caches are kept in git
+book/data/i18n/_shard_*.json
 book/data/_imgtmp/

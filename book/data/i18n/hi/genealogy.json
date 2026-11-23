@@ -1,0 +1,365 @@
+{
+  "people": [
+    {
+      "name": "Adam",
+      "birthAM": 0,
+      "deathAM": 930,
+      "approx": false
+    },
+    {
+      "name": "Seth",
+      "birthAM": 130,
+      "deathAM": 1042,
+      "approx": false
+    },
+    {
+      "name": "Enosh",
+      "birthAM": 235,
+      "deathAM": 1140,
+      "approx": false
+    },
+    {
+      "name": "Kenan",
+      "birthAM": 325,
+      "deathAM": 1235,
+      "approx": false
+    },
+    {
+      "name": "Mahalalel",
+      "birthAM": 395,
+      "deathAM": 1290,
+      "approx": false
+    },
+    {
+      "name": "Jared",
+      "birthAM": 460,
+      "deathAM": 1422,
+      "approx": false
+    },
+    {
+      "name": "Enoch",
+      "birthAM": 622,
+      "deathAM": 987,
+      "approx": false
+    },
+    {
+      "name": "Methuselah",
+      "birthAM": 687,
+      "deathAM": 1656,
+      "approx": false
+    },
+    {
+      "name": "Lamech",
+      "birthAM": 874,
+      "deathAM": 1651,
+      "approx": false
+    },
+    {
+      "name": "Noah",
+      "birthAM": 1056,
+      "deathAM": 2006,
+      "approx": false
+    },
+    {
+      "name": "Shem",
+      "birthAM": 1558,
+      "deathAM": 2158,
+      "approx": false
+    },
+    {
+      "name": "Arphaxad",
+      "birthAM": 1658,
+      "deathAM": 2096,
+      "approx": false
+    },
+    {
+      "name": "Shelah",
+      "birthAM": 1693,
+      "deathAM": 2126,
+      "approx": false
+    },
+    {
+      "name": "Eber",
+      "birthAM": 1723,
+      "deathAM": 2187,
+      "approx": false
+    },
+    {
+      "name": "Peleg",
+      "birthAM": 1757,
+      "deathAM": 1996,
+      "approx": false
+    },
+    {
+      "name": "Reu",
+      "birthAM": 1787,
+      "deathAM": 2026,
+      "approx": false
+    },
+    {
+      "name": "Serug",
+      "birthAM": 1819,
+      "deathAM": 2049,
+      "approx": false
+    },
+    {
+      "name": "Nahor",
+      "birthAM": 1849,
+      "deathAM": 1997,
+      "approx": false
+    },
+    {
+      "name": "Terah",
+      "birthAM": 1878,
+      "deathAM": 2083,
+      "approx": false
+    },
+    {
+      "name": "Abraham",
+      "birthAM": 2008,
+      "deathAM": 2183,
+      "approx": false
+    },
+    {
+      "name": "Isaac",
+      "birthAM": 2108,
+      "deathAM": 2288,
+      "approx": false
+    },
+    {
+      "name": "Jacob",
+      "birthAM": 2168,
+      "deathAM": 2315,
+      "approx": false
+    },
+    {
+      "name": "Judah",
+      "birthAM": 2252,
+      "deathAM": 2371,
+      "approx": true
+    },
+    {
+      "name": "Perez",
+      "birthAM": 2275,
+      "deathAM": 2395,
+      "approx": true
+    },
+    {
+      "name": "Hezron",
+      "birthAM": 2290,
+      "deathAM": 2410,
+      "approx": true
+    },
+    {
+      "name": "Ram",
+      "birthAM": 2370,
+      "deathAM": 2480,
+      "approx": true
+    },
+    {
+      "name": "Amminadab",
+      "birthAM": 2440,
+      "deathAM": 2550,
+      "approx": true
+    },
+    {
+      "name": "Nahshon",
+      "birthAM": 2480,
+      "deathAM": 2590,
+      "approx": true
+    },
+    {
+      "name": "Salmon",
+      "birthAM": 2590,
+      "deathAM": 2690,
+      "approx": true
+    },
+    {
+      "name": "Boaz",
+      "birthAM": 2680,
+      "deathAM": 2780,
+      "approx": true
+    },
+    {
+      "name": "Obed",
+      "birthAM": 2770,
+      "deathAM": 2870,
+      "approx": true
+    },
+    {
+      "name": "Jesse",
+      "birthAM": 2850,
+      "deathAM": 2960,
+      "approx": true
+    },
+    {
+      "name": "David",
+      "birthAM": 2919,
+      "deathAM": 2989,
+      "approx": true
+    },
+    {
+      "name": "Solomon",
+      "birthAM": 2971,
+      "deathAM": 3029,
+      "approx": true
+    },
+    {
+      "name": "Rehoboam",
+      "birthAM": 2988,
+      "deathAM": 3046,
+      "approx": true
+    },
+    {
+      "name": "Abijah",
+      "birthAM": 3020,
+      "deathAM": 3049,
+      "approx": true
+    },
+    {
+      "name": "Asa",
+      "birthAM": 3025,
+      "deathAM": 3090,
+      "approx": true
+    },
+    {
+      "name": "Jehoshaphat",
+      "birthAM": 3055,
+      "deathAM": 3115,
+      "approx": true
+    },
+    {
+      "name": "Joram",
+      "birthAM": 3083,
+      "deathAM": 3119,
+      "approx": true
+    },
+    {
+      "name": "Uzziah",
+      "birthAM": 3178,
+      "deathAM": 3246,
+      "approx": true
+    },
+    {
+      "name": "Jotham",
+      "birthAM": 3221,
+      "deathAM": 3262,
+      "approx": true
+    },
+    {
+      "name": "Ahaz",
+      "birthAM": 3242,
+      "deathAM": 3278,
+      "approx": true
+    },
+    {
+      "name": "Hezekiah",
+      "birthAM": 3253,
+      "deathAM": 3307,
+      "approx": true
+    },
+    {
+      "name": "Manasseh",
+      "birthAM": 3295,
+      "deathAM": 3362,
+      "approx": true
+    },
+    {
+      "name": "Amon",
+      "birthAM": 3340,
+      "deathAM": 3364,
+      "approx": true
+    },
+    {
+      "name": "Josiah",
+      "birthAM": 3356,
+      "deathAM": 3395,
+      "approx": true
+    },
+    {
+      "name": "Jeconiah",
+      "birthAM": 3388,
+      "deathAM": 3445,
+      "approx": true
+    },
+    {
+      "name": "Shealtiel",
+      "birthAM": 3400,
+      "deathAM": 3465,
+      "approx": true
+    },
+    {
+      "name": "Zerubbabel",
+      "birthAM": 3430,
+      "deathAM": 3500,
+      "approx": true
+    },
+    {
+      "name": "Abiud",
+      "birthAM": 3480,
+      "deathAM": 3550,
+      "approx": true
+    },
+    {
+      "name": "Eliakim",
+      "birthAM": 3525,
+      "deathAM": 3595,
+      "approx": true
+    },
+    {
+      "name": "Azor",
+      "birthAM": 3570,
+      "deathAM": 3640,
+      "approx": true
+    },
+    {
+      "name": "Zadok",
+      "birthAM": 3615,
+      "deathAM": 3685,
+      "approx": true
+    },
+    {
+      "name": "Akim",
+      "birthAM": 3660,
+      "deathAM": 3730,
+      "approx": true
+    },
+    {
+      "name": "Eliud",
+      "birthAM": 3705,
+      "deathAM": 3775,
+      "approx": true
+    },
+    {
+      "name": "Eleazar",
+      "birthAM": 3750,
+      "deathAM": 3820,
+      "approx": true
+    },
+    {
+      "name": "Matthan",
+      "birthAM": 3810,
+      "deathAM": 3880,
+      "approx": true
+    },
+    {
+      "name": "जैकब (जोसेफ के पिता)",
+      "birthAM": 3880,
+      "deathAM": 3960,
+      "approx": true
+    },
+    {
+      "name": "Joseph",
+      "birthAM": 3960,
+      "deathAM": 4020,
+      "approx": true
+    },
+    {
+      "name": "Jesus",
+      "birthAM": 4000,
+      "deathAM": 4033,
+      "approx": true
+    }
+  ],
+  "page_text": "एडम → यीशु: ओवरलैपिंग लाइफटाइम्स मानचित्र हर बार एक व्यक्ति का जीवन है। जहां बार ओवरलैप करते हैं, वे लोग एक साथ रहते थे। प्रेस प्ले, या वास्तव में वे किसके साथ रहते थे देखने के लिए एक नाम टैप करें। ▶ Play ↺ रीसेट ages in Genesis approximate (कोई आयु नहीं दी गई) Jesus Flood / Exile Tap a name to see overlaps. स्केल: निर्माण (AM) से वर्षों, BC के साथ नीचे दिखाया गया है, Ussher शैली क्रोनोलॉजी के बाद। एडम से जैकब उत्पत्ति 5 और 11 में उम्र का उपयोग करते हैं। यहूदियों की ओर से बाइबल के नामों को सूचीबद्ध करता है लेकिन उम्र नहीं है और मैथ्यू की सूची कुछ पीढ़ियों को छोड़ देती है, इसलिए उन सलाखों का अनुमान ज्ञात शासनकाल की तारीखों और पीढ़ी की रिक्ति से बनाया गया है। एनोच को 365 वर्ष की उम्र में दिखाया गया है, जब भगवान ने उसे लिया।"
+}

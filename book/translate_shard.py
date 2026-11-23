@@ -30,7 +30,10 @@ def main(argv):
     items = C.strings()
     mine = C.shard(items, index, count)
     out_path = C.I18N / f"_shard_{lang}_{index}.json"
-    done = C.load_json(out_path, {})
+    # Seed from the previously merged dictionary as well as this shard's own
+    # file, so a later run only pays for strings added since the last merge.
+    done = dict(C.load_json(C.I18N / f"_cache_{lang}.json", {}))
+    done.update(C.load_json(out_path, {}))
 
     todo = [s for s in mine if s not in done]
     print(
