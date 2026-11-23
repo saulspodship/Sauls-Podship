@@ -19,13 +19,17 @@ jobs:
           curl -fsSL --retry 3 -o argos_models/translate-en_hi-1_1.argosmodel \
             "https://argos-net.com/v1/translate-en_hi-1_1.argosmodel"
           ls -la argos_models/
-      - name: Push to argos-models branch
+          # sanity: files must be zip archives (PK header)
+          file argos_models/* || true
+          head -c 2 argos_models/translate-en_ur-1_9.argosmodel | grep -q PK
+          head -c 2 argos_models/translate-en_hi-1_1.argosmodel | grep -q PK
+      - name: Push models branch
         run: |
+          set -eux
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan argos-models-tmp
-          git rm -rf --cached . >/dev/null 2>&1 || true
+          git checkout -b argos-models
           git add -f argos_models/
-          git commit -m "chore: argos translation models en-ur + en-hi"
-          git push --force origin HEAD:argos-models
-          echo "pushed OK"
+          git commit -m "chore: add argos en-ur and en-hi translation models"
+          git push origin argos-models
+          echo PUSH_OK
