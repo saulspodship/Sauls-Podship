@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Download — Saul's Podship Compendium (PDF)</title>
+<title>Download — Saul's Podship Compendium</title>
 <style>
   :root {
     --wine: #4A152C;
@@ -33,9 +33,9 @@
     border: 2px solid var(--gold);
     outline: 1px solid var(--gold);
     outline-offset: 4px;
-    max-width: 560px;
+    max-width: 620px;
     width: 100%;
-    padding: 40px 36px 36px;
+    padding: 40px 36px 32px;
     text-align: center;
     box-shadow: 0 12px 40px rgba(74, 21, 44, 0.12);
   }
@@ -49,99 +49,88 @@
     padding: 12px 10px;
     margin: -40px -36px 28px;
   }
-  h1 {
-    color: var(--wine);
-    font-size: 32px;
-    line-height: 1.2;
-    margin: 0 0 10px;
-  }
-  .sub {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.55;
-    margin: 0 0 22px;
-  }
+  h1 { color: var(--wine); font-size: 31px; line-height: 1.2; margin: 0 0 10px; }
+  .sub { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0 0 20px; }
   .meta {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    margin-bottom: 26px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    color: var(--wine);
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 24px;
+    font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: var(--wine);
   }
   .meta span {
-    background: var(--cream);
-    border: 1px solid var(--line);
-    padding: 6px 12px;
-    border-radius: 999px;
+    background: var(--cream); border: 1px solid var(--line);
+    padding: 6px 12px; border-radius: 999px;
   }
+  .editions { display: grid; gap: 10px; margin: 0 0 6px; }
   a.btn {
-    display: inline-block;
+    display: block;
     background: var(--wine);
     color: var(--gold-l);
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
     text-decoration: none;
-    padding: 16px 34px;
+    padding: 15px 22px;
     border: 1px solid var(--gold);
     border-radius: 4px;
     transition: background 0.15s ease, transform 0.1s ease;
   }
   a.btn:hover { background: var(--wine2); }
   a.btn:active { transform: translateY(1px); }
-  a.btn.ghost {
-    background: transparent;
-    color: var(--wine);
-    margin-top: 12px;
-    font-size: 13px;
-    padding: 12px 24px;
-  }
-  a.btn.ghost:hover { background: rgba(74, 21, 44, 0.06); }
-  .hint {
-    margin-top: 22px;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-  .rule {
-    width: 40%;
-    height: 1px;
-    background: var(--gold);
-    margin: 20px auto;
-    border: 0;
-  }
+  a.btn .lang { display: block; font-size: 12px; letter-spacing: 0.2em; opacity: 0.8; margin-bottom: 4px; }
+  a.btn .native { font-weight: 400; font-size: 13px; letter-spacing: 0; opacity: 0.85; }
+  .hint { margin-top: 22px; font-size: 13px; color: var(--muted); line-height: 1.6; text-align: left; }
+  .hint b { color: var(--wine); }
+  .rule { width: 40%; height: 1px; background: var(--gold); margin: 22px auto; border: 0; }
+  .pending { border-color: var(--line); color: var(--muted); }
 </style>
 </head>
 <body>
   <div class="card">
-    <div class="band">SAUL'S PODSHIP · SCRIPTORIUM</div>
-    <h1>The Complete<br/>Knowledge Compendium</h1>
+    <div class="band">SAUL'S PODSHIP · THE COMPLETE KNOWLEDGE COMPENDIUM</div>
+    <h1>A Complete Theological Archive</h1>
     <p class="sub">
-      Fifty illustrated Bible-encyclopedia volumes · 400-question comparative
-      apologetics codex · biblical atlases · 1,000-entry theological archive ·
-      Watchers atlas · prophecy lenses · Punjabi Zaboor hymnody
+      Fifty illustrated Bible-encyclopedia volumes · biblical maps and atlases ·
+      a 400-question comparative apologetics codex · a 1,000-entry study archive ·
+      the Watchers, prophecy lenses and world faiths · the Punjabi Zaboor hymnody.
+      Typeset as a real book — 6&Prime;&nbsp;&times;&nbsp;9&Prime; trim, laid open two facing pages at a time.
     </p>
     <div class="meta">
-      <span>750 pages</span>
-      <span>A4 print-ready</span>
-      <span>33 MB PDF</span>
+      <span>1,155 pages</span>
+      <span>6&Prime; × 9&Prime; book trim</span>
+      <span>Facing-page spreads</span>
+      <span>3 editions</span>
     </div>
-    <a class="btn" href="/download" download="Sauls-Podship-Compendium.pdf">
-      ⬇ Download PDF
-    </a>
-    <br/>
-    <a class="btn ghost" href="/Sauls-Podship-Compendium.pdf" target="_blank" rel="noopener">
-      Open in browser instead
-    </a>
+
+    <div class="editions">
+      <a class="btn" href="/download?lang=en" download="Sauls-Podship-Compendium-English.pdf">
+        <span class="lang">ENGLISH</span>
+        Download the book <span class="native">· 37.7 MB</span>
+      </a>
+      <a class="btn" href="/download?lang=ur" download="Sauls-Podship-Compendium-Urdu.pdf">
+        <span class="lang">URDU</span>
+        کتاب ڈاؤن لوڈ کریں <span class="native">· اردو</span>
+      </a>
+      <a class="btn" href="/download?lang=hi" download="Sauls-Podship-Compendium-Hindi.pdf">
+        <span class="lang">HINDI</span>
+        पुस्तक डाउनलोड करें <span class="native">· हिन्दी</span>
+      </a>
+    </div>
+
     <hr class="rule" />
     <p class="hint">
-      For printing: A4 portrait · duplex “flip on long edge” · full table of
-      contents with page numbers.
+      <b>To read it as a book:</b> open the PDF in any viewer and choose
+      <b>two-page view</b> (Adobe Reader: <i>View → Page Display → Two Page View</i>,
+      plus <i>Show Cover Page in Two Page View</i>). Each sheet then reads as one
+      open book with the cover and every part-opener on a right-hand page.
+      <br/><br/>
+      <b>To print it:</b> 6&Prime;&nbsp;&times;&nbsp;9&Prime; trim, duplex, flip on the
+      <i>short</i> edge — spreads are already imposed left-and-right, so print
+      “two pages per sheet” only if your printer scales to the sheet.
+      <br/><br/>
+      Urdu scripture references follow
+      <b>کِتابِ مُقادّس</b> (Revised Urdu Bible, 2010) at
+      bible.com/bible/189 — the edition you asked for.
     </p>
   </div>
 </body>

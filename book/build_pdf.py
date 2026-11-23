@@ -10,6 +10,13 @@ import json, re, os, sys, datetime, html as htmllib
 from pathlib import Path
 from collections import defaultdict
 
+# ReportLab's RTL engine (BidiStr, wordWrap="RTL") looks for the retired
+# `rlbidi` extension.  Ship a python-bidi backed stand-in beside this file
+# and make sure it is importable before reportlab is loaded.
+_VENDOR = Path(__file__).resolve().parent / "_vendor"
+if _VENDOR.is_dir() and str(_VENDOR) not in sys.path:
+    sys.path.insert(0, str(_VENDOR))
+
 from reportlab.lib.pagesizes import inch
 from reportlab.lib.units import mm
 from reportlab.lib import colors
@@ -73,9 +80,11 @@ def register_fonts():
         pdfmetrics.registerFont(TTFont("Sans", f"{F}/DejaVuSans.ttf"))
         pdfmetrics.registerFont(TTFont("Sans-Bold", f"{F}/DejaVuSans-Bold.ttf"))
     elif LANG == "ur":
-        # Nastaliq for body, Naskh/Arabic sans for labels & tables
-        pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoNastaliqUrdu.ttf")))
-        pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoNastaliqUrdu.ttf")))
+        # Naskh (Noto Sans Arabic) for body — ReportLab's Nastaliq subsetting
+        # drops glyph outlines, so Nastaliq is only used for display headings
+        # when it survives; body text stays in the reliable Naskh face.
+        pdfmetrics.registerFont(TTFont("Serif", str(FONTS / "NotoSansArabic.ttf")))
+        pdfmetrics.registerFont(TTFont("Serif-Bold", str(FONTS / "NotoSansArabic.ttf")))
         pdfmetrics.registerFont(TTFont("Sans", str(FONTS / "NotoSansArabic.ttf")))
         pdfmetrics.registerFont(TTFont("Sans-Bold", str(FONTS / "NotoSansArabic.ttf")))
     else:  # hi
@@ -97,7 +106,18 @@ register_fonts()
 def S(name, **kw):
     base = dict(fontName="Serif", fontSize=9.5, leading=13.2, textColor=INK,
                 alignment=TA_JUSTIFY, spaceBefore=0, spaceAfter=4)
+    if LANG == "ur":
+        # Right-to-left paragraph engine: wordWrap="RTL" drives ReportLab's
+        # bidi reordering + HarfBuzz shaping; alignment is mirrored below.
+        base["wordWrap"] = "RTL"
+        base["leading"] = 16.5
     base.update(kw)
+    if LANG == "ur":
+        al = base.get("alignment")
+        if al == TA_LEFT:
+            base["alignment"] = TA_RIGHT
+        elif al == TA_RIGHT:
+            base["alignment"] = TA_LEFT
     return ParagraphStyle(name, **base)
 
 
@@ -155,6 +175,14 @@ ST = {
                spaceBefore=5, spaceAfter=1),
     "panel": S("panel", fontSize=8.6, leading=11.8, alignment=TA_LEFT, spaceAfter=2),
 }
+
+# RTL list defaults: bullets hang off the right edge in the Urdu edition
+if LANG == "ur":
+    RTL_LIST = dict(bulletDir="rtl", bulletAlign="right", rightIndent=14)
+    RTL_BULLET = dict(rightIndent=12)
+else:
+    RTL_LIST = {}
+    RTL_BULLET = {}
 
 # ---------------------------------------------------------------- text utils
 EMOJI_RE = re.compile(
@@ -335,6 +363,10 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
         widths = [avail * w for w in col_widths]
     else:
         widths = [avail / n_cols] * n_cols
+    if LANG == "ur":
+        # Right-to-left reading order: last column is read first.
+        data = [list(reversed(r)) for r in data]
+        widths = list(reversed(widths))
     total = sum(widths)
     widths = [w * avail / total for w in widths]
     t = Table(data, colWidths=widths, repeatRows=1 if headers else 0)
@@ -429,10 +461,11 @@ def md_to_flowables(md: str, style=None) -> list:
                 items.append(re.sub(r"^[-*•]\s+", "", lines[i].strip()))
                 i += 1
             out.append(ListFlowable(
-                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=12)
+                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=12,
+                          **RTL_BULLET)
                  for it in items],
                 bulletType="bullet", start="•", leftIndent=14,
-                bulletFontName="Sans", bulletFontSize=7,
+                bulletFontName="Sans", bulletFontSize=7, **RTL_LIST,
             ))
             continue
         if re.match(r"^\d+[.)]\s+", s):
@@ -441,10 +474,11 @@ def md_to_flowables(md: str, style=None) -> list:
                 items.append(re.sub(r"^\d+[.)]\s+", "", lines[i].strip()))
                 i += 1
             out.append(ListFlowable(
-                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=14)
+                [ListItem(safe_para(inline_md(it), ST["bullet"]), leftIndent=14,
+                          **RTL_BULLET)
                  for it in items],
                 bulletType="1", leftIndent=18,
-                bulletFontName="Sans", bulletFontSize=8,
+                bulletFontName="Sans", bulletFontSize=8, **RTL_LIST,
             ))
             continue
         buf = [s]

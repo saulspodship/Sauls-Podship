@@ -1,51 +1,109 @@
-name: Translate book data
+name: Translate book data (ur + hi)
+
+# The archive is ~2.2M characters of prose. A single runner would take hours,
+# so translation is sharded across a matrix, one runner per shard, then merged
+# and committed once by the merge job.
+
 on:
   workflow_dispatch:
     inputs:
-      langs:
-        description: "Comma-separated langs"
-        default: "ur,hi"
+      shards:
+        description: "Shards per language"
+        required: false
+        default: "16"
+  push:
+    paths:
+      - "book/data/*.json"
+      - "book/translate_shard.py"
+      - "book/merge_shards.py"
+      - "book/i18n_common.py"
+      - ".github/workflows/translate-book-data.yml"
+
+concurrency:
+  group: book-i18n
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
 jobs:
-  translate:
+  shard:
+    name: ${{ matrix.lang }} shard ${{ matrix.index }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        lang: [ur, hi]
+        index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: arena/53b2d966-sauls-podship
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install argostranslate
-        run: pip install argostranslate
-      - name: Install models and translate
+      - name: Install argostranslate + models
         run: |
           set -eux
+          pip install argostranslate
           python - <<'PY'
           import argostranslate.package as pkg
-          import argostranslate.translate as tr
           pkg.update_package_index()
-          for to in ("ur", "hi"):
-              pkgs = [p for p in pkg.get_available_packages()
-                      if p.from_code == "en" and p.to_code == to]
-              if not pkgs:
-                  raise SystemExit(f"no package for en->{to}")
-              print("installing", pkgs[0])
-              pkg.install_from_path(pkgs[0].download())
-          print("installed:", tr.get_installed_languages())
+          pkgs = [p for p in pkg.get_available_packages()
+                  if p.from_code == "en" and p.to_code == "${{ matrix.lang }}"]
+          if not pkgs:
+              raise SystemExit("no package for en->${{ matrix.lang }}")
+          path = pkgs[0].download()
+          print("installing", pkgs[0], "->", path)
+          pkg.install_from_path(path)
+          from argostranslate import translate
+          print("installed:", sorted(l.code for l in translate.get_installed_languages()))
           PY
-      - name: Run translation script
+      - name: Translate shard
         run: |
-          python book/translate_data.py ur hi
+          set -eux
+          python book/translate_shard.py ${{ matrix.lang }} ${{ matrix.index }} 16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.lang }}-${{ matrix.index }}
+          path: book/data/i18n/_shard_${{ matrix.lang }}_${{ matrix.index }}.json
+          if-no-files-found: error
+          retention-days: 7
+
+  merge:
+    name: merge and publish
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          path: book/data/i18n
+          pattern: shard-*
+          merge-multiple: true
+      - name: Merge shards
+        run: |
+          set -eux
+          ls -la book/data/i18n | head -40
+          python book/merge_shards.py ur
+          python book/merge_shards.py hi
+          du -sh book/data/i18n
       - name: Commit translations
         run: |
           set -eux
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b book-i18n
-          git add -f book/data/i18n/
-          git commit -m "i18n: translate book data to ur + hi" || echo "nothing to commit"
-          git push -u origin book-i18n
+          git checkout -B book-i18n
+          git add -f book/data/i18n
+          git status --short | head -40
+          if git diff --cached --quiet; then
+            echo "NOTHING_STAGED"
+            exit 1
+          fi
+          git commit -m "i18n: translate book data to ur + hi"
+          git push -u origin book-i18n --force
           echo PUSH_OK
