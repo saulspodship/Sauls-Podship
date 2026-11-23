@@ -160,10 +160,19 @@ ST = {
 EMOJI_RE = re.compile(
     "[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF\U00002190-\U000021FF\U00002B00-\U00002BFF⬀-⯿]"
 )
+def _chip(hex_color: str, glyph: str = "■") -> str:
+    return f'<font color="{hex_color}">{glyph}</font>'
+
+
+# Coloured square emojis keep their hue as ■ chips so colour keys stay colourful.
 EMOJI_MAP = {
-    "🟦": "■", "🟥": "■", "🟨": "■", "🟩": "■", "🟪": "■", "🟧": "■", "🟫": "■",
-    "⚫": "■", "⚪": "■", "🔘": "■", "✨": "★", "🔥": "▲", "🔵": "●",
-    "✅": "✓", "❌": "✗", "⭐": "★", "📖": "▣", "✟": "✝", "☦": "✝",
+    "🟦": _chip("#2563EB"), "🟥": _chip("#DC2626"), "🟨": _chip("#CA8A04"),
+    "🟩": _chip("#16A34A"), "🟪": _chip("#9333EA"), "🟧": _chip("#EA580C"),
+    "🟫": _chip("#92400E"),
+    "⚫": _chip("#1F2937"), "⚪": _chip("#9CA3AF"), "🔘": _chip("#6B7280"),
+    "🔵": _chip("#2563EB", "●"), "✨": "★", "🔥": _chip("#DC2626", "▲"),
+    "✅": "✓", "❌": "✗", "⭐": _chip("#CA8A04", "★"),
+    "📖": "▣", "✟": "✝", "☦": "✝",
 }
 AR_DIGIT_TABLE = str.maketrans(
     "٠١٢٣٤٥٦٧٨٩"  # Arabic-Indic
@@ -482,7 +491,10 @@ class BookDoc(BaseDocTemplate):
                          half - lm - rm, BOOK_H - 14 * mm - 14 * mm,
                          id=fid)
         self.addPageTemplates([
-            PageTemplate(id="cover", frames=[Frame(0, 0, PAGE_W, PAGE_H, 0, 0, 0, 0, id="cover")],
+            # front cover sits on the recto (right half), inset inside the gold border
+            PageTemplate(id="cover",
+                         frames=[Frame(BOOK_W + 16 * mm, 0, BOOK_W - 32 * mm, PAGE_H,
+                                       0, 0, 0, 0, id="cover")],
                          onPage=self._cover_page),
             PageTemplate(id="front", frames=[half_frame("R", "front")],
                          onPageEnd=lambda c, d: self._side_page(c, d, "front")),
@@ -612,6 +624,8 @@ class BookDoc(BaseDocTemplate):
     def beforeDocument(self):
         self.chapter_label = ""
         self.part_label = ""
+        self._pending_tpl = "cover"
+        self.pageTemplate = self._tpls["cover"]
 
     def afterFlowable(self, flowable):
         if isinstance(flowable, Paragraph):
@@ -723,7 +737,8 @@ def build():
 
     # ================= COVER =================
     story += [
-        Spacer(1, 58 * mm),
+        NextPageTemplate("cover"),
+        Spacer(1, 34 * mm),  # clear the wine banner drawn by _cover_page
         Paragraph("THE COMPLETE KNOWLEDGE BOOK", ST["cover_kicker"]),
         Spacer(1, 5 * mm),
         Paragraph("Saul's Podship", ST["cover_title"]),
@@ -740,7 +755,7 @@ def build():
     if not hero_path.exists():
         hero_path = ROOT / "public/images/volumes/all-bible-stories/hero-1920.jpg"
     if hero_path.exists():
-        story += img_flowable(hero_path, BOOK_W - 30 * mm, 70 * mm)
+        story += img_flowable(hero_path, BOOK_W - 36 * mm, 50 * mm)
     story += [
         Spacer(1, 3 * mm),
         Paragraph(
