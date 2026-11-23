@@ -1,0 +1,278 @@
+[
+ {
+  "key": "abraham-journey",
+  "name": "Abraham's Journey",
+  "img": "/images/maps/abraham-journey.png",
+  "stops": [
+   [
+    63,
+    76,
+    "Ur of the Chaldees"
+   ],
+   [
+    65.5,
+    25,
+    "Haran"
+   ],
+   [
+    75,
+    60,
+    "Canaan — Shechem · Bethel · Hebron"
+   ]
+  ]
+ },
+ {
+  "key": "exodus",
+  "name": "The Exodus from Egypt",
+  "img": "/images/maps/exodus.png",
+  "stops": [
+   [
+    29,
+    35,
+    "Rameses"
+   ],
+   [
+    19,
+    30,
+    "Succoth"
+   ],
+   [
+    36,
+    44,
+    "Pi-hahiroth — the Sea crossing"
+   ],
+   [
+    41,
+    43,
+    "Elim · Mount Sinai"
+   ],
+   [
+    53,
+    53,
+    "Wilderness of Paran"
+   ],
+   [
+    75,
+    28,
+    "Kadesh-barnea"
+   ],
+   [
+    80,
+    23,
+    "Beersheba → Hebron"
+   ]
+  ]
+ },
+ {
+  "key": "paul-journeys",
+  "name": "Paul's Missionary Journeys",
+  "img": "/images/maps/paul-journeys.png",
+  "stops": [
+   [
+    34,
+    91,
+    "Jerusalem"
+   ],
+   [
+    62,
+    71,
+    "Antioch of Syria"
+   ],
+   [
+    64,
+    52,
+    "Seleucia"
+   ],
+   [
+    59,
+    67,
+    "Tarsus"
+   ],
+   [
+    50,
+    45,
+    "Derbe"
+   ],
+   [
+    61,
+    44,
+    "Iconium"
+   ],
+   [
+    51,
+    40,
+    "Antioch of Pisidia"
+   ],
+   [
+    31,
+    49,
+    "Attalia"
+   ],
+   [
+    33,
+    42,
+    "Athens"
+   ],
+   [
+    23,
+    28,
+    "Berea"
+   ],
+   [
+    23,
+    33,
+    "Philippi"
+   ]
+  ]
+ },
+ {
+  "key": "seven-churches",
+  "name": "The Seven Churches of Revelation",
+  "img": "/images/maps/seven-churches.png",
+  "stops": [
+   [
+    36,
+    58,
+    "Ephesus"
+   ],
+   [
+    44,
+    64,
+    "Smyrna"
+   ],
+   [
+    44,
+    42,
+    "Pergamum"
+   ],
+   [
+    48,
+    47,
+    "Thyatira"
+   ],
+   [
+    45,
+    50,
+    "Sardis"
+   ],
+   [
+    50,
+    55,
+    "Philadelphia"
+   ],
+   [
+    53,
+    75,
+    "Laodicea"
+   ],
+   [
+    36,
+    58,
+    "Return to Ephesus"
+   ]
+  ]
+ },
+ {
+  "key": "holy-land-jesus",
+  "name": "The Holy Land in the Time of Jesus",
+  "img": "/images/maps/holy-land-jesus.png",
+  "stops": [
+   [
+    52,
+    20,
+    "Nazareth of Galilee"
+   ],
+   [
+    37,
+    37,
+    "Capernaum"
+   ],
+   [
+    55,
+    47,
+    "Jericho"
+   ],
+   [
+    54,
+    70,
+    "Bethlehem"
+   ],
+   [
+    50,
+    60,
+    "Jerusalem"
+   ]
+  ]
+ },
+ {
+  "key": "kingdom-israel-judah",
+  "name": "Kingdom of Israel & Judah",
+  "img": "/images/maps/kingdom-israel-judah.png",
+  "stops": [
+   [
+    45,
+    44,
+    "Samaria — capital of the 10 tribes"
+   ],
+   [
+    85,
+    16,
+    "→ Assyria (722 BC)"
+   ],
+   [
+    34,
+    87,
+    "Jerusalem — capital of Judah"
+   ]
+  ]
+ },
+ {
+  "key": "ancient-near-east",
+  "name": "Ancient Near East — Empires & Exiles",
+  "img": "/images/maps/ancient-near-east.png",
+  "stops": [
+   [
+    38,
+    50,
+    "Israel (Samaria)"
+   ],
+   [
+    62,
+    36,
+    "Assyrian exile — 722 BC"
+   ],
+   [
+    35,
+    68,
+    "Judah (Jerusalem)"
+   ],
+   [
+    55,
+    66,
+    "Babylonian exile — 586 BC"
+   ]
+  ]
+ },
+ {
+  "key": "roman-empire-jesus",
+  "name": "The Roman Empire in Jesus’ Time",
+  "img": "/images/maps/roman-empire-jesus.png",
+  "stops": [
+   [
+    64,
+    64,
+    "Jerusalem"
+   ],
+   [
+    70,
+    58,
+    "Antioch — believers first called Christians"
+   ],
+   [
+    28,
+    46,
+    "Rome — the gospel to the ends of the earth"
+   ]
+  ]
+ }
+]

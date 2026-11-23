@@ -42,3 +42,10 @@ book/data/
 book/_imgtmp/
 book/__pycache__/
 .bookenv/
+
+# book/data JSON sources are required by CI translation (override earlier ignore)
+!book/data/
+!book/data/*.json
+!book/data/i18n/
+!book/data/i18n/**
+book/data/_imgtmp/

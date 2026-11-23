@@ -1,0 +1,171 @@
+{
+  "apps": [
+    {
+      "id": "biblical-languages",
+      "name": "Biblical Languages",
+      "url": "https://biblicallanguages.saulspodship.com/",
+      "logo": "/images/apps/biblical-languages.webp",
+      "category": "Original-language study",
+      "description": "Study Biblical Hebrew, Koine Greek, Biblical Aramaic and Vulgate Latin through lessons, vocabulary and verse-by-verse tools.",
+      "isAccessibleForFree": true,
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "id": "sunday-school",
+      "name": "Saul's Sunday School",
+      "url": "https://saulssundayschool.saulspodship.com/",
+      "logo": "/images/apps/sunday-school.webp",
+      "category": "For children & families",
+      "description": "Free, ad-free Bible learning for children ages 3–12, with narrated stories, games, quizzes and memory verses.",
+      "isAccessibleForFree": true,
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "id": "evangelism",
+      "name": "Evangelism",
+      "url": "https://evangelism.saulspodship.com/",
+      "logo": "/images/apps/evangelism.svg",
+      "category": "Faith in action",
+      "description": "A Scripture-rooted field guide to sharing the gospel with grace, with conversation prompts and practical training resources.",
+      "isAccessibleForFree": true,
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "id": "biblical-cosmos-3d",
+      "name": "Biblical Cosmos 3D",
+      "url": "https://biblicalcosmos3d.saulspodship.com/",
+      "logo": "/images/apps/biblical-cosmos-3d.svg",
+      "category": "Interactive Bible study",
+      "description": "Explore biblical cosmology and cited Scripture in an interactive 3D interpretation—not a scientific model of the universe.",
+      "isAccessibleForFree": true,
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "id": "biblical-numerology-etymology",
+      "name": "Biblical Numerology & Etymology",
+      "url": "https://biblicalnumerologyandetymology.saulspodship.com/",
+      "logo": "/images/apps/biblical-numerology-etymology.svg",
+      "category": "Numbers & word origins",
+      "description": "Explore letter values, word histories and biblical text matches in Gematria Lab, with transparent calculations and cited sources.",
+      "isAccessibleForFree": true,
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "id": "faithconnect-pro",
+      "name": "FaithConnect Pro",
+      "url": "https://faithconnectpro.saulspodship.com/",
+      "logo": "/images/apps/faithconnect-pro.svg",
+      "category": "Christian community & careers",
+      "description": "Connect with a Christian community for careers, networking, learning, prayer and a faith-based marketplace.",
+      "isAccessibleForFree": null,
+      "applicationCategory": "SocialNetworkingApplication"
+    }
+  ],
+  "directory_intro": "From children's Bible learning and original-language study to evangelism, biblical numerology and Christian community, our dedicated apps serve families, churches and curious readers in Pakistan and around the world.",
+  "about_faq": [
+    {
+      "question": "What is Saul's Podship?",
+      "answer": "Saul's Podship is an open-access Christian digital ministry  and study library, with a 51-volume theological encyclopedia, sacred music and podcasts, and a family of dedicated apps."
+    },
+    {
+      "question": "Which websites are part of Saul's Podship?",
+      "answer": "Our dedicated public apps are [our public apps] ([our public apps])`).join('; ')}. Each is a Saul's Podship project with its own website."
+    },
+    {
+      "question": "Where can I learn biblical Hebrew and Greek?",
+      "answer": "Biblical Languages offers lessons and verse study in Biblical Hebrew, Koine Greek, Biblical Aramaic and Vulgate Latin, along with vocabulary and review tools."
+    },
+    {
+      "question": "Is there a Bible learning app for children?",
+      "answer": "Saul's Sunday School is a free, ad-free Bible learning app for children ages 3–12, with narrated stories, games, quizzes and memory verses."
+    },
+    {
+      "question": "What is the Evangelism field guide?",
+      "answer": "Evangelism is a Scripture-rooted guide to sharing the good news of Jesus with clarity and respect. It includes conversation prompts, a testimony-writing aid and a library of practical field guides."
+    },
+    {
+      "question": "What is Biblical Cosmos 3D?",
+      "answer": "Biblical Cosmos 3D is an interactive interpretation of biblical cosmological imagery with linked Scripture passages. It is a study aid, not a scientific or scale model of the universe."
+    },
+    {
+      "question": "What is Biblical Numerology & Etymology?",
+      "answer": "Gematria Lab is a research workspace for exploring letter values, word histories and biblical text matches with transparent calculations and cited sources. Numerical patterns are not proof of meaning or causation."
+    },
+    {
+      "question": "What is FaithConnect Pro?",
+      "answer": "FaithConnect Pro brings together a Christian community with career opportunities, networking, learning, prayer and a faith-based marketplace."
+    },
+    {
+      "question": "Are Saul's Podship resources free and available worldwide?",
+      "answer": "Many Saul's Podship resources, including this library, are free to explore online and available to readers around the world. Features and account requirements may vary by app. Saul's Sunday School also offers narration in English, Urdu, Hindi and Arabic."
+    }
+  ],
+  "faq": [
+    {
+      "question": "What is Saul's Podship?",
+      "answer": "An interactive theological encyclopedia and digital ministry: 51 volumes, the Biblical Prophecy Map, the Kings of the Bible throne line, 400 comparative apologetics questions, and the Punjabi Zaboor archive — freely accessible worldwide."
+    },
+    {
+      "question": "What do the fulfilment tags on the Prophecy Map mean?",
+      "answer": "Every one of the 247 prophecies carries three interpretive lenses — Historical (preterist/historicist reading), Metaphorical (idealist/spiritual reading) and Futurist (literal awaiting reading) — so you can see which school of theology counts each prophecy complete."
+    },
+    {
+      "question": "Who is the first King in the Kings of the Bible module?",
+      "answer": "Jesus the Messiah — King of Kings and Lord of Lords, the Alpha and the Omega — before Saul, David and Solomon; the line closes with the final counterfeit king, the Beast."
+    },
+    {
+      "question": "Is the Punjabi Zaboor archive complete?",
+      "answer": "Yes — the complete historical record of 150 biblical Psalms versified into Punjabi classical meters by Imam-ud-Din Shahbaz (1908), with the living archive of Pakistani gospel musicians."
+    },
+    {
+      "question": "Are the new biblical maps interactive?",
+      "answer": "Yes — eight journey maps with animated footsteps tracing Abraham, the Exodus, Paul, the Seven Churches and more, stop by stop."
+    },
+    {
+      "question": "Is Saul's Podship free?",
+      "answer": "Yes. Every volume, atlas, archive and podcast is freely accessible; the ministry is sustained by voluntary support and prayer."
+    },
+    {
+      "question": "How many volumes are in the encyclopedia?",
+      "answer": "This library contains 51 volumes covering biblical exegesis, historical theology, devotional and reference subjects."
+    },
+    {
+      "question": "What are the companion modules?",
+      "answer": "The Biblical Prophecy Map, Kings of the Bible, the Interlinked Bible and Comparative Apologetics — interactive charts woven from the same scholarship, linked by routing buttons at the bottom of every volume."
+    },
+    {
+      "question": "Are the volumes free to read?",
+      "answer": "Yes — every volume, table and FAQ is freely readable online."
+    },
+    {
+      "question": "How is the codex organized?",
+      "answer": "100 questions per tradition, each with Context, Mainstream Position & Primary Sources, Christian Apologetic Response, and Points for Respectful Discussion."
+    },
+    {
+      "question": "What is the method?",
+      "answer": "Represent other traditions accurately and charitably before answering — persuasion through honesty, not mockery; weak or fabricated hadith are never used as authoritative."
+    },
+    {
+      "question": "Can I search and sort the questions?",
+      "answer": "Yes — by book order, by most-asked in Pakistan & India, or A–Z."
+    },
+    {
+      "question": "Why is geographical context vital for reading the Bible?",
+      "answer": "Revelation happened in real places: elevation, water and borderlands shape the meaning of campaigns, covenants and parables."
+    },
+    {
+      "question": "Where did the Exodus route travel?",
+      "answer": "Rameses → Succoth → the sea crossing → Sinai → Kadesh-barnea → Moab; the interactive map walks this spine."
+    },
+    {
+      "question": "How many missionary journeys did Paul make?",
+      "answer": "Three recorded journeys plus the voyage to Rome — over 10,000 miles."
+    }
+  ],
+  "faq_summaries": [
+    "Saul’s Podship is a biblical ministry project presenting an interactive theological encyclopedia for believers and scholars worldwide: 51 volumes from Eden to the New Jerusalem; a Biblical Prophecy Map tagging all 247 prophecies by historical, metaphorical and futurist fulfilment; the Kings of the Bible throne line from Jesus the King of Kings to the final Beast; 400 comparative apologetics questions across Islam, Judaism, Hinduism and Sikhism; and the living archive of Punjabi Zaboor hymnody — 150 Psalms in classical Punjabi meters — fulfilling the vision of worship in Spirit and Truth from Karachi to the nations.",
+    "The complete library catalog: 51 volumes across scholarly exegesis, historical theology, devotional, reference and hymnology categories — with data tables, FAQs, timelines, original-language transliteration and scriptural references.",
+    "A Christian’s guide to comparative apologetics: 400 of the hardest objections raised in dialogue with Islam, Judaism, Hinduism and Sikhism — 100 per tradition — each answered with context, primary sources, a fair statement of the other side, and a Christian response; searchable, sortable, and ranked by what is most asked in Pakistan & India.",
+    "Biblical Maps, Volume 11: a visual atlas of sacred topography — the land bridge of Canaan, the Exodus spine, Paul’s 10,000 miles, the Jordan Rift — now with an interactive journey atlas whose footsteps walk each route, and the world map at the foot of the volume."
+  ]
+}
