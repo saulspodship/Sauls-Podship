@@ -16,6 +16,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import i18n_common as C
 
+# Mirrors gt_shard.is_garbage: values that are only markers/punctuation/empty.
+GARBAGE_RE = __import__("re").compile(r"^[\uf8f00-9\s\d;:,.\-\u061f]*$")
+
+
+def is_garbage(value: str) -> bool:
+    return not value.strip() or bool(GARBAGE_RE.match(value.strip()))
+
 
 def main(argv):
     if not argv:
@@ -48,10 +55,19 @@ def main(argv):
             "strings translated"
         )
 
+    # A few hundred strings are nothing but a Bible reference. Translating
+    # them is meaningless and, before the pin guard, they came back as "0";
+    # fall back to the source text rather than print a digit.
+    def pick(s):
+        value = table.get(s)
+        if value is None or is_garbage(value):
+            return s
+        return value
+
     out_dir = C.I18N / lang
     for src in C.source_files():
         obj = C.load_json(src)
-        out = C.walk(obj, lambda s: table.get(s, s))
+        out = C.walk(obj, pick)
         dest = out_dir / src.name
         C.dump_json(dest, out)
         print(f"  {src.name} → {dest.relative_to(C.DATA.parent)}", flush=True)
