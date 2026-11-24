@@ -6,7 +6,7 @@ Outputs book/Sauls-Podship-Compendium[-ur|-hi].pdf
 """
 from __future__ import annotations
 
-import json, re, os, sys, datetime, html as htmllib
+import json, re, os, sys, datetime, hashlib, html as htmllib
 from pathlib import Path
 from collections import defaultdict
 
@@ -22,6 +22,12 @@ from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY, TA_RIGHT
+import reportlab.rl_config as _rl_config
+
+# Fixed creation date and document ids, so rebuilding unchanged data produces
+# a byte-identical file instead of a fresh 44 MB blob in git.
+_rl_config.invariant = 1
+
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
@@ -344,7 +350,11 @@ def load(name):
 def prep_image(path: Path, max_w: float, max_h: float, quality: int = 84) -> Path | None:
     if not path.exists():
         return None
-    key = f"{abs(hash((str(path), max_w, max_h, quality)))}.jpg"
+    # Stable cache name: str hashing is randomised per process, so a plain
+    # hash() gave every build its own XObject names and a different file.
+    key = hashlib.sha1(
+        f"{path}|{max_w}|{max_h}|{quality}".encode("utf-8")
+    ).hexdigest() + ".jpg"
     out = IMG_TMP / key
     if out.exists():
         return out
@@ -2311,7 +2321,15 @@ def build():
     print(f"Story flowables: {len(flat)}")
     story = flat
     print("Building PDF (pass 1 — layout & TOC)…")
+    # Pin the metadata so two builds of the same data produce byte-identical
+    # files.  Without this the creation date changes on every run and each
+    # 44 MB PDF lands in git as a new blob.
     doc = BookDoc(str(OUT_PDF))
+    doc.title = "Saul's Podship Compendium"
+    doc.author = "Saul's Podship"
+    doc.subject = "Theological archive"
+    doc.creator = "Saul's Podship build"
+    doc.invariant = 1
     doc.multiBuild(story)
     size = OUT_PDF.stat().st_size
     print(f"Done → {OUT_PDF} ({size/1e6:.1f} MB)")
