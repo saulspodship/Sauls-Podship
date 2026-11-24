@@ -1419,6 +1419,9 @@ _CAPTIONS = {
         "Hindi Scripture: standard Hindi Bible": "صحیفہ: معیاری ہندی بائبل",
         "Representative": "مثالی", "Photo": "تصویر",
         "Theme": "موضوع", "Connections": "ربط", "Characters": "کردار",
+        "Related volumes": "متعلقہ جلدیں", "Related volumes:": "متعلقہ جلدیں:",
+        "Theme:": "موضوع:", "Connections:": "ربط:", "Characters:": "کردار:",
+        "Panel": "منظر", "Detail": "تفصیل", "Era": "دور",
         "Article": "مضمون", "Video": "ویڈیو", "Asked in": "پوچھا گیا",
         "Updated": "تازہ کاری", "Part": "حصہ", "Part 3": "حصہ 3",
         "Summary": "خلاصہ", "Summary:": "خلاصہ:",
@@ -1462,6 +1465,11 @@ _CAPTIONS = {
         "Founder": "संस्थापक", "Biblical date": "बाइबलीय तिथि",
         "Claim": "दावा", "Books": "पुस्तकें", "Catholic": "कैथोलिक",
         "Updated": "अद्यतन", "Summary": "सार", "Summary:": "सार:",
+        "Theme": "विषय", "Connections": "संबंध", "Characters": "पात्र",
+        "Theme:": "विषय:", "Connections:": "संबंध:", "Characters:": "पात्र:",
+        "Panel": "दृश्य", "Detail": "विवरण", "Era": "युग",
+        "Related volumes:": "संबंधित खंड:",
+        "Related volumes": "संबंधित खंड", "Article": "लेख", "Video": "वीडियो",
         "Volume": "खंड", "Chapter": "अध्याय", "Context": "पृष्ठभूमि", "Part": "भाग",
         "Orthodox": "ऑर्थोडॉक्स", "Protestant": "प्रोटेस्टेंट",
         "Anglican": "एंग्लिकन", "Pentecostal": "पेंटेकोस्टल",
@@ -2424,7 +2432,7 @@ def build_volume_chapter(v: dict) -> list:
                 while len(row) < 3:
                     row.append("")
                 key_rows.append(row)
-            flow += make_table(["Era", "Era", "Era"], key_rows,
+            flow += make_table([chrome("Era")] * 3, key_rows,
                                col_widths=[0.34, 0.33, 0.33], font_size=7.2)
         rows = []
         for p in panels:
@@ -2445,7 +2453,8 @@ def build_volume_chapter(v: dict) -> list:
                 f"<font color='{era_col}'>{p.get('era','')}</font>",
                 "<br/>".join(b for b in bits if b),
             ])
-        flow += make_table(["Panel", "Detail"], rows, col_widths=[0.32, 0.68])
+        flow += make_table([chrome("Panel"), chrome("Detail")], rows,
+                           col_widths=[0.32, 0.68])
     profiles = c.get("characterProfiles") or []
     if profiles:
         flow += [CondPageBreak(30 * mm), sub_h("Character profiles")]
@@ -2504,7 +2513,8 @@ def build_volume_chapter(v: dict) -> list:
                      para(inline_md(f.get("a", "")), ST["body"])]
     rel = v.get("relatedVolumes") or []
     if rel:
-        flow += [para("<b>Related volumes:</b> " + clean(", ".join(rel)), ST["small"])]
+        flow += [para(f"<b>{chrome('Related volumes:')}</b> " + clean(", ".join(rel)),
+                      ST["small"])]
     links = []
     if v.get("articleLink"):
         links.append(chrome(f"Article: {v['articleLink']}"))
