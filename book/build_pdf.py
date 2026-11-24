@@ -1389,6 +1389,11 @@ _CAPTIONS = {
         "Colour key": "رنگوں کی کلید", "Colour key by era": "دور کے مطابق رنگوں کی کلید",
         "Catholic": "کیتھولک", "Orthodox": "آرتھوڈکس", "Protestant": "پروٹسٹنٹ",
         "Common answer": "عام جواب", "Featured": "نمایاں",
+        "Tier 1 — Most asked": "درجہ 1 — سب سے زیادہ پوچھے گئے",
+        "Tier 2 — Common": "درجہ 2 — عام",
+        "Tier 3 — Advanced": "درجہ 3 — اعلیٰ",
+        "Scholarly": "علمی", "History": "تاریخ", "Devotional": "عبادتی",
+        "Reference": "حوالہ", "Quora": "کورا", "Yes": "ہاں", "None": "کوئی نہیں",
         "Anglican": "اینگلیکن", "Pentecostal": "پینتی کاسٹل", "Rep.": "مثالی",
         "The cross reference data is credited to openbible.info.":
             "کراس ریفرنس کا ڈیٹا openbible.info کے تعاون سے ہے۔",
@@ -1413,6 +1418,10 @@ _CAPTIONS = {
         "Music and Podcasts": "संगीत और पॉडकास्ट",
         "Thank you for reading": "पढ़ने के लिए धन्यवाद",
         "Representative": "प्रतिनिधि", "Photo": "चित्र", "Rep.": "प्रतिनिधि",
+        "Tier 1 — Most asked": "स्तर 1 — सबसे अधिक पूछे गए",
+        "Tier 2 — Common": "स्तर 2 — सामान्य",
+        "Tier 3 — Advanced": "स्तर 3 — उच्च",
+        "Scholarly": "विद्वत्तापूर्ण", "History": "इतिहास", "Devotional": "भक्ति",
         "Founder": "संस्थापक", "Biblical date": "बाइबलीय तिथि",
         "Claim": "दावा", "Books": "पुस्तकें", "Catholic": "कैथोलिक",
         "Orthodox": "ऑर्थोडॉक्स", "Protestant": "प्रोटेस्टेंट",
@@ -1774,7 +1783,9 @@ def build():
 
     story += chapter_head("", "One Hundred Tough Questions", kicker="Part 5",
                           hero=hero("images/volumes/jesus-is-god-full-references-ot-nt/hero-1920.jpg"))
-    tier_names = {1: "Tier 1 — Most asked", 2: "Tier 2 — Common", 3: "Tier 3 — Advanced"}
+    tier_names = {1: chrome("Tier 1 — Most asked"),
+                  2: chrome("Tier 2 — Common"),
+                  3: chrome("Tier 3 — Advanced")}
     view_names = {
         "catholic": chrome("Catholic"), "orthodox": chrome("Orthodox"),
         "protestant": chrome("Protestant"), "anglican": chrome("Anglican"),
@@ -2185,7 +2196,8 @@ def build_volume_chapter(v: dict) -> list:
             hero = None
     flow = chapter_head("", v["title"], v.get("subtitle"), hero=hero,
                         kicker=f"Part 1 · Volume {v['number']:02d}")
-    meta = [v.get("category", "").title(), chrome(f"Updated {v.get('lastUpdated','')}")]
+    meta = [chrome(v.get("category", "").title()) if v.get("category") else "",
+            chrome(f"Updated {v.get('lastUpdated','')}")]
     if v.get("featured"):
         meta.append(chrome("Featured"))
     flow += [para(" · ".join(m for m in meta if m), ST["small"])]

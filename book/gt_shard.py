@@ -73,7 +73,14 @@ def protect(text: str) -> tuple[str, list[str]]:
 
     out = re.sub(r"\[([^\]]*)\]\(([^)]*)\)", r"\1", text)
     out = out.replace("**", "")
-    out = VERSE_RE.sub(_pin, out)
+    # Pin only inside prose that has words around it. A string that is nothing
+    # but a reference ("Acts 1:1") would otherwise reduce to a bare marker and
+    # come back as "0" -- 110 of those were written to the cache before this
+    # guard existed.
+    leftover = re.findall(r"[A-Za-z]{3,}", VERSE_RE.sub(" ", out))
+    has_prose = len(leftover) >= 2
+    if has_prose:
+        out = VERSE_RE.sub(_pin, out)
     return out, pins
 
 
@@ -133,6 +140,16 @@ def _request(text: str, lang: str, tries: int = 5) -> str:
     raise RuntimeError(f"translate failed for {text[:60]!r}: {last}")
 
 
+def is_garbage(value: str) -> bool:
+    """True when a translation is empty punctuation or a bare pin marker."""
+    stripped = value.strip()
+    if not stripped:
+        return True
+    if re.fullmatch(r"[\uf8f00-9\s\d;:,.\-\u061f]*", stripped):
+        return True
+    return False
+
+
 def translate(text: str, lang: str, cache: dict) -> str:
     key = hashlib.sha1(f"{lang}\x00{text}".encode("utf-8")).hexdigest()
     if key in cache:
@@ -164,6 +181,12 @@ def main(argv):
     out_path = C.I18N / f"_shard_{lang}_{index}_{limit or 0}.json"
     # Seed from this shard's own file so a re-run resumes rather than repeats.
     done = C.load_json(out_path, {})
+    # drop anything a previous failed attempt wrote that is not a translation
+    bad = [k for k, v in done.items() if is_garbage(v)]
+    for k in bad:
+        del done[k]
+    if bad:
+        print(f"[gt {lang}/{index}] discarded {len(bad)} bad prior entries", flush=True)
     todo = [s for s in mine if s not in done]
     if limit:
         todo = todo[:limit]
@@ -181,7 +204,7 @@ def main(argv):
         except Exception as exc:
             print(f"  ! {exc}", flush=True)
             continue
-        if out and out != s:
+        if out and out != s and not is_garbage(out):
             done[s] = out
         if n % 25 == 0:
             C.dump_json(out_path, done)
