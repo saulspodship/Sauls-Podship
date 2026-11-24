@@ -8,7 +8,7 @@
       "category": "اصل زبان کا مطالعہ",
       "description": "اسباق، الفاظ اور آیت بہ آیت ٹولز کے ذریعے بائبل کے عبرانی، کوئین یونانی، بائبلی آرامی اور ولگیٹ لاطینی کا مطالعہ کریں۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی عمل"
     },
     {
       "id": "sunday-school",
@@ -18,17 +18,17 @@
       "category": "بچوں اور خاندانوں کے لیے",
       "description": "3-12 سال کی عمر کے بچوں کے لیے مفت، اشتہار سے پاک بائبل سیکھنا، بیان کردہ کہانیوں، گیمز، کوئزز اور یادداشت کی آیات کے ساتھ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی عمل"
     },
     {
       "id": "evangelism",
-      "name": "Evangelism",
+      "name": "انجیل‌نویس",
       "url": "https://evangelism.saulspodship.com/",
       "logo": "/images/apps/evangelism.svg",
       "category": "عمل پر ایمان",
       "description": "گفتگو کے اشارے اور عملی تربیتی وسائل کے ساتھ، فضل کے ساتھ خوشخبری کو بانٹنے کے لیے کتاب سے جڑی فیلڈ گائیڈ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی عمل"
     },
     {
       "id": "biblical-cosmos-3d",
@@ -38,7 +38,7 @@
       "category": "انٹرایکٹو بائبل کا مطالعہ",
       "description": "بائبلی کاسمولوجی اور حوالہ شدہ صحیفے کو ایک انٹرایکٹو 3D تشریح میں دریافت کریں—نہ کہ کائنات کا کوئی سائنسی نمونہ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی عمل"
     },
     {
       "id": "biblical-numerology-etymology",
@@ -48,11 +48,11 @@
       "category": "نمبرز اور الفاظ کی ابتدا",
       "description": "Gematria لیب میں حروف کی قدروں، الفاظ کی تاریخوں اور بائبل کے متن کے مماثلتوں کو تلاش کریں، شفاف حساب کتاب اور حوالہ کردہ ذرائع کے ساتھ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی عمل"
     },
     {
       "id": "faithconnect-pro",
-      "name": "FaithConnect Pro",
+      "name": "ایمان کی بنیاد",
       "url": "https://faithconnectpro.saulspodship.com/",
       "logo": "/images/apps/faithconnect-pro.svg",
       "category": "عیسائی برادری اور کیریئر",
