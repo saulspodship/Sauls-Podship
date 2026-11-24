@@ -86,11 +86,17 @@ def register_fonts():
         pdfmetrics.registerFont(TTFont("Sans", f"{F}/DejaVuSans.ttf"))
         pdfmetrics.registerFont(TTFont("Sans-Bold", f"{F}/DejaVuSans-Bold.ttf"))
     elif LANG == "ur":
-        # Jameel Noori Nastaleeq for everything readable: it is the face Urdu
-        # readers actually expect, and ReportLab shapes and embeds it cleanly.
-        # Nastaliq needs deep descenders and stacked marks, so it is set at a
-        # larger size with generous leading (see ST below).
-        nastaliq = FONTS / "JameelNooriNastaleeq.ttf"
+        # Nastaliq for everything readable.  The shipped Jameel Noori file is
+        # broken: its glyph ids no longer match its cmap (14 character slots
+        # share one outline, and HarfBuzz receives glyph ids that do not line up
+        # with the glyf table it was built from).  Rendered, that shows up as
+        # nukta dots detached from their letters, marks thrown high above the
+        # word, and words sitting at different heights across the line.  Noto
+        # Nastaliq Urdu -- the same script style, properly built -- renders the
+        # identical strings cleanly, so it is the face the book is set in.
+        # Nastaliq needs deep descenders and stacked marks, so it is also set at
+        # a larger size with generous leading (see ST below).
+        nastaliq = FONTS / "NotoNastaliqUrdu-Static.ttf"
         pdfmetrics.registerFont(TTFont("Serif", str(nastaliq)))
         pdfmetrics.registerFont(TTFont("Serif-Bold", str(nastaliq)))
         pdfmetrics.registerFont(TTFont("Sans", str(nastaliq)))
@@ -1405,6 +1411,7 @@ _CAPTIONS = {
         "Theme": "موضوع", "Connections": "ربط", "Characters": "کردار",
         "Article": "مضمون", "Video": "ویڈیو", "Asked in": "پوچھا گیا",
         "Updated": "تازہ کاری", "Part": "حصہ", "Part 3": "حصہ 3",
+        "Summary": "خلاصہ", "Summary:": "خلاصہ:",
         "Volume": "جلد", "Chapter": "باب", "Context": "پس منظر",
         "Colour key": "رنگوں کی کلید", "Colour key by era": "دور کے مطابق رنگوں کی کلید",
         "Catholic": "کیتھولک", "Orthodox": "آرتھوڈکس", "Protestant": "پروٹسٹنٹ",
@@ -1444,6 +1451,7 @@ _CAPTIONS = {
         "Scholarly": "विद्वत्तापूर्ण", "History": "इतिहास", "Devotional": "भक्ति",
         "Founder": "संस्थापक", "Biblical date": "बाइबलीय तिथि",
         "Claim": "दावा", "Books": "पुस्तकें", "Catholic": "कैथोलिक",
+        "Updated": "अद्यतन", "Summary": "सार", "Summary:": "सार:",
         "Volume": "खंड", "Chapter": "अध्याय", "Context": "पृष्ठभूमि", "Part": "भाग",
         "Orthodox": "ऑर्थोडॉक्स", "Protestant": "प्रोटेस्टेंट",
         "Anglican": "एंग्लिकन", "Pentecostal": "पेंटेकोस्टल",
@@ -2320,14 +2328,15 @@ def build_volume_chapter(v: dict) -> list:
     flow = chapter_head("", v["title"], v.get("subtitle"), hero=hero,
                         kicker=f"{chrome('Part')} 1 · {chrome('Volume')} {v['number']:02d}")
     meta = [chrome(v.get("category", "").title()) if v.get("category") else "",
-            chrome(f"Updated {v.get('lastUpdated','')}")]
+            f"{chrome('Updated')} {v.get('lastUpdated','')}"]
     if v.get("featured"):
         meta.append(chrome("Featured"))
     flow += [para(" · ".join(m for m in meta if m), ST["small"])]
     if v.get("overview"):
         flow += [para(clean_plain(v["overview"]), ST["lead"])]
     if v.get("summary"):
-        flow += [para(f"<b>Summary.</b> {inline_md(v['summary'])}", ST["body"])]
+        flow += [para(f"<b>{chrome('Summary:')}</b> {inline_md(v['summary'])}",
+                      ST["body"])]
     kf = v.get("keyFacts") or []
     if kf:
         flow += sub_h("Key facts")
