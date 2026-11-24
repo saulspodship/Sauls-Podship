@@ -22,6 +22,7 @@ on:
   push:
     paths:
       - "book/gt_shard.py"
+      - "book/i18n_common.py"
       - ".github/workflows/translate-ur-google.yml"
 
 concurrency:
