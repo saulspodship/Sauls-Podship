@@ -942,7 +942,7 @@
     ]
   },
   {
-    "name": "History",
+    "name": "इतिहास",
     "slug": "history",
     "items": [
       {
@@ -2314,7 +2314,7 @@
     ]
   },
   {
-    "name": "Prophets",
+    "name": "भविष्यद्वक्ता",
     "slug": "prophets",
     "items": [
       {
@@ -3176,7 +3176,7 @@
     ]
   },
   {
-    "name": "Gospels",
+    "name": "सुसमाचार",
     "slug": "gospels",
     "items": [
       {
@@ -4174,7 +4174,7 @@
     ]
   },
   {
-    "name": "Acts",
+    "name": "प्रेरितों के काम",
     "slug": "acts",
     "items": [
       {
@@ -4700,7 +4700,7 @@
     ]
   },
   {
-    "name": "Letters",
+    "name": "पत्रियाँ",
     "slug": "letters",
     "items": [
       {
@@ -6210,7 +6210,7 @@
     ]
   },
   {
-    "name": "Apocalypse",
+    "name": "प्रकाशितवाक्य",
     "slug": "apocalypse",
     "items": [
       {

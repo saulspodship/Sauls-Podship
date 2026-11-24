@@ -28,7 +28,12 @@ SKIP_RE = re.compile(
     # 318 strings and 247,000 characters from translation, which is why blocks
     # of the Urdu book were still English.
     r"^(https?://|www\.|/(?=\S)|#(?=[^\s#])|[\d\.\s%:]+\$?$)"
-    r"|^[A-Za-z0-9_\-./]+$"
+    # A lone Latin slug ("jesus-is-god", "abraham-journey", "NIV") is an id,
+    # not prose -- but a capitalised single word is a name ("Philippines",
+    # "Indonesia"), and the world map lists 175 of them. Requiring lowercase
+    # keeps slugs out while letting names through.
+    # (?-i:) keeps the re.I above from making the lowercase half match names.
+    r"|^(?-i:[a-z0-9_\-./]+|[A-Z0-9_\-./]*[0-9_\-./][A-Za-z0-9_\-./]*)$"
     r"|^[\W\d]+$",
     re.I,
 )

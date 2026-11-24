@@ -1262,6 +1262,9 @@ def part_text(num, title, subtitle):
     if LANG == "ur":
         t, sub = _PART_UR.get(num, (title, subtitle))
         return f"حصہ {num}", t, sub
+    if LANG == "hi":
+        t, sub = _PART_HI.get(num, (title, subtitle))
+        return f"भाग {num}", t, sub
     return f"PART {num}", title, subtitle
 
 
@@ -1302,10 +1305,10 @@ def chapter_head(no: str, title: str, subtitle: str | None = None,
     # only part dividers take a page of their own.
     flow = [PageBreak()]
     if kicker:
-        flow.append(para(clean_plain(kicker), ST["chap_no"]))
-    flow.append(para(clean_plain(title), ST["chap_title"]))
+        flow.append(para(clean_plain(chrome(kicker)), ST["chap_no"]))
+    flow.append(para(clean_plain(chrome(title)), ST["chap_title"]))
     if subtitle:
-        flow.append(para(clean_plain(subtitle), ST["chap_sub"]))
+        flow.append(para(clean_plain(chrome(subtitle)), ST["chap_sub"]))
     flow.append(Spacer(1, 4))
     if hero and Path(hero).exists():
         flow.extend(img_flowable(Path(hero), BOOK_W - 2 * MARGIN - GUTTER, 70 * mm))
@@ -1352,6 +1355,22 @@ _CAPTIONS = {
         "Verses": "آیات", "Abbr.": "مخفف", "Category ": "زمرہ",
         "Appendix": "ضمیمہ",
         "Walking the Bible Maps": "بائبل کے نقشوں کی سیر",
+        "The World Map": "دنیا کا نقشہ",
+        "One Hundred Tough Questions": "سو دشوار سوالات",
+        "Two Hundred Forty Seven Prophecies": "دو سو سینتالیس پیش گوئیاں",
+        "World Religions and People": "عالمی مذاہب اور لوگ",
+        "From Adam to Jesus": "آدم سے یسوع تک",
+        "The Singers and Their Story": "گلوکار اور ان کی کہانی",
+        "Punjabi Zaboor, the Psalm Songs": "پنجابی زبور، زبور کے گیت",
+        "Podcasts and Video Lessons": "پوڈ کاسٹ اور ویڈیو اسباق",
+        "Video masterclasses": "ویڈیو ماسٹر کلاسز",
+        "Our Family of Websites": "ہماری ویب سائٹس کا خاندان",
+        "About FAQ": "تعارف کے سوالات",
+        "Questions People Ask": "لوگوں کے پوچھے گئے سوالات",
+        "Bible Books and Counts": "بائبل کی کتابیں اور شمار",
+        "Largest countries by dominant tradition": "غالب روایت کے مطابق بڑے ممالک",
+        "Full profiles — the honored Din dynasty": "مکمل تعارف — معزز دین خاندان",
+        "How These Answers Were Written": "یہ جوابات کیسے لکھے گئے",
         "The World Map": "دنیا کا نقشہ", "Stop": "پڑاؤ", "Station": "منزل",
         "Entries": "اندراجات",
         "The Fifty Volumes": "پچاس جلدیں", "Bible Maps": "بائبل کے نقشے",
@@ -1386,6 +1405,7 @@ _CAPTIONS = {
         "Theme": "موضوع", "Connections": "ربط", "Characters": "کردار",
         "Article": "مضمون", "Video": "ویڈیو", "Asked in": "پوچھا گیا",
         "Updated": "تازہ کاری", "Part": "حصہ", "Part 3": "حصہ 3",
+        "Volume": "جلد", "Chapter": "باب", "Context": "پس منظر",
         "Colour key": "رنگوں کی کلید", "Colour key by era": "دور کے مطابق رنگوں کی کلید",
         "Catholic": "کیتھولک", "Orthodox": "آرتھوڈکس", "Protestant": "پروٹسٹنٹ",
         "Common answer": "عام جواب", "Featured": "نمایاں",
@@ -1424,6 +1444,7 @@ _CAPTIONS = {
         "Scholarly": "विद्वत्तापूर्ण", "History": "इतिहास", "Devotional": "भक्ति",
         "Founder": "संस्थापक", "Biblical date": "बाइबलीय तिथि",
         "Claim": "दावा", "Books": "पुस्तकें", "Catholic": "कैथोलिक",
+        "Volume": "खंड", "Chapter": "अध्याय", "Context": "पृष्ठभूमि", "Part": "भाग",
         "Orthodox": "ऑर्थोडॉक्स", "Protestant": "प्रोटेस्टेंट",
         "Anglican": "एंग्लिकन", "Pentecostal": "पेंटेकोस्टल",
         "Historical": "ऐतिहासिक", "Metaphorical": "रूपकात्मक",
@@ -1509,6 +1530,41 @@ def ui_prose(text: str) -> str:
     return table.get("__cache__", {}).get(text, text)
 
 
+_PART_HI = {
+    "1": ("पचास खंड", "पूरा बाइबल विश्वकोश, खंड दर खंड, तालिकाओं, समयरेखाओं और चित्रों के साथ"),
+    "2": ("बाइबल के मानचित्र", "आठ यात्रा मानचित्र जो अब्राहम, मूसा, पौलुस और यीशु के मार्ग दिखाते हैं"),
+    "3": ("चार सौ प्रश्न", "इस्लाम, यहूदी धर्म, हिंदू धर्म और सिख धर्म पर सौ-सौ प्रश्न, सावधानी से उत्तरित"),
+    "4": ("एक हज़ार उत्तर", "बाइबल अध्ययन के छोटे प्रश्न, व्यवस्था से प्रकाशितवाक्य तक"),
+    "5": ("कठिन प्रश्न", "सौ कठिन प्रश्न, पाँच ईसाई परंपराओं के उत्तरों के साथ"),
+    "6": ("स्वर्गदूत और पहरेदार", "पवित्र प्राणी, गिरे हुए पहरेदार, पशु और उनके बारे में बाइबल की बातें"),
+    "7": ("भविष्यवाणी और विश्व धर्म", "भविष्यवाणियाँ कैसे पूरी हुईं, विश्व के धर्म, और आदम से यीशु तक वंशावली"),
+    "8": ("संगीत और पॉडकास्ट", "पाकिस्तानी सुसमाचार गायक, पंजाबी ज़बूर भजन और पॉडकास्ट एपिसोड"),
+    "A": ("परिशिष्ट", "वेबसाइटों का परिवार, सामान्य प्रश्न, और बाइबल पुस्तकों की गणना"),
+}
+
+
+# Image tiles are captioned with their data key so the asset lookup keeps
+# working, which means those captions never reach the translator. They are
+# translated separately and merged in here as "img:<key>" entries.
+_CAPTION_OVERLAY: dict = {}
+
+
+def _caption_table() -> dict:
+    """_CAPTIONS for the current language, plus the image-tile captions."""
+    if not _CAPTION_OVERLAY:
+        try:
+            raw = json.loads((Path(__file__).resolve().parent / "data" / "i18n"
+                              / "_captions.json").read_text(encoding="utf-8"))
+        except Exception:
+            raw = {}
+        for lang, table in raw.items():
+            if isinstance(table, dict):
+                _CAPTION_OVERLAY[lang] = table
+    table = dict(_CAPTIONS.get(LANG) or {})
+    table.update(_CAPTION_OVERLAY.get(LANG, {}))
+    return table
+
+
 def chrome(text: str) -> str:
     """Local wording for a piece of book apparatus, in the current language.
 
@@ -1519,7 +1575,7 @@ def chrome(text: str) -> str:
     """
     if LANG == "en":
         return text
-    table = _CAPTIONS.get(LANG) or {}
+    table = _caption_table()
     if text in table:
         return table[text]
     m = re.match(r"^(.*?)\s*\((\d+)\)$", text)
@@ -1528,6 +1584,13 @@ def chrome(text: str) -> str:
     m = re.match(r"^([A-Z][^:]{1,30}):\s*(.*)$", text, re.S)
     if m and m.group(1) in table:
         return f"{table[m.group(1)]}: {m.group(2)}"
+    # "Part 2", "Part 3 · Context", "Part 1 · Volume 05": localise each piece
+    # and keep the separator, so no combination needs its own entry.
+    if " · " in text:
+        return " · ".join(chrome(piece) for piece in text.split(" · "))
+    m = re.match(r"^([A-Z][A-Za-z ]{1,20}?)\s+([0-9]+|[IVX]+)$", text)
+    if m and m.group(1) in table:
+        return f"{table[m.group(1)]} {m.group(2)}"
     return text
 
 
@@ -1551,6 +1614,36 @@ def sub_h(text: str) -> list:
 
 
 # ---- prose owned by this script (see ui_prose) ----
+_MAP_BLURB_UR = {
+    "abraham-journey": "کلدیوں کے یور سے حاران ہوتے ہوئے کنعان تک — ابراہیم کی دعوت تین بڑے مرحلوں میں (پیدائش ۱۱–۱۳)۔",
+    "exodus": "رعمسیس سے سمندر پار کرنے، ایلیم اور کوہ سینا، فاران کے بیابان، قادش برنیع اور بیر سبع تک — خروج اور گنتی کا نجات کا راستہ۔",
+    "paul-journeys": "یروشلم، انطاکیہ، ترسس، گلتیہ کے شہر، فلپی، ایتھنز، کرنتھس اور آگے — غیر قوموں کی دنیا میں انجیل۔",
+    "seven-churches": "افسس، سمیرنا، پرگامم، تیاتیرہ، سردیس، فلادلفیا، لودیکیہ — اناطولیہ کے راستے پر مکاشفہ ۲–۳ کے خطوط۔",
+    "holy-land-jesus": "ناصرت، کفرنحوم، یریحو، بیت لحم اور یروشلم — اناجیل کا جغرافیہ۔",
+    "kingdom-israel-judah": "سامریہ، دس قبیلوں کا دارالحکومت، اور یروشلم، یہوداہ کا دارالحکومت — اسور کی سڑک کے ساتھ (۷۲۲ ق م)۔",
+    "ancient-near-east": "اسور (۷۲۲ ق م) اور بابل (۵۸۶ ق م) کے درمیان اسرائیل اور یہوداہ — نبیوں کی دنیا۔",
+    "roman-empire-jesus": "یروشلم، انطاکیہ — جہاں ایمان والوں کو پہلی بار مسیحی کہا گیا — اور روم، زمین کی انتہا تک انجیل۔",
+}
+
+_MAP_BLURB_HI = {
+    "abraham-journey": "कसदियों के ऊर से हारान होते हुए कनान तक — अब्राहम का बुलावा तीन बड़े चरणों में (उत्पत्ति 11–13)।",
+    "exodus": "रामसेस से समुद्र पार करने, एलीम और सीनै पर्वत, पारान का जंगल, कादेश-बर्नेआ और बेर्शेबा तक — निर्गमन और गिनती का छुटकारे का मार्ग।",
+    "paul-journeys": "यरूशलेम, अन्ताकिया, तरसुस, गलातिया के नगर, फिलिप्पी, एथेंस, कुरिन्थुस और आगे — अन्यजातियों की दुनिया में सुसमाचार।",
+    "seven-churches": "इफिसुस, स्मुरना, परगमुम, थुआतीरा, सरदीस, फिलदिलफिया, लौदीकिया — अनातोलिया के मार्ग पर प्रकाशितवाक्य 2–3 के पत्र।",
+    "holy-land-jesus": "नासरत, कफरनहूम, यरीहो, बैतलहम और यरूशलेम — सुसमाचारों का भूगोल।",
+    "kingdom-israel-judah": "सामरिया, दस गोत्रों की राजधानी, और यरूशलेम, यहूदा की राजधानी — अश्शूर की सड़क के साथ (722 ई.पू.)।",
+    "ancient-near-east": "अश्शूर (722 ई.पू.) और बाबेल (586 ई.पू.) के बीच इस्राएल और यहूदा — भविष्यद्वक्ताओं की दुनिया।",
+    "roman-empire-jesus": "यरूशलेम, अन्ताकिया — जहाँ विश्वासियों को पहली बार मसीही कहा गया — और रोम, पृथ्वी के छोर तक सुसमाचार।",
+}
+
+
+_STUDY_LEAD = {
+    "ur": "اس مجموعے میں صحیفے کے {g} حصوں میں {n} سوالات ہیں۔ ہر ایک کا مختصر جواب، "
+          "بائبل کا حوالہ، اور جہاں مناسب ہو ایک نوٹ ہے جو جواب کے پیچھے معنی کھولتا ہے۔",
+    "hi": "इस संग्रह में शास्त्र के {g} वर्गों में {n} प्रश्न हैं। हर एक का संक्षिप्त उत्तर, "
+          "बाइबल का संदर्भ, और जहाँ उपयोगी हो वहाँ उत्तर के पीछे का अर्थ खोलने वाला टिप्पणी है।",
+}
+
 _UI_P01 = 'These eight maps show real places on true geography. On the website you can press a button and watch footsteps trace each route, stop by stop. The coastlines come from Natural Earth, which is free for everyone to use. The routes follow standard scholarly reconstructions, so a few details are approximate. Use them to picture where these stories actually happened.'
 _UI_P02 = 'After walking the sacred journeys, lift your eyes to the whole world the gospel now covers. The world-faith map (Part VIII) carries the same dataset the live site woven into its Interlinked Bible module: seven tradition categories across 175 countries, on a total population of 8.23 billion.'
 _UI_P03 = 'Each entry follows the same structure: Context; the mainstream position with primary sources; a Christian apologetic response; and points for respectful discussion — because a debate opponent who feels straw-manned will not listen, no matter how strong the argument is.'
@@ -1712,7 +1805,7 @@ def build():
         hero("images/hero-biblical-maps.jpg"),
     )
 
-    story += chapter_head("", "Walking the Bible Maps", kicker="Part 2",
+    story += chapter_head("", "Walking the Bible Maps", kicker=f"Part 2",
                           hero=hero("images/volumes/biblical-maps/hero-1920.jpg"))
     story += [para(
         ui_prose(_UI_P01),
@@ -1733,14 +1826,18 @@ def build():
         img = ROOT / "public" / r.get("img", "").lstrip("/")
         stops = r.get("stops") or []
         blurb = map_meta.get(r["key"], (name, ""))[1]
-        story += [safe_para(f"{idx}. {clean_plain(name)}", ST["h2"])]
+        if LANG == "ur":
+            blurb = _MAP_BLURB_UR.get(r["key"], blurb)
+        elif LANG == "hi":
+            blurb = _MAP_BLURB_HI.get(r["key"], blurb)
+        story += [safe_para(f"{idx}. {clean_plain(ui_prose(name))}", ST["h2"])]
         if blurb:
-            story += [safe_para(clean_plain(blurb), ST["body"])]
+            story += [safe_para(clean_plain(ui_prose(blurb)), ST["body"])]
         story += img_flowable(img, BOOK_W - 2 * MARGIN - GUTTER, 118 * mm)
         stop_rows = [[str(i + 1), s[2]] for i, s in enumerate(stops)]
         if stop_rows:
             story += make_table(["Stop", "Station"], stop_rows, col_widths=[0.1, 0.9])
-    story += chapter_head("", "The World Map", kicker="Part 2",
+    story += chapter_head("", "The World Map", kicker=f"Part 2",
                           hero=hero("images/hero-prophecy.jpg"))
     story += [para(
         ui_prose(_UI_P02),
@@ -1777,7 +1874,7 @@ def build():
         title = sec.get("title", rel.title())
         sub = sec.get("sub", "")
         story += chapter_head("", f"{title}", subtitle=sub if sub else None,
-                              kicker=f"Part 3 · {eyebrow}")
+                              kicker=f"{chrome('Part')} 3 · {eyebrow}")
         if sec.get("lead"):
             story += [para(clean_plain(sec["lead"]), ST["lead"])]
         for q in qs:
@@ -1799,6 +1896,9 @@ def build():
         f"This archive holds {total_items} questions in {len(archive)} groups of "
         "Scripture. Each one gives a short answer, a Bible reference, and when it helps, "
         "a note that opens up the meaning behind the answer.",
+        ST["lead"],
+    )] if LANG == "en" else [para(
+        _STUDY_LEAD[LANG].format(n=total_items, g=len(archive)),
         ST["lead"],
     )]
     idx_rows = [[c["name"], str(len(c["items"]))] for c in archive]
@@ -1911,7 +2011,7 @@ def build():
     if feature_names:
         story += [para(chrome("Featured gallery"), ST["h3"])]
         story += asset_grid(feature_names, assets, cols=3, thumb=True)
-    story += [para("Complete image catalogue", ST["h3"])]
+    story += [para(chrome("Complete image catalogue"), ST["h3"])]
     story += asset_grid(list(assets.keys()), assets, cols=4, thumb=True)
 
     # ================================================================
@@ -2218,7 +2318,7 @@ def build_volume_chapter(v: dict) -> list:
         if not hero.exists():
             hero = None
     flow = chapter_head("", v["title"], v.get("subtitle"), hero=hero,
-                        kicker=f"Part 1 · Volume {v['number']:02d}")
+                        kicker=f"{chrome('Part')} 1 · {chrome('Volume')} {v['number']:02d}")
     meta = [chrome(v.get("category", "").title()) if v.get("category") else "",
             chrome(f"Updated {v.get('lastUpdated','')}")]
     if v.get("featured"):
@@ -2488,8 +2588,16 @@ def asset_grid(names, assets, cols=4, thumb=True) -> list:
         short_kind = ("AI" if kind.startswith("Text") else
                       chrome("Rep.") if kind.startswith("Representative")
                       else chrome("Photo"))
+        # Captions are data keys, which the pipeline cannot translate without
+        # breaking the asset lookup, so they fall through to the English name.
+        # Translate only for display, keeping the key intact.
+        shown = name
+        if LANG != "en":
+            tr = _caption_table().get(f"img:{name}")
+            if tr:
+                shown = tr
         label = para(
-            f"{clean(name)}<br/><font color='#7a6a5f' size='6'>{short_kind}</font>",
+            f"{clean(shown)}<br/><font color='#7a6a5f' size='6'>{short_kind}</font>",
             S("gl", fontName="Sans", fontSize=6.5, leading=8, alignment=TA_CENTER,
               textColor=INK),
         )
