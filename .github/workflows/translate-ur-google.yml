@@ -1,4 +1,4 @@
-name: Translate book data with Google (ur)
+name: Translate book data with Google (ur + hi)
 
 # The Argos models produced Urdu that did not hold together: English words
 # stranded mid-sentence, invented spellings, broken grammar. Google Translate
@@ -6,11 +6,16 @@ name: Translate book data with Google (ur)
 # sandbox, so the work runs here.
 #
 # The merge job pushes to its own branch, book-i18n-google, so it never fights
-# with the Argos pipeline over book-i18n.
+# with the Argos pipeline over book-i18n.  The same jobs serve Hindi: the
+# language is a dispatch input, so no second copy of this file is needed.
 
 on:
   workflow_dispatch:
     inputs:
+      lang:
+        description: "Target language (ur or hi)"
+        required: false
+        default: "ur"
       shards:
         description: "Shards"
         required: false
@@ -34,7 +39,7 @@ permissions:
 
 jobs:
   shard:
-    name: ur shard ${{ matrix.index }}
+    name: ${{ inputs.lang || 'ur' }} shard ${{ matrix.index }}
     runs-on: ubuntu-latest
     timeout-minutes: 300
     strategy:
@@ -51,15 +56,15 @@ jobs:
       - name: Translate shard
         run: |
           set -eux
-          python book/gt_shard.py ur ${{ matrix.index }} ${{ inputs.shards || '30' }} \
+          python book/gt_shard.py ${{ inputs.lang || 'ur' }} ${{ matrix.index }} ${{ inputs.shards || '30' }} \
             --limit ${{ inputs.limit || '0' }}
       - uses: actions/upload-artifact@v4
         with:
-          name: gt-ur-${{ matrix.index }}
+          name: gt-${{ inputs.lang || 'ur' }}-${{ matrix.index }}
           # artifact names use --limit to keep a pilot run's output out of the
           # real cache (they are keyed by shard, so a pilot would seed the full
           # run with the strings it happened to translate)
-          path: book/data/i18n/_shard_ur_${{ matrix.index }}_${{ inputs.limit || '0' }}.json
+          path: book/data/i18n/_shard_${{ inputs.lang || 'ur' }}_${{ matrix.index }}_${{ inputs.limit || '0' }}.json
           if-no-files-found: error
           retention-days: 14
 
@@ -78,22 +83,22 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: book/data/i18n
-          pattern: gt-ur-*
+          pattern: gt-${{ inputs.lang || 'ur' }}-*
           merge-multiple: false
       - name: Flatten artifacts
         run: |
           set -eux
           # each artifact unpacks into its own directory; the merger wants them
           # side by side as _shard_ur_<n>.json
-          find book/data/i18n -name '_shard_ur_*_0.json' -print
-          find book/data/i18n -mindepth 2 -name '_shard_ur_*_0.json' \
+          find book/data/i18n -name '_shard_${{ inputs.lang || 'ur' }}_*_0.json' -print
+          find book/data/i18n -mindepth 2 -name '_shard_${{ inputs.lang || 'ur' }}_*_0.json' \
             -exec mv -v {} book/data/i18n/ \;
           ls -la book/data/i18n | head -40
       - name: Merge shards
         run: |
           set -eux
-          python book/merge_shards.py ur
-          du -sh book/data/i18n/ur
+          python book/merge_shards.py ${{ inputs.lang || 'ur' }}
+          du -sh book/data/i18n/${{ inputs.lang || 'ur' }}
       - name: Commit translations
         run: |
           set -eux
@@ -106,6 +111,6 @@ jobs:
             echo "NOTHING_STAGED"
             exit 1
           fi
-          git commit -m "i18n: retranslate book data to Urdu with Google Translate"
+          git commit -m "i18n: retranslate book data (${{ inputs.lang || 'ur' }}) with Google Translate"
           git push -u origin book-i18n-google --force
           echo PUSH_OK
