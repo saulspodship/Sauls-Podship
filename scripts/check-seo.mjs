@@ -282,6 +282,64 @@ for (const slug of seoArticleSlugs) {
   if (!fs.existsSync(path.join(dist, 'resources', `${slug}.md`))) fail(urlPath, 'study guide Markdown companion missing');
 }
 
+/* ---- GSC Page indexing guards (16 Nov 2026) ----------------------------
+ * The three ways a correct page silently leaves Google's index:
+ *  1. an inline location.replace() that turns every clean URL into a redirect;
+ *  2. a static "redirect" page (meta refresh + noindex) answering 200, which
+ *     GSC files under "Excluded by 'noindex' tag" instead of 301ing;
+ *  3. a declared redirect in vercel.json that a rebuild forgot to regenerate.
+ * All three are cheap to assert here and expensive to discover in GSC. */
+const needsRedirect = new Map([['/index.html', '/']]);
+for (const volume of volumes) {
+  const target = `/encyclopedia/${volume.slug}`;
+  needsRedirect.set(`/encyclopedia/${volume.number}`, target);
+  needsRedirect.set(`/encyclopedia/by-number/${volume.number}`, target);
+}
+const declared = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+const declaredRedirects = new Map((declared.redirects || []).map((entry) => [entry.source, entry]));
+for (const [source, destination] of needsRedirect) {
+  const entry = declaredRedirects.get(source);
+  if (!entry) fail(source, 'no permanent redirect declared in vercel.json');
+  else if (entry.destination !== destination) fail(source, `redirects to ${entry.destination}, expected ${destination}`);
+  else if (entry.permanent !== true) fail(source, 'declared redirect is not permanent (301)');
+}
+
+/* A redirect must never shadow a page we actually built: that is how
+ * /music-archive/pakistani-christian-musicians ended up redirected and
+ * unindexable while the sitemap still promised it. */
+for (const [source] of declaredRedirects) {
+  if (source.includes(':') || source.includes('(') || source.includes('*')) continue;
+  if (pages.has(normalize(source))) {
+    fail(source, 'is both a declared redirect and a built page');
+  }
+}
+
+for (const [urlPath, { html }] of pages) {
+  if (/location\s*\.\s*replace\s*\(\s*['"]\/#/.test(html)) {
+    fail(urlPath, 'boot script redirects to /#/… (GSC "Page with redirect")');
+  }
+  if (/http-equiv=["']?refresh/i.test(html) && isNoindex(html)) {
+    fail(urlPath, 'is a noindex meta-refresh stub instead of a real 301');
+  }
+  if (urlPath !== '/404' && /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html) && promised.includes(urlPath)) {
+    fail(urlPath, 'is in a sitemap but asks not to be indexed');
+  }
+}
+
+const headerRules = declared.headers || [];
+const headerValue = (source, key) =>
+  (headerRules.find((rule) => rule.source === source)?.headers || [])
+    .find((header) => header.key.toLowerCase() === key.toLowerCase())?.value || '';
+const markdownRule = headerRules.find((rule) => /\.md/.test(rule.source));
+if (!markdownRule || !/noindex/i.test(headerValue(markdownRule.source, 'X-Robots-Tag'))) {
+  fail('/:path*.md', 'Markdown corpus companions are not marked noindex (GSC "Crawled - currently not indexed")');
+}
+for (const sitemapPath of ['/sitemap.xml', '/sitemap-theological-archive.xml']) {
+  if (!/noindex/i.test(headerValue(sitemapPath, 'X-Robots-Tag'))) {
+    fail(sitemapPath, 'XML sitemap is served as an indexable page');
+  }
+}
+
 if (errors.length) {
   console.error(`[CHECK-SEO] ${errors.length} problem(s) in the built HTML:`);
   for (const error of errors.slice(0, 40)) console.error(`  - ${error}`);

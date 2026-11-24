@@ -157,6 +157,44 @@ app.use((req, res, next) => {
   next();
 });
 
+// Canonical URL hygiene — the container (npm start) mirror of the edge rules in
+// vercel.json. GSC Page indexing, 16 Nov 2026:
+//  - "Alternate page with proper canonical tag": /index.html duplicated "/".
+//  - "Not found (404)": legacy /music/archive/... paths had no route.
+//  - "Crawled - currently not indexed": the *.md corpus companions and the XML
+//    sitemaps were being crawled as pages. They stay public (LLM crawlers read
+//    them) but must not compete with the HTML pages for indexing.
+app.use((req, res, next) => {
+  const pathname = req.path || "/";
+  if (/\.md$/i.test(pathname)) {
+    res.setHeader("X-Robots-Tag", "noindex, follow");
+    res.setHeader("Content-Type", "text/markdown; charset=utf-8");
+  } else if (/^\/sitemap.*\.xml$/i.test(pathname)) {
+    res.setHeader("X-Robots-Tag", "noindex");
+  }
+
+  if (pathname === "/index.html") return res.redirect(301, "/");
+  // /encyclopedia/by-number/12 (the old volume-number route) and /encyclopedia/12
+  // belong to the canonical slug URL. Vercel answers these at the edge from the
+  // 301s in vercel.json; this keeps `npm start` behaving the same way.
+  const byNumber = pathname.match(/^\/encyclopedia\/(?:by-number\/)?(\d{1,3})$/);
+  if (byNumber) {
+    const volume = findVolume(byNumber[1]);
+    const slug = volume && (volume.slug || getVolumeSlug(volume.title));
+    if (slug) return res.redirect(301, `/encyclopedia/${slug}`);
+  }
+  if (pathname === "/music-archive") return res.redirect(301, "/Pakistanisingersarchive");
+  if (pathname === "/music/archive") return res.redirect(301, "/music/pakistani-singers-archive");
+  if (/^\/music\/archive\/.*(?:collection|directory|musicians)/i.test(pathname)) {
+    return res.redirect(301, "/Pakistanisingersarchive");
+  }
+  if (pathname.startsWith("/music/archive/")) {
+    return res.redirect(301, `/music-archive/${pathname.slice("/music/archive/".length)}`);
+  }
+
+  next();
+});
+
 // Vercel Serverless Routing Normalizer and Logging Middleware
 app.use((req, res, next) => {
   console.log(`[EXPRESS REQUEST LOG] METHOD: ${req.method} | PATH: ${req.path} | FULL URL: ${req.url}`);
@@ -1111,8 +1149,12 @@ ${list.map(a => `<div class="card"><h2>${a.name}</h2><div class="role">${a.badge
 });
 
 // Dynamic Server-Side Rendered (SSR) Volume Page for Search Indexing & AdSense Compliance
-app.get("/encyclopedia/:slug", async (req, res) => {
+app.get("/encyclopedia/:slug", async (req, res, next) => {
   const reqSlug = req.params.slug;
+  // /encyclopedia/<slug>.md is the machine-readable companion of the volume, not
+  // a volume: let the static layer serve it (with the noindex header above)
+  // instead of 301-ing it back to the HTML page.
+  if (/\.md$/i.test(reqSlug)) return next();
   console.log(`[ENCYCLOPEDIA ROUTE LOG] Received request for /encyclopedia/:slug with slug parameter: "${reqSlug}"`);
 
   try {
@@ -1351,7 +1393,10 @@ app.get("/music-archive/:slug", async (req, res) => {
     reqSlug.includes("pakistani-christian-gospel-singers") ||
     reqSlug.includes("geetandzaboor") ||
     reqSlug.includes("dailygeet") ||
-    reqSlug.includes("bonpounou")
+    reqSlug.includes("bonpounou") ||
+    // Facebook group / page entries kept out of the index (see
+    // scripts/prerender-music.mjs NON_PROFILE_BADGES).
+    reqSlug === "pakistani-christian-musicians"
   ) {
     return res.redirect(301, "/Pakistanisingersarchive");
   }

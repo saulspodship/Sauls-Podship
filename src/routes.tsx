@@ -164,3 +164,30 @@ export const routeConfig: RouteObject[] = [
 ];
 
 export const router = createHashRouter(routeConfig);
+
+/* ---- canonicalise the address bar once the visitor starts navigating ----
+ * A clean sitemap URL (e.g. /terms) boots with its route seeded as a fragment
+ * (/terms#/terms) so the hash router renders the requested page WITHOUT any
+ * navigation — see the boot script in index.html, which is what removes the
+ * GSC "Page with redirect" reports. The clean path is correct for as long as
+ * that first page is on screen; as soon as the visitor moves inside the SPA the
+ * stale path would be wrong, so the first in-app navigation rewrites the
+ * address to the plain hash URL (/#/podcast). replaceState only — never a
+ * navigation, so the page is not reloaded and nothing is reported as a redirect.
+ */
+if (typeof window !== 'undefined') {
+  const seededPath = window.location.pathname;
+  router.subscribe((state) => {
+    // Already on a plain hash URL — nothing to tidy up.
+    if (window.location.pathname === '/') return;
+    const { pathname, search, hash } = state.location;
+    // The router re-emitting the route we seeded on first paint is not a
+    // navigation; the clean path is still the correct address for this page.
+    if (pathname === seededPath) return;
+    try {
+      window.history.replaceState(null, '', `/#${pathname}${search}${hash}`);
+    } catch {
+      /* history unavailable — the session keeps the seeded fragment, which works */
+    }
+  });
+}

@@ -13,6 +13,31 @@
       "permanent": true
     },
     {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/music-archive",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music-archive/bonpounoucom-pakistani-gospel-collection",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music-archive/pakistani-christian-gospel-collection",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music-archive/pakistani-christian-musicians",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
       "source": "/music-archive/christians-of-pakistan-music-directory",
       "destination": "/Pakistanisingersarchive",
       "permanent": true
@@ -20,6 +45,646 @@
     {
       "source": "/music-archive/pakistani-christian-gospel-singers-group",
       "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music/archive/christians-of-pakistan-music-directory",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music/archive/pakistani-christian-gospel-collection",
+      "destination": "/Pakistanisingersarchive",
+      "permanent": true
+    },
+    {
+      "source": "/music/archive/:slug",
+      "destination": "/music-archive/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/music/archive",
+      "destination": "/music/pakistani-singers-archive",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/1",
+      "destination": "/encyclopedia/all-bible-stories",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/1",
+      "destination": "/encyclopedia/all-bible-stories",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/01",
+      "destination": "/encyclopedia/all-bible-stories",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/01",
+      "destination": "/encyclopedia/all-bible-stories",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/2",
+      "destination": "/encyclopedia/all-biblical-numerology",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/2",
+      "destination": "/encyclopedia/all-biblical-numerology",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/02",
+      "destination": "/encyclopedia/all-biblical-numerology",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/02",
+      "destination": "/encyclopedia/all-biblical-numerology",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/3",
+      "destination": "/encyclopedia/all-big-denominations-their-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/3",
+      "destination": "/encyclopedia/all-big-denominations-their-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/03",
+      "destination": "/encyclopedia/all-big-denominations-their-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/03",
+      "destination": "/encyclopedia/all-big-denominations-their-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/4",
+      "destination": "/encyclopedia/angels-demons-beasts-monsters-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/4",
+      "destination": "/encyclopedia/angels-demons-beasts-monsters-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/04",
+      "destination": "/encyclopedia/angels-demons-beasts-monsters-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/04",
+      "destination": "/encyclopedia/angels-demons-beasts-monsters-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/5",
+      "destination": "/encyclopedia/apologetics-40-critical-questions",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/5",
+      "destination": "/encyclopedia/apologetics-40-critical-questions",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/05",
+      "destination": "/encyclopedia/apologetics-40-critical-questions",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/05",
+      "destination": "/encyclopedia/apologetics-40-critical-questions",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/6",
+      "destination": "/encyclopedia/apostles-creed",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/6",
+      "destination": "/encyclopedia/apostles-creed",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/06",
+      "destination": "/encyclopedia/apostles-creed",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/06",
+      "destination": "/encyclopedia/apostles-creed",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/7",
+      "destination": "/encyclopedia/ark-of-covenant-and-other-biblical-relics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/7",
+      "destination": "/encyclopedia/ark-of-covenant-and-other-biblical-relics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/07",
+      "destination": "/encyclopedia/ark-of-covenant-and-other-biblical-relics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/07",
+      "destination": "/encyclopedia/ark-of-covenant-and-other-biblical-relics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/8",
+      "destination": "/encyclopedia/baptism-sacraments-circumcision",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/8",
+      "destination": "/encyclopedia/baptism-sacraments-circumcision",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/08",
+      "destination": "/encyclopedia/baptism-sacraments-circumcision",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/08",
+      "destination": "/encyclopedia/baptism-sacraments-circumcision",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/9",
+      "destination": "/encyclopedia/bible-book-writers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/9",
+      "destination": "/encyclopedia/bible-book-writers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/09",
+      "destination": "/encyclopedia/bible-book-writers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/09",
+      "destination": "/encyclopedia/bible-book-writers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/10",
+      "destination": "/encyclopedia/biblical-creation-vs-scientific-creation",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/10",
+      "destination": "/encyclopedia/biblical-creation-vs-scientific-creation",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/11",
+      "destination": "/encyclopedia/biblical-maps",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/11",
+      "destination": "/encyclopedia/biblical-maps",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/12",
+      "destination": "/encyclopedia/book-of-revelation",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/12",
+      "destination": "/encyclopedia/book-of-revelation",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/13",
+      "destination": "/encyclopedia/christianity-in-south-asia-india-pakistan",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/13",
+      "destination": "/encyclopedia/christianity-in-south-asia-india-pakistan",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/14",
+      "destination": "/encyclopedia/christmas-history",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/14",
+      "destination": "/encyclopedia/christmas-history",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/15",
+      "destination": "/encyclopedia/comparative-religion",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/15",
+      "destination": "/encyclopedia/comparative-religion",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/16",
+      "destination": "/encyclopedia/complete-christian-theology-map",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/16",
+      "destination": "/encyclopedia/complete-christian-theology-map",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/17",
+      "destination": "/encyclopedia/crusades-historical-theological-analysis",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/17",
+      "destination": "/encyclopedia/crusades-historical-theological-analysis",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/18",
+      "destination": "/encyclopedia/early-church-fathers-councils",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/18",
+      "destination": "/encyclopedia/early-church-fathers-councils",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/19",
+      "destination": "/encyclopedia/easter-resurrection",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/19",
+      "destination": "/encyclopedia/easter-resurrection",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/20",
+      "destination": "/encyclopedia/family-tree-adam-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/20",
+      "destination": "/encyclopedia/family-tree-adam-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/21",
+      "destination": "/encyclopedia/forbidden-knowledge-the-watchers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/21",
+      "destination": "/encyclopedia/forbidden-knowledge-the-watchers",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/22",
+      "destination": "/encyclopedia/guide-to-christian-living",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/22",
+      "destination": "/encyclopedia/guide-to-christian-living",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/23",
+      "destination": "/encyclopedia/heaven-hell",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/23",
+      "destination": "/encyclopedia/heaven-hell",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/24",
+      "destination": "/encyclopedia/history-of-all-12-disciples",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/24",
+      "destination": "/encyclopedia/history-of-all-12-disciples",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/25",
+      "destination": "/encyclopedia/holy-communion",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/25",
+      "destination": "/encyclopedia/holy-communion",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/26",
+      "destination": "/encyclopedia/how-the-world-populated-after-abels-death",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/26",
+      "destination": "/encyclopedia/how-the-world-populated-after-abels-death",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/27",
+      "destination": "/encyclopedia/jesus-is-god-full-references-ot-nt",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/27",
+      "destination": "/encyclopedia/jesus-is-god-full-references-ot-nt",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/28",
+      "destination": "/encyclopedia/lords-prayer",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/28",
+      "destination": "/encyclopedia/lords-prayer",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/29",
+      "destination": "/encyclopedia/messianic-prophecies",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/29",
+      "destination": "/encyclopedia/messianic-prophecies",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/30",
+      "destination": "/encyclopedia/miracles-of-jesus-and-the-apostles-complete-catalogue",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/30",
+      "destination": "/encyclopedia/miracles-of-jesus-and-the-apostles-complete-catalogue",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/31",
+      "destination": "/encyclopedia/names-of-god",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/31",
+      "destination": "/encyclopedia/names-of-god",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/32",
+      "destination": "/encyclopedia/names-of-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/32",
+      "destination": "/encyclopedia/names-of-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/33",
+      "destination": "/encyclopedia/non-canonical-books-canon-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/33",
+      "destination": "/encyclopedia/non-canonical-books-canon-differences",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/34",
+      "destination": "/encyclopedia/not-biblical-quotes-sayings",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/34",
+      "destination": "/encyclopedia/not-biblical-quotes-sayings",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/35",
+      "destination": "/encyclopedia/original-scripture-languages",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/35",
+      "destination": "/encyclopedia/original-scripture-languages",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/36",
+      "destination": "/encyclopedia/parables-of-jesus-all-40-explained",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/36",
+      "destination": "/encyclopedia/parables-of-jesus-all-40-explained",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/37",
+      "destination": "/encyclopedia/primeval-world-timeline-ancient-civilizations",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/37",
+      "destination": "/encyclopedia/primeval-world-timeline-ancient-civilizations",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/38",
+      "destination": "/encyclopedia/psalm-authors",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/38",
+      "destination": "/encyclopedia/psalm-authors",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/39",
+      "destination": "/encyclopedia/revelation-judgments-timeline",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/39",
+      "destination": "/encyclopedia/revelation-judgments-timeline",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/40",
+      "destination": "/encyclopedia/sermon-on-the-mount",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/40",
+      "destination": "/encyclopedia/sermon-on-the-mount",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/41",
+      "destination": "/encyclopedia/seven-last-words-of-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/41",
+      "destination": "/encyclopedia/seven-last-words-of-jesus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/42",
+      "destination": "/encyclopedia/systematic-theology-subjects",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/42",
+      "destination": "/encyclopedia/systematic-theology-subjects",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/43",
+      "destination": "/encyclopedia/ten-commandments-ot-laws",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/43",
+      "destination": "/encyclopedia/ten-commandments-ot-laws",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/44",
+      "destination": "/encyclopedia/the-five-offerings-of-leviticus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/44",
+      "destination": "/encyclopedia/the-five-offerings-of-leviticus",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/45",
+      "destination": "/encyclopedia/the-magi",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/45",
+      "destination": "/encyclopedia/the-magi",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/46",
+      "destination": "/encyclopedia/true-worship-vs-false-worship",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/46",
+      "destination": "/encyclopedia/true-worship-vs-false-worship",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/47",
+      "destination": "/encyclopedia/types-of-bad-spirits-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/47",
+      "destination": "/encyclopedia/types-of-bad-spirits-in-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/48",
+      "destination": "/encyclopedia/vatican-and-its-history",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/48",
+      "destination": "/encyclopedia/vatican-and-its-history",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/49",
+      "destination": "/encyclopedia/worlds-all-big-churches",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/49",
+      "destination": "/encyclopedia/worlds-all-big-churches",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/50",
+      "destination": "/encyclopedia/1-year-sermon-guide-52-gen-z-topics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/50",
+      "destination": "/encyclopedia/1-year-sermon-guide-52-gen-z-topics",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/51",
+      "destination": "/encyclopedia/kings-of-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/by-number/51",
+      "destination": "/encyclopedia/kings-of-the-bible",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/biblical-numerology",
+      "destination": "/encyclopedia/all-biblical-numerology",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/miracles-of-jesus-the-apostles-complete-catalogue",
+      "destination": "/encyclopedia/miracles-of-jesus-and-the-apostles-complete-catalogue",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/not-biblical-quotes-or-sayings",
+      "destination": "/encyclopedia/not-biblical-quotes-sayings",
+      "permanent": true
+    },
+    {
+      "source": "/encyclopedia/biblical-quotes-sayings",
+      "destination": "/encyclopedia/not-biblical-quotes-sayings",
       "permanent": true
     }
   ],
@@ -57,6 +722,37 @@
     }
   ],
   "headers": [
+    {
+      "source": "/(.*\\.md)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
+      "source": "/sitemap-theological-archive.xml",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
     {
       "source": "/assets/:name-:hash.:ext(js|css|woff2)",
       "headers": [
