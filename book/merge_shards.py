@@ -17,11 +17,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import i18n_common as C
 
 # Mirrors gt_shard.is_garbage: values that are only markers/punctuation/empty.
+# A leftover "[[" means the translator did not preserve a pinned reference, so
+# the string is unusable and the English is better than stray brackets.
 GARBAGE_RE = __import__("re").compile(r"^[\uf8f00-9\s\d;:,.\-\u061f]*$")
 
 
 def is_garbage(value: str) -> bool:
-    return not value.strip() or bool(GARBAGE_RE.match(value.strip()))
+    stripped = value.strip()
+    if not stripped or "[[" in stripped:
+        return True
+    return bool(GARBAGE_RE.match(stripped))
 
 
 def main(argv):

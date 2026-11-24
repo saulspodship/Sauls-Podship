@@ -60,7 +60,12 @@ VERSE_RE = re.compile(
     r"\s\d+(?::\d+(?:[-\u2013]\d+)?)?"
 )
 
-PIN = "\uf8f0"   # private-use marker, one per pinned reference
+# Placeholders the endpoint reliably leaves alone: bracketed digits survive
+# translation intact (verified against the live endpoint).  The old marker was
+# a bare private-use character, which Google mistranslated into "0" and then
+# dropped the other half of, leaving stray glyphs and missing verse references
+# in 614 Urdu strings.
+PIN_OPEN, PIN_CLOSE = "[[", "]]"
 
 
 def protect(text: str) -> tuple[str, list[str]]:
@@ -69,7 +74,7 @@ def protect(text: str) -> tuple[str, list[str]]:
 
     def _pin(m):
         pins.append(m.group(0))
-        return f"{PIN}{len(pins) - 1}{PIN}"
+        return f"{PIN_OPEN}{len(pins) - 1}{PIN_CLOSE}"
 
     out = re.sub(r"\[([^\]]*)\]\(([^)]*)\)", r"\1", text)
     out = out.replace("**", "")
@@ -87,7 +92,7 @@ def protect(text: str) -> tuple[str, list[str]]:
 def restore(text: str, pins: list[str]) -> str:
     """Put the pinned references back and tidy translation artefacts."""
     out = re.sub(
-        rf"{PIN}(\d+){PIN}",
+        r"\[\[\s*(\d+)\s*\]\]",
         lambda m: pins[int(m.group(1))] if int(m.group(1)) < len(pins) else "",
         text,
     )
@@ -141,9 +146,11 @@ def _request(text: str, lang: str, tries: int = 5) -> str:
 
 
 def is_garbage(value: str) -> bool:
-    """True when a translation is empty punctuation or a bare pin marker."""
+    """True when a translation is empty punctuation or a leftover marker."""
     stripped = value.strip()
     if not stripped:
+        return True
+    if "[[" in stripped:          # an unresolved placeholder leaked through
         return True
     if re.fullmatch(r"[\uf8f00-9\s\d;:,.\-\u061f]*", stripped):
         return True
