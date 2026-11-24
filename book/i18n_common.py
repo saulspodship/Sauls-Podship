@@ -22,7 +22,12 @@ I18N = DATA / "i18n"
 
 # Strings that should never be sent to the translator.
 SKIP_RE = re.compile(
-    r"^(https?://|www\.|/|#|[\d\.\s%:]+\$?$)"
+    # '#' only means a URL fragment or an id when it has no space after it.
+    # A markdown heading ("# Title", "### Analysis") does have one, and those
+    # headings introduce whole sections -- matching bare '#' silently dropped
+    # 318 strings and 247,000 characters from translation, which is why blocks
+    # of the Urdu book were still English.
+    r"^(https?://|www\.|/(?=\S)|#(?=[^\s#])|[\d\.\s%:]+\$?$)"
     r"|^[A-Za-z0-9_\-./]+$"
     r"|^[\W\d]+$",
     re.I,
