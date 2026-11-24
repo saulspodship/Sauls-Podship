@@ -1422,6 +1422,24 @@ _CAPTIONS = {
         "Related volumes": "متعلقہ جلدیں", "Related volumes:": "متعلقہ جلدیں:",
         "Theme:": "موضوع:", "Connections:": "ربط:", "Characters:": "کردار:",
         "Panel": "منظر", "Detail": "تفصیل", "Era": "دور",
+        # Bible book names stay in Latin on the tables that abbreviate them
+        # (the column would not fit the Urdu name), but the spelled-out names
+        # read better in Urdu elsewhere.
+        "Genesis": "پیدائش", "Exodus": "خروج", "Leviticus": "احبار",
+        "Numbers": "گنتی", "Deuteronomy": "استثنا", "Joshua": "یشوع",
+        "Judges": "قضاۃ", "Ruth": "رتُ", "Ezra": "عزرا", "Nehemiah": "نحمیاہ",
+        "Esther": "آستر", "Job": "ایوب", "Psalms": "زبور", "Proverbs": "امثال",
+        "Ecclesiastes": "واعظ", "Song": "غزل الغزلات", "Isaiah": "یسعیاہ",
+        "Jeremiah": "یرمیاہ", "Lamentations": "نوحہ", "Ezekiel": "حزقیل",
+        "Daniel": "دانیال", "Hosea": "ہوشیع", "Joel": "یوایل", "Amos": "عاموس",
+        "Obadiah": "عبدیا", "Jonah": "یوناہ", "Micah": "میکاہ", "Nahum": "ناحوم",
+        "Habakkuk": "حبقوق", "Zephaniah": "صفنیاہ", "Haggai": "حجی",
+        "Zechariah": "زکریاہ", "Malachi": "ملاکی", "Matthew": "متی",
+        "Mark": "مرقس", "Luke": "لوقا", "John": "یوحنا", "Romans": "رومیوں",
+        "Galatians": "گلتیوں", "Ephesians": "افسیوں", "Philippians": "فلپیوں",
+        "Colossians": "کلسیوں", "Titus": "ططس", "Philemon": "فلیمون",
+        "Hebrews": "عبرانیوں", "James": "یعقوب", "Jude": "یہوداہ",
+        "Revelation": "مکاشفہ",
         "Article": "مضمون", "Video": "ویڈیو", "Asked in": "پوچھا گیا",
         "Updated": "تازہ کاری", "Part": "حصہ", "Part 3": "حصہ 3",
         "Summary": "خلاصہ", "Summary:": "خلاصہ:",
@@ -1468,6 +1486,22 @@ _CAPTIONS = {
         "Theme": "विषय", "Connections": "संबंध", "Characters": "पात्र",
         "Theme:": "विषय:", "Connections:": "संबंध:", "Characters:": "पात्र:",
         "Panel": "दृश्य", "Detail": "विवरण", "Era": "युग",
+        "Genesis": "उत्पत्ति", "Exodus": "निर्गमन", "Leviticus": "लैव्यव्यवस्था",
+        "Numbers": "गिनती", "Deuteronomy": "व्यवस्थाविवरण", "Joshua": "यहोशू",
+        "Judges": "न्यायियों", "Ruth": "रूत", "Ezra": "एज्रा",
+        "Nehemiah": "नहेम्याह", "Esther": "एस्तेर", "Job": "अय्यूब",
+        "Psalms": "भजन संहिता", "Proverbs": "नीतिवचन", "Ecclesiastes": "सभोपदेशक",
+        "Song": "श्रेष्ठगीत", "Isaiah": "यशायाह", "Jeremiah": "यिर्मयाह",
+        "Lamentations": "विलापगीत", "Ezekiel": "यहेजकेल", "Daniel": "दानिय्येल",
+        "Hosea": "होशे", "Joel": "योएल", "Amos": "आमोस", "Obadiah": "ओबद्याह",
+        "Jonah": "योना", "Micah": "मीका", "Nahum": "नहूम", "Habakkuk": "हबक्कूक",
+        "Zephaniah": "सपन्याह", "Haggai": "हाग्गै", "Zechariah": "जकर्याह",
+        "Malachi": "मलाकी", "Matthew": "मत्ती", "Mark": "मरकुस", "Luke": "लूका",
+        "John": "यूहन्ना", "Romans": "रोमियों", "Galatians": "गलातियों",
+        "Ephesians": "इफिसियों", "Philippians": "फिलिप्पियों",
+        "Colossians": "कुलुस्सियों", "Titus": "तीतुस", "Philemon": "फिलेमोन",
+        "Hebrews": "इब्रानियों", "James": "याकूब", "Jude": "यहूदा",
+        "Revelation": "प्रकाशितवाक्य",
         "Related volumes:": "संबंधित खंड:",
         "Related volumes": "संबंधित खंड", "Article": "लेख", "Video": "वीडियो",
         "Volume": "खंड", "Chapter": "अध्याय", "Context": "पृष्ठभूमि", "Part": "भाग",
@@ -1578,14 +1612,17 @@ _CAPTION_OVERLAY: dict = {}
 def _caption_table() -> dict:
     """_CAPTIONS for the current language, plus the image-tile captions."""
     if not _CAPTION_OVERLAY:
-        try:
-            raw = json.loads((Path(__file__).resolve().parent / "data" / "i18n"
-                              / "_captions.json").read_text(encoding="utf-8"))
-        except Exception:
-            raw = {}
-        for lang, table in raw.items():
-            if isinstance(table, dict):
-                _CAPTION_OVERLAY[lang] = table
+        base = Path(__file__).resolve().parent / "data" / "i18n"
+        for name in ("_captions.json", "_panel_overlay.json"):
+            try:
+                raw = json.loads((base / name).read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            for lang, table in raw.items():
+                if lang.startswith("_"):
+                    continue
+                if isinstance(table, dict):
+                    _CAPTION_OVERLAY.setdefault(lang, {}).update(table)
     table = dict(_CAPTIONS.get(LANG) or {})
     table.update(_CAPTION_OVERLAY.get(LANG, {}))
     return table
@@ -2428,7 +2465,7 @@ def build_volume_chapter(v: dict) -> list:
                 chunk = items[i:i+3]
                 row = []
                 for era, col in chunk:
-                    row.append(_square(col) + " " + htmllib.escape(era))
+                    row.append(_square(col) + " " + htmllib.escape(chrome(era)))
                 while len(row) < 3:
                     row.append("")
                 key_rows.append(row)
@@ -2436,21 +2473,25 @@ def build_volume_chapter(v: dict) -> list:
                                col_widths=[0.34, 0.33, 0.33], font_size=7.2)
         rows = []
         for p in panels:
-            bits = [p.get("description", "")]
+            # The panel fields are short labels ("Church", "Cain & Abel",
+            # "Exile / Restoration"), which the bulk translator skips as bare
+            # Latin tokens.  chrome() reads them from the hand-checked panel
+            # overlay instead, and returns anything unknown untouched.
+            bits = [chrome(p.get("description", ""))]
             if p.get("scripture"):
-                bits.append(chrome(f"Scripture: {p['scripture']}"))
+                bits.append(chrome(f"Scripture: {chrome(p['scripture'])}"))
             if p.get("theologicalTheme"):
-                bits.append(chrome(f"Theme: {p['theologicalTheme']}"))
+                bits.append(chrome(f"Theme: {chrome(p['theologicalTheme'])}"))
             if p.get("connections"):
-                bits.append(chrome(f"Connections: {p['connections']}"))
+                bits.append(chrome(f"Connections: {chrome(p['connections'])}"))
             if p.get("characters"):
-                bits.append(chrome(f"Characters: {p['characters']}"))
+                bits.append(chrome(f"Characters: {chrome(p['characters'])}"))
             col = (p.get("colorTheme") or "").strip()
             chip_mark = (_square(col) + " ") if col else ""
             era_col = col if col else "#7a6a5f"
             rows.append([
-                f"{chip_mark}<b>{p.get('title','')}</b><br/>"
-                f"<font color='{era_col}'>{p.get('era','')}</font>",
+                f"{chip_mark}<b>{chrome(p.get('title',''))}</b><br/>"
+                f"<font color='{era_col}'>{chrome(p.get('era',''))}</font>",
                 "<br/>".join(b for b in bits if b),
             ])
         flow += make_table([chrome("Panel"), chrome("Detail")], rows,
