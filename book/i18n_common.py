@@ -75,6 +75,15 @@ def strings():
                     walk(v)
 
         walk(obj)
+
+    # Prose that lives in build_pdf.py rather than in the data files. It is
+    # listed last so adding it never renumbers the existing shards.
+    ui = BOOK / "data" / "i18n" / "_ui_prose_sources.json"
+    if ui.exists():
+        for s in json.loads(ui.read_text(encoding="utf-8")):
+            if isinstance(s, str) and s not in seen and not should_skip(s):
+                seen.add(s)
+                out.append(s)
     return out
 
 

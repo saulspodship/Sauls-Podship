@@ -1467,6 +1467,48 @@ _CAPTIONS = {
 }
 
 
+# Prose that lives in this script rather than in the data files: the part
+# introductions and a few explanatory paragraphs. The translation pipeline
+# only reads book/data, so these were never translated and printed in English
+# in the middle of the Urdu and Hindi books. Writing them to a file lets the
+# same runner-side pipeline pick them up; a missing entry falls back to English.
+_UI_PROSE_PATH = Path(__file__).resolve().parent / "data" / "i18n" / "_ui_prose.json"
+_UI_PROSE_CACHE: dict = {}
+
+
+def _ui_prose_table() -> dict:
+    """Translations for the prose above.
+
+    Kept in the ordinary translation cache rather than a file of its own: the
+    cache is keyed by the English string, and the runner already writes it, so
+    the builders need no separate step. _ui_prose.json is still read first so
+    a hand correction can override the machine wording.
+    """
+    if not _UI_PROSE_CACHE:
+        try:
+            raw = json.loads(_UI_PROSE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            raw = {}
+        _UI_PROSE_CACHE.update(raw.get(LANG, {}) or {})
+        cache_path = DATA / "i18n" / f"_cache_{LANG}.json"
+        try:
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+        _UI_PROSE_CACHE["__cache__"] = cache
+    return _UI_PROSE_CACHE
+
+
+def ui_prose(text: str) -> str:
+    """Translated wording for prose that lives in the build script."""
+    if LANG == "en":
+        return text
+    table = _ui_prose_table()
+    if text in table:
+        return table[text]
+    return table.get("__cache__", {}).get(text, text)
+
+
 def chrome(text: str) -> str:
     """Local wording for a piece of book apparatus, in the current language.
 
@@ -1506,6 +1548,20 @@ def section_h(text: str) -> list:
 
 def sub_h(text: str) -> list:
     return [para(clean(chrome(text)), ST["h3"])]
+
+
+# ---- prose owned by this script (see ui_prose) ----
+_UI_P01 = 'These eight maps show real places on true geography. On the website you can press a button and watch footsteps trace each route, stop by stop. The coastlines come from Natural Earth, which is free for everyone to use. The routes follow standard scholarly reconstructions, so a few details are approximate. Use them to picture where these stories actually happened.'
+_UI_P02 = 'After walking the sacred journeys, lift your eyes to the whole world the gospel now covers. The world-faith map (Part VIII) carries the same dataset the live site woven into its Interlinked Bible module: seven tradition categories across 175 countries, on a total population of 8.23 billion.'
+_UI_P03 = 'Each entry follows the same structure: Context; the mainstream position with primary sources; a Christian apologetic response; and points for respectful discussion — because a debate opponent who feels straw-manned will not listen, no matter how strong the argument is.'
+_UI_P04 = 'Each question below comes with a plain answer, a verse from the King James Bible, and five responses from different Christian traditions. Where a tradition has a famous quotation to offer, it is included.'
+_UI_P05 = 'Each profile in the atlas carries its own distinct artwork — sourced historical images where they exist, and text-guided reconstructions strictly limited to the forms the Bible or 1 Enoch describes. Concept and claim rows carry no images, so no picture pretends to be evidence.'
+_UI_P06 = 'Every prophecy on the live prophecy map carries three ways of reading it. The historical view looks at what happened in the past. The metaphorical view sees a spiritual meaning in Christ. The futurist view waits for a literal fulfillment still to come. This way you can see which school of theology counts each prophecy as complete.'
+_UI_P07 = "Every row is one person's life; where lives overlap, those people were alive together. Ages in Genesis 5 and 11 (Hebrew text; the Septuagint differs) give absolute dates for the antediluvian and early postdiluvian patriarchs. From Judah onward Scripture lists names but not ages, and Matthew's list skips some generations, so those bars are estimates built from known reign dates and generation spacing (shown as approx). Enoch is shown to age 365, when God took him. Chronology is Ussher-style years from creation (AM)."
+_UI_P08 = "This is a living archive of Pakistani Christian music. It follows four generations of one family, beginning with a founding pastor in Montgomery, which is now called Sahiwal, and running through to today's composers and maestros."
+_UI_P09 = 'These are the biblical Psalms put into classical Punjabi meters by Imam-ud-Din Shahbaz in 1908. Each one is listed with its raga and its English theme. The full hymn texts live at punjabizaboor1908.com.'
+_UI_P10 = "The Interlinked Bible / cross-reference module maps every verse of the King James Version against openbible.info's topical links — 66 books, with chapter and verse counts used to lay out the classic chord diagram."
+_UI_P11 = 'The world map module ships dominant-tradition polygons for 175 countries with population and percentage shares — the same data tabulated earlier in Part 7.'
 
 
 # ================================================================ BUILD
@@ -1659,11 +1715,7 @@ def build():
     story += chapter_head("", "Walking the Bible Maps", kicker="Part 2",
                           hero=hero("images/volumes/biblical-maps/hero-1920.jpg"))
     story += [para(
-        "These eight maps show real places on true geography. On the website you can "
-        "press a button and watch footsteps trace each route, stop by stop. The coastlines "
-        "come from Natural Earth, which is free for everyone to use. The routes follow "
-        "standard scholarly reconstructions, so a few details are approximate. Use them "
-        "to picture where these stories actually happened.",
+        ui_prose(_UI_P01),
         ST["lead"],
     )]
     map_meta = {
@@ -1691,10 +1743,7 @@ def build():
     story += chapter_head("", "The World Map", kicker="Part 2",
                           hero=hero("images/hero-prophecy.jpg"))
     story += [para(
-        "After walking the sacred journeys, lift your eyes to the whole world the gospel now "
-        "covers. The world-faith map (Part VIII) carries the same dataset the live site "
-        "woven into its Interlinked Bible module: seven tradition categories across 175 "
-        "countries, on a total population of 8.23 billion.",
+        ui_prose(_UI_P02),
         ST["body"],
     )]
 
@@ -1714,10 +1763,7 @@ def build():
     for p in codex.get("preface", []):
         story += [safe_para(inline_md(p), ST["body"])]
     story += [para(
-        "Each entry follows the same structure: Context; the mainstream position with "
-        "primary sources; a Christian apologetic response; and points for respectful "
-        "discussion — because a debate opponent who feels straw-manned will not listen, no "
-        "matter how strong the argument is.",
+        ui_prose(_UI_P03),
         ST["body"],
     )]
 
@@ -1792,9 +1838,7 @@ def build():
         "pentecostal": chrome("Pentecostal"),
     }
     story += [para(
-        "Each question below comes with a plain answer, a verse from the King James "
-        "Bible, and five responses from different Christian traditions. Where a tradition "
-        "has a famous quotation to offer, it is included.",
+        ui_prose(_UI_P04),
         ST["lead"],
     )]
     for q in tough:
@@ -1859,10 +1903,7 @@ def build():
     story += [CondPageBreak(60 * mm),
               para("Visual index — key figures and beings", ST["h2"])]
     story += [para(
-        "Each profile in the atlas carries its own distinct artwork — sourced historical "
-        "images where they exist, and text-guided reconstructions strictly limited to the "
-        "forms the Bible or 1 Enoch describes. Concept and claim rows carry no images, so "
-        "no picture pretends to be evidence.",
+        ui_prose(_UI_P05),
         ST["body"],
     )]
     assets = watchers.get("assets", {})
@@ -1885,11 +1926,7 @@ def build():
     story += chapter_head("", "Two Hundred Forty Seven Prophecies", kicker="Part 7",
                           hero=hero("images/hero-prophecy.jpg"))
     story += [para(
-        "Every prophecy on the live prophecy map carries three ways of reading it. "
-        "The historical view looks at what happened in the past. The metaphorical view "
-        "sees a spiritual meaning in Christ. The futurist view waits for a literal "
-        "fulfillment still to come. This way you can see which school of theology counts "
-        "each prophecy as complete.",
+        ui_prose(_UI_P06),
         ST["lead"],
     )]
     lens_rows = []
@@ -1938,13 +1975,7 @@ def build():
     story += chapter_head("", "From Adam to Jesus", kicker="Part 7",
                           hero=hero("images/volumes/family-tree-adam-jesus/hero-1920.jpg"))
     story += [para(
-        "Every row is one person's life; where lives overlap, those people were alive "
-        "together. Ages in Genesis 5 and 11 (Hebrew text; the Septuagint differs) give "
-        "absolute dates for the antediluvian and early postdiluvian patriarchs. From Judah "
-        "onward Scripture lists names but not ages, and Matthew's list skips some "
-        "generations, so those bars are estimates built from known reign dates and "
-        "generation spacing (shown as approx). Enoch is shown to age 365, when God took "
-        "him. Chronology is Ussher-style years from creation (AM).",
+        ui_prose(_UI_P07),
         ST["body"],
     )]
     g_rows = []
@@ -1974,10 +2005,7 @@ def build():
     story += chapter_head("", "The Singers and Their Story", kicker="Part 8",
                           hero=hero("images/volumes/guide-to-christian-living/hero-1920.jpg"))
     story += [para(
-        "This is a living archive of Pakistani Christian music. It follows four "
-        "generations of one family, beginning with a founding pastor in Montgomery, "
-        "which is now called Sahiwal, and running through to today's composers and "
-        "maestros.",
+        ui_prose(_UI_P08),
         ST["lead"],
     )]
     all_singers = (music.get("dynasty", []) + music.get("pioneers", [])
@@ -2006,9 +2034,7 @@ def build():
     story += chapter_head("", "Punjabi Zaboor, the Psalm Songs", kicker="Part 8",
                           hero=hero("images/volumes/lords-prayer/hero-1920.jpg"))
     story += [para(
-        "These are the biblical Psalms put into classical Punjabi meters by Imam-ud-Din "
-        "Shahbaz in 1908. Each one is listed with its raga and its English theme. The "
-        "full hymn texts live at punjabizaboor1908.com.",
+        ui_prose(_UI_P09),
         ST["lead"],
     )]
     z_rows = []
@@ -2120,9 +2146,7 @@ def build():
         ST["body"],
     )]
     story += [para(
-        "The Interlinked Bible / cross-reference module maps every verse of the King James "
-        "Version against openbible.info's topical links — 66 books, with chapter and verse "
-        "counts used to lay out the classic chord diagram.",
+        ui_prose(_UI_P10),
         ST["body"],
     )]
     x_rows = []
@@ -2133,8 +2157,7 @@ def build():
                         col_widths=[0.44, 0.16, 0.2, 0.2])
     story += sub_h("World faith dataset (as shipped)")
     story += [para(
-        "The world map module ships dominant-tradition polygons for 175 countries with "
-        "population and percentage shares — the same data tabulated earlier in Part 7.",
+        ui_prose(_UI_P11),
         ST["body"],
     )]
 
