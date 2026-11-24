@@ -29,12 +29,19 @@ npm run dev        # dev server on :3000 (tsz server.ts behind gen-volume-index)
 | `npm run gen:volumes` | Regenerate `src/data/volumes/volumeIndex.json` |
 | `npm run gen:i18n` | Emit `public/i18n/*.json` + bundle `public/assets/sp-i18n.js` from `src/data/i18n/` |
 | `npm run test:i18n` | Dictionary/coverage/engine gate (also runs inside `npm run build`) |
+| `npm run gen:redirects` | Rewrite the `/encyclopedia/<NN>` + legacy-slug 301s in `vercel.json` from the volume data |
+| `npm run check:redirects` | Gate: fails when `vercel.json` has drifted from `volumesData.json` (runs in `npm run build`) |
+| `node scripts/test-boot-route.mjs` | Proves a clean URL seeds the hash route without a redirect (needs a build) |
 
 ## Verify before finishing (required)
 
 ```bash
 npm run lint && npm test && npm run verify && npm run build && npm run test:about
 ```
+
+Search Console indexing work is documented in
+[`docs/SEO_GSC_FIXES_2026-11-24.md`](docs/SEO_GSC_FIXES_2026-11-24.md) — read it before
+touching routing, redirects or the `.md` corpus companions.
 
 ## Languages (Urdu / Hindi / Arabic)
 

@@ -76,8 +76,13 @@ const vercel = JSON.parse(read('vercel.json'));
 for (const route of ['about', 'faq']) {
   for (const source of [`/${route}`, `/${route}/`]) {
     const index = vercel.rewrites.findIndex((rewrite: { source: string }) => rewrite.source === source);
+    // There is no SPA-catch-all rewrite in vercel.json any more: the platform's
+    // Vite preset answers unknown paths and dist/404.html keeps the 404 status,
+    // which is what Google needs (a 200 shell here would be a soft 404). The
+    // ordering rule still applies whenever such a fallback is declared.
     const fallback = vercel.rewrites.findIndex((rewrite: { destination: string }) => rewrite.destination === '/index.html');
-    assert.ok(index >= 0 && index < fallback, `Missing clean URL rewrite for ${source}`);
+    const beforeFallback = fallback === -1 || index < fallback;
+    assert.ok(index >= 0 && beforeFallback, `Missing clean URL rewrite for ${source}`);
     assert.equal(vercel.rewrites[index].destination, `/${route}.html`);
   }
 }
@@ -107,7 +112,12 @@ for (const item of FAQ_PAGE_ITEMS) {
 const llms = read('dist/llms.txt');
 assert.ok(llms.includes(ABOUT_META.canonical));
 for (const app of PODSHIP_APPS) assert.ok(llms.includes(`[${app.name}](${app.url})`));
-assert.equal(llms, read('dist/llms-full.txt'));
+// llms.txt is the index and llms-full.txt is the same document followed by the
+// full volume corpus (postbuild writes both; check-seo asserts the full one is
+// meaningfully larger). The old equality assertion predates that split.
+const llmsFull = read('dist/llms-full.txt');
+assert.ok(llmsFull.startsWith(llms), 'llms-full.txt no longer begins with llms.txt');
+assert.ok(llmsFull.length > llms.length, 'llms-full.txt is not fuller than llms.txt');
 const sitemap = read('dist/sitemap.xml');
 assert.ok(sitemap.includes(`<loc>${ABOUT_META.canonical}</loc>`));
 assert.ok(sitemap.includes(`<loc>${FAQ_PAGE_META.canonical}</loc>`));

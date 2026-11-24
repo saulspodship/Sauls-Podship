@@ -13,14 +13,36 @@
     <title>Saul's Podship | Interactive Theological Encyclopedia</title>
     <script>
       // The app is routed with createHashRouter (/#/route). Static hosting
-      // answers any unknown path (e.g. /theological-archive from the sitemap,
-      // volume-page companion buttons or an old plain <a href>) with this
-      // file and an EMPTY hash, which silently lands on the home page.
-      // Rewrite such deep links to their hash form before the app boots.
+      // answers every clean sitemap URL (e.g. /theological-archive) with a
+      // prerendered file that still boots the hash router, so the requested
+      // route has to reach location.hash before the router is created.
+      //
+      // GSC "Page with redirect" (78 URLs, 16 Nov 2026) — this used to send the
+      // browser to the hash form with location.replace(), i.e. a real
+      // navigation. Googlebot rendered each clean URL, watched it navigate away
+      // and filed every sitemap URL as a redirect, so none of the prerendered
+      // pages could ever be indexed.
+      //
+      // history.replaceState seeds the same hash route WITHOUT navigating: the
+      // clean path stays in the address bar (still the canonical this page
+      // declares), the prerendered HTML is kept instead of being reloaded, and
+      // there is no redirect for a crawler to report. The fragment is only
+      // there for the router to read; see src/routes.tsx for the one-time
+      // address-bar tidy-up after the user starts navigating inside the SPA.
       (function () {
         var p = location.pathname;
-        if (p && p !== '/' && p !== '/index.html' && !location.hash) {
-          location.replace('/#' + p.replace(/\/+$/, '') + location.search);
+        if (!p || p === '/' || p === '/index.html' || location.hash) return;
+        var route = p.replace(/^\/+|\/+$/g, '');
+        if (!route) return;
+        var hash = '#/' + route + location.search;
+        try {
+          // Keep the clean path, append the route as a fragment for the router.
+          history.replaceState(null, '', p + hash);
+          if (location.hash !== hash) throw new Error('hash not seeded');
+        } catch (e) {
+          // Very old engines without a usable history.replaceState keep the
+          // old behaviour rather than silently landing on the home page.
+          location.replace('/' + hash);
         }
       })();
     </script>

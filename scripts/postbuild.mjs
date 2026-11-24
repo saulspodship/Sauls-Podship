@@ -327,32 +327,14 @@ for (const v of volumes) {
 
   fs.writeFileSync(path.join(volDir, 'index.html'), volHtml, 'utf8');
 
-  // Pre-generate numeric redirect files for /encyclopedia/:num and /encyclopedia/by-number/:num
-  const numDirs = [
-    path.join(encDistDir, String(v.number)),
-    path.join(encDistDir, 'by-number', String(v.number))
-  ];
-
-  const redirectHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/encyclopedia/${v.slug}">
-  <meta name="robots" content="noindex, follow">
-  <link rel="canonical" href="${volCanonical}">
-  <title>Redirecting to Volume ${v.number}...</title>
-</head>
-<body>
-  <p>Redirecting to <a href="/encyclopedia/${v.slug}">${v.title}</a>...</p>
-</body>
-</html>`;
-
-  for (const nd of numDirs) {
-    if (!fs.existsSync(nd)) {
-      fs.mkdirSync(nd, { recursive: true });
-    }
-    fs.writeFileSync(path.join(nd, 'index.html'), redirectHtml, 'utf8');
-  }
+  // Numeric volume URLs (/encyclopedia/12, /encyclopedia/by-number/12) are NOT
+  // written as HTML stubs any more. GSC (16 Nov 2026) filed them under
+  // "Excluded by 'noindex' tag" because a static <meta http-equiv="refresh">
+  // page can only *ask* for a redirect — it answers 200 with a noindex — and a
+  // meta refresh is what GSC's "Page with redirect" report is built on.
+  // They are now real edge 301s declared in vercel.json by
+  // scripts/sync-vercel-redirects.mjs (and by the /encyclopedia/:slug route in
+  // api/index.ts when the app runs as a container). Nothing to write here.
 }
 
 // Pre-render static HTML for all static pages

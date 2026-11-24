@@ -169,11 +169,52 @@ fs.mkdirSync(archDir, { recursive: true });
 fs.writeFileSync(path.join(archDir, 'index.html'), archiveHtmlWithPioneers, 'utf8');
 
 // ---- 2. Artist bio pages (mirror the /music-archive/:slug route) ----
+/* Community / aggregator entries (Facebook groups and pages) are not person
+ * biographies: they are one short paragraph long, they duplicate the archive
+ * index, and Google crawls them without indexing them ("Crawled - currently
+ * not indexed", 16 Nov 2026). They are 301'd to /Pakistanisingersarchive in
+ * vercel.json, so they get no page here and no sitemap entry. */
+const NON_PROFILE_BADGES = new Set(['Active Community']);
+const isProfile = (artist) => !NON_PROFILE_BADGES.has(artist.badge);
+const profiles = artists.filter(isProfile);
+
+/* Context + related-profile links for every artist page.
+ * GSC "Crawled - currently not indexed" (16 Nov 2026) listed
+ * /music-archive/imam-ud-din-shahbaz: the page was a single short paragraph
+ * with one incoming link, which reads as thin/orphaned. Each profile now
+ * carries a breadcrumb trail, a short archive-context block, links into the
+ * Punjabi Zaboor / sacred-music pages, and links to five neighbouring profiles
+ * so every artist is reachable from the rest of the archive. */
+function relatedArtists(artist, count = 5) {
+  const sameBadge = profiles.filter((other) => other.id !== artist.id && other.badge === artist.badge);
+  const rest = profiles.filter((other) => other.id !== artist.id && other.badge !== artist.badge);
+  return [...sameBadge, ...rest].slice(0, count);
+}
+
+function relatedLinksHtml(artist) {
+  const items = relatedArtists(artist)
+    .map(
+      (other) =>
+        `<li><a href="/music-archive/${other.id}">${escapeAttribute(other.name)}</a>${
+          other.role ? ` — <span>${escapeAttribute(String(other.role).slice(0, 90))}</span>` : ''
+        }</li>`,
+    )
+    .join('');
+  if (!items) return '';
+  return `<section style="margin-top: 3rem; border-top: 1px solid #D4AF37; padding-top: 1.5rem;">
+      <h2 style="font-family:'Merriweather', serif; color:#4A152C; font-size:1.35rem; margin-bottom:1rem; font-weight:700;">Other profiles in the Pakistani Gospel Archive</h2>
+      <ul style="line-height:1.9; padding-left:1.2rem;">${items}</ul>
+      <p><a href="/Pakistanisingersarchive">Browse the complete Pakistani gospel singers archive</a></p>
+    </section>`;
+}
+
 function renderBio(artist) {
   const canonicalSlug = artist.id;
+  // Titles that end in "…" lose the brand anyway, so the default keeps the
+  // artist first and the descriptor short (20/104 pages were being truncated).
   const title = clipText(
-    artist.metaTitle || `${artist.name} | Pakistani Gospel Music | Saul's Podship`,
-    60,
+    artist.metaTitle || `${artist.name} | Pakistani Gospel Music Biography`,
+    66,
   );
   const description = clipText(
     artist.metaDescription ||
@@ -218,6 +259,16 @@ function renderBio(artist) {
     mainEntity: { '@type': 'Person', name: artist.name },
   }).replace(/</g, '\\u003c');
 
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: "Saul's Podship", item: `${BASE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Pakistani Gospel Music Archive', item: `${BASE_URL}/Pakistanisingersarchive` },
+      { '@type': 'ListItem', position: 3, name: artist.name, item: pageUrl },
+    ],
+  }).replace(/</g, '\\u003c');
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,6 +292,7 @@ function renderBio(artist) {
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script type="application/ld+json">${personSchema}</script>
   <script type="application/ld+json">${articleSchema}</script>
+  <script type="application/ld+json">${breadcrumbSchema}</script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -271,13 +323,21 @@ function renderBio(artist) {
     </div>
 
     ${linksHtml}
+
+    <section style="margin-top: 3rem; border-top: 1px solid #D4AF37; padding-top: 1.5rem;">
+      <h2 style="font-family:'Merriweather', serif; color:#4A152C; font-size:1.35rem; margin-bottom:1rem; font-weight:700;">About this record</h2>
+      <p>This profile is part of the Saul's Podship <a href="/Pakistanisingersarchive">Pakistani Christian gospel music archive</a>, a research register of the composers, vocalists and hymn writers who shaped the Punjabi Zaboor and Masihi Geet tradition${artist.badge ? `, catalogued here under the ${escapeAttribute(artist.badge)} group` : ''}.</p>
+      <p>Continue with the <a href="/music/punjabi-zaboor">Punjabi Zaboor: all 150 Psalms in Punjabi verse</a>, the <a href="/encyclopedia/christianity-in-south-asia-india-pakistan">history of Christianity in South Asia</a>, or the <a href="/music">sacred music overview</a>.</p>
+    </section>
+
+    ${relatedLinksHtml(artist)}
   </div>
 </body>
 </html>`;
 }
 
 let written = 0;
-for (const artist of artists) {
+for (const artist of profiles) {
   const dir = path.join(distDir, 'music-archive', artist.id);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), renderBio(artist), 'utf8');
@@ -292,7 +352,7 @@ if (fs.existsSync(sitemapPath)) {
   // Only append URLs the shipped sitemap does not already carry (no dupes).
   const urls = [
     `${BASE_URL}/Pakistanisingersarchive`,
-    ...artists.map((a) => `${BASE_URL}/music-archive/${a.id}`)
+    ...profiles.map((a) => `${BASE_URL}/music-archive/${a.id}`)
   ].filter((loc) => {
     const pathname = new URL(loc).pathname;
     return !redirectSources.has(pathname) && !xml.includes(`<loc>${loc}</loc>`);
@@ -311,5 +371,6 @@ if (fs.existsSync(sitemapPath)) {
 }
 
 console.log(
-  `[PRERENDER-MUSIC] Archive page + ${written}/${artists.length} artist bio pages written to dist/ (static, function-independent).`
+  `[PRERENDER-MUSIC] Archive page + ${written}/${profiles.length} artist bio pages written to dist/ (static, function-independent); ` +
+    `${artists.length - profiles.length} community entries left to their 301.`
 );
