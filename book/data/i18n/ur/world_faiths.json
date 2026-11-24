@@ -2,7 +2,7 @@
   "worldPop": 8232000000,
   "cats": {
     "christian": {
-      "label": "مسیحیت",
+      "label": "عیسائیت",
       "color": "#2e7d32",
       "adherents": 2440000000
     },
@@ -17,7 +17,7 @@
       "adherents": 1220000000
     },
     "unaffiliated": {
-      "label": "کوئی بھی نہیں",
+      "label": "غیر وابستہ / کوئی نہیں۔",
       "color": "#78909c",
       "adherents": 1190000000
     },
@@ -27,7 +27,7 @@
       "adherents": 520000000
     },
     "folk": {
-      "label": "روایتی و مقامی",
+      "label": "لوک/روایتی",
       "color": "#6a1b9a",
       "adherents": 430000000
     },
@@ -39,13 +39,13 @@
   },
   "countries": [
     {
-      "name": "Fiji",
+      "name": "فجی",
       "cat": "christian",
       "pct": 64,
       "pop": 902623
     },
     {
-      "name": "Tanzania",
+      "name": "تنزانیہ",
       "cat": "christian",
       "pct": 61,
       "pop": 70038850
@@ -57,7 +57,7 @@
       "pop": 610813
     },
     {
-      "name": "Canada",
+      "name": "کینیڈا",
       "cat": "christian",
       "pct": 53,
       "pop": 41417056
@@ -69,7 +69,7 @@
       "pop": 341784857
     },
     {
-      "name": "Kazakhstan",
+      "name": "قازقستان",
       "cat": "muslim",
       "pct": 72,
       "pop": 20604819
@@ -87,13 +87,13 @@
       "pop": 10185363
     },
     {
-      "name": "Indonesia",
+      "name": "انڈونیشیا",
       "cat": "muslim",
       "pct": 87,
       "pop": 288315089
     },
     {
-      "name": "Argentina",
+      "name": "ارجنٹائن",
       "cat": "christian",
       "pct": 85,
       "pop": 46466688
@@ -111,31 +111,31 @@
       "pop": 116452162
     },
     {
-      "name": "Somalia",
+      "name": "صومالیہ",
       "cat": "muslim",
       "pct": 99,
       "pop": 20305907
     },
     {
-      "name": "Kenya",
+      "name": "کینیا",
       "cat": "christian",
       "pct": 85,
       "pop": 54227015
     },
     {
-      "name": "Sudan",
+      "name": "سوڈان",
       "cat": "muslim",
       "pct": 91,
       "pop": 53282719
     },
     {
-      "name": "Chad",
+      "name": "چاڈ",
       "cat": "muslim",
       "pct": 56,
       "pop": 20031602
     },
     {
-      "name": "Haiti",
+      "name": "ہیٹی",
       "cat": "christian",
       "pct": 81,
       "pop": 11867032
@@ -147,13 +147,13 @@
       "pop": 10771504
     },
     {
-      "name": "Russia",
+      "name": "روس",
       "cat": "christian",
       "pct": 71,
       "pop": 146028325
     },
     {
-      "name": "Bahamas",
+      "name": "بہاماس",
       "cat": "christian",
       "pct": 90,
       "pop": 398165
@@ -165,19 +165,19 @@
       "pop": 3662
     },
     {
-      "name": "Norway",
+      "name": "ناروے",
       "cat": "christian",
       "pct": 68,
       "pop": 5636904
     },
     {
-      "name": "Greenland",
+      "name": "گرین لینڈ",
       "cat": "christian",
       "pct": 95,
       "pop": 56945
     },
     {
-      "name": "Timor-Leste",
+      "name": "تیمور-لیستے",
       "cat": "christian",
       "pct": 99,
       "pop": 1409452
@@ -189,49 +189,49 @@
       "pop": 63522380
     },
     {
-      "name": "Lesotho",
+      "name": "لیسوتھو",
       "cat": "christian",
       "pct": 90,
       "pop": 2116427
     },
     {
-      "name": "Mexico",
+      "name": "میکسیکو",
       "cat": "christian",
       "pct": 81,
       "pop": 131231919
     },
     {
-      "name": "Uruguay",
+      "name": "یوراگوئے",
       "cat": "christian",
       "pct": 47,
       "pop": 3480601
     },
     {
-      "name": "Brazil",
+      "name": "برازیل",
       "cat": "christian",
       "pct": 88,
       "pop": 214211951
     },
     {
-      "name": "Bolivia",
+      "name": "بولیویا",
       "cat": "christian",
       "pct": 88,
       "pop": 11365333
     },
     {
-      "name": "Peru",
+      "name": "پیرو",
       "cat": "christian",
       "pct": 89,
       "pop": 34157732
     },
     {
-      "name": "Colombia",
+      "name": "کولمبیا",
       "cat": "christian",
       "pct": 89,
       "pop": 53399171
     },
     {
-      "name": "Panama",
+      "name": "پانامہ",
       "cat": "christian",
       "pct": 85,
       "pop": 4064780
@@ -243,13 +243,13 @@
       "pop": 5217296
     },
     {
-      "name": "Nicaragua",
+      "name": "نکاراگوا",
       "cat": "christian",
       "pct": 84,
       "pop": 6874748
     },
     {
-      "name": "Honduras",
+      "name": "ہونڈوراس",
       "cat": "christian",
       "pct": 87,
       "pop": 10186738
@@ -261,25 +261,25 @@
       "pop": 6029976
     },
     {
-      "name": "Guatemala",
+      "name": "گوئٹے مالا",
       "cat": "christian",
       "pct": 94,
       "pop": 18312373
     },
     {
-      "name": "Belize",
+      "name": "بیلیز",
       "cat": "christian",
       "pct": 84,
       "pop": 418982
     },
     {
-      "name": "Venezuela",
+      "name": "وینزویلا",
       "cat": "christian",
       "pct": 88,
       "pop": 28633711
     },
     {
-      "name": "Guyana",
+      "name": "گیانا",
       "cat": "christian",
       "pct": 64,
       "pop": 956044
@@ -291,13 +291,13 @@
       "pop": 616500
     },
     {
-      "name": "France",
+      "name": "فرانس",
       "cat": "christian",
       "pct": 51,
       "pop": 69081996
     },
     {
-      "name": "Ecuador",
+      "name": "ایکواڈور",
       "cat": "christian",
       "pct": 88,
       "pop": 18243816
@@ -321,73 +321,73 @@
       "pop": 9434593
     },
     {
-      "name": "Zimbabwe",
+      "name": "زمبابوے",
       "cat": "christian",
       "pct": 87,
       "pop": 17073087
     },
     {
-      "name": "Botswana",
+      "name": "بوٹسوانا",
       "cat": "christian",
       "pct": 79,
       "pop": 2359609
     },
     {
-      "name": "Namibia",
+      "name": "نمیبیا",
       "cat": "christian",
       "pct": 90,
       "pop": 3022401
     },
     {
-      "name": "Senegal",
+      "name": "سینیگال",
       "cat": "muslim",
       "pct": 96,
       "pop": 19575061
     },
     {
-      "name": "Mali",
+      "name": "مالی",
       "cat": "muslim",
       "pct": 94,
       "pop": 23929000
     },
     {
-      "name": "Mauritania",
+      "name": "موریطانیہ",
       "cat": "muslim",
       "pct": 99,
       "pop": 4927532
     },
     {
-      "name": "Benin",
+      "name": "بینن",
       "cat": "christian",
       "pct": 48,
       "pop": 13551992
     },
     {
-      "name": "Niger",
+      "name": "نائجر",
       "cat": "muslim",
       "pct": 99,
       "pop": 27522750
     },
     {
-      "name": "Nigeria",
+      "name": "نائیجیریا",
       "cat": "muslim",
       "pct": 53,
       "pop": 223800000
     },
     {
-      "name": "Cameroon",
+      "name": "کیمرون",
       "cat": "christian",
       "pct": 69,
       "pop": 29442327
     },
     {
-      "name": "Togo",
+      "name": "ٹوگو",
       "cat": "christian",
       "pct": 48,
       "pop": 8095498
     },
     {
-      "name": "Ghana",
+      "name": "گھانا",
       "cat": "christian",
       "pct": 71,
       "pop": 34378768
@@ -399,19 +399,19 @@
       "pop": 32494020
     },
     {
-      "name": "Guinea",
+      "name": "گنی",
       "cat": "muslim",
       "pct": 86,
       "pop": 17521167
     },
     {
-      "name": "Guinea-Bissau",
+      "name": "گنی بساؤ",
       "cat": "muslim",
       "pct": 46,
       "pop": 1890252
     },
     {
-      "name": "Liberia",
+      "name": "لائبیریا",
       "cat": "christian",
       "pct": 85,
       "pop": 5248621
@@ -435,13 +435,13 @@
       "pop": 6470307
     },
     {
-      "name": "Congo",
+      "name": "کانگو",
       "cat": "christian",
       "pct": 86,
       "pop": 6142180
     },
     {
-      "name": "Gabon",
+      "name": "گبون",
       "cat": "christian",
       "pct": 82,
       "pop": 2469296
@@ -453,13 +453,13 @@
       "pop": 1668768
     },
     {
-      "name": "Zambia",
+      "name": "زیمبیا",
       "cat": "christian",
       "pct": 95,
       "pop": 23003214
     },
     {
-      "name": "Malawi",
+      "name": "ملاوی",
       "cat": "christian",
       "pct": 82,
       "pop": 21201635
@@ -471,19 +471,19 @@
       "pop": 34958973
     },
     {
-      "name": "eSwatini",
+      "name": "ای سواتینی",
       "cat": "christian",
       "pct": 90,
       "pop": 1235549
     },
     {
-      "name": "Angola",
+      "name": "انگولا",
       "cat": "christian",
       "pct": 79,
       "pop": 38778554
     },
     {
-      "name": "Burundi",
+      "name": "برونڈی",
       "cat": "christian",
       "pct": 89,
       "pop": 12332788
@@ -495,7 +495,7 @@
       "pop": 10273700
     },
     {
-      "name": "Lebanon",
+      "name": "لبنان",
       "cat": "muslim",
       "pct": 61,
       "pop": 5895466
@@ -513,25 +513,25 @@
       "pop": 5557096
     },
     {
-      "name": "Gambia",
+      "name": "گیمبیا",
       "cat": "muslim",
       "pct": 96,
       "pop": 2422712
     },
     {
-      "name": "Tunisia",
+      "name": "تیونس",
       "cat": "muslim",
       "pct": 99,
       "pop": 11992843
     },
     {
-      "name": "Algeria",
+      "name": "الجزائر",
       "cat": "muslim",
       "pct": 99,
       "pop": 47400000
     },
     {
-      "name": "Jordan",
+      "name": "اردن",
       "cat": "muslim",
       "pct": 97,
       "pop": 11937000
@@ -543,55 +543,55 @@
       "pop": 11294243
     },
     {
-      "name": "Qatar",
+      "name": "قطر",
       "cat": "muslim",
       "pct": 68,
       "pop": 3370611
     },
     {
-      "name": "Kuwait",
+      "name": "کویت",
       "cat": "muslim",
       "pct": 74,
       "pop": 4881254
     },
     {
-      "name": "Iraq",
+      "name": "عراق",
       "cat": "muslim",
       "pct": 95,
       "pop": 46118793
     },
     {
-      "name": "Oman",
+      "name": "عمان",
       "cat": "muslim",
       "pct": 86,
       "pop": 5398645
     },
     {
-      "name": "Vanuatu",
+      "name": "وانواتو",
       "cat": "christian",
       "pct": 83,
       "pop": 321409
     },
     {
-      "name": "Cambodia",
+      "name": "کمبوڈیا",
       "cat": "buddhist",
       "pct": 97,
       "pop": 17816143
     },
     {
-      "name": "Thailand",
+      "name": "تھائی لینڈ",
       "cat": "buddhist",
       "pct": 93,
       "pop": 70250751
     },
     {
-      "name": "Laos",
+      "name": "لاؤس",
       "cat": "buddhist",
       "pct": 66,
       "pop": 7745000
     },
     {
-      "name": "Myanmar",
+      "name": "میانمار",
       "cat": "buddhist",
       "pct": 88,
       "pop": 51375327
@@ -615,31 +615,31 @@
       "pop": 51088284
     },
     {
-      "name": "Mongolia",
+      "name": "منگولیا",
       "cat": "buddhist",
       "pct": 55,
       "pop": 3591120
     },
     {
-      "name": "India",
+      "name": "انڈیا",
       "cat": "hindu",
       "pct": 79,
       "pop": 1429404000
     },
     {
-      "name": "Bangladesh",
+      "name": "بنگلہ دیش",
       "cat": "muslim",
       "pct": 91,
       "pop": 169828911
     },
     {
-      "name": "Bhutan",
+      "name": "بھوٹان",
       "cat": "buddhist",
       "pct": 75,
       "pop": 784043
     },
     {
-      "name": "Nepal",
+      "name": "نیپال",
       "cat": "hindu",
       "pct": 81,
       "pop": 30034040
@@ -651,49 +651,49 @@
       "pop": 241499431
     },
     {
-      "name": "Afghanistan",
+      "name": "افغانستان",
       "cat": "muslim",
       "pct": 99,
       "pop": 43844000
     },
     {
-      "name": "Tajikistan",
+      "name": "تاجکستان",
       "cat": "muslim",
       "pct": 98,
       "pop": 10721000
     },
     {
-      "name": "Kyrgyzstan",
+      "name": "کرغزستان",
       "cat": "muslim",
       "pct": 90,
       "pop": 7404300
     },
     {
-      "name": "Turkmenistan",
+      "name": "ترکمانستان",
       "cat": "muslim",
       "pct": 93,
       "pop": 7057841
     },
     {
-      "name": "Iran",
+      "name": "ایران",
       "cat": "muslim",
       "pct": 99,
       "pop": 87134000
     },
     {
-      "name": "Syria",
+      "name": "شام",
       "cat": "muslim",
       "pct": 87,
       "pop": 26472497
     },
     {
-      "name": "Armenia",
+      "name": "آرمینیا",
       "cat": "christian",
       "pct": 95,
       "pop": 3096900
     },
     {
-      "name": "Sweden",
+      "name": "سویڈن",
       "cat": "christian",
       "pct": 63,
       "pop": 10610483
@@ -705,19 +705,19 @@
       "pop": 9056080
     },
     {
-      "name": "Ukraine",
+      "name": "یوکرین",
       "cat": "christian",
       "pct": 85,
       "pop": 28700000
     },
     {
-      "name": "Poland",
+      "name": "پولینڈ",
       "cat": "christian",
       "pct": 85,
       "pop": 37243000
     },
     {
-      "name": "Austria",
+      "name": "آسٹریا",
       "cat": "christian",
       "pct": 68,
       "pop": 9217573
@@ -735,103 +735,103 @@
       "pop": 2365600
     },
     {
-      "name": "Romania",
+      "name": "رومانیہ",
       "cat": "christian",
       "pct": 86,
       "pop": 19041322
     },
     {
-      "name": "Lithuania",
+      "name": "لتھوانیا",
       "cat": "christian",
       "pct": 74,
       "pop": 2886179
     },
     {
-      "name": "Latvia",
+      "name": "لٹویا",
       "cat": "christian",
       "pct": 68,
       "pop": 1832100
     },
     {
-      "name": "Estonia",
+      "name": "ایسٹونیا",
       "cat": "unaffiliated",
       "pct": 54,
       "pop": 1360745
     },
     {
-      "name": "Germany",
+      "name": "جرمنی",
       "cat": "christian",
       "pct": 55,
       "pop": 83467117
     },
     {
-      "name": "Bulgaria",
+      "name": "بلغاریہ",
       "cat": "christian",
       "pct": 60,
       "pop": 6423207
     },
     {
-      "name": "Greece",
+      "name": "یونان",
       "cat": "christian",
       "pct": 81,
       "pop": 10372335
     },
     {
-      "name": "Turkey",
+      "name": "ترکی",
       "cat": "muslim",
       "pct": 98,
       "pop": 86092168
     },
     {
-      "name": "Albania",
+      "name": "البانیہ",
       "cat": "muslim",
       "pct": 60,
       "pop": 2335930
     },
     {
-      "name": "Croatia",
+      "name": "کروشیا",
       "cat": "christian",
       "pct": 86,
       "pop": 3866233
     },
     {
-      "name": "Switzerland",
+      "name": "سوئٹزرلینڈ",
       "cat": "christian",
       "pct": 61,
       "pop": 9154896
     },
     {
-      "name": "Luxembourg",
+      "name": "لکسمبرگ",
       "cat": "christian",
       "pct": 60,
       "pop": 690959
     },
     {
-      "name": "Belgium",
+      "name": "بیلجیم",
       "cat": "christian",
       "pct": 55,
       "pop": 11942772
     },
     {
-      "name": "Netherlands",
+      "name": "نیدرلینڈز",
       "cat": "unaffiliated",
       "pct": 57,
       "pop": 18153271
     },
     {
-      "name": "Portugal",
+      "name": "پرتگال",
       "cat": "christian",
       "pct": 81,
       "pop": 11424031
     },
     {
-      "name": "Spain",
+      "name": "سپین",
       "cat": "christian",
       "pct": 58,
       "pop": 49801559
     },
     {
-      "name": "Ireland",
+      "name": "آئرلینڈ",
       "cat": "christian",
       "pct": 69,
       "pop": 5525600
@@ -855,7 +855,7 @@
       "pop": 5357300
     },
     {
-      "name": "Australia",
+      "name": "آسٹریلیا",
       "cat": "christian",
       "pct": 44,
       "pop": 27801023
@@ -867,25 +867,25 @@
       "pop": 21756000
     },
     {
-      "name": "China",
+      "name": "چین",
       "cat": "unaffiliated",
       "pct": 52,
       "pop": 1404890000
     },
     {
-      "name": "Taiwan",
+      "name": "تائیوان",
       "cat": "folk",
       "pct": 48,
       "pop": 23235002
     },
     {
-      "name": "Italy",
+      "name": "اٹلی",
       "cat": "christian",
       "pct": 76,
       "pop": 58940756
     },
     {
-      "name": "Denmark",
+      "name": "ڈنمارک",
       "cat": "christian",
       "pct": 65,
       "pop": 6031699
@@ -897,19 +897,19 @@
       "pop": 69487000
     },
     {
-      "name": "Iceland",
+      "name": "آئس لینڈ",
       "cat": "christian",
       "pct": 71,
       "pop": 396500
     },
     {
-      "name": "Azerbaijan",
+      "name": "آذربائیجان",
       "cat": "muslim",
       "pct": 95,
       "pop": 10273450
     },
     {
-      "name": "Georgia",
+      "name": "جارجیا",
       "cat": "christian",
       "pct": 88,
       "pop": 3941100
@@ -927,55 +927,55 @@
       "pop": 34389400
     },
     {
-      "name": "Brunei",
+      "name": "برونائی",
       "cat": "muslim",
       "pct": 82,
       "pop": 458600
     },
     {
-      "name": "Slovenia",
+      "name": "سلووینیا",
       "cat": "christian",
       "pct": 68,
       "pop": 2136385
     },
     {
-      "name": "Finland",
+      "name": "فن لینڈ",
       "cat": "christian",
       "pct": 66,
       "pop": 5655296
     },
     {
-      "name": "Slovakia",
+      "name": "سلوواکیہ",
       "cat": "christian",
       "pct": 65,
       "pop": 5403009
     },
     {
-      "name": "Czechia",
+      "name": "چیکیا",
       "cat": "unaffiliated",
       "pct": 72,
       "pop": 10896003
     },
     {
-      "name": "Eritrea",
+      "name": "اریٹیریا",
       "cat": "christian",
       "pct": 63,
       "pop": 3682669
     },
     {
-      "name": "Japan",
+      "name": "جاپان",
       "cat": "unaffiliated",
       "pct": 60,
       "pop": 122680000
     },
     {
-      "name": "Paraguay",
+      "name": "پیراگوئے",
       "cat": "christian",
       "pct": 89,
       "pop": 6109644
     },
     {
-      "name": "Yemen",
+      "name": "یمن",
       "cat": "muslim",
       "pct": 99,
       "pop": 32684503
@@ -993,55 +993,55 @@
       "pop": 476214
     },
     {
-      "name": "Cyprus",
+      "name": "قبرص",
       "cat": "christian",
       "pct": 78,
       "pop": 983000
     },
     {
-      "name": "Morocco",
+      "name": "مراکش",
       "cat": "muslim",
       "pct": 99,
       "pop": 37254695
     },
     {
-      "name": "Egypt",
+      "name": "مصر",
       "cat": "muslim",
       "pct": 90,
       "pop": 108613296
     },
     {
-      "name": "Libya",
+      "name": "لیبیا",
       "cat": "muslim",
       "pct": 97,
       "pop": 7539852
     },
     {
-      "name": "Ethiopia",
+      "name": "ایتھوپیا",
       "cat": "christian",
       "pct": 67,
       "pop": 111652998
     },
     {
-      "name": "Djibouti",
+      "name": "جبوتی",
       "cat": "muslim",
       "pct": 94,
       "pop": 1066809
     },
     {
-      "name": "Somaliland",
+      "name": "صومالی لینڈ",
       "cat": "muslim",
       "pct": 99,
       "pop": 5750000
     },
     {
-      "name": "Uganda",
+      "name": "یوگنڈا",
       "cat": "christian",
       "pct": 84,
       "pop": 45905417
     },
     {
-      "name": "Rwanda",
+      "name": "روانڈا",
       "cat": "christian",
       "pct": 93,
       "pop": 14418145
@@ -1053,25 +1053,25 @@
       "pop": 3412000
     },
     {
-      "name": "Macedonia",
+      "name": "مقدونیہ",
       "cat": "christian",
       "pct": 64,
       "pop": 1819074
     },
     {
-      "name": "Serbia",
+      "name": "سربیا",
       "cat": "christian",
       "pct": 84,
       "pop": 6532019
     },
     {
-      "name": "Montenegro",
+      "name": "مونٹی نیگرو",
       "cat": "christian",
       "pct": 72,
       "pop": 622902
     },
     {
-      "name": "Kosovo",
+      "name": "کوسوو",
       "cat": "muslim",
       "pct": 95,
       "pop": 1582322

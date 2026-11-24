@@ -502,8 +502,11 @@ def make_table(headers, rows, col_widths=None, header_bg=WINE, font_size=7.6,
         if headers:
             data.append([safe_para(clean(chrome(str(h))), head_st) for h in headers])
         for row in rows:
+            # Table cells carry short labels too ("Creation", "Baptism",
+            # "Protestant").  chrome() only rewrites what it knows, so prose
+            # cells pass through untouched.
             data.append([
-                safe_para(inline_md(str(c)) if c is not None else "", cell_st)
+                safe_para(inline_md(chrome(str(c))) if c is not None else "", cell_st)
                 for c in row
             ])
         n_cols = max(len(r) for r in data)
@@ -2465,7 +2468,7 @@ def build_volume_chapter(v: dict) -> list:
                 chunk = items[i:i+3]
                 row = []
                 for era, col in chunk:
-                    row.append(_square(col) + " " + htmllib.escape(chrome(era)))
+                    row.append(_square(col) + " " + htmllib.escape(era))
                 while len(row) < 3:
                     row.append("")
                 key_rows.append(row)
