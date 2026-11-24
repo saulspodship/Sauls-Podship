@@ -8,7 +8,7 @@
       "category": "मूल भाषा अध्ययन",
       "description": "अध्ययन बाइबिल हिब्रू, कोइन ग्रीक, बाइबिल अरामी और Vulgate लैटिन सबक, शब्दावली और कविता-by-verse उपकरण के माध्यम से।",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "शैक्षिक अनुप्रयोग"
     },
     {
       "id": "sunday-school",
@@ -18,7 +18,7 @@
       "category": "बच्चों और परिवारों के लिए",
       "description": "बच्चों के लिए नि: शुल्क, विज्ञापन मुक्त बाइबल सीखना 3-12 उम्र, कथा कहानियों, खेल, प्रश्नोत्तरी और स्मृति छंद के साथ।",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "शैक्षिक अनुप्रयोग"
     },
     {
       "id": "evangelism",
@@ -28,7 +28,7 @@
       "category": "कार्रवाई में विश्वास",
       "description": "एक धर्म-मूलित फील्ड गाइड जो गोस्सेल को अनुग्रह के साथ साझा करने के लिए, बातचीत के संकेत और व्यावहारिक प्रशिक्षण संसाधनों के साथ।",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "शैक्षिक अनुप्रयोग"
     },
     {
       "id": "biblical-cosmos-3d",
@@ -38,7 +38,7 @@
       "category": "इंटरैक्टिव बाइबल अध्ययन",
       "description": "एक इंटरैक्टिव 3 डी व्याख्या में बाइबिल ब्रह्मांड विज्ञान और उद्धृत शास्त्र का अन्वेषण करें - ब्रह्मांड का वैज्ञानिक मॉडल नहीं।",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "शैक्षिक अनुप्रयोग"
     },
     {
       "id": "biblical-numerology-etymology",
@@ -48,7 +48,7 @@
       "category": "संख्या और शब्द मूल",
       "description": "पत्र मूल्यों, शब्द इतिहास और बाइबिल पाठ का अन्वेषण करें Gematria लैब में, पारदर्शी गणना और उद्धृत स्रोतों के साथ।",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "शैक्षिक अनुप्रयोग"
     },
     {
       "id": "faithconnect-pro",
@@ -58,7 +58,7 @@
       "category": "ईसाई समुदाय और करियर",
       "description": "करियर, नेटवर्किंग, सीखने, प्रार्थना और विश्वास आधारित बाज़ार के लिए एक ईसाई समुदाय से कनेक्ट करें।",
       "isAccessibleForFree": null,
-      "applicationCategory": "SocialNetworkingApplication"
+      "applicationCategory": "सामाजिक नेटवर्क अनुप्रयोग"
     }
   ],
   "directory_intro": "बच्चों के बाइबिल सीखने और मूल-भाषा अध्ययन से लेकर evangelism, बाइबिल न्यूमेरोलॉजी और ईसाई समुदाय तक, हमारे समर्पित ऐप पाकिस्तान और दुनिया भर में परिवारों, चर्चों और उत्सुक पाठकों की सेवा करते हैं।",

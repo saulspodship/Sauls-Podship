@@ -33,7 +33,7 @@
       "bio": "17 फरवरी 1942 को जन्मे और अक्टूबर 2020 में घर बुलाए गए, जैम्सन जे दीन एक सम्मानित पाकिस्तानी ईसाई संगीत परिवार और सुसमाचार संगीत रचना, भक्ति गायन और उत्पीड़न में एक महान अग्रणी थे। जैमसन जे दीन एक मास्टर टैबला कलाकार के रूप में प्रसिद्ध थे, जिनकी लयबद्ध प्रतिभा, जटिल बोल और गहरे आध्यात्मिक संवेदनशीलता ने पंजाब भर में दशकों की पूजा की। हार्मोनियम और कोरल hymnody के अपने स्वामी के साथ, पवित्र लय के प्रति समर्पण ने पूरे पाकिस्तान में सुसमाचार संगीतकारों के लिए एक निष्क्रिय बेंचमार्क स्थापित किया।",
       "majorContributions": [
         "मास्टर Tabla कलाकार और percussion virtuoso जो पारंपरिक पंजाबी Zaboor accompaniment परिभाषित",
-        "पाकिस्तानी चर्चों में पियोनेर्ड फाउंडेशनल गोस्पेल रचनाएं और कोरल भजन व्यवस्था",
+        "पाकिस्तानी चर्चों में पियोनेर्ड नींवल गोस्पेल रचनाएं और कोरल भजन व्यवस्था",
         "शास्त्रीय हार्मोनियम accompaniment, ग़ज़ल शैली भक्तिपूर्ण गीट्स और मण्डली singinging",
         "शहरी और ग्रामीण पारिश्रमिक समुदायों में गाना बजाने वालों और गायकों की शुरुआती पीढ़ियों को प्रशिक्षित और सलाह दी",
         "एक स्थायी परिवार संगीतमय राजवंश स्थापित किया जो कई पीढ़ियों में दक्षिण एशियाई सुसमाचार भजन का नेतृत्व करना जारी रखता है।"
@@ -108,7 +108,7 @@
   "pioneers": [
     {
       "id": "rev-imam-ud-din-shahbaz",
-      "name": "Rev. Imam-ud-Din Shahbaz",
+      "name": "रेव इमाम-उद-दीन शाहबाज़",
       "badge": "पंजाबी ज़बोर के पायनियर पैट्रिआर्क",
       "role": "150 बाइबिल भजनों के अनुवादक और मेट्रिकल वेरिफायर",
       "status": "deceased",
@@ -118,7 +118,7 @@
       "lineageNote": "Indigenous दक्षिण एशियाई ईसाई Hymnody",
       "bio": "स्वदेशी दक्षिण एशियाई ईसाई hymnody के मूलभूत वास्तुकार। अपने बाद के वर्षों में ब्लाइंड, रेव शाहबाज़ ने हिब्रू से 1898 और 1908 के बीच मूल शास्त्रीय रागों के लिए सेट लिरिक पंजाबी मीटर (Bahr) में सभी 150 बाइबिल भजनों की तुलना की। 'देसी ज़बोर' के रूप में जाना जाता है, उनके काम ने लाखों पंजाबी ईसाईयों को उनके स्थायी धर्मशास्त्रीय और संगीत पहचान प्रदान की।",
       "majorContributions": [
-        "देशी पंजाबी मीटर (1898-1908) में सभी 150 हिब्रू भजनों के पूर्ण मीट्रिक संस्करण",
+        "देशी पंजाबी मीटर (1898-1908) में सभी 150 हिब्रू भजनों के पूर्ण मापदंड संस्करण",
         "ईसाई धर्म के साथ शास्त्रीय उत्तरी भारतीय राग संरचनाओं (भैरवी, काफी, यामन, खमाज) का डेलायरेट एकीकरण",
         "ऐतिहासिक Sialkot Song Book (Geet Ki Kitab) का संकलन और प्रकाशन",
         "Unbroken liturgical नींव पाकिस्तान, भारत और वैश्विक diaspora में लाखों लोगों द्वारा दैनिक इस्तेमाल किया"
@@ -162,7 +162,7 @@
     },
     {
       "id": "dr-bashir-anwar",
-      "name": "Dr. Bashir Anwar",
+      "name": "डॉ. बशीर अनवर",
       "badge": "मृत क्लासिकल वोकल मास्टर",
       "role": "शास्त्रीय सुसमाचार गायक",
       "status": "deceased",
@@ -203,7 +203,7 @@
         "Yeshu Tera Pyar",
         "Mukti Ki Raah",
         "Eid-e-Milad-e-Masiha (Christmas Anthems)",
-        "Dua-e-Masihi"
+        "दुआ-ए-मासीहि"
       ],
       "era": "नेशनल लीजेंड (दिसंबर)"
     },
@@ -227,7 +227,7 @@
         "Yeshu Paak Masih",
         "शास्त्रीय ग़ज़ल भजन"
       ],
-      "era": "फाउंडेशनल लीजेंड (दिसंबर)"
+      "era": "नींवल लीजेंड (दिसंबर)"
     },
     {
       "id": "ernest-mall",
@@ -285,7 +285,7 @@
       "category": "both",
       "dates": "1920–1985",
       "academicCredentials": "पारंपरिक Ustadi Gharana अनुशासन और चर्च Hymnody",
-      "bio": "केंद्रीय पंजाब के पायनियरिंग चर्च गायक स्वामी जिन्होंने आधे सदी के शिक्षण ग्रामीण और शहरी विश्वासियों को नुकसान के साथ प्रामाणिक राग स्केल में मीट्रिक Zaboors गायन की कला बिताई।",
+      "bio": "केंद्रीय पंजाब के पायनियरिंग चर्च गायक स्वामी जिन्होंने आधे सदी के शिक्षण ग्रामीण और शहरी विश्वासियों को नुकसान के साथ प्रामाणिक राग स्केल में मापदंड Zaboors गायन की कला बिताई।",
       "majorContributions": [
         "ज़बोर गायन की सूचीबद्ध गांव मौखिक परंपराएं",
         "Raiwind और Lahore के Diocese भर में चर्च choir मानकों की स्थापना की",
@@ -311,7 +311,7 @@
       "majorContributions": [
         "खुले हवाई गांव सम्मेलनों में पंजाबी ज़बोर के पायनियर लोक पुनरुद्धार",
         "बेरोजगार, शक्तिशाली भक्ति गीत के लिए प्रसिद्ध है कि हजारों जस्ती",
-        "गायन शास्त्र की ग्रामीण पंजाबी मीट्रिक परंपरा संरक्षित"
+        "गायन शास्त्र की ग्रामीण पंजाबी मापदंड परंपरा संरक्षित"
       ],
       "keyZaboorOrGeet": [
         "Zaboor 150 (Taareef Karo)",
@@ -330,7 +330,7 @@
       "status": "veteran",
       "category": "singer",
       "dates": "1955-वर्तमान",
-      "academicCredentials": "स्टूडियो एक्सीलेंस और कैसेट मंत्रालय के चार दशक",
+      "academicCredentials": "स्टूडियो एक्मुहरेंस और कैसेट मंत्रालय के चार दशक",
       "bio": "पाकिस्तानी ईसाई संगीत के इतिहास में सबसे अधिक पोषित और पहचानने योग्य महिला आवाज़ों में से एक। 1980 के दशक और 1990 के दशक में उनके प्रिय स्वर रेंज, आध्यात्मिक गहराई और ऐतिहासिक कैसेट रिलीज ने पूरे दक्षिण एशिया में महिला पूजा कलाकारों के लिए एक मानक स्थापित किया।",
       "majorContributions": [
         "चार दशकों में 30 बेस्टसेलिंग स्टूडियो पूजा एल्बम",
@@ -553,7 +553,7 @@
       "role": "समकालीन सुसमाचार गायक, गीतकार और संगीतकार",
       "status": "current",
       "category": "both",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "आधुनिक पूजा रचना और ध्वनिक मेलोडी",
       "bio": "पाकिस्तानी सुसमाचार संगीत में एक प्रमुख समकालीन आवाज जिसका दिल lyrical सादगी और melodic ईमानदारी ने उन्हें युवा सम्मेलनों और डिजिटल स्ट्रीमिंग प्लेटफार्मों में पसंदीदा बनाया है।",
       "majorContributions": [
@@ -575,7 +575,7 @@
       "role": "समकालीन पूजा कलाकार और रिकॉर्डिंग सोलोवाद",
       "status": "current",
       "category": "singer",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "आधुनिक स्टूडियो स्वर और कन्वेंशन पूजा नेतृत्व",
       "bio": "डायनेमिक गोस्पेल गायक अपने समृद्ध स्वर और शक्तिशाली लाइव सम्मेलन पूजा सेट के लिए जाना जाता है जो युवाओं और वरिष्ठ सहयोगियों को गहरी भक्ति में लाते हैं।",
       "majorContributions": [
@@ -597,7 +597,7 @@
       "role": "संगीत निर्माता, बास Virtuoso और ध्वनि इंजीनियर",
       "status": "current",
       "category": "composer",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "आधुनिक बास तकनीक & उन्नत मल्टी ट्रैक मिश्रण",
       "bio": "Acclaimed संगीत निर्माता और सत्र बेसिस्ट जिन्होंने पाकिस्तानी ईसाई पूजा कलाकारों के लिए ब्रेकथ्रू ट्रैक्स का उत्पादन और इंजीनियर किया है, जो स्थानीय सुसमाचार गीतों के लिए अंतरराष्ट्रीय ध्वनि पॉलिश ला रहा है।",
       "majorContributions": [
@@ -619,7 +619,7 @@
       "role": "सुसमाचार गायक, गीतकार और डिजिटल पूजा कलाकार",
       "status": "current",
       "category": "both",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "डिजिटल सुसमाचार संगीत उत्पादन और युवा मंत्रालय",
       "bio": "युवा और प्रभावशाली पूजा कलाकार जिनकी मूल रचनाओं और ऊर्जावान लाइव प्रस्तुतियों ने पाकिस्तान और अंतरराष्ट्रीय डायस्पोरा में सैकड़ों हजारों युवाओं को शामिल किया है।",
       "majorContributions": [
@@ -641,7 +641,7 @@
       "role": "पूजा कलाकार & Devotional Vocalist",
       "status": "current",
       "category": "singer",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "Devotional Vocal Styling & लाइव चर्च मंत्रालय",
       "bio": "प्रतिभाशाली समकालीन गायक जिनकी भक्ति से भरे ट्रैक और भावनात्मक आवाज पाकिस्तान भर में समकालीन चर्च की पूजा की प्रमुख विशेषताएं बन गई हैं।",
       "majorContributions": [
@@ -663,7 +663,7 @@
       "role": "पूजा एकल कलाकार और रिकॉर्डिंग कलाकार",
       "status": "current",
       "category": "singer",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "Soprano Devotional Vocalist & Liturgical Singer",
       "bio": "समकालीन पाकिस्तानी सुसमाचार दृश्य में एक प्रमुख महिला आवाज, अपनी क्रिस्टलीय सोप्रानो डिलीवरी के साथ प्रतिवर्ती पूजा में महिलाओं और युवाओं को प्रेरित करती है।",
       "majorContributions": [
@@ -685,7 +685,7 @@
       "role": "शास्त्रीय सुसमाचार गायक",
       "status": "current",
       "category": "singer",
-      "dates": "Contemporary",
+      "dates": "समकालीन",
       "academicCredentials": "बेटी की Maestro Dr. Bashir Anwar — Classical Gharana Lineage",
       "bio": "देर से शास्त्रीय मास्टर की बेटी डॉ. बशीर आनंदवर, शाज़िया बसीर ने अपने परिवार के प्रतिष्ठित शास्त्रीय घाटा वंश को बरकरार रखा, जटिल राग-आधारित Masihi Geet को समर्पित तकनीकी कृपा से गाया।",
       "majorContributions": [
@@ -706,56 +706,56 @@
       "number": 1,
       "title": "Dhan Hai Oh Manukh",
       "slug": "zaboor-1",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "Blessed आदमी है"
     },
     {
       "number": 2,
       "title": "Kahde Lai Pande Dand",
       "slug": "zaboor-2-lok-kahde-lai-pande-dand",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "क्यों राष्ट्र क्रोध"
     },
     {
       "number": 3,
       "title": "Oh Kide Wadhe Aye Khuda",
       "slug": "zaboor-3-oh-kide-wadhe-aye-khuda",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "प्रभु, कितने मेरे दुश्मन हैं"
     },
     {
       "number": 4,
       "title": "Zadon Tenu Pukaran Mein",
       "slug": "zaboor-4-zadon-tenu-pukaran-mein",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "मुझे जवाब जब मैं कॉल करता हूँ"
     },
     {
       "number": 5,
       "title": "Jo Mere Munh Dian Gallan",
       "slug": "zaboor-5-jo-mere-munh-dian-gallan",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "मेरे शब्दों को कान दें, हे प्रभु"
     },
     {
       "number": 6,
       "title": "Gusse Hoke Na Jhirak Mainun",
       "slug": "zaboor-6-gusse-hoke-na-jhirak-mainun",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "हे भगवान, मुझे क्रोध में नहीं रह सकते"
     },
     {
       "number": 7,
       "title": "Mera Bhrosa Tere Hi Utte Hai",
       "slug": "zaboor-7-mera-bhrosa-tere-hi-utte-hai",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "हे प्रभु मेरे परमेश्वर, तुम में मैं शरण लेता हूँ"
     },
     {
       "number": 8,
       "title": "Sabb Dharti De Utte Vi",
       "slug": "zaboor-8-sabb-dharti-de-utte-vi",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "हे भगवान, कैसे राजसी आपका नाम है"
     },
     {
@@ -769,84 +769,84 @@
       "number": 11,
       "title": "Aas Meri Rabb De Utte Hai",
       "slug": "zaboor-11-aas-meri-rabb-de-utte-hai",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "प्रभु मैं शरण लेता हूँ"
     },
     {
       "number": 12,
       "title": "De Mukti Sanu Rabb Hamare",
       "slug": "zaboor-12-de-mukti-sanu-rabb-hamare",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "बचाओ, हे भगवान, भगवान के लिए"
     },
     {
       "number": 13,
       "title": "Kad Tikar Mainun Ai Khuda",
       "slug": "zaboor-13-kad-tikar-mainun-ai-khuda",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "कब तक, हे प्रभु? क्या आप मुझे हमेशा के लिए भूल सकते हैं?"
     },
     {
       "number": 14,
       "title": "Ahmaq Kahdna Hai Dil Wich",
       "slug": "zaboor-14-ahmaq-kahdna-hai-dil-wich",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "लोमड़ी अपने दिल में कहती है, कोई ईश्वर नहीं है"
     },
     {
       "number": 15,
       "title": "Kaun Salamat Rahega Tere Ghar",
       "slug": "zaboor-15-kaun-salamat-rahega-tere-ghar",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "हे प्रभु, जो आपके तम्बू में ठहरेंगे"
     },
     {
       "number": 16,
       "title": "Aye Khudawand Mere Tuen Kar Rakhwali",
       "slug": "zaboor-16-aye-khudawand-mere-tuen-kar-rakhwali",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "मुझे संरक्षित करें, हे भगवान, तुम्हारे लिए मैं शरण लेता हूं"
     },
     {
       "number": 17,
       "title": "Rakh Dhiyan Faryad Te Meri",
       "slug": "zaboor-17-rakh-dhiyan-faryad-te-meri",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "हे प्रभु, हे प्रभु, मेरे रोने में भाग लेना"
     },
     {
       "number": 18,
       "title": "Ai Khudawand Zor Tun Mera",
       "slug": "zaboor-18-ai-khudawand-zor-tun-mera",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "मैं तुम्हें प्यार करता हूँ, हे भगवान, मेरी ताकत"
     },
     {
       "number": 19,
       "title": "Kahde Lai Pande Dand",
       "slug": "zaboor-19-lok-kahde-lai-pande-dand",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "स्वर्ग परमेश्वर की महिमा की घोषणा करता है"
     },
     {
       "number": 20,
       "title": "Dukhan De Wele Teri",
       "slug": "zaboor-20-dukhan-de-wele-teri",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "मई प्रभु आप को मुसीबत के दिन जवाब देते हैं"
     },
     {
       "number": 21,
       "title": "टेरे Zor पतला Khudaya",
       "slug": "zaboor-21-tere-zor-thin-khudaya",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "हे प्रभु, आपकी ताकत में राजा आनन्दित होता है"
     },
     {
       "number": 22,
       "title": "Aye Khudawand Aye Rabb Mere",
       "slug": "zaboor-22-aye-khudawand-aye-rabb-mere",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "मेरा परमेश्वर, मेरा परमेश्वर, क्यों तुम मुझे क्षमा करें"
     },
     {
@@ -860,525 +860,525 @@
       "number": 24,
       "title": "Zameen Te Jo Kujh Ohde Vich",
       "slug": "zaboor-24-rabb-khdawand-badshah-hai",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "पृथ्वी भगवान और उसके पूर्णता है"
     },
     {
       "number": 25,
       "title": "Aas Tere Uttey Rakhda Mein",
       "slug": "zaboor-25-aas-tere-uttey-rakhda-mein",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "हे प्रभु, मैं अपनी आत्मा को उठाता हूँ"
     },
     {
       "number": 26,
       "title": "Nina Kar Mera Aye Khuda",
       "slug": "zaboor-26-nina-kar-mera-aye-khuda",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "मुझे समर्पित करें, हे भगवान, के लिए मैं अपनी अखंडता में चल रहा हूँ"
     },
     {
       "number": 27,
       "title": "Hai Dar Mainun Kis Da",
       "slug": "zaboor-27-hai-dar-mainun-kis-da",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "प्रभु मेरा प्रकाश और मेरा उद्धार है"
     },
     {
       "number": 28,
       "title": "Hai Dar Mainun Kis Da (Part 2)",
       "slug": "zaboor-28-hai-dar-mainun-kis-da",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "हे प्रभु, मैं कहता हूँ; मेरी चट्टान, बह नहीं"
     },
     {
       "number": 29,
       "title": "ज़ोर वालियो जहीर करो",
       "slug": "zaboor-29-zor-waleo-zahir-karo",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "प्रभु, हे स्वर्गीय प्राणियों की सदस्यता लें"
     },
     {
       "number": 30,
       "title": "Karanga Teri Wadyai Khudaya",
       "slug": "zaboor-30-karanga-teri-wadyai-khudaya",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "मैं तुम्हारे लिए, हे प्रभु, तुमने मुझे खींच लिया है"
     },
     {
       "number": 31,
       "title": "Meri Aas Hai Teri Uttey",
       "slug": "zaboor-31-meri-aas-hai-teri-uttey",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "आप में, हे प्रभु, मैं शरण लेता हूँ"
     },
     {
       "number": 32,
       "title": "Oh Dhan Jis De Bakhshe",
       "slug": "zaboor-32-oh-dhan-jis-de-bakhshe",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "Blessed वह है जिसका संक्रमण क्षमा किया जाता है"
     },
     {
       "number": 34,
       "title": "मैन हार वेले रब दी तारेफ करंगा",
       "slug": "zaboor-34",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "मैं हर समय भगवान को आशीर्वाद दूंगा"
     },
     {
       "number": 35,
       "title": "Jo Jhagra Karde Mere Nal",
       "slug": "zaboor-35-jo-jhagra-karde-mere-nal",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "हे प्रभु, उन लोगों के साथ जो मेरे साथ संबंध रखते हैं"
     },
     {
       "number": 36,
       "title": "Mera Dil Soch Karda Hai",
       "slug": "zaboor-36-mera-dil-soch-karda-hai",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "अपराध अपने दिल में दुष्ट गहरे से बोलता है"
     },
     {
       "number": 37,
       "title": "Dukh Burean Lokan De Na Kariye",
       "slug": "zaboor-37-dukh-burean-lokan-de-na-kariye",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "अपने आप को बुराइयों के कारण मत भूलना"
     },
     {
       "number": 38,
       "title": "Ghuse Nal Na Jhirkin Mainun",
       "slug": "zaboor-38-ghuse-nal-na-jhirkin-mainun-ai-khuda",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "हे भगवान, मुझे अपने क्रोध में नहीं रह जाओ"
     },
     {
       "number": 39,
       "title": "Rakhi Rah Di Mein Apni Karanga",
       "slug": "zaboor-39-rakhi-rah-di-mein-apni-karanga",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "मैंने कहा, मैं अपने तरीके की रक्षा करूँगा"
     },
     {
       "number": 40,
       "title": "Hai Kasrat Nal Khudawanda",
       "slug": "zaboor-40-hai-kasrat-nal-khudawanda",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "मैंने भगवान के लिए धैर्यपूर्वक इंतजार किया"
     },
     {
       "number": 41,
       "title": "Mubarik Hai Jo Fikr Ajiz Di Kakhe",
       "slug": "zaboor-41-mubarik-hai-jo-fikr-ajiz-di-kakhe",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "धन्य वह है जो गरीबों पर विचार करता है!"
     },
     {
       "number": 42,
       "title": "Dhaindi Hai Te Bechain Hai",
       "slug": "zaboor-42-digdi-dhaindi-hai-te-bechain-hai",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "बहने वाली धाराओं के लिए एक हिरण पैंट के रूप में"
     },
     {
       "number": 43,
       "title": "Kar Adalat Meri Khudawanda",
       "slug": "zaboor-43-kar-adalat-meri-khudawanda",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "मुझे, हे भगवान, और मेरे कारण की रक्षा"
     },
     {
       "number": 44,
       "title": "Asan Sabho Suniya Hai",
       "slug": "zaboor-44-asan-sabho-suniya-hai-sade-khudaya",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "हे भगवान, हमने अपने कानों के साथ सुना है"
     },
     {
       "number": 45,
       "title": "सनी लियोन",
       "slug": "zaboor-45-sunn-aiye-beti-tun-aye-soch-lai",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "मेरे दिल एक सुखद विषय के साथ अतिप्रवाह"
     },
     {
       "number": 46,
       "title": "रब Sada Zor Hai Te Panah",
       "slug": "zaboor-46-rabb-sada-zor-hai-te-nale-sadi-hai-panah",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "भगवान हमारे शरण और ताकत है"
     },
     {
       "number": 47,
       "title": "साब लोको महंगे मारो हुन",
       "slug": "zaboor-47-sab-loko-mahnge-maro-hun",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "अपने हाथों को पकड़ो, सभी लोग!"
     },
     {
       "number": 48,
       "title": "Asade Rabb De Shahr Wich",
       "slug": "zaboor-48-asade-rabb-de-shahr-wich",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "महान प्रभु है और बहुत प्रशंसा की जा रही है"
     },
     {
       "number": 49,
       "title": "Sune Dhar Kan Adna Ala",
       "slug": "zaboor-49-sune-dhar-kan-adna-ala",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "यह सुनो, सभी लोग; कान दें, दुनिया के सभी निवासियों"
     },
     {
       "number": 50,
       "title": "Khudwand Khdratwale Ne",
       "slug": "zaboor-50-khudwand-khdratwale-ne-oh-gal-farmai-hai",
-      "raga": "Yaman",
-      "englishTheme": "The Mighty One, God the Lord, speaks"
+      "raga": "यामन",
+      "englishTheme": "The Mighty One, God of the Lord."
     },
     {
       "number": 51,
       "title": "Fazal Nal Aye Rabb Bakhsh",
       "slug": "zaboor-51-fazal-nal-aye-rabb-bakhsh",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "मेरे पास दया है, हे भगवान, आपके दृढ़ प्रेम के अनुसार"
     },
     {
       "number": 52,
       "title": "Karke Buriai Tun Kyun Phulda Hain",
       "slug": "zaboor-52-karke-buriai-tun-kyun-phulda-hain",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "क्यों आप बुराई का दावा करते हैं?"
     },
     {
       "number": 53,
       "title": "Eh Ji Wich Kiha Ahmaq Ne",
       "slug": "zaboor-53-eh-ji-wich-kiha-ahmaq-ne",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "लोमड़ी अपने दिल में कहती है, कोई ईश्वर नहीं है"
     },
     {
       "number": 54,
       "title": "Rabba Apne Nan De अपशिष्ट",
       "slug": "zaboor-54-rabba-apne-nan-de-waste",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "हे भगवान, मुझे अपने नाम से बचाओ"
     },
     {
       "number": 55,
       "title": "Tun Mere Wall Kan Dharke Sunn",
       "slug": "zaboor-55-tun-mere-wall-kan-dharke-sunn",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "मेरी प्रार्थना को कान दें, हे भगवान"
     },
     {
       "number": 56,
       "title": "Khudawanda Tun Rahm Farma",
       "slug": "zaboor-56-khudawanda-tun-rahm-farma",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "मेरे लिए बहुत दुखी रहें, हे भगवान, मनुष्य के लिए मुझे पर दया करना"
     },
     {
       "number": 57,
       "title": "Mere Utte Kar Rahm",
       "slug": "zaboor-57-mere-utte-kar-rahm-mere-khudaya",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "मेरे लिए दयालु होना, हे भगवान, मेरे लिए दयालु होना"
     },
     {
       "number": 58,
       "title": "Kyun Sach De Wele Manukh",
       "slug": "zaboor-58-kyun-sach-de-wele-manukh",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "क्या आप वास्तव में डिक्री करते हैं?"
     },
     {
       "number": 59,
       "title": "Tun Mainun Mere Wairian Thon",
       "slug": "zaboor-59-tun-mainun-mere-wairian-thon",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "मुझे अपने दुश्मनों से बचाओ, हे मेरे परमेश्वर"
     },
     {
       "number": 60,
       "title": "Sanun Tun Hai Radd Kar Ditta",
       "slug": "zaboor-60-sanun-tun-hai-radd-kar-ditta",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "हे भगवान, आपने हमें अस्वीकार कर दिया है, हमारे रक्षा को तोड़ दिया"
     },
     {
       "number": 61,
       "title": "डुआ मेरी ट्यून सनी लाई हुन",
       "slug": "zaboor-61-dua-meri-tun-sunn-lai-hunn",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "हे परमेश्वर, मेरी प्रार्थना सुनो"
     },
     {
       "number": 62,
       "title": "Khudawand Nun Udikdi Rah",
       "slug": "zaboor-62-khudawand-nun-udikdi-rah",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "केवल ईश्वर के लिए मेरी आत्मा मौन में इंतजार करती है"
     },
     {
       "number": 63,
       "title": "Tarke Main Tainun Dhundhan",
       "slug": "zaboor-63-tarke-main-tainun-dhundhan-ya-rabb",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "हे परमेश्वर, तुम मेरे परमेश्वर हैं; ईमानदारी से मैं तुम्हें तलाशता हूँ"
     },
     {
       "number": 64,
       "title": "Jad Taithon Karan मुख्य Faryad",
       "slug": "zaboor-64-jad-taithon-karan-main-faryad",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "हे भगवान, मेरी शिकायत में"
     },
     {
       "number": 65,
       "title": "Sahun De Wich Chup Kite Udikde",
       "slug": "zaboor-65-saihun-de-wich-chup-kite-udikde",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "प्राइज़ आपके कारण है, हे भगवान, जिओं में"
     },
     {
       "number": 66,
       "title": "Khudawand De Wall Kull Zamin",
       "slug": "zaboor-66-khudawand-de-wall-kull-zamin-lalkare",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "भगवान के लिए खुशी के लिए चिल्लाना, सभी पृथ्वी"
     },
     {
       "number": 67,
       "title": "रब्ब Asad Sade Utte Apna Rahm",
       "slug": "zaboor-67-rabb-asad-sade-utte-apna-rahm",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "परमेश्वर हमें अनुग्रह और हमें आशीर्वाद दे"
     },
     {
       "number": 68,
       "title": "Rabb Utte Ohde Wairi Sab",
       "slug": "zaboor-68-rabb-utte-ohde-wairi-sab",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "भगवान उत्पन्न होंगे, उनके दुश्मन बिखर जाएंगे"
     },
     {
       "number": 69,
       "title": "Meri Jan De Tik Khudawanda",
       "slug": "zaboor-69-meri-jan-de-tik-khudawanda",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "मुझे बचाओ, हे भगवान, क्योंकि पानी मेरी गर्दन तक पहुंच गया है"
     },
     {
       "number": 70,
       "title": "Mere Chuddane Nun Ya Rabba",
       "slug": "zaboor-70-mere-chuddane-nun-ya-rabba",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "हे भगवान!"
     },
     {
       "number": 71,
       "title": "Mera Bhrosa Tere Utte Hai",
       "slug": "zaboor-71-mera-bhrosa-tere-hi-utte-hai",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "आप में, हे प्रभु, मैं शरण लेता हूँ"
     },
     {
       "number": 72,
       "title": "Tun Apne Badshan Nun Ya Rabb",
       "slug": "zaboor-72-tun-apne-badshan-nun-ya-rabb",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "राजा को अपना न्याय दें, हे भगवान"
     },
     {
       "number": 73,
       "title": "जो इज़राइलियन डे विच सैफ दिल",
       "slug": "zaboor-73-jo-israelian-de-wich-saf-dil",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "वास्तव में ईश्वर इज़राइल के लिए अच्छा है"
     },
     {
       "number": 74,
       "title": "Tun Asanun Sada Tikar Kyun Radd",
       "slug": "zaboor-74-tun-asanun-sada-tikar-kyun-radd",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "क्या आप हमें हमेशा के लिए क्यों डाल सकते हैं?"
     },
     {
       "number": 75,
       "title": "Tarif Hun Teri Karde Han",
       "slug": "zaboor-75-tarif-hun-teri-karde-han-te",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "हम आपको धन्यवाद देते हैं, हे भगवान"
     },
     {
       "number": 76,
       "title": "Rabb Yahudah Wich Mashhur Hai",
       "slug": "zaboor-76-rabb-yahudah-wich-mashhur-hai",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "यहूदा में भगवान को जाना जाता है; उसका नाम इज़राइल में बहुत अच्छा है"
     },
     {
       "number": 77,
       "title": "Khudawand De Wall Zor De Nal",
       "slug": "zaboor-77-khudawand-de-wall-zor-de-nal",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "मैं परमेश्वर से घृणा करता हूँ, परमेश्वर से घृणा करता हूँ, और वह मुझे सुनेगा"
     },
     {
       "number": 78,
       "title": "Kan Rakh Ai Meri Umaat",
       "slug": "zaboor-78-kan-rakh-ai-meri-umaat",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "हे मेरे लोग, मेरे शिक्षण के लिए"
     },
     {
       "number": 79,
       "title": "Jiun Nind Thon Koi Jage",
       "slug": "zaboor-79-jiun-nind-thon-koi-jage",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "हे भगवान, राष्ट्र आपके विरासत में आए हैं"
     },
     {
       "number": 80,
       "title": "Ai Ayali Israil De",
       "slug": "zaboor-80-ai-ayali-israil-de",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "कान दें, हे इज़राइल के शेफर्ड"
     },
     {
       "number": 82,
       "title": "Jamaat Wich Khuda Di Khalota",
       "slug": "zaboor-82-jamaat-wich-khuda-di-khalota",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "भगवान ने दिव्य परिषद में जगह ली है"
     },
     {
       "number": 83,
       "title": "Khudaya Mere Chup Na Ho",
       "slug": "zaboor-83-khudaya-mere-chup-na-ho",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "हे भगवान, मौन नहीं रखते"
     },
     {
       "number": 84,
       "title": "Khdawanda Tun Lashkaran Da",
       "slug": "zaboor-84-khdawanda-tun-lashkaran-da-khuda",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "कैसे प्यारा आपका निवास स्थान है, हे मेजबान के भगवान!"
     },
     {
       "number": 85,
       "title": "Rehmat Teri Es Dharti De Utte",
       "slug": "zaboor-85-rehmat-teri-es-dharti-de-utte",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "भगवान, आप अपनी जमीन के अनुकूल थे"
     },
     {
       "number": 86,
       "title": "Khudaya Tun Kan Dharke सूर्य",
       "slug": "zaboor-86-khudaya-tun-kan-dharke-sun",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "अपने कान, हे भगवान को शामिल करें और मुझे जवाब दें"
     },
     {
       "number": 87,
       "title": "बुनियाद टैन ओहदी क़ैम है",
       "slug": "zaboor-87-bunyad-tan-ohdi-qaim-hai",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "पवित्र पर्वत पर वह शहर है जिसे उन्होंने स्थापित किया था"
     },
     {
       "number": 88,
       "title": "Khudaya Kuyn Jan Meri Mardud",
       "slug": "zaboor-88-khudaya-kuyn-jan-meri-mardud",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "हे प्रभु, मेरे उद्धार का भगवान, मैं दिन और रात्रि में रो रहा हूँ"
     },
     {
       "number": 89,
       "title": "Khuda Di Rehmatan De Git",
       "slug": "zaboor-89-khuda-di-rehmatan-de-git-main",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "मैं हमेशा के लिए प्रभु के स्थूल प्रेम का गायन करूंगा"
     },
     {
       "number": 90,
       "title": "Tun Pusht Dar Pusht Khudaya",
       "slug": "zaboor-90-tun-pusht-dar-pusht-khudaya",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "भगवान, आप सभी पीढ़ियों में हमारे निवास स्थान रहे हैं"
     },
     {
       "number": 91,
       "title": "Khuda De Par De Hethan",
       "slug": "zaboor-91-khuda-de-par-de-hethan-jo-koi",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "वह जो सबसे उच्च के आश्रय में रहता है"
     },
     {
       "number": 92,
       "title": "Terian Siftan De Gaone Git",
       "slug": "zaboor-92-terian-siftan-de-gaone-git-karna",
-      "raga": "Kafi",
+      "raga": "काफ़ी",
       "englishTheme": "भगवान को धन्यवाद देना अच्छा है"
     },
     {
       "number": 93,
       "title": "Khurme De Darkht De Wangar Sadiq",
       "slug": "zaboor-93-khurme-de-darkht-de-wangar-sadiq",
-      "raga": "Bilawal",
+      "raga": "बिलावल",
       "englishTheme": "भगवान राज्य करता है; वह राजसी में रोब होता है"
     },
     {
       "number": 94,
       "title": "Ai Badla Lainewale Rabb Ai",
       "slug": "zaboor-94-ai-badla-lainewale-rabb-ai",
-      "raga": "Bhairavi",
+      "raga": "भैरवी",
       "englishTheme": "हे भगवान, vengeance के भगवान, चमकना!"
     },
     {
       "number": 95,
       "title": "Ao Rabb Di Waddiai Gaiye",
       "slug": "zaboor-95-ao-rabb-di-waddiai-gaiye-dil-de-zor",
-      "raga": "Yaman",
+      "raga": "यामन",
       "englishTheme": "ओह आते हैं, हम भगवान को गाते हैं!"
     },
     {
       "number": 96,
       "title": "Ao Ik Nawan Rabb Lai Gao",
       "slug": "zaboor-96-ao-ik-nawan-rabb-lai-gao",
-      "raga": "Des",
+      "raga": "डे",
       "englishTheme": "ओह भगवान को एक नया गीत गाते हैं!"
     },
     {
       "number": 97,
       "title": "Badhshahi Karda Hai Khuda",
       "slug": "zaboor-97-badhshahi-karda-hai-khuda",
-      "raga": "Khamaj",
+      "raga": "कामाज",
       "englishTheme": "प्रभु शासन करता है, पृथ्वी को आनन्दित करने देता है"
     },
     {
       "number": 98,
       "title": "Git Nawan Gao Gao Ik Nawan",
       "slug": "zaboor-98-git-nawan-gao-gao-ik-nawan-gao",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "ओह भगवान को एक नया गीत गाते हैं, क्योंकि उन्होंने अद्भुत चीजें की हैं!"
     },
     {
       "number": 99,
       "title": "Badhshahi Karda Hai Khuda Kulलोक",
       "slug": "zaboor-99-badhshahi-karda-hai-khuda-kul-lok",
-      "raga": "Pahadi",
+      "raga": "पहाड़ी",
       "englishTheme": "प्रभु राज्य करता है; लोगों को तिब्बत करने दें!"
     },
     {
       "number": 100,
       "title": "Khushi De Naal Gao Rab Di Janab Vich",
       "slug": "zaboor-100",
-      "raga": "Bhairav",
+      "raga": "भैरव",
       "englishTheme": "भगवान के लिए एक खुशहाल शोर बनाओ, सभी पृथ्वी!"
     },
     {
@@ -1424,7 +1424,7 @@
       "duration": "23:08",
       "publishDate": "2026-10-26",
       "topics": [
-        "Predestination",
+        "भविष्यवाणी",
         "फ्री विल",
         "Qadr"
       ],
@@ -1455,7 +1455,7 @@
       "topics": [
         "Suffering",
         "परमेश्वर के वचन",
-        "Faith"
+        "विश्वास"
       ],
       "scriptureReferences": [
         "जेम्स 1:2-4,12",
@@ -1484,8 +1484,8 @@
       "publishDate": "2026-10-26",
       "topics": [
         "समृद्धि सुसमाचार",
-        "Contentment",
-        "Wealth"
+        "सामग्री",
+        "धन"
       ],
       "scriptureReferences": [
         "2 कोरिंथियंस 8: 9",
@@ -1513,7 +1513,7 @@
       "duration": "11:38",
       "publishDate": "2026-10-26",
       "topics": [
-        "Genealogies",
+        "भूगोल",
         "मैथ्यू",
         "लूका 3"
       ],
@@ -1537,12 +1537,12 @@
       "title": "سیکرك ریپار: 1830 کا خواب یا حقیقت",
       "titleRoman": "1830 ka khwab ya haqat?",
       "titleEnglish": "The Secret Rapture: An 1830 Dream or reality?",
-      "description": "जहां रहस्य वास्तव में सामने आया - डार्बी, प्लायमाउथ ब्रेथ्रन, मार्गरेट मैकडॉनल्ड्स, स्कोफील्ड बाइबिल - और क्या 1 थेसालोनियन्स 4, मैथ्यू 24 और रिवेलेशन 20 का कहना है कि जब वे मानने के बजाय पढ़ रहे हैं।",
+      "description": "जहां रहस्य वास्तव में सामने आया - डार्बी, प्लायमाउथ ब्रेथ्रन, मार्गरेट मैकडॉनल्ड्स, स्कोफील्ड बाइबिल - और क्या 1 थेसालोनियन्स 4, मैथ्यू 24 और प्रकाशितवाक्य 20 का कहना है कि जब वे मानने के बजाय पढ़ रहे हैं।",
       "notesUrdu": "خاتفی ریپارسی - یعنیمسیح السیالسیا واموشی سری, لسمور, لسیور, لیور, لیور, سیور, سیور, سیور, سیور, سیور, سین, سین, سین, سین, سیور, سیوران, سیورسی, سی, سی, سی, سی, سی, سی, سی, سی, سیسی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی, سی\n\nفات سط السم اللسم الللسم لللام للللم للللم للللم لللم لللم لللم لللم لللم للللم لللم للللم لللللم للللميم للللللم للللللللللم لللللم الللللللللللللللللللللللللللللم م م لللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللل\n\nاللس قسط میل:\n• ریمور کالفال بالل میلل میل الللليم اللليم الللليم لللفام للليم للفاليم للللهال میل للللليم الللليم لللليم لللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللل\n• 1830 سون سی پلسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسی پارسیسی پارسیسی پارسی سی سی سی سی سی سی سی سی سی سی پارسی پارسی پارسی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی سی\nTo make a lyric.\nالعربية 中文(简体) 中文(繁體) हिन्दी Indonesia\nA عقیدور الللاف الللاف الللمو للللالللللم للللللللم اللللم اللللللللللم اللللللميم الللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللللل\n\nBahasa Englishالعربية中文(简体)中文(漢字)NederlandsSuomiFrançaisDeutschहिन्दी; हिंदीMagyarItaliano日本語한국어Bahasa MelayuPortuguêsRomânăРусскийEspañolTürkçeУкраїнськаTiếng Việt\n\nअंग्रेजी: रहस्य rapture — जहां सिद्धांत (Darby, 1830, Scofield) से आया था, वास्तव में क्या पाठ कहते हैं, और कैसे चर्च विभाजन के बिना बहस पकड़ो।",
       "duration": "17:41",
       "publishDate": "2026-10-26",
       "topics": [
-        "Rapture",
+        "रैप्चर",
         "Eschatology",
         "चर्च इतिहास"
       ],
@@ -1572,14 +1572,14 @@
       "topics": [
         "Slavery",
         "पुराने नियम एथिक्स",
-        "Philemon"
+        "फिलेमोन"
       ],
       "scriptureReferences": [
         "प्रस्थान 21: 1-11,16",
         "लेविस 25:39-43",
         "व्यवस्था 15:12-15",
         "व्यवस्था 23:15-16",
-        "Philemon",
+        "फिलेमोन",
         "इफिसियन 6:5-9",
         "1 टिमोथी 1:10"
       ],
@@ -1602,7 +1602,7 @@
       "topics": [
         "पवित्र युद्ध",
         "दिव्य न्याय",
-        "Joshua"
+        "जोशुआ"
       ],
       "scriptureReferences": [
         "व्यवस्था 20",
@@ -1634,7 +1634,7 @@
       "topics": [
         "Lex Talionis",
         "मृत्यु जुर्माना",
-        "Justice"
+        "न्याय"
       ],
       "scriptureReferences": [
         "प्रस्थान 21:23-25",
@@ -1661,8 +1661,8 @@
       "duration": "19:51",
       "publishDate": "2026-10-26",
       "topics": [
-        "Divorce",
-        "Healing",
+        "तलाक",
+        "हीलिंग",
         "पादरी"
       ],
       "scriptureReferences": [
@@ -1693,7 +1693,7 @@
       "topics": [
         "मंत्रालय में महिला",
         "चर्च नेतृत्व",
-        "Hermeneutics"
+        "हर्मेन्यूटिक्स"
       ],
       "scriptureReferences": [
         "उत्पत्ति 1:27",
@@ -1725,7 +1725,7 @@
       "duration": "1:39",
       "publishDate": "2026-10-26",
       "topics": [
-        "Homosexuality",
+        "समलैंगिकता",
         "अनुग्रह और सत्य",
         "पादरी"
       ],
@@ -1764,8 +1764,8 @@
       "youtubeUrl": "https://youtu.be/7t2Tjo9F_mg",
       "topics": [
         "बाइबिल धर्मशास्त्र",
-        "Covenants",
-        "Hermeneutics"
+        "किशोर",
+        "हर्मेन्यूटिक्स"
       ],
       "scriptureReferences": [
         "उत्पत्ति 1-3",
@@ -1783,7 +1783,7 @@
       "duration": "54:30",
       "publishDate": "2026-01-29",
       "topics": [
-        "Leviticus",
+        "लेवी",
         "Typology",
         "Atonement"
       ],
@@ -1803,8 +1803,8 @@
       "publishDate": "2026-02-12",
       "youtubeUrl": "https://youtu.be/HSI84sTSkKY",
       "topics": [
-        "Angelology",
-        "Demonology",
+        "एंजेलोलॉजी",
+        "प्रदर्शन",
         "आध्यात्मिक युद्ध"
       ],
       "scriptureReferences": [
@@ -1818,13 +1818,13 @@
       "number": 4,
       "slug": "punjabi-zaboor-the-indigenous-psalms-of-south-asia",
       "title": "पंजाबी ज़बोर: दक्षिण एशिया के स्वदेशी भजन",
-      "subtitle": "कैसे 150 बाइबिल भजन शास्त्रीय पंजाबी मीट्रिक कविता में संरक्षित थे",
+      "subtitle": "कैसे 150 बाइबिल भजन शास्त्रीय पंजाबी मापदंड कविता में संरक्षित थे",
       "description": "1908 में, मिशनरी इमाम-उद-दीन शाहबाज़ ने स्वदेशी पंजाबी मीटर (बहर) में सभी 150 बाइबिल भजनों के अनुवाद और काव्यात्मक संस्करण पूरा किया। हम इतिहास, संगीत राग और पाकिस्तान भर के लाखों लोगों और डायस्पोरा पर ज़बोर के गहरा आध्यात्मिक प्रभाव का पता लगाते हैं।",
       "duration": "45:20",
       "publishDate": "2026-02-26",
       "topics": [
         "चर्च इतिहास",
-        "Musicology",
+        "संगीत",
         "दक्षिण एशियाई ईसाई धर्म"
       ],
       "scriptureReferences": [

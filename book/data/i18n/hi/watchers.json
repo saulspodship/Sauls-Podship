@@ -7,7 +7,7 @@
   ],
   "sections": [
     {
-      "id": "scriptureImageGuide",
+      "id": "स्क्रिप्टिंगImageGuide",
       "title": "",
       "blocks": [
         {
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "id": "visualIndex",
+      "id": "दृश्य सूचकांक",
       "title": "दृश्य सूचकांक: मुख्य आंकड़े और प्राणी",
       "blocks": [
         {
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "id": "scriptureProfiles",
+      "id": "स्क्रिप्टिंगप्रोफाइल",
       "title": "शास्त्र के नेतृत्व में प्रोफ़ाइल मानक",
       "blocks": [
         {
@@ -73,7 +73,7 @@
             },
             {
               "cell": "th",
-              "text": "Reference"
+              "text": "संदर्भ"
             },
             {
               "cell": "th",
@@ -212,7 +212,7 @@
           "cells": [
             {
               "cell": "td",
-              "text": "Leviathan"
+              "text": "लेवियाथेन"
             },
             {
               "cell": "td",
@@ -302,7 +302,7 @@
       ]
     },
     {
-      "id": "claimsEvidence",
+      "id": "दावा सबूत",
       "title": "विशिष्ट दावे, लोकगीत और साक्ष्य की जांच",
       "blocks": [
         {
@@ -326,7 +326,7 @@
             },
             {
               "cell": "th",
-              "text": "Assessment"
+              "text": "आकलन"
             }
           ]
         },
@@ -479,7 +479,7 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
@@ -491,19 +491,19 @@
             },
             {
               "cell": "th",
-              "text": "Greek"
+              "text": "यूनानी"
             },
             {
               "cell": "th",
-              "text": "Egyptian"
+              "text": "मिस्र"
             },
             {
               "cell": "th",
-              "text": "Norse"
+              "text": "नॉर्स"
             },
             {
               "cell": "th",
-              "text": "Hindu"
+              "text": "हिंदू"
             }
           ]
         },
@@ -532,11 +532,11 @@
             },
             {
               "cell": "td",
-              "text": "Odin"
+              "text": "ओडिन"
             },
             {
               "cell": "td",
-              "text": "Indra"
+              "text": "इंद्रा"
             }
           ]
         },
@@ -594,15 +594,15 @@
             },
             {
               "cell": "td",
-              "text": "Ra"
+              "text": "राणा"
             },
             {
               "cell": "td",
-              "text": "Sol"
+              "text": "सोल"
             },
             {
               "cell": "td",
-              "text": "Surya"
+              "text": "सूर्य"
             }
           ]
         },
@@ -664,7 +664,7 @@
             },
             {
               "cell": "td",
-              "text": "Thor"
+              "text": "थोर"
             },
             {
               "cell": "td",
@@ -689,7 +689,7 @@
             },
             {
               "cell": "td",
-              "text": "Hecate"
+              "text": "हिंदी"
             },
             {
               "cell": "td",
@@ -722,11 +722,11 @@
             },
             {
               "cell": "td",
-              "text": "Hermes"
+              "text": "हर्मी"
             },
             {
               "cell": "td",
-              "text": "Thoth"
+              "text": "थॉथ"
             },
             {
               "cell": "td",
@@ -763,11 +763,11 @@
             },
             {
               "cell": "td",
-              "text": "Forseti"
+              "text": "फोरसेटी"
             },
             {
               "cell": "td",
-              "text": "Yama"
+              "text": "यामा"
             }
           ]
         },
@@ -825,7 +825,7 @@
             },
             {
               "cell": "td",
-              "text": "Duat"
+              "text": "डुएट"
             },
             {
               "cell": "td",
@@ -833,7 +833,7 @@
             },
             {
               "cell": "td",
-              "text": "Patala"
+              "text": "पटेला"
             }
           ]
         },
@@ -858,7 +858,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             },
             {
               "cell": "td",
@@ -885,7 +885,7 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
@@ -893,11 +893,11 @@
             },
             {
               "cell": "th",
-              "text": "Meaning"
+              "text": "अर्थ"
             },
             {
               "cell": "th",
-              "text": "Where"
+              "text": "कहाँ"
             }
           ]
         },
@@ -927,7 +927,7 @@
           "cells": [
             {
               "cell": "td",
-              "text": "Satan"
+              "text": "सतन"
             },
             {
               "cell": "td",
@@ -948,7 +948,7 @@
             },
             {
               "cell": "td",
-              "text": "Slanderer"
+              "text": "स्लेंडर"
             },
             {
               "cell": "td",
@@ -995,11 +995,11 @@
           "cells": [
             {
               "cell": "td",
-              "text": "Belial"
+              "text": "बेलिया"
             },
             {
               "cell": "td",
-              "text": "Worthlessness"
+              "text": "बेरहमी"
             },
             {
               "cell": "td",
@@ -1196,11 +1196,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Figure"
+              "text": "चित्र"
             },
             {
               "cell": "th",
@@ -1212,7 +1212,7 @@
             },
             {
               "cell": "th",
-              "text": "Fit"
+              "text": "फिट"
             }
           ]
         },
@@ -1225,7 +1225,7 @@
             },
             {
               "cell": "td",
-              "text": "Hanuman"
+              "text": "हनुमान"
             },
             {
               "cell": "td",
@@ -1237,7 +1237,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1250,7 +1250,7 @@
             },
             {
               "cell": "td",
-              "text": "Rama"
+              "text": "राम"
             },
             {
               "cell": "td",
@@ -1262,7 +1262,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1275,7 +1275,7 @@
             },
             {
               "cell": "td",
-              "text": "Ravana"
+              "text": "रावण"
             },
             {
               "cell": "td",
@@ -1287,7 +1287,7 @@
             },
             {
               "cell": "td",
-              "text": "Medium"
+              "text": "मध्यम"
             }
           ]
         },
@@ -1300,7 +1300,7 @@
             },
             {
               "cell": "td",
-              "text": "Rakshasas"
+              "text": "रक्षस"
             },
             {
               "cell": "td",
@@ -1312,7 +1312,7 @@
             },
             {
               "cell": "td",
-              "text": "Medium"
+              "text": "मध्यम"
             }
           ]
         },
@@ -1325,7 +1325,7 @@
             },
             {
               "cell": "td",
-              "text": "Shiva"
+              "text": "शिवा"
             },
             {
               "cell": "td",
@@ -1337,7 +1337,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1375,7 +1375,7 @@
             },
             {
               "cell": "td",
-              "text": "Brahma"
+              "text": "ब्रह्मा"
             },
             {
               "cell": "td",
@@ -1387,7 +1387,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1400,7 +1400,7 @@
             },
             {
               "cell": "td",
-              "text": "Indra"
+              "text": "इंद्रा"
             },
             {
               "cell": "td",
@@ -1412,7 +1412,7 @@
             },
             {
               "cell": "td",
-              "text": "Medium"
+              "text": "मध्यम"
             }
           ]
         },
@@ -1437,7 +1437,7 @@
             },
             {
               "cell": "td",
-              "text": "Medium"
+              "text": "मध्यम"
             }
           ]
         },
@@ -1450,7 +1450,7 @@
             },
             {
               "cell": "td",
-              "text": "Ganesha"
+              "text": "गणेश"
             },
             {
               "cell": "td",
@@ -1462,7 +1462,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1475,7 +1475,7 @@
             },
             {
               "cell": "td",
-              "text": "Narasimha"
+              "text": "नरसिंह"
             },
             {
               "cell": "td",
@@ -1487,7 +1487,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1512,7 +1512,7 @@
             },
             {
               "cell": "td",
-              "text": "Loose"
+              "text": "लूज"
             }
           ]
         },
@@ -1537,7 +1537,7 @@
             },
             {
               "cell": "td",
-              "text": "Medium"
+              "text": "मध्यम"
             }
           ]
         }
@@ -1556,11 +1556,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Being"
+              "text": "होना"
             },
             {
               "cell": "th",
@@ -1568,7 +1568,7 @@
             },
             {
               "cell": "th",
-              "text": "Characteristics"
+              "text": "लक्षण"
             },
             {
               "cell": "th",
@@ -1660,7 +1660,7 @@
             },
             {
               "cell": "td",
-              "text": "Animal-sinning"
+              "text": "पशु सिननिंग"
             },
             {
               "cell": "td",
@@ -1743,7 +1743,7 @@
             },
             {
               "cell": "td",
-              "text": "फिश-बंद ऋषियों ने सभ्यता को सिखाया; बैल-पुरुषों और लामासु गार्ड गेट्स।"
+              "text": "फिश-बंद ऋषियों ने सभ्यता को सिखाया; बैल-पुरुषों और लामासु गार्ड फाटक।"
             },
             {
               "cell": "td",
@@ -1774,7 +1774,7 @@
             },
             {
               "cell": "th",
-              "text": "References"
+              "text": "संदर्भ"
             }
           ]
         },
@@ -1825,7 +1825,7 @@
             },
             {
               "cell": "td",
-              "text": "1 Enoch 15:8-12; 19:1; 99:7; Jubilees 11:4-5"
+              "text": "1 एनोच 15:8-12; 19:1; 99:7; जुबली 11:4-5"
             }
           ]
         },
@@ -1928,19 +1928,19 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Creature"
+              "text": "रचना"
             },
             {
               "cell": "th",
-              "text": "Where"
+              "text": "कहाँ"
             },
             {
               "cell": "th",
-              "text": "Description"
+              "text": "विवरण"
             },
             {
               "cell": "th",
@@ -2007,7 +2007,7 @@
             },
             {
               "cell": "td",
-              "text": "Leviathan"
+              "text": "लेवियाथेन"
             },
             {
               "cell": "td",
@@ -2040,7 +2040,7 @@
             },
             {
               "cell": "td",
-              "text": "विशाल भूमि जानवर, एक देवदार की तरह पूंछ। एनोच में, डेन्डेन नामक एक अनदेखी रेगिस्तान में एक पुरुष राक्षस।"
+              "text": "विशाल भूमि जानवर, एक देवदार की तरह पूंछ। एनोच में, डेन्डेन नामक एक अनदेखी जंगल में एक पुरुष राक्षस।"
             },
             {
               "cell": "td",
@@ -2057,7 +2057,7 @@
             },
             {
               "cell": "td",
-              "text": "Rahab"
+              "text": "रघु"
             },
             {
               "cell": "td",
@@ -2119,7 +2119,7 @@
             },
             {
               "cell": "td",
-              "text": "God"
+              "text": "परमेश्वर"
             }
           ]
         },
@@ -2132,7 +2132,7 @@
             },
             {
               "cell": "td",
-              "text": "Cherubim"
+              "text": "चेरुबिन"
             },
             {
               "cell": "td",
@@ -2144,7 +2144,7 @@
             },
             {
               "cell": "td",
-              "text": "God"
+              "text": "परमेश्वर"
             }
           ]
         },
@@ -2157,7 +2157,7 @@
             },
             {
               "cell": "td",
-              "text": "Sirens"
+              "text": "सरीन"
             },
             {
               "cell": "td",
@@ -2165,7 +2165,7 @@
             },
             {
               "cell": "td",
-              "text": "एनोच में, गिरे हुए स्वर्गदूतों की महिलाएं सिरेन बन जाती हैं। बाइबिल अनुवाद में शब्द हिब्रू शब्द को रेगिस्तानी जीवों, अक्सर जैकल या ऑस्ट्रीच के लिए प्रस्तुत करता है।"
+              "text": "एनोच में, गिरे हुए स्वर्गदूतों की महिलाएं सिरेन बन जाती हैं। बाइबिल अनुवाद में शब्द हिब्रू शब्द को जंगली जीवों, अक्सर जैकल या ऑस्ट्रीच के लिए प्रस्तुत करता है।"
             },
             {
               "cell": "td",
@@ -2269,7 +2269,7 @@
             },
             {
               "cell": "td",
-              "text": "God"
+              "text": "परमेश्वर"
             }
           ]
         },
@@ -2369,7 +2369,7 @@
             },
             {
               "cell": "td",
-              "text": "God"
+              "text": "परमेश्वर"
             }
           ]
         },
@@ -2438,11 +2438,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Entity"
+              "text": "संस्था"
             },
             {
               "cell": "th",
@@ -2529,7 +2529,7 @@
             },
             {
               "cell": "td",
-              "text": "Baal-peor"
+              "text": "बाली"
             },
             {
               "cell": "td",
@@ -2616,7 +2616,7 @@
             },
             {
               "cell": "td",
-              "text": "Chemosh"
+              "text": "चेमोश"
             },
             {
               "cell": "td",
@@ -2645,7 +2645,7 @@
             },
             {
               "cell": "td",
-              "text": "Dagon"
+              "text": "डैगन"
             },
             {
               "cell": "td",
@@ -2703,7 +2703,7 @@
             },
             {
               "cell": "td",
-              "text": "Tammuz"
+              "text": "तैमुज़"
             },
             {
               "cell": "td",
@@ -2732,7 +2732,7 @@
             },
             {
               "cell": "td",
-              "text": "Rimmon"
+              "text": "रिमौन"
             },
             {
               "cell": "td",
@@ -2761,7 +2761,7 @@
             },
             {
               "cell": "td",
-              "text": "Nergal"
+              "text": "नेरगल"
             },
             {
               "cell": "td",
@@ -2906,7 +2906,7 @@
             },
             {
               "cell": "td",
-              "text": "Mammon"
+              "text": "मैमोन"
             },
             {
               "cell": "td",
@@ -2941,11 +2941,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "View"
+              "text": "देखें"
             },
             {
               "cell": "th",
-              "text": "Claim"
+              "text": "दावा"
             },
             {
               "cell": "th",
@@ -3033,7 +3033,7 @@
             },
             {
               "cell": "td",
-              "text": "Ugaritic texts; Deut 32:8-9; Ps 82; Isa 40-48"
+              "text": "Ugaritic ग्रंथ; Deut 32:8-9; Ps 82; Isa 40-48"
             },
             {
               "cell": "td",
@@ -3106,7 +3106,7 @@
             },
             {
               "cell": "th",
-              "text": "References"
+              "text": "संदर्भ"
             }
           ]
         },
@@ -3252,11 +3252,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Being"
+              "text": "होना"
             },
             {
               "cell": "th",
@@ -3264,7 +3264,7 @@
             },
             {
               "cell": "th",
-              "text": "Role"
+              "text": "भूमिका"
             },
             {
               "cell": "th",
@@ -3272,7 +3272,7 @@
             },
             {
               "cell": "th",
-              "text": "Parallels"
+              "text": "समानांतर"
             }
           ]
         },
@@ -3314,7 +3314,7 @@
             },
             {
               "cell": "td",
-              "text": "Thoth"
+              "text": "थॉथ"
             },
             {
               "cell": "td",
@@ -3401,7 +3401,7 @@
             },
             {
               "cell": "td",
-              "text": "Sekhmet"
+              "text": "सिखमेट"
             },
             {
               "cell": "td",
@@ -3430,7 +3430,7 @@
             },
             {
               "cell": "td",
-              "text": "Horus"
+              "text": "हॉरस"
             },
             {
               "cell": "td",
@@ -3517,7 +3517,7 @@
             },
             {
               "cell": "td",
-              "text": "Garuda"
+              "text": "गौर"
             },
             {
               "cell": "td",
@@ -3603,18 +3603,18 @@
       "blocks": [
         {
           "type": "p",
-          "text": "बाइबिल में स्टार समूहों (मैज़ारोथ, जॉब 38:32; 2 किलो 23:5) का उल्लेख किया गया है और स्टार रीडिंग (Deut 4:19; Isa 47:13). 1 एनोच 8:3 का कहना है कि वॉचर्स ने ज्योतिष पढ़ाया: बाराकेल ज्योतिष, कोकबीएल ने नक्षत्रों को पढ़ाया, शमसील सूर्य के संकेत, सारिएल चंद्रमा के पाठ्यक्रम को। राशि खुद बेबीलोन से आती है और मिस्र, ग्रीस और भारत में फैलती है।"
+          "text": "बाइबिल में स्टार समूहों (मैज़ारोथ, जॉब 38:32; 2 किलो 23:5) का उल्लेख किया गया है और स्टार रीडिंग (Deut 4:19; Isa 47:13). 1 एनोच 8:3 का कहना है कि वॉचर्स ने ज्योतिष पढ़ाया: बाराकेल ज्योतिष, कोकबीएल ने नक्षत्रों को पढ़ाया, शममुहर सूर्य के संकेत, सारिएल चंद्रमा के पाठ्यक्रम को। राशि खुद बेबीलोन से आती है और मिस्र, ग्रीस और भारत में फैलती है।"
         },
         {
           "type": "row",
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Sign"
+              "text": "साइन"
             },
             {
               "cell": "th",
@@ -3630,7 +3630,7 @@
             },
             {
               "cell": "th",
-              "text": "Note"
+              "text": "नोट"
             }
           ]
         },
@@ -3643,11 +3643,11 @@
             },
             {
               "cell": "td",
-              "text": "Aries"
+              "text": "मेष"
             },
             {
               "cell": "td",
-              "text": "Ram"
+              "text": "राम"
             },
             {
               "cell": "td",
@@ -3672,11 +3672,11 @@
             },
             {
               "cell": "td",
-              "text": "Taurus"
+              "text": "वृषभ"
             },
             {
               "cell": "td",
-              "text": "Bull"
+              "text": "बुल"
             },
             {
               "cell": "td",
@@ -3701,11 +3701,11 @@
             },
             {
               "cell": "td",
-              "text": "Gemini"
+              "text": "मिथुन"
             },
             {
               "cell": "td",
-              "text": "Twins"
+              "text": "जुड़वां"
             },
             {
               "cell": "td",
@@ -3730,11 +3730,11 @@
             },
             {
               "cell": "td",
-              "text": "Cancer"
+              "text": "कैंसर"
             },
             {
               "cell": "td",
-              "text": "Crab"
+              "text": "केकड़ा"
             },
             {
               "cell": "td",
@@ -3759,11 +3759,11 @@
             },
             {
               "cell": "td",
-              "text": "Leo"
+              "text": "सिंह"
             },
             {
               "cell": "td",
-              "text": "Lion"
+              "text": "शेर"
             },
             {
               "cell": "td",
@@ -3788,11 +3788,11 @@
             },
             {
               "cell": "td",
-              "text": "Virgo"
+              "text": "कन्या"
             },
             {
               "cell": "td",
-              "text": "Maiden"
+              "text": "मैडेन"
             },
             {
               "cell": "td",
@@ -3817,11 +3817,11 @@
             },
             {
               "cell": "td",
-              "text": "Libra"
+              "text": "तुला"
             },
             {
               "cell": "td",
-              "text": "Scales"
+              "text": "स्केल"
             },
             {
               "cell": "td",
@@ -3846,7 +3846,7 @@
             },
             {
               "cell": "td",
-              "text": "Scorpio"
+              "text": "वृश्चिक"
             },
             {
               "cell": "td",
@@ -3875,7 +3875,7 @@
             },
             {
               "cell": "td",
-              "text": "Sagittarius"
+              "text": "धनु"
             },
             {
               "cell": "td",
@@ -3904,7 +3904,7 @@
             },
             {
               "cell": "td",
-              "text": "Capricorn"
+              "text": "मकर"
             },
             {
               "cell": "td",
@@ -3933,11 +3933,11 @@
             },
             {
               "cell": "td",
-              "text": "Aquarius"
+              "text": "कुम्भ"
             },
             {
               "cell": "td",
-              "text": "Water-bearer"
+              "text": "पानी बियर"
             },
             {
               "cell": "td",
@@ -3962,7 +3962,7 @@
             },
             {
               "cell": "td",
-              "text": "Pisces"
+              "text": "मीन"
             },
             {
               "cell": "td",
@@ -4013,7 +4013,7 @@
             },
             {
               "cell": "th",
-              "text": "Status"
+              "text": "स्थिति"
             }
           ]
         },
@@ -4199,7 +4199,7 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Claim"
+              "text": "दावा"
             },
             {
               "cell": "th",
@@ -4211,7 +4211,7 @@
             },
             {
               "cell": "th",
-              "text": "Evidence"
+              "text": "प्रमाण"
             }
           ]
         },
@@ -4232,7 +4232,7 @@
             },
             {
               "cell": "td",
-              "text": "Weak"
+              "text": "वेक"
             }
           ]
         },
@@ -4253,7 +4253,7 @@
             },
             {
               "cell": "td",
-              "text": "Strong"
+              "text": "मजबूत"
             }
           ]
         },
@@ -4274,7 +4274,7 @@
             },
             {
               "cell": "td",
-              "text": "Weak"
+              "text": "वेक"
             }
           ]
         },
@@ -4295,7 +4295,7 @@
             },
             {
               "cell": "td",
-              "text": "Weak"
+              "text": "वेक"
             }
           ]
         },
@@ -4316,7 +4316,7 @@
             },
             {
               "cell": "td",
-              "text": "Weak"
+              "text": "वेक"
             }
           ]
         },
@@ -4325,7 +4325,7 @@
           "cells": [
             {
               "cell": "td",
-              "text": "Phones"
+              "text": "फ़ोन"
             },
             {
               "cell": "td",
@@ -4337,7 +4337,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             }
           ]
         },
@@ -4358,7 +4358,7 @@
             },
             {
               "cell": "td",
-              "text": "Strong"
+              "text": "मजबूत"
             }
           ]
         },
@@ -4379,7 +4379,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             }
           ]
         }
@@ -4402,15 +4402,15 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Group"
+              "text": "समूह"
             },
             {
               "cell": "th",
-              "text": "Source"
+              "text": "स्रोत"
             },
             {
               "cell": "th",
@@ -4418,7 +4418,7 @@
             },
             {
               "cell": "th",
-              "text": "Traits"
+              "text": "लक्षण"
             }
           ]
         },
@@ -4560,15 +4560,15 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Depiction"
+              "text": "व्याख्या"
             },
             {
               "cell": "th",
-              "text": "Site"
+              "text": "साइट"
             },
             {
               "cell": "th",
-              "text": "Place"
+              "text": "स्थान"
             },
             {
               "cell": "th",
@@ -4584,7 +4584,7 @@
             },
             {
               "cell": "th",
-              "text": "Status"
+              "text": "स्थिति"
             }
           ]
         },
@@ -4601,7 +4601,7 @@
             },
             {
               "cell": "td",
-              "text": "Turkey"
+              "text": "तुर्की"
             },
             {
               "cell": "td",
@@ -4650,7 +4650,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -4663,11 +4663,11 @@
             },
             {
               "cell": "td",
-              "text": "Caral"
+              "text": "कैरल"
             },
             {
               "cell": "td",
-              "text": "Peru"
+              "text": "पेरू"
             },
             {
               "cell": "td",
@@ -4683,7 +4683,7 @@
             },
             {
               "cell": "td",
-              "text": "1990 के दशक में खुदाई तक रेगिस्तानी रेत में दफन"
+              "text": "1990 के दशक में खुदाई तक जंगली रेत में दफन"
             }
           ]
         },
@@ -4696,11 +4696,11 @@
             },
             {
               "cell": "td",
-              "text": "Mohenjo-daro"
+              "text": "मोहनजो-दारो"
             },
             {
               "cell": "td",
-              "text": "Pakistan"
+              "text": "पाकिस्तान"
             },
             {
               "cell": "td",
@@ -4712,7 +4712,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -4729,11 +4729,11 @@
             },
             {
               "cell": "td",
-              "text": "Stonehenge"
+              "text": "स्टोनहेन्ग"
             },
             {
               "cell": "td",
-              "text": "England"
+              "text": "इंग्लैंड"
             },
             {
               "cell": "td",
@@ -4749,7 +4749,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -4782,7 +4782,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -4799,7 +4799,7 @@
             },
             {
               "cell": "td",
-              "text": "Egypt"
+              "text": "मिस्र"
             },
             {
               "cell": "td",
@@ -4832,7 +4832,7 @@
             },
             {
               "cell": "td",
-              "text": "Iraq"
+              "text": "इराक"
             },
             {
               "cell": "td",
@@ -4848,7 +4848,7 @@
             },
             {
               "cell": "td",
-              "text": "Restored"
+              "text": "बहाल"
             }
           ]
         },
@@ -4877,11 +4877,11 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -4898,7 +4898,7 @@
             },
             {
               "cell": "td",
-              "text": "Mexico"
+              "text": "मेक्सिको"
             },
             {
               "cell": "td",
@@ -4906,7 +4906,7 @@
             },
             {
               "cell": "td",
-              "text": "Olmec"
+              "text": "ओल्मीक"
             },
             {
               "cell": "td",
@@ -4914,7 +4914,7 @@
             },
             {
               "cell": "td",
-              "text": "Jungle-covered"
+              "text": "जंगल से ढके"
             }
           ]
         },
@@ -4947,7 +4947,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -4964,7 +4964,7 @@
             },
             {
               "cell": "td",
-              "text": "Mexico"
+              "text": "मेक्सिको"
             },
             {
               "cell": "td",
@@ -4997,7 +4997,7 @@
             },
             {
               "cell": "td",
-              "text": "Guatemala"
+              "text": "ग्वाटेमाला"
             },
             {
               "cell": "td",
@@ -5005,15 +5005,15 @@
             },
             {
               "cell": "td",
-              "text": "Maya"
+              "text": "माया"
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
-              "text": "Jungle-covered"
+              "text": "जंगल से ढके"
             }
           ]
         },
@@ -5030,7 +5030,7 @@
             },
             {
               "cell": "td",
-              "text": "Sudan"
+              "text": "सूडान"
             },
             {
               "cell": "td",
@@ -5042,7 +5042,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5096,7 +5096,7 @@
             },
             {
               "cell": "td",
-              "text": "Mexico"
+              "text": "मेक्सिको"
             },
             {
               "cell": "td",
@@ -5112,7 +5112,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -5129,7 +5129,7 @@
             },
             {
               "cell": "td",
-              "text": "Lebanon"
+              "text": "लेबनान"
             },
             {
               "cell": "td",
@@ -5162,7 +5162,7 @@
             },
             {
               "cell": "td",
-              "text": "Guatemala"
+              "text": "ग्वाटेमाला"
             },
             {
               "cell": "td",
@@ -5170,11 +5170,11 @@
             },
             {
               "cell": "td",
-              "text": "Maya"
+              "text": "माया"
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5195,7 +5195,7 @@
             },
             {
               "cell": "td",
-              "text": "Bolivia"
+              "text": "बोलीविया"
             },
             {
               "cell": "td",
@@ -5224,7 +5224,7 @@
             },
             {
               "cell": "td",
-              "text": "Borobudur"
+              "text": "बोरोबुदुर"
             },
             {
               "cell": "td",
@@ -5240,7 +5240,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5261,7 +5261,7 @@
             },
             {
               "cell": "td",
-              "text": "India"
+              "text": "भारत"
             },
             {
               "cell": "td",
@@ -5277,7 +5277,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -5290,11 +5290,11 @@
             },
             {
               "cell": "td",
-              "text": "Mahabalipuram"
+              "text": "महाबलीपुरम"
             },
             {
               "cell": "td",
-              "text": "India"
+              "text": "भारत"
             },
             {
               "cell": "td",
@@ -5327,7 +5327,7 @@
             },
             {
               "cell": "td",
-              "text": "Java"
+              "text": "जावा"
             },
             {
               "cell": "td",
@@ -5360,7 +5360,7 @@
             },
             {
               "cell": "td",
-              "text": "Mexico"
+              "text": "मेक्सिको"
             },
             {
               "cell": "td",
@@ -5372,11 +5372,11 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
-              "text": "Restored"
+              "text": "बहाल"
             }
           ]
         },
@@ -5409,7 +5409,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -5422,11 +5422,11 @@
             },
             {
               "cell": "td",
-              "text": "Bagan"
+              "text": "बागान"
             },
             {
               "cell": "td",
-              "text": "Myanmar"
+              "text": "पाकिस्तान"
             },
             {
               "cell": "td",
@@ -5438,7 +5438,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5459,7 +5459,7 @@
             },
             {
               "cell": "td",
-              "text": "Cambodia"
+              "text": "कंबोडिया"
             },
             {
               "cell": "td",
@@ -5492,7 +5492,7 @@
             },
             {
               "cell": "td",
-              "text": "Vietnam"
+              "text": "वियतनाम"
             },
             {
               "cell": "td",
@@ -5504,7 +5504,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5537,7 +5537,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5558,7 +5558,7 @@
             },
             {
               "cell": "td",
-              "text": "Thailand"
+              "text": "थाईलैंड"
             },
             {
               "cell": "td",
@@ -5570,7 +5570,7 @@
             },
             {
               "cell": "td",
-              "text": "None"
+              "text": "कोई नहीं"
             },
             {
               "cell": "td",
@@ -5640,7 +5640,7 @@
             },
             {
               "cell": "td",
-              "text": "Standing"
+              "text": "स्थायी"
             }
           ]
         },
@@ -5686,11 +5686,11 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Site"
+              "text": "साइट"
             },
             {
               "cell": "th",
-              "text": "Claim"
+              "text": "दावा"
             },
             {
               "cell": "th",
@@ -5837,7 +5837,7 @@
       ]
     },
     {
-      "id": "imageCredits",
+      "id": "छवि",
       "title": "छवि स्रोत और लाइसेंस",
       "blocks": [
         {
@@ -5853,7 +5853,7 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Profile"
+              "text": "प्रोफ़ाइल"
             },
             {
               "cell": "th",
@@ -5865,18 +5865,18 @@
             },
             {
               "cell": "th",
-              "text": "Licence"
+              "text": "लाइसेंस"
             },
             {
               "cell": "th",
-              "text": "Link"
+              "text": "लिंक"
             }
           ]
         }
       ]
     },
     {
-      "id": "imageCredits",
+      "id": "छवि",
       "title": "छवि स्रोत और लाइसेंस",
       "blocks": [
         {
@@ -5892,7 +5892,7 @@
           "cells": [
             {
               "cell": "th",
-              "text": "Profile"
+              "text": "प्रोफ़ाइल"
             },
             {
               "cell": "th",
@@ -5904,11 +5904,11 @@
             },
             {
               "cell": "th",
-              "text": "Licence"
+              "text": "लाइसेंस"
             },
             {
               "cell": "th",
-              "text": "Link"
+              "text": "लिंक"
             }
           ]
         }
@@ -5968,7 +5968,7 @@
       "t": "/watchers-atlas/img/c5ed549cedc092-t.webp",
       "f": "/watchers-atlas/img/7e37ff434a6f5c-f.webp",
       "ti": "फ़ाइल:Storm God-AO 11188-IMG 7669-gradient.jpg",
-      "c": "Rama",
+      "c": "राम",
       "l": "CC BY-SA 3.0 fr",
       "lu": "https://creativecommons.org/licenses/by-sa/3.0/fr/deed.en",
       "p": "https://commons.wikimedia.org/wiki/File:Storm_god-AO_11188-IMG_7669-gradient.jpg",
@@ -6039,7 +6039,7 @@
       "t": "/watchers-atlas/img/96064d6b3fb61f-t.webp",
       "f": "/watchers-atlas/img/d9ebffb9a8400f-f.webp",
       "ti": "फ़ाइल:एक प्रबुद्ध पांडुलिपि पत्ता, फिर्डौसी के शाहनामा के दूसरे भाग का उद्घाटन पृष्ठ (Lhrasb का शासनकाल), फारस, 16th - 17th Century.jpg",
-      "c": "Bonhams",
+      "c": "बॉनहम",
       "l": "सार्वजनिक डोमेन",
       "lu": "",
       "p": "https://commons.wikimedia.org/wiki/File:An_illuminated_manuscript_leaf,_the_opening_page_of_the_second_part_of_Firdausi%27s_Shahnama_(the_reign_of_Luhrasb),_Persia,_16th_-_17th_Century.jpg",
@@ -6055,7 +6055,7 @@
       "l": "सार्वजनिक डोमेन",
       "lu": "",
       "p": "https://commons.wikimedia.org/wiki/File:Satan_Exulting_over_Eve_c1795_Tate_Britain.jpg",
-      "d": "अधिग्रहण नेशनल हेरिटेज मेमोरियल फंड, द फ्रेंड्स ऑफ टेट गैलरी, Essick फाउंडेशन, एडविन सी. कोहेन और अन्य benefactorों की सहायता से खरीदी गई, जो मार्टिन बटलिन, ब्रिटिश संग्रह के कीपर 1967-1989, 1996 संदर्भ T07",
+      "d": "अधिग्रहण नेशनल हेरिटेज मेमोरियल फंड, द फ्रेंड्स ऑफ टेट गैलरी, Essick नींव, एडविन सी. कोहेन और अन्य benefactorों की सहायता से खरीदी गई, जो मार्टिन बटलिन, ब्रिटिश संग्रह के कीपर 1967-1989, 1996 संदर्भ T07",
       "s": "",
       "k": "रियल सोर्स्ड छवि"
     },
@@ -6291,7 +6291,7 @@
       "t": "/watchers-atlas/img/b4ec5e8feb6428-t.webp",
       "f": "/watchers-atlas/img/e37fa07cc0feaf-f.webp",
       "ti": "फ़ाइल:शिवा प्रतिमा CERN 02.jpg",
-      "c": "Peacearth",
+      "c": "शांतिर्थ",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Shiva_statue_at_CERN_02.jpg",
@@ -6315,7 +6315,7 @@
       "t": "/watchers-atlas/img/1b7aa188416afa-t.webp",
       "f": "/watchers-atlas/img/2820ed89383764-f.webp",
       "ti": "फ़ाइल:ब्रह्म की मूर्तिकला, 8 वीं सदी, भुवनेश्वर, ओडिशा राज्य संग्रहालय.jpg",
-      "c": "SpeakingArch",
+      "c": "स्पीकिंग आर्क",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Sculpture_of_Brahma,_8th_century,_Bhubaneswar,_Odisha_State_Museum.jpg",
@@ -6327,7 +6327,7 @@
       "t": "/watchers-atlas/img/6c4fac293b4b42-t.webp",
       "f": "/watchers-atlas/img/a699bfe781030c-f.webp",
       "ti": "फ़ाइल:Indra Statue 7377.jpg",
-      "c": "LinYuKi",
+      "c": "लिनुकी",
       "l": "सार्वजनिक डोमेन",
       "lu": "",
       "p": "https://commons.wikimedia.org/wiki/File:Indra_Statue_7377.jpg",
@@ -6515,7 +6515,7 @@
       "t": "/watchers-atlas/img/27bed4e7d05e65-t.webp",
       "f": "/watchers-atlas/img/1cb8835f164b6b-f.webp",
       "ti": "फ़ाइल:अपकल्लू मूर्ति 2.jpg",
-      "c": "Zunkir",
+      "c": "ज़ंकीर",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Apkallu_statuette_2.jpg",
@@ -6735,7 +6735,7 @@
       "l": "सार्वजनिक डोमेन",
       "lu": "",
       "p": "https://commons.wikimedia.org/wiki/File:Lilith_(John_Collier_painting).jpg",
-      "d": "Lilith",
+      "d": "लिलीथ",
       "s": "",
       "k": "रियल सोर्स्ड छवि"
     },
@@ -7090,7 +7090,7 @@
       "t": "/watchers-atlas/img/eb68a7e2efea98-t.webp",
       "f": "/watchers-atlas/img/24f300443b78c5-f.webp",
       "ti": "फ़ाइल: Zeus, ओलंपिया के प्रतिमा का मॉडल। jpg",
-      "c": "Joseph2302",
+      "c": "जोसेफ2302",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Model_of_the_Statue_of_Zeus,_Olympia.jpg",
@@ -7162,7 +7162,7 @@
       "t": "/watchers-atlas/img/96064d6b3fb61f-t.webp",
       "f": "/watchers-atlas/img/d9ebffb9a8400f-f.webp",
       "ti": "फ़ाइल:एक प्रबुद्ध पांडुलिपि पत्ता, फिर्डौसी के शाहनामा के दूसरे भाग का उद्घाटन पृष्ठ (Lhrasb का शासनकाल), फारस, 16th - 17th Century.jpg",
-      "c": "Bonhams",
+      "c": "बॉनहम",
       "l": "सार्वजनिक डोमेन",
       "lu": "",
       "p": "https://commons.wikimedia.org/wiki/File:An_illuminated_manuscript_leaf,_the_opening_page_of_the_second_part_of_Firdausi%27s_Shahnama_(the_reign_of_Luhrasb),_Persia,_16th_-_17th_Century.jpg",
@@ -7358,7 +7358,7 @@
       "l": "CC0",
       "lu": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "p": "https://commons.wikimedia.org/wiki/File:Neo-Assyrian_Bas-Relief_of_Apkallu,_Eagle-Headed_Winged_Deity.jpg",
-      "d": "एसेरियन मूर्तिकला और बालावत गेट्स गैलरी, ब्रिटिश संग्रहालय, लंदन, इंग्लैंड, ब्रिटेन। WorldHistoryPics.com पर पूर्ण अनुक्रमित फोटो संग्रह।",
+      "d": "एसेरियन मूर्तिकला और बालावत फाटक गैलरी, ब्रिटिश संग्रहालय, लंदन, इंग्लैंड, ब्रिटेन। WorldHistoryPics.com पर पूर्ण अनुक्रमित फोटो संग्रह।",
       "s": "",
       "k": "रियल सोर्स्ड छवि"
     },
@@ -7378,7 +7378,7 @@
       "t": "/watchers-atlas/img/18ac4b46cbfee0-t.webp",
       "f": "/watchers-atlas/img/fec59298c1af9c-f.webp",
       "ti": "फ़ाइल:Sobek और Amenhotep III की डबल प्रतिमा - Luxor Museum 03.jpg",
-      "c": "Marsupium",
+      "c": "मार्सुपियम",
       "l": "सीसी द्वारा 4.0",
       "lu": "https://creativecommons.org/licenses/by/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Double_statue_of_Sobek_and_Amenhotep_III_-_Luxor_Museum_03.jpg",
@@ -7414,7 +7414,7 @@
       "t": "/watchers-atlas/img/eae76bb22d029b-t.webp",
       "f": "/watchers-atlas/img/6c937f8d59e649-f.webp",
       "ti": "फ़ाइल:Apis-MAHG A 2004-66-P5250373.JPG",
-      "c": "Rama",
+      "c": "राम",
       "l": "CC BY-SA 3.0 fr",
       "lu": "https://creativecommons.org/licenses/by-sa/3.0/fr/deed.en",
       "p": "https://commons.wikimedia.org/wiki/File:Bull_of_Apis-MAHG_A_2004-66-P5250373.JPG",
@@ -7541,7 +7541,7 @@
       "l": "मूल कलाकृति - कोई तृतीय-पक्ष लाइसेंस नहीं",
       "p": "",
       "d": "मकर की पारंपरिक बेबीलोनियन नक्षत्र आकृति। शास्त्र में सितारे समूह (Mazzaroth, जॉब 38:32) नाम हैं, लेकिन कोई रूप नहीं देता; यह केवल प्राचीन नक्षत्र चित्रण का अनुसरण करता है।",
-      "s": "Goat-Fish (SUHUR.MASH), Enki's emblem",
+      "s": "Goat-Fish (SUHUR.MASH), Enki emblem",
       "k": "Text-guided AI पुनर्निर्माण"
     },
     "Aquarius": {
@@ -7572,7 +7572,7 @@
       "t": "/watchers-atlas/img/ad8721fa2927a1-t.webp",
       "f": "/watchers-atlas/img/2a7146395304c3-f.webp",
       "ti": "फ़ाइल:Ironie pile Bagdad.jpg",
-      "c": "Ironie",
+      "c": "आयरनी",
       "l": "CC BY-SA 2.5",
       "lu": "https://creativecommons.org/licenses/by-sa/2.5",
       "p": "https://commons.wikimedia.org/wiki/File:Ironie_pile_Bagdad.jpg",
@@ -7644,7 +7644,7 @@
       "t": "/watchers-atlas/img/d13f39bdcb364e-t.webp",
       "f": "/watchers-atlas/img/da6c94a4165f81-f.webp",
       "ti": "फ़ाइल: Antikythera, 150-100 BC, NAMA, 191431.jpg",
-      "c": "Zde",
+      "c": "जेड",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Mechanism_of_Antikythera,_150-100_BC,_NAMA,_191431.jpg",
@@ -7660,7 +7660,7 @@
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:British_Museum_Flood_Tablet_1.jpg",
-      "d": "\"द फ्लड टैबलेट\"। यह शायद सभी cuneiform गोलियों का सबसे प्रसिद्ध है। यह गिलगामेश एपिक का ग्यारहवां टैबलेट है, और वर्णन करता है कि कैसे देवताओं ने दुनिया को नष्ट करने के लिए बाढ़ भेजा है। Noah की तरह, Utnapishtim को पहले से तैयार किया गया था और घर और पूर्व के लिए एक जहाज बनाया गया था",
+      "d": "\"द फ्लड टैबलेट\"। यह शायद सभी cuneiform गोलियों का सबसे प्रसिद्ध है। यह गिलगामेश एपिक का ग्यारहवां टैबलेट है, और वर्णन करता है कि कैसे देवताओं ने दुनिया को नष्ट करने के लिए बाढ़ भेजा है। नूह की तरह, Utnapishtim को पहले से तैयार किया गया था और घर और पूर्व के लिए एक जहाज बनाया गया था",
       "s": "",
       "k": "रियल सोर्स्ड छवि"
     },
@@ -8048,7 +8048,7 @@
       "t": "/watchers-atlas/img/29ecebc00d0700-t.webp",
       "f": "/watchers-atlas/img/618e374efa0959-f.webp",
       "ti": "फ़ाइल:2024 - M stelln अभयारण्य मंदिर E7 - img 01.jpg",
-      "c": "Chainwit.",
+      "c": "चेनवेट।",
       "l": "सीसी द्वारा 4.0",
       "lu": "https://creativecommons.org/licenses/by/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:2024_-_M%E1%BB%B9_S%C6%A1n_Sanctuary_Temple_E7_-_img_01.jpg",
@@ -8084,7 +8084,7 @@
       "t": "/watchers-atlas/img/2c6b101e27ef3a-t.webp",
       "f": "/watchers-atlas/img/d5dc460cca93f8-f.webp",
       "ti": "फ़ाइल:Nan Madol बर्बाद 13.jpg",
-      "c": "Uhooep",
+      "c": "उहोओप",
       "l": "CC BY-SA 4.0",
       "lu": "https://creativecommons.org/licenses/by-sa/4.0",
       "p": "https://commons.wikimedia.org/wiki/File:Nan_Madol_ruins_13.jpg",
@@ -8168,7 +8168,7 @@
       "t": "/watchers-atlas/img/e0f3d5913c0c67-t.webp",
       "f": "/watchers-atlas/img/960c4e5e2b8ec0-f.webp",
       "ti": "फ़ाइल:Yonaguni Monument Arch.jpg",
-      "c": "Melkov",
+      "c": "मेल्कोव",
       "l": "CC0",
       "lu": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "p": "https://commons.wikimedia.org/wiki/File:Yonaguni_Monument_Arch.jpg",
@@ -8322,7 +8322,7 @@
       "t": "/watchers-atlas/img/1aff4871fd69ec-t.webp",
       "f": "/watchers-atlas/img/8541551d5e4965-f.webp",
       "ti": "फ़ाइल:स्टोरम देवता ब्रांडिंग बिजली बोल्ट-AO 11188-IMG 8118-white.jpg",
-      "c": "Rama",
+      "c": "राम",
       "l": "CC BY-SA 3.0 fr",
       "lu": "https://creativecommons.org/licenses/by-sa/3.0/fr/deed.en",
       "p": "https://commons.wikimedia.org/wiki/File:Storm_god_brandishing_lightning-bolts-AO_11188-IMG_8118-white.jpg",
@@ -8544,50 +8544,50 @@
     }
   },
   "feature_names": [
-    "Semyaza",
+    "सेमेज़ा",
     "Azazel",
     "Araki / Arakiba",
     "रामेल / रामेल",
     "Kokabiel",
-    "Tamiel",
-    "Ramiel",
-    "Danel",
+    "तामिल",
+    "रामायल",
+    "डैनियल",
     "Ezeqel / Ezeqeel",
-    "Baraqel",
+    "बाराकेल",
     "Asael",
     "Armaros",
-    "Penemue",
-    "Uriel",
-    "Raphael",
-    "Raguel",
-    "Michael",
-    "Gabriel",
+    "पेनेम्यू",
+    "यूरेल",
+    "राफेल",
+    "रागुएल",
+    "माइकल",
+    "गेब्रियल",
     "Saraqael / Sariel",
-    "Remiel",
-    "Phanuel",
+    "रेमील",
+    "फ़ानुएल",
     "Seraphim",
-    "Cherubim",
-    "Ophanim",
+    "चेरुबिन",
+    "ओफ़ानीम",
     "चार लिविंग कैरेचर",
-    "Nephilim",
-    "Naphil",
-    "Naphidim",
+    "नेफिलिम",
+    "नाफिल",
+    "नफ़ीदीम",
     "Eljo",
     "दिग्गजों की बुराई आत्माओं",
-    "Leviathan",
+    "लेवियाथेन",
     "Behemoth",
     "डैनियल के चार जानवर",
-    "Watcher Descent Scene",
+    "वॉचर वंश दृश्य",
     "रहस्योद्घाटन 9 Locusts",
     "Anubis",
-    "Thoth",
-    "Horus",
-    "Shiva",
-    "Ganesha",
-    "Narasimha",
-    "Garuda",
-    "Zeus",
-    "Odin"
+    "थॉथ",
+    "हॉरस",
+    "शिवा",
+    "गणेश",
+    "नरसिंह",
+    "गौर",
+    "ज़ीउस",
+    "ओडिन"
   ],
   "local_images": [
     "005c9244077729-t.webp",

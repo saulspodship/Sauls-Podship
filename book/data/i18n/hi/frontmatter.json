@@ -3,7 +3,7 @@
   "about_body": "यह पुस्तक एक पूर्ण धर्मशास्त्रीय संग्रह है: पचास सचित्र बाइबिल की मात्रा, अन्य धर्मों के बारे में चार सौ प्रश्न, पवित्र भूमि के आठ यात्रा के नक्शे, एक हजार लघु बाइबिल अध्ययन उत्तर, पांच ईसाई परंपराओं से उत्तरों के साथ एक सौ कठिन सवाल, स्वर्गदूतों का एक पूर्ण एटलस और वॉचर्स, दो सौ चालीस सात भविष्यवाणी नोट, दुनिया के धर्म की कहानी, एडम से यीशु तक की पारिवारिक रेखा, और पाकिस्तानी ईसाई संगीत और पॉडकास्ट का संग्रह। यह एक पारंपरिक पुस्तक आकार में सेट किया गया है और खुले दो पृष्ठ स्प्रेड के रूप में रखा गया है, जिस तरह से एक मुद्रित वॉल्यूम हाथ में बैठता है।",
   "inside_title": "अंदर क्या है",
   "table_headers": [
-    "Part",
+    "भाग",
     "आप पाएंगे",
     "संक्षेप में"
   ],
@@ -49,19 +49,19 @@
       "पाकिस्तानी सुसमाचार गायक, पंजाबी ज़बोर, एपिसोड"
     ],
     [
-      "Appendix",
+      "परिशिष्ट",
       "निर्देशिका और संदर्भ",
       "वेबसाइट, प्रश्न और उत्तर, बाइबल पुस्तक गिनती"
     ]
   ],
   "toc_title": "सामग्री तालिका",
-  "dedication_title": "DEDICATION",
+  "dedication_title": "विभाग",
   "cover_kicker": "कंपनी KNOWLEDGE बुक",
   "cover_lede": "Fifty Bible-encyclopedia Volumes, 400-question faith codex, Bible maps, 1,000-answer अध्ययन संग्रह, एन्जिल्स और भविष्यवाणी, और पंजाबी Zaboor भजन संग्रह",
   "cover_note": "साउल की पोडशिप परियोजना से एकत्रित और अध्ययन और भक्ति के लिए प्रिंट में सेट",
-  "dedication_heading": "To the seed my grandparents planted in me",
-  "dedication_body1": "I, Solat Jamil, dedicate this book, and the research that lies behind it, to my grandparents, Jamson Jamil-ud-Din and my grandmother Mercy Jamson. They planted a seed in me, and everything you are about to read grew from it.",
-  "dedication_body2": "More than sixty percent of the knowledge and the questions gathered in these pages belongs to them. It is knowledge they handed down to me, and work they had already laboured over and written in their own hands. I have taken that treasure, studied it, and shaped it into this book so that the truth they loved may be brought out clearly for others.",
-  "dedication_body3": "With love and gratitude, and in hope that the seed keeps growing.",
-  "dedication_sign": "Solat Jamil"
+  "dedication_heading": "मेरे दादा-दादी ने मुझे अपने पिता से भेंट की।",
+  "dedication_body1": "I, Solat जमील, इस पुस्तक को समर्पित करते हैं, और अनुसंधान जो इसके पीछे स्थित है, मेरे दादा दादी, जम्सन जमील-उद-दीन और मेरी दादी मर्सी जम्सन। उन्होंने मुझे एक बीज लगाया और सब कुछ जो आप पढ़ रहे हैं उससे बड़ा हुआ।",
+  "dedication_body2": "ज्ञान का साठ प्रतिशत से अधिक और इन पृष्ठों में एकत्रित प्रश्न उनके अंतर्गत आता है। यह ज्ञान है कि उन्होंने मुझे सौंप दिया है, और वे पहले से ही अपने हाथों में काम कर चुके थे। मैंने उस खजाने को लिया है, इसका अध्ययन किया है और इसे इस पुस्तक में आकार दिया है ताकि वे जिस सच्चाई से प्यार करते थे, उन्हें दूसरों के लिए स्पष्ट रूप से लाया जा सकता है।",
+  "dedication_body3": "प्यार और आभार के साथ, और आशा है कि बीज बढ़ता रहता है।",
+  "dedication_sign": "सोला"
 }

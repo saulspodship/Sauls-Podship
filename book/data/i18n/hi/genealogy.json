@@ -1,43 +1,43 @@
 {
   "people": [
     {
-      "name": "Adam",
+      "name": "एडम",
       "birthAM": 0,
       "deathAM": 930,
       "approx": false
     },
     {
-      "name": "Seth",
+      "name": "सेठ",
       "birthAM": 130,
       "deathAM": 1042,
       "approx": false
     },
     {
-      "name": "Enosh",
+      "name": "एनोश",
       "birthAM": 235,
       "deathAM": 1140,
       "approx": false
     },
     {
-      "name": "Kenan",
+      "name": "केन",
       "birthAM": 325,
       "deathAM": 1235,
       "approx": false
     },
     {
-      "name": "Mahalalel",
+      "name": "महलेल",
       "birthAM": 395,
       "deathAM": 1290,
       "approx": false
     },
     {
-      "name": "Jared",
+      "name": "जारेड",
       "birthAM": 460,
       "deathAM": 1422,
       "approx": false
     },
     {
-      "name": "Enoch",
+      "name": "एनोच",
       "birthAM": 622,
       "deathAM": 987,
       "approx": false
@@ -49,19 +49,19 @@
       "approx": false
     },
     {
-      "name": "Lamech",
+      "name": "लैमेच",
       "birthAM": 874,
       "deathAM": 1651,
       "approx": false
     },
     {
-      "name": "Noah",
+      "name": "नोआ",
       "birthAM": 1056,
       "deathAM": 2006,
       "approx": false
     },
     {
-      "name": "Shem",
+      "name": "शेम",
       "birthAM": 1558,
       "deathAM": 2158,
       "approx": false
@@ -73,49 +73,49 @@
       "approx": false
     },
     {
-      "name": "Shelah",
+      "name": "शीला",
       "birthAM": 1693,
       "deathAM": 2126,
       "approx": false
     },
     {
-      "name": "Eber",
+      "name": "एबर",
       "birthAM": 1723,
       "deathAM": 2187,
       "approx": false
     },
     {
-      "name": "Peleg",
+      "name": "पेलेग",
       "birthAM": 1757,
       "deathAM": 1996,
       "approx": false
     },
     {
-      "name": "Reu",
+      "name": "रेयू",
       "birthAM": 1787,
       "deathAM": 2026,
       "approx": false
     },
     {
-      "name": "Serug",
+      "name": "सर्ग",
       "birthAM": 1819,
       "deathAM": 2049,
       "approx": false
     },
     {
-      "name": "Nahor",
+      "name": "नाहोर",
       "birthAM": 1849,
       "deathAM": 1997,
       "approx": false
     },
     {
-      "name": "Terah",
+      "name": "टेरा",
       "birthAM": 1878,
       "deathAM": 2083,
       "approx": false
     },
     {
-      "name": "Abraham",
+      "name": "अब्राहम",
       "birthAM": 2008,
       "deathAM": 2183,
       "approx": false
@@ -127,31 +127,31 @@
       "approx": false
     },
     {
-      "name": "Jacob",
+      "name": "जैक",
       "birthAM": 2168,
       "deathAM": 2315,
       "approx": false
     },
     {
-      "name": "Judah",
+      "name": "यहूदा",
       "birthAM": 2252,
       "deathAM": 2371,
       "approx": true
     },
     {
-      "name": "Perez",
+      "name": "पेरेज़",
       "birthAM": 2275,
       "deathAM": 2395,
       "approx": true
     },
     {
-      "name": "Hezron",
+      "name": "हेज़रॉन",
       "birthAM": 2290,
       "deathAM": 2410,
       "approx": true
     },
     {
-      "name": "Ram",
+      "name": "राम",
       "birthAM": 2370,
       "deathAM": 2480,
       "approx": true
@@ -163,49 +163,49 @@
       "approx": true
     },
     {
-      "name": "Nahshon",
+      "name": "नहशोन",
       "birthAM": 2480,
       "deathAM": 2590,
       "approx": true
     },
     {
-      "name": "Salmon",
+      "name": "साल्मन",
       "birthAM": 2590,
       "deathAM": 2690,
       "approx": true
     },
     {
-      "name": "Boaz",
+      "name": "बोआ",
       "birthAM": 2680,
       "deathAM": 2780,
       "approx": true
     },
     {
-      "name": "Obed",
+      "name": "ओबेड",
       "birthAM": 2770,
       "deathAM": 2870,
       "approx": true
     },
     {
-      "name": "Jesse",
+      "name": "जेसी",
       "birthAM": 2850,
       "deathAM": 2960,
       "approx": true
     },
     {
-      "name": "David",
+      "name": "डेविड",
       "birthAM": 2919,
       "deathAM": 2989,
       "approx": true
     },
     {
-      "name": "Solomon",
+      "name": "सोलोमन",
       "birthAM": 2971,
       "deathAM": 3029,
       "approx": true
     },
     {
-      "name": "Rehoboam",
+      "name": "भोजपुरी",
       "birthAM": 2988,
       "deathAM": 3046,
       "approx": true
@@ -229,13 +229,13 @@
       "approx": true
     },
     {
-      "name": "Joram",
+      "name": "जोरम",
       "birthAM": 3083,
       "deathAM": 3119,
       "approx": true
     },
     {
-      "name": "Uzziah",
+      "name": "उज्जैन",
       "birthAM": 3178,
       "deathAM": 3246,
       "approx": true
@@ -247,49 +247,49 @@
       "approx": true
     },
     {
-      "name": "Ahaz",
+      "name": "अहाज",
       "birthAM": 3242,
       "deathAM": 3278,
       "approx": true
     },
     {
-      "name": "Hezekiah",
+      "name": "हिजकिय्याह",
       "birthAM": 3253,
       "deathAM": 3307,
       "approx": true
     },
     {
-      "name": "Manasseh",
+      "name": "मनश्शे",
       "birthAM": 3295,
       "deathAM": 3362,
       "approx": true
     },
     {
-      "name": "Amon",
+      "name": "अमन",
       "birthAM": 3340,
       "deathAM": 3364,
       "approx": true
     },
     {
-      "name": "Josiah",
+      "name": "योश्या",
       "birthAM": 3356,
       "deathAM": 3395,
       "approx": true
     },
     {
-      "name": "Jeconiah",
+      "name": "जेकोनिया",
       "birthAM": 3388,
       "deathAM": 3445,
       "approx": true
     },
     {
-      "name": "Shealtiel",
+      "name": "शेल्टील",
       "birthAM": 3400,
       "deathAM": 3465,
       "approx": true
     },
     {
-      "name": "Zerubbabel",
+      "name": "ज़हरबबबबच्चा",
       "birthAM": 3430,
       "deathAM": 3500,
       "approx": true
@@ -301,7 +301,7 @@
       "approx": true
     },
     {
-      "name": "Eliakim",
+      "name": "एलियकीम",
       "birthAM": 3525,
       "deathAM": 3595,
       "approx": true
@@ -319,7 +319,7 @@
       "approx": true
     },
     {
-      "name": "Akim",
+      "name": "अकीम",
       "birthAM": 3660,
       "deathAM": 3730,
       "approx": true
@@ -337,7 +337,7 @@
       "approx": true
     },
     {
-      "name": "Matthan",
+      "name": "मैथन",
       "birthAM": 3810,
       "deathAM": 3880,
       "approx": true
@@ -349,13 +349,13 @@
       "approx": true
     },
     {
-      "name": "Joseph",
+      "name": "जोस",
       "birthAM": 3960,
       "deathAM": 4020,
       "approx": true
     },
     {
-      "name": "Jesus",
+      "name": "यीशु",
       "birthAM": 4000,
       "deathAM": 4033,
       "approx": true

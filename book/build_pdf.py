@@ -327,8 +327,14 @@ def inline_md(text: str) -> str:
         return f"\x00{len(code_spans) - 1}\x00"
 
     t = re.sub(r"`([^`]+)`", _code, t)
+    # A machine translation can move a heading's opening "**" onto the next
+    # line, or leave a lone "**" before a bullet.  Pair what is left, then drop
+    # the unmatched markers rather than printing them.
     t = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", t)
+    t = t.replace("**", "")
     t = re.sub(r"(?<![\w*])\*([^*\n]+)\*(?![\w*])", r"<i>\1</i>", t)
+    # whatever is left is an unpaired marker from a broken translation source
+    t = t.replace("*", "")
     t = re.sub(
         r"\x00(\d+)\x00",
         lambda m: f'<font name="Mono">{code_spans[int(m.group(1))]}</font>',
