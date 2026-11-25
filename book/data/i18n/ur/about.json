@@ -8,7 +8,7 @@
       "category": "اصل زبان کا مطالعہ",
       "description": "اسباق، الفاظ اور آیت بہ آیت ٹولز کے ذریعے بائبل کے عبرانی، کوئین یونانی، بائبلی آرامی اور ولگیٹ لاطینی کا مطالعہ کریں۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی درخواست"
     },
     {
       "id": "sunday-school",
@@ -18,17 +18,17 @@
       "category": "بچوں اور خاندانوں کے لیے",
       "description": "3-12 سال کی عمر کے بچوں کے لیے مفت، اشتہار سے پاک بائبل سیکھنا، بیان کردہ کہانیوں، گیمز، کوئزز اور یادداشت کی آیات کے ساتھ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی درخواست"
     },
     {
       "id": "evangelism",
-      "name": "Evangelism",
+      "name": "انجیلی بشارت",
       "url": "https://evangelism.saulspodship.com/",
       "logo": "/images/apps/evangelism.svg",
-      "category": "عمل پر ایمان",
-      "description": "گفتگو کے اشارے اور عملی تربیتی وسائل کے ساتھ، فضل کے ساتھ خوشخبری کو بانٹنے کے لیے کتاب سے جڑی فیلڈ گائیڈ۔",
+      "category": "عمل میں ایمان",
+      "description": "گفتگو کے اشارے اور عملی تربیتی وسائل کے ساتھ خوشخبری کو فضل کے ساتھ بانٹنے کے لیے کتاب سے جڑی فیلڈ گائیڈ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی درخواست"
     },
     {
       "id": "biblical-cosmos-3d",
@@ -38,7 +38,7 @@
       "category": "انٹرایکٹو بائبل کا مطالعہ",
       "description": "بائبلی کاسمولوجی اور حوالہ شدہ صحیفے کو ایک انٹرایکٹو 3D تشریح میں دریافت کریں—نہ کہ کائنات کا کوئی سائنسی نمونہ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی درخواست"
     },
     {
       "id": "biblical-numerology-etymology",
@@ -46,9 +46,9 @@
       "url": "https://biblicalnumerologyandetymology.saulspodship.com/",
       "logo": "/images/apps/biblical-numerology-etymology.svg",
       "category": "نمبرز اور الفاظ کی ابتدا",
-      "description": "Gematria لیب میں حروف کی قدروں، الفاظ کی تاریخوں اور بائبل کے متن کے مماثلتوں کو تلاش کریں، شفاف حساب کتاب اور حوالہ کردہ ذرائع کے ساتھ۔",
+      "description": "Gematria لیب میں حروف کی قدروں، الفاظ کی تاریخوں اور بائبل کے متن کے مماثلتوں کو تلاش کریں، شفاف حسابات اور حوالہ کردہ ذرائع کے ساتھ۔",
       "isAccessibleForFree": true,
-      "applicationCategory": "EducationalApplication"
+      "applicationCategory": "تعلیمی درخواست"
     },
     {
       "id": "faithconnect-pro",
@@ -68,8 +68,8 @@
       "answer": "Saul's Podship ایک کھلی رسائی کرسچن ڈیجیٹل منسٹری اور اسٹڈی لائبریری ہے، جس میں 51 جلدوں پر مشتمل تھیولوجیکل انسائیکلوپیڈیا، مقدس موسیقی اور پوڈکاسٹس، اور سرشار ایپس کا ایک خاندان ہے۔"
     },
     {
-      "question": "کون سی ویب سائٹس ساؤل کی پوڈ شپ کا حصہ ہیں؟",
-      "answer": "ہماری وقف کردہ عوامی ایپس ہیں [ہماری عوامی ایپس] ([ہماری عوامی ایپس])`)۔ جوائن کریں(';')}۔ ہر ایک ساؤل کا پوڈ شپ پروجیکٹ ہے جس کی اپنی ویب سائٹ ہے۔"
+      "question": "Which websites are part of Saul's Podship?",
+      "answer": "Our dedicated public apps are [our public apps] ([our public apps])`).join('; ')}. Each is a Saul's Podship project with its own website."
     },
     {
       "question": "میں بائبل کی عبرانی اور یونانی کہاں سیکھ سکتا ہوں؟",
@@ -85,7 +85,7 @@
     },
     {
       "question": "بائبل کاسموس تھری ڈی کیا ہے؟",
-      "answer": "Biblical Cosmos 3D بائبل کے کائناتی منظر کشی کی ایک متعامل تشریح ہے جس میں کتاب کے منسلک حصئوں کے ساتھ ہے۔ یہ ایک مطالعہ امداد ہے، کائنات کا کوئی سائنسی یا پیمانے کا ماڈل نہیں۔"
+      "answer": "Biblical Cosmos 3D بائبل کے کائناتی منظر کشی کی ایک متعامل تشریح ہے جس سے منسلک کلام کے حصّے ہیں۔ یہ ایک مطالعہ امداد ہے، کائنات کا کوئی سائنسی یا پیمانے کا ماڈل نہیں۔"
     },
     {
       "question": "بائبل کے اعداد و شمار اور Etymology کیا ہے؟",
@@ -93,7 +93,7 @@
     },
     {
       "question": "FaithConnect Pro کیا ہے؟",
-      "answer": "FaithConnect Pro ایک مسیحی برادری کو کیریئر کے مواقع، نیٹ ورکنگ، سیکھنے، دعا اور عقیدے پر مبنی بازار کے ساتھ اکٹھا کرتا ہے۔"
+      "answer": "FaithConnect Pro ایک مسیحی برادری کو کیریئر کے مواقع، نیٹ ورکنگ، سیکھنے، دعا اور ایمان پر مبنی بازار کے ساتھ اکٹھا کرتا ہے۔"
     },
     {
       "question": "کیا ساؤل کے پوڈ شپ وسائل مفت اور پوری دنیا میں دستیاب ہیں؟",
@@ -110,7 +110,7 @@
       "answer": "247 پیشین گوئیوں میں سے ہر ایک میں تین تشریحی لینز ہوتے ہیں — تاریخی (پریٹرسٹ/تاریخی پڑھنا)، استعاراتی (مثالی/روحانی پڑھنا) اور فیوچرسٹ (لفاظی پڑھنے کا انتظار) — تاکہ آپ دیکھ سکیں کہ الہیات کا کون سا مکتبہ ہر پیشین گوئی کو مکمل شمار کرتا ہے۔"
     },
     {
-      "question": "کنگز آف دی بائبل ماڈیول میں پہلا بادشاہ کون ہے؟",
+      "question": "کنگس آف دی بائبل ماڈیول میں پہلا بادشاہ کون ہے؟",
       "answer": "یسوع مسیح — بادشاہوں کا بادشاہ اور رب کا رب، الفا اور اومیگا — ساؤل، ڈیوڈ اور سلیمان سے پہلے؛ لائن حتمی جعلی بادشاہ، جانور کے ساتھ بند ہوتی ہے۔"
     },
     {
@@ -131,10 +131,10 @@
     },
     {
       "question": "ساتھی ماڈیولز کیا ہیں؟",
-      "answer": "بائبل کی پیشن گوئی کا نقشہ، کنگس آف دی بائبل، باہم منسلک بائبل اور تقابلی اپالوجیٹکس - ایک ہی اسکالرشپ سے بنے ہوئے انٹرایکٹو چارٹس، ہر والیوم کے نیچے روٹنگ بٹنوں سے منسلک ہیں۔"
+      "answer": "The Biblical Prophecy Map, Kings of the Bible, the Interlinked Bible and Comparative Apologetics — interactive charts woven from the same scholarship, linked by routing buttons at the bottom of every volume."
     },
     {
-      "question": "کیا جلدیں پڑھنے کے لیے آزاد ہیں؟",
+      "question": "Are the volumes free to read?",
       "answer": "ہاں — ہر حجم، جدول اور عمومی سوالنامہ آن لائن آزادانہ طور پر پڑھنے کے قابل ہے۔"
     },
     {
@@ -143,7 +143,7 @@
     },
     {
       "question": "طریقہ کیا ہے؟",
-      "answer": "جواب دینے سے پہلے دوسری روایات کی درستگی اور خیراتی طور پر نمائندگی کریں — ایمانداری کے ذریعے قائل کریں، طنز کے نہیں۔ ضعیف یا من گھڑت حدیث کو کبھی مستند کے طور پر استعمال نہیں کیا جاتا۔"
+      "answer": "جواب دینے سے پہلے دوسری روایات کی درستگی اور خیراتی طور پر نمائندگی کریں — ایمانداری کے ذریعے قائل کریں، نہ کہ مذاق کے ذریعے۔ ضعیف یا من گھڑت حدیث کو کبھی مستند کے طور پر استعمال نہیں کیا جاتا۔"
     },
     {
       "question": "کیا میں سوالات کو تلاش اور ترتیب دے سکتا ہوں؟",

@@ -39,7 +39,7 @@
   },
   "countries": [
     {
-      "name": "فجی",
+      "name": "Fiji",
       "cat": "christian",
       "pct": 64,
       "pop": 902623
@@ -75,7 +75,7 @@
       "pop": 20604819
     },
     {
-      "name": "Uzbekistan",
+      "name": "ازبکستان",
       "cat": "muslim",
       "pct": 96,
       "pop": 39047321
@@ -99,7 +99,7 @@
       "pop": 46466688
     },
     {
-      "name": "Chile",
+      "name": "چلی",
       "cat": "christian",
       "pct": 60,
       "pop": 20150948
@@ -141,7 +141,7 @@
       "pop": 11867032
     },
     {
-      "name": "ڈومینیکن ریپ",
+      "name": "ڈومینیکن نمائندہ",
       "cat": "christian",
       "pct": 88,
       "pop": 10771504
@@ -219,7 +219,7 @@
       "pop": 11365333
     },
     {
-      "name": "پیرو",
+      "name": "Peru",
       "cat": "christian",
       "pct": 89,
       "pop": 34157732
@@ -243,7 +243,7 @@
       "pop": 5217296
     },
     {
-      "name": "نکاراگوا",
+      "name": "Nicaragua",
       "cat": "christian",
       "pct": 84,
       "pop": 6874748
@@ -285,7 +285,7 @@
       "pop": 956044
     },
     {
-      "name": "Suriname",
+      "name": "سورینام",
       "cat": "christian",
       "pct": 52,
       "pop": 616500
@@ -309,13 +309,13 @@
       "pop": 3184835
     },
     {
-      "name": "Jamaica",
+      "name": "جمیکا",
       "cat": "christian",
       "pct": 69,
       "pop": 2774538
     },
     {
-      "name": "Cuba",
+      "name": "کیوبا",
       "cat": "christian",
       "pct": 60,
       "pop": 9434593
@@ -429,7 +429,7 @@
       "pop": 24736828
     },
     {
-      "name": "وسطی افریقی نمائندہ",
+      "name": "Central African Rep.",
       "cat": "christian",
       "pct": 89,
       "pop": 6470307
@@ -465,7 +465,7 @@
       "pop": 21201635
     },
     {
-      "name": "Mozambique",
+      "name": "موزمبیق",
       "cat": "christian",
       "pct": 55,
       "pop": 34958973
@@ -489,7 +489,7 @@
       "pop": 12332788
     },
     {
-      "name": "Israel",
+      "name": "اسرائیل",
       "cat": "jewish",
       "pct": 74,
       "pop": 10273700
@@ -501,13 +501,13 @@
       "pop": 5895466
     },
     {
-      "name": "Madagascar",
+      "name": "مڈغاسکر",
       "cat": "christian",
       "pct": 85,
       "pop": 32658977
     },
     {
-      "name": "Palestine",
+      "name": "فلسطین",
       "cat": "muslim",
       "pct": 93,
       "pop": 5557096
@@ -573,7 +573,7 @@
       "pop": 321409
     },
     {
-      "name": "کمبوڈیا",
+      "name": "Cambodia",
       "cat": "buddhist",
       "pct": 97,
       "pop": 17816143
@@ -597,7 +597,7 @@
       "pop": 51375327
     },
     {
-      "name": "Vietnam",
+      "name": "ویتنام",
       "cat": "folk",
       "pct": 46,
       "pop": 102300000
@@ -645,7 +645,7 @@
       "pop": 30034040
     },
     {
-      "name": "Pakistan",
+      "name": "پاکستان",
       "cat": "muslim",
       "pct": 96,
       "pop": 241499431
@@ -663,7 +663,7 @@
       "pop": 10721000
     },
     {
-      "name": "کرغزستان",
+      "name": "Kyrgyzstan",
       "cat": "muslim",
       "pct": 90,
       "pop": 7404300
@@ -699,7 +699,7 @@
       "pop": 10610483
     },
     {
-      "name": "Belarus",
+      "name": "بیلاروس",
       "cat": "christian",
       "pct": 83,
       "pop": 9056080
@@ -723,13 +723,13 @@
       "pop": 9217573
     },
     {
-      "name": "Hungary",
+      "name": "ہنگری",
       "cat": "christian",
       "pct": 69,
       "pop": 9488428
     },
     {
-      "name": "Moldova",
+      "name": "مالڈووا",
       "cat": "christian",
       "pct": 90,
       "pop": 2365600
@@ -855,7 +855,7 @@
       "pop": 5357300
     },
     {
-      "name": "آسٹریلیا",
+      "name": "Australia",
       "cat": "christian",
       "pct": 44,
       "pop": 27801023
@@ -915,13 +915,13 @@
       "pop": 3941100
     },
     {
-      "name": "Philippines",
+      "name": "فلپائن",
       "cat": "christian",
       "pct": 92,
       "pop": 114849400
     },
     {
-      "name": "Malaysia",
+      "name": "ملائیشیا",
       "cat": "muslim",
       "pct": 63,
       "pop": 34389400
@@ -1041,7 +1041,7 @@
       "pop": 45905417
     },
     {
-      "name": "روانڈا",
+      "name": "Rwanda",
       "cat": "christian",
       "pct": 93,
       "pop": 14418145
