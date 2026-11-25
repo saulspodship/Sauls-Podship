@@ -127,6 +127,7 @@ const NAV_LINKS = [
   ['/encyclopedia', '51-Volume Encyclopedia'],
   ['/theological-archive', 'Theological Archive — Tough Bible Questions'],
   ['/comparative-apologetics', 'Comparative Apologetics Codex'],
+  ['/complete-knowledge-book', 'Complete Knowledge Book (Urdu)'],
   ['/prophecy-map', 'Biblical Prophecy Map'],
   ['/cross-references', 'Interlinked Bible'],
   ['/kings-of-the-bible', 'Kings of the Bible'],
@@ -584,6 +585,24 @@ pages.set('/comparative-apologetics', {
   },
   body: wrap(
     `<main><h1>Comparative Apologetics Codex</h1><p>400 critical dialogue questions across Islam, Judaism, Hinduism and Sikhism, with primary sources, fair representation and a Christian response.</p></main>` +
+      siteNav(),
+  ),
+});
+pages.set('/complete-knowledge-book', {
+  head: {
+    title: "The Complete Knowledge Book (Urdu) | Saul's Podship",
+    description:
+      "The Complete Knowledge Book in Urdu (مکمل علمی کتاب) — fifty Bible encyclopedia volumes, 400 comparative apologetics questions, Bible maps, a 1,000-answer study archive, angels and prophecy, and the Punjabi Zaboor hymn collection.",
+    canonical: `${BASE_URL}/complete-knowledge-book`,
+  },
+  article: {
+    headline: 'The Complete Knowledge Book (Urdu)',
+    description:
+      'The full Saul\'s Podship theological archive in Urdu: fifty Bible encyclopedia volumes, 400 comparative apologetics questions, Bible maps, study archives, and more, presented as a page-flip book.',
+    section: 'Books',
+  },
+  body: wrap(
+    `<main><h1>The Complete Knowledge Book — Urdu Edition (مکمل علمی کتاب)</h1><p>The full Saul's Podship theological archive in Urdu: fifty Bible encyclopedia volumes, 400 comparative apologetics questions, Bible maps, a 1,000-answer study archive, angels and prophecy, and the Punjabi Zaboor hymn collection — presented as a page-flip reading experience.</p><p><a href="/complete-knowledge-book/book-ur.html">Open the Urdu book</a></p></main>` +
       siteNav(),
   ),
 });

@@ -44,6 +44,7 @@ export const SitemapPage: React.FC = () => {
             <Link to="/scholarly-standards" className="text-[#4A152C] hover:underline font-semibold">Scholarly Standards</Link>
             <Link to="/theological-archive" className="text-[#4A152C] hover:underline font-semibold">Theological Archive (1000 Answers)</Link>
             <Link to="/comparative-apologetics" className="text-[#4A152C] hover:underline font-semibold">Comparative Apologetics Codex</Link>
+            <Link to="/complete-knowledge-book" className="text-[#4A152C] hover:underline font-semibold">Complete Knowledge Book (Urdu)</Link>
             <Link to="/prophecy-map" className="text-[#4A152C] hover:underline font-semibold">Biblical Prophecy Map</Link>
             <Link to="/kings-of-the-bible" className="text-[#4A152C] hover:underline font-semibold">Kings of the Bible</Link>
             <Link to="/cross-references" className="text-[#4A152C] hover:underline font-semibold">Bible Cross-References</Link>

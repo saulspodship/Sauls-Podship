@@ -25,6 +25,7 @@ const SingersArchivePage = lazy(() => import('./pages/SingersArchivePage'));
 const StudioPage = lazy(() => import('./pages/StudioPage'));
 const TheologicalArchivePage = lazy(() => import('./pages/TheologicalArchivePage'));
 const ComparativeApologeticsPage = lazy(() => import('./pages/ComparativeApologeticsPage'));
+const CompleteKnowledgeBookPage = lazy(() => import('./pages/CompleteKnowledgeBookPage'));
 const ProphecyMapPage = lazy(() => import('./pages/ModulePages').then(m => ({ default: m.ProphecyMapPage })));
 const KingsOfTheBiblePage = lazy(() => import('./pages/ModulePages').then(m => ({ default: m.KingsOfTheBiblePage })));
 const CrossReferencesPage = lazy(() => import('./pages/ModulePages').then(m => ({ default: m.CrossReferencesPage })));
@@ -114,6 +115,10 @@ export const routeConfig: RouteObject[] = [
       {
         path: 'comparative-apologetics',
         element: L(<ComparativeApologeticsPage />)
+      },
+      {
+        path: 'complete-knowledge-book',
+        element: L(<CompleteKnowledgeBookPage />)
       },
       {
         path: 'prophecy-map',
